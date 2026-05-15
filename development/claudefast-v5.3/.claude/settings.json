@@ -1,0 +1,133 @@
+{
+  "permissions": {
+    "allow": [
+      "Edit",
+      "Write",
+      "Bash(git add:*)",
+      "Bash(git reset:*)",
+      "Bash(git commit:*)",
+      "Bash(git diff:*)",
+      "Bash(git checkout:*)",
+      "Bash(git push:*)",
+      "Bash(git --version)",
+      "Bash(git config user.name)",
+      "Bash(git config user.email)",
+      "Bash(find:*)",
+      "Bash(rg:*)",
+      "Bash(echo:*)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(source:*)",
+      "Bash(bash:*)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(cp:*)",
+      "Bash(rm:*)",
+      "Bash(ln:*)",
+      "Bash(chmod:*)",
+      "Bash(sed:*)",
+      "Bash(test:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)",
+      "Bash(which:*)",
+      "Bash(ps:*)",
+      "Bash(kill:*)",
+      "Bash(printenv:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(node:*)",
+      "Bash(bun:*)",
+      "Bash(npm install:*)",
+      "Bash(npm config:*)",
+      "Bash(npm search:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm install:*)",
+      "Bash(claude --version)",
+      "Bash(~/.local/bin/claude --version)",
+      "Bash(sudo ln:*)",
+      "WebFetch(domain:docs.litellm.ai)",
+      "WebFetch(domain:openai.com)",
+      "WebFetch(domain:anthropic.com)",
+      "WebFetch(domain:docs.anthropic.com)",
+      "WebFetch(domain:github.com)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "Skill(session-management)",
+      "Skill(codebase-navigation)",
+      "Skill(sub-agent-invocation)",
+      "Skill(git-commits)",
+      "Skill(claudefast)"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "skillListingBudgetFraction": 0.02,
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [],
+  "disabledMcpjsonServers": [],
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/FormatterHook/formatter.mjs\""
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/ContextRecoveryHook/conv-backup.mjs\"",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/LibraryHook/library-sync.mjs\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/SkillActivationHook/skill-activation-prompt.mjs\""
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/ContextRecoveryHook/statusline-monitor.mjs\""
+  },
+  "_readme": [
+    "SHARED PROJECT SETTINGS (tracked in git, used on both Mac and Windows)",
+    "",
+    "How it works:",
+    "  settings.json      = shared config (this file, tracked)",
+    "  settings.local.json = platform-specific overrides (gitignored, per-device)",
+    "  Claude Code merges both: local permissions are ADDED to shared permissions.",
+    "",
+    "When you add a new permission:",
+    "  - Works on both platforms? Add it here.",
+    "  - Platform-specific (brew, powershell, etc.)? Add to settings.local.json on that device."
+  ],
+  "enabledPlugins": {}
+}

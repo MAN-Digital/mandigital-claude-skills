@@ -1,0 +1,114 @@
+{
+  "PositioningCanvas": {
+    "@attributes": {
+      "sheet": "Positioning - HubSpot- RevOps As a Service"
+    },
+    "WhoAndWhat": {
+      "Item": [
+        "Mid-to-large B2B firms (€5M+), multi-market teams. Priority: Poland; opportunistic: Poland, DACH, Nordics, UK. HubSpot is in place or planned.",
+        "Primary: Marketing Leader (Head of Marketing, CMO, Marketing Manager). Secondary: CRO, Sales Leader (Head of Sales, Sales Manager), Head of CS/CS Ops, CEO (Series A companies, companies with maximum 250 employees)",
+        "Revenue Operations as a Service (flagship), HubSpot Onboarding, Custom Integrations",
+        "Standardize revenue operations on HubSpot: unify tools/data, instrument reliable forecasting & attribution, stand up CS health, and run it with SLAs/weekly cadence"
+      ]
+    },
+    "Alternatives": {
+      "Alternative": [
+        {
+          "@attributes": {
+            "name": "Doing it yourself"
+          },
+          "ProblemSummary": "Disconnected systems, manual admin, no trusted forecasts; leaders fly blind",
+          "DifferentiationSummary": "Assessment -> Backbone -> Run: Operational Reality Assessment, HubSpot process/data standardization, then ongoing SLA-based ops"
+        },
+        {
+          "@attributes": {
+            "name": "One-off HubSpot Admin Solutions only"
+          },
+          "ProblemSummary": "Value erodes post go-live; no governance, dashboards decay, adoption slips",
+          "DifferentiationSummary": "RevOps as a Service with weekly status, backlog execution, QA, renewal roadmap—keeps improving each sprint"
+        },
+        {
+          "@attributes": {
+            "name": "Tool-led vendors (single platform hero)"
+          },
+          "ProblemSummary": "Siloed wins; attribution/intent/CS tools don't translate into processes reps and CSMs actually follow",
+          "DifferentiationSummary": "Process-first, tool-second: map data model & playbooks, then wire tools so signals drive action in HubSpot"
+        }
+      ]
+    },
+    "OurSolutions": {
+      "Solution": [
+        {
+          "UseCase": "RevOps Foundation (Assessment & Backbone)",
+          "CompetitiveAlternative": "DIY patchwork or \"onboarding only\"",
+          "WhyThatSucks": "Fragmented systems, manual work, no single source of truth; forecasts not believed",
+          "WhatWeDo": "Operational Reality Assessment, HubSpot backbone for process, data model, automations; then enablement",
+          "HowWeDoDifferently": "Assessment, process mapping, data model",
+          "Capabilities": "Assessment, process mapping, data model",
+          "Features": "Portal audit, process diagrams, SOPs, roadmap/SOW",
+          "Benefits": "Faster time-to-value, shared truth, de-risked scope"
+        },
+        {
+          "UseCase": "Sales Ops & Coaching Visibility",
+          "CompetitiveAlternative": "Basic CRM + no methodology",
+          "WhyThatSucks": "No visibility into activities; can't lift underperformers; forecasting = guesswork",
+          "WhatWeDo": "Methodology in HubSpot (pipelines, playbooks, activity/forecast dashboards) + coaching views",
+          "HowWeDoDifferently": "Sales methodology operationalization (e.g. SPIN, MEDDPICC, Sandler)",
+          "Capabilities": "Sales methodology operationalization (e.g. SPIN, MEDDPICC, Sandler)",
+          "Features": "Pipelines, playbooks, activity capture, forecast dashboards",
+          "Benefits": "Predictable pipeline, rep lift, forecast accuracy"
+        },
+        {
+          "UseCase": "Marketing Ops & Attribution",
+          "CompetitiveAlternative": "First-touch only; channel-silo dashboards",
+          "WhyThatSucks": "Can't prove ROI; lead quality friction with sales",
+          "WhatWeDo": "Attribution-first reporting + lifecycle/routing & nurture that sales accepts",
+          "HowWeDoDifferently": "Attribution framework",
+          "Capabilities": "Attribution framework",
+          "Features": "Campaign source tracking, MTA (Multi-Touch Attribution) dashboards, qualification & routing",
+          "Benefits": "Credible ROI, fewer rejected leads, smarter budget allocation"
+        },
+        {
+          "UseCase": "CS Ops & Health Scoring",
+          "CompetitiveAlternative": "Reactive support; ticketing != health",
+          "WhyThatSucks": "Unknown churn risk, manual tickets, no enablement; CS impact invisible",
+          "WhatWeDo": "Health score + ticket integration, playbooks, CS enablement, real-time alerts",
+          "HowWeDoDifferently": "Health scoring & CS enablement",
+          "Capabilities": "Health scoring & CS enablement",
+          "Features": "Scoring model, ticket automations, CS dashboards, playbooks",
+          "Benefits": "Early churn flags, higher NRR, consistent CS delivery"
+        },
+        {
+          "UseCase": "Data Quality & Enrichment",
+          "CompetitiveAlternative": "Spreadsheet hacks; no pre-ingest QA",
+          "WhyThatSucks": "Bad data -> broken routing, wasted time; tool chaos",
+          "WhatWeDo": "Pre-ingest validation & enrichment, dedup, scheduled hygiene",
+          "HowWeDoDifferently": "Data QA & enrichment",
+          "Capabilities": "Data QA & enrichment",
+          "Features": "Validation rules, dedup logic, enrichment APIs",
+          "Benefits": "Clean segments, reliable workflows, better reporting"
+        },
+        {
+          "UseCase": "Run & Governance (SLA-based)",
+          "CompetitiveAlternative": "One-off projects",
+          "WhyThatSucks": "Entropy post-launch; no owner; deployments delay, new features not implemented",
+          "WhatWeDo": "RevOps as a Service: weekly status, backlog, naming convention hygiene, renewals roadmap, NPS/reviews",
+          "HowWeDoDifferently": "Ongoing ops & PM",
+          "Capabilities": "Ongoing ops & PM",
+          "Features": "Weekly status, SLAs, hour rules, SOW renewals",
+          "Benefits": "Continuous improvement; transparency; resilience"
+        },
+        {
+          "UseCase": "Integrations & Data Layer (add-on)",
+          "CompetitiveAlternative": "Native connectors only",
+          "WhyThatSucks": "Sync failures & siloed data block GTM plays",
+          "WhatWeDo": "Custom implementations architected to your model; treated separately when complex",
+          "HowWeDoDifferently": "Systems integration",
+          "Capabilities": "Systems integration",
+          "Features": "Custom objects, APIs, custom apps, custom AI agents",
+          "Benefits": "Signals flow to HubSpot; fewer manual fixes"
+        }
+      ]
+    }
+  }
+}
