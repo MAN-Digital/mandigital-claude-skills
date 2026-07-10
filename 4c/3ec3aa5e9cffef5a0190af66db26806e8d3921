@@ -1,0 +1,787 @@
+README.md
+  s_83549d9e4a90fe::t_6f71cd8538e46e 30-31
+  s_83549d9e4a90fe::t_c001a6f91c3bab 27-29
+  s_83549d9e4a90fe::t_bab7fca2486e7d 23-26
+marketing/man-digital-blog-graphics/README.md
+  s_83549d9e4a90fe::t_17833fce389f01 1-312
+marketing/man-digital-blog-graphics/SKILL.md
+  s_83549d9e4a90fe::t_56ebdb34b89caf 1-220
+marketing/man-digital-blog-graphics/agents/openai.yaml
+  s_83549d9e4a90fe::t_3217f4f0183fcb 1-5
+marketing/man-digital-blog-graphics/assets/playground/Playground.pen
+  s_83549d9e4a90fe::t_4da2f5e6e99fbf 1-304376
+marketing/man-digital-blog-graphics/references/audit-loop.md
+  s_83549d9e4a90fe::t_fbf15156382590 1-207
+marketing/man-digital-blog-graphics/references/brand-rules.md
+  s_83549d9e4a90fe::t_a30f927a561dce 1-104
+marketing/man-digital-blog-graphics/references/component-index.md
+  s_83549d9e4a90fe::t_10a2e97128a600 1-399
+marketing/man-digital-blog-graphics/references/components/1GRXD.md
+  s_83549d9e4a90fe::t_336a8d466b5e00 1-7
+marketing/man-digital-blog-graphics/references/components/1LmMQ.md
+  s_83549d9e4a90fe::t_6ac4e31dee8b32 1-7
+marketing/man-digital-blog-graphics/references/components/1wobI.md
+  s_83549d9e4a90fe::t_ff75ec5fba4673 1-9
+marketing/man-digital-blog-graphics/references/components/4XjgY.md
+  s_83549d9e4a90fe::t_47174dc22e421d 1-9
+marketing/man-digital-blog-graphics/references/components/5MGHD.md
+  s_83549d9e4a90fe::t_f585597f1934f9 1-7
+marketing/man-digital-blog-graphics/references/components/5hcRD.md
+  s_83549d9e4a90fe::t_04a65deb4b3273 1-9
+marketing/man-digital-blog-graphics/references/components/5kXd2.md
+  s_83549d9e4a90fe::t_5e2576b3b83341 1-7
+marketing/man-digital-blog-graphics/references/components/69qqe.md
+  s_83549d9e4a90fe::t_0439cf21867519 1-9
+marketing/man-digital-blog-graphics/references/components/6YYmt.md
+  s_83549d9e4a90fe::t_f235d96a9c61fe 1-7
+marketing/man-digital-blog-graphics/references/components/81xtN.md
+  s_83549d9e4a90fe::t_53094f39889e37 1-19
+marketing/man-digital-blog-graphics/references/components/9Nac9.md
+  s_83549d9e4a90fe::t_6abd6520ac25cc 1-9
+marketing/man-digital-blog-graphics/references/components/9QojL.md
+  s_83549d9e4a90fe::t_80832cf30d8f52 1-7
+marketing/man-digital-blog-graphics/references/components/9ucOy.md
+  s_83549d9e4a90fe::t_e6fa3c515cf56a 1-7
+marketing/man-digital-blog-graphics/references/components/A4PRC0.md
+  s_83549d9e4a90fe::t_b399abbacc95e2 1-17
+marketing/man-digital-blog-graphics/references/components/AGj6s.md
+  s_83549d9e4a90fe::t_dabfc139cac2ef 1-7
+marketing/man-digital-blog-graphics/references/components/ANwLg.md
+  s_83549d9e4a90fe::t_9a24d6c5b1d3e8 1-9
+marketing/man-digital-blog-graphics/references/components/AeLIJ.md
+  s_83549d9e4a90fe::t_2cd01994a94a5f 1-17
+marketing/man-digital-blog-graphics/references/components/BXJ1b.md
+  s_83549d9e4a90fe::t_2c411712e2492d 1-19
+marketing/man-digital-blog-graphics/references/components/BwBMc.md
+  s_83549d9e4a90fe::t_661ddfc806e38f 1-17
+marketing/man-digital-blog-graphics/references/components/CK187.md
+  s_83549d9e4a90fe::t_3203e9f158a680 1-19
+marketing/man-digital-blog-graphics/references/components/CT8V7.md
+  s_83549d9e4a90fe::t_2b8fa4ba058f30 1-17
+marketing/man-digital-blog-graphics/references/components/CW9op.md
+  s_83549d9e4a90fe::t_d87cb79df3bce9 1-19
+marketing/man-digital-blog-graphics/references/components/CcSWR.md
+  s_83549d9e4a90fe::t_3b70b8a254b7ad 1-21
+marketing/man-digital-blog-graphics/references/components/Cr3TW.md
+  s_83549d9e4a90fe::t_91310757233ce7 1-17
+marketing/man-digital-blog-graphics/references/components/D4tA8.md
+  s_83549d9e4a90fe::t_71bf13cd7f75f1 1-17
+marketing/man-digital-blog-graphics/references/components/DEXIR.md
+  s_83549d9e4a90fe::t_f911f9940f4810 1-19
+marketing/man-digital-blog-graphics/references/components/DIdDa.md
+  s_83549d9e4a90fe::t_7d7547860b8458 1-9
+marketing/man-digital-blog-graphics/references/components/DJN2N.md
+  s_83549d9e4a90fe::t_8278b2a063de99 1-27
+marketing/man-digital-blog-graphics/references/components/DSNAg.md
+  s_83549d9e4a90fe::t_3e83ba8af7ab07 1-9
+marketing/man-digital-blog-graphics/references/components/DW3dd.md
+  s_83549d9e4a90fe::t_f9cefed4daeb20 1-7
+marketing/man-digital-blog-graphics/references/components/DqvaN.md
+  s_83549d9e4a90fe::t_ac39b67a9e4e6a 1-17
+marketing/man-digital-blog-graphics/references/components/E4Ylf.md
+  s_83549d9e4a90fe::t_a550f93ebd13e4 1-17
+marketing/man-digital-blog-graphics/references/components/E93plV.md
+  s_83549d9e4a90fe::t_ba9e5ebdad7d36 1-17
+marketing/man-digital-blog-graphics/references/components/EWQkm.md
+  s_83549d9e4a90fe::t_53c553cdacd42f 1-24
+marketing/man-digital-blog-graphics/references/components/EdtGZ-anatomy.md
+  s_83549d9e4a90fe::t_a6e010d8074564 1-45
+marketing/man-digital-blog-graphics/references/components/EdtGZ.md
+  s_83549d9e4a90fe::t_88c67a19ca47f2 1-43
+marketing/man-digital-blog-graphics/references/components/Eflsc.md
+  s_83549d9e4a90fe::t_a4f7c74838097a 1-17
+marketing/man-digital-blog-graphics/references/components/El1Np.md
+  s_83549d9e4a90fe::t_6e1e1389b44374 1-7
+marketing/man-digital-blog-graphics/references/components/EuJZZ.md
+  s_83549d9e4a90fe::t_c05c3d647e9320 1-19
+marketing/man-digital-blog-graphics/references/components/EzX4X.md
+  s_83549d9e4a90fe::t_83d4f271e4920c 1-21
+marketing/man-digital-blog-graphics/references/components/FCw4P.md
+  s_83549d9e4a90fe::t_bf052e6d1c9c23 1-9
+marketing/man-digital-blog-graphics/references/components/FVfNE.md
+  s_83549d9e4a90fe::t_4f147070cc281b 1-19
+marketing/man-digital-blog-graphics/references/components/FWG3n.md
+  s_83549d9e4a90fe::t_2e155b0ac0695b 1-17
+marketing/man-digital-blog-graphics/references/components/FXb6g.md
+  s_83549d9e4a90fe::t_af265fd2eae77a 1-9
+marketing/man-digital-blog-graphics/references/components/Fe8ZR.md
+  s_83549d9e4a90fe::t_62c7ad09dad3ae 1-9
+marketing/man-digital-blog-graphics/references/components/FmG17.md
+  s_83549d9e4a90fe::t_4d906b85d1e247 1-9
+marketing/man-digital-blog-graphics/references/components/G6YkCq.md
+  s_83549d9e4a90fe::t_1a831263a45bc1 1-28
+marketing/man-digital-blog-graphics/references/components/G7EWZ.md
+  s_83549d9e4a90fe::t_1ac0310ddd3374 1-31
+marketing/man-digital-blog-graphics/references/components/GGxl2.md
+  s_83549d9e4a90fe::t_82f59f39ed5e22 1-28
+marketing/man-digital-blog-graphics/references/components/GK1cz.md
+  s_83549d9e4a90fe::t_208ced4620e998 1-13
+marketing/man-digital-blog-graphics/references/components/GRV8P.md
+  s_83549d9e4a90fe::t_9506aab367c28d 1-9
+marketing/man-digital-blog-graphics/references/components/GUuGw.md
+  s_83549d9e4a90fe::t_3988d0bc2fef19 1-9
+marketing/man-digital-blog-graphics/references/components/Gagt6.md
+  s_83549d9e4a90fe::t_00bb6629383cf0 1-7
+marketing/man-digital-blog-graphics/references/components/GoNGR.md
+  s_83549d9e4a90fe::t_350f973a45550b 1-17
+marketing/man-digital-blog-graphics/references/components/GogdW.md
+  s_83549d9e4a90fe::t_6cd335e20caeac 1-29
+marketing/man-digital-blog-graphics/references/components/HPD8m.md
+  s_83549d9e4a90fe::t_15009fdb2dca95 1-17
+marketing/man-digital-blog-graphics/references/components/HQP5q.md
+  s_83549d9e4a90fe::t_0fa3263c4bd2cb 1-21
+marketing/man-digital-blog-graphics/references/components/HoOjV.md
+  s_83549d9e4a90fe::t_9e0c46ebd1ec3d 1-28
+marketing/man-digital-blog-graphics/references/components/IfWXj.md
+  s_83549d9e4a90fe::t_9a88d0f35bb83e 1-9
+marketing/man-digital-blog-graphics/references/components/Ikpzh.md
+  s_83549d9e4a90fe::t_a7f2f00accf305 1-17
+marketing/man-digital-blog-graphics/references/components/IqpRv.md
+  s_83549d9e4a90fe::t_ce1407df035d0f 1-7
+marketing/man-digital-blog-graphics/references/components/J1AVRc.md
+  s_83549d9e4a90fe::t_2682af2497c391 1-19
+marketing/man-digital-blog-graphics/references/components/Jm3qM.md
+  s_83549d9e4a90fe::t_e90ceeac50b770 1-17
+marketing/man-digital-blog-graphics/references/components/K3lUTV.md
+  s_83549d9e4a90fe::t_34ed550831f46b 1-17
+marketing/man-digital-blog-graphics/references/components/K9BnU.md
+  s_83549d9e4a90fe::t_3bfe162c52fd48 1-17
+marketing/man-digital-blog-graphics/references/components/KOasO.md
+  s_83549d9e4a90fe::t_1df11b641f4d17 1-25
+marketing/man-digital-blog-graphics/references/components/KTCK6.md
+  s_83549d9e4a90fe::t_4ba4d6bd5b0161 1-7
+marketing/man-digital-blog-graphics/references/components/KVqAt-anatomy.md
+  s_83549d9e4a90fe::t_30f085c0f67f4e 1-123
+marketing/man-digital-blog-graphics/references/components/KVqAt-connectors.md
+  s_83549d9e4a90fe::t_8267640ed91db1 1-21
+marketing/man-digital-blog-graphics/references/components/KVqAt-decorations.md
+  s_83549d9e4a90fe::t_2cdcce958c86cd 1-22
+marketing/man-digital-blog-graphics/references/components/KVqAt-pill-rows.md
+  s_83549d9e4a90fe::t_2cece937b5eaab 1-61
+marketing/man-digital-blog-graphics/references/components/KVqAt-stage-medallions.md
+  s_83549d9e4a90fe::t_0d2234e6314a05 1-30
+marketing/man-digital-blog-graphics/references/components/KVqAt.md
+  s_83549d9e4a90fe::t_7694c952a0640e 1-42
+marketing/man-digital-blog-graphics/references/components/Kz4lo.md
+  s_83549d9e4a90fe::t_329ea459f82d4b 1-19
+marketing/man-digital-blog-graphics/references/components/L3XUdM.md
+  s_83549d9e4a90fe::t_fab748868f4eaa 1-15
+marketing/man-digital-blog-graphics/references/components/L4BsQ.md
+  s_83549d9e4a90fe::t_1084f2171e8d3b 1-21
+marketing/man-digital-blog-graphics/references/components/L4Tph8.md
+  s_83549d9e4a90fe::t_f161eb4ea85370 1-31
+marketing/man-digital-blog-graphics/references/components/L6sz6.md
+  s_83549d9e4a90fe::t_285b8da6a99375 1-19
+marketing/man-digital-blog-graphics/references/components/LGDxt.md
+  s_83549d9e4a90fe::t_999c551c218542 1-7
+marketing/man-digital-blog-graphics/references/components/LQxPS.md
+  s_83549d9e4a90fe::t_d30ffbc2427b09 1-28
+marketing/man-digital-blog-graphics/references/components/LZkoW.md
+  s_83549d9e4a90fe::t_929d1ae3f9deee 1-48
+marketing/man-digital-blog-graphics/references/components/LaC0j.md
+  s_83549d9e4a90fe::t_9e0989a054cf24 1-26
+marketing/man-digital-blog-graphics/references/components/LcGj0.md
+  s_83549d9e4a90fe::t_06da5fffe8648b 1-25
+marketing/man-digital-blog-graphics/references/components/LmSrf.md
+  s_83549d9e4a90fe::t_e179c8c574050a 1-17
+marketing/man-digital-blog-graphics/references/components/M9Mwq.md
+  s_83549d9e4a90fe::t_6101cb2725e943 1-7
+marketing/man-digital-blog-graphics/references/components/MDZoE.md
+  s_83549d9e4a90fe::t_6283f65a5b9b47 1-9
+marketing/man-digital-blog-graphics/references/components/MEygm.md
+  s_83549d9e4a90fe::t_ba171c3d24b068 1-7
+marketing/man-digital-blog-graphics/references/components/MRO7A.md
+  s_83549d9e4a90fe::t_d41d60c05fa8c4 1-19
+marketing/man-digital-blog-graphics/references/components/N6hQ6i.md
+  s_83549d9e4a90fe::t_cb50f0c56cf2a0 1-17
+marketing/man-digital-blog-graphics/references/components/N9vBe.md
+  s_83549d9e4a90fe::t_6bdb58cb2bde13 1-20
+marketing/man-digital-blog-graphics/references/components/NDHPc.md
+  s_83549d9e4a90fe::t_fdf720db619e62 1-17
+marketing/man-digital-blog-graphics/references/components/NMnG1.md
+  s_83549d9e4a90fe::t_6ccecc885d2dcc 1-29
+marketing/man-digital-blog-graphics/references/components/NhErk.md
+  s_83549d9e4a90fe::t_20a8b6a4a7ea0d 1-29
+marketing/man-digital-blog-graphics/references/components/ONaC7.md
+  s_83549d9e4a90fe::t_22d0438c6bd12e 1-9
+marketing/man-digital-blog-graphics/references/components/OY5Hk.md
+  s_83549d9e4a90fe::t_f8ccb8bcbaf38b 1-17
+marketing/man-digital-blog-graphics/references/components/Oaaf3.md
+  s_83549d9e4a90fe::t_1e39bddb217179 1-13
+marketing/man-digital-blog-graphics/references/components/Olo2q.md
+  s_83549d9e4a90fe::t_c7dc790127c143 1-17
+marketing/man-digital-blog-graphics/references/components/OxE0i.md
+  s_83549d9e4a90fe::t_51187d68483906 1-7
+marketing/man-digital-blog-graphics/references/components/OzxqD.md
+  s_83549d9e4a90fe::t_337c45aa97c6df 1-17
+marketing/man-digital-blog-graphics/references/components/P1lJ4.md
+  s_83549d9e4a90fe::t_ca69818bf06de9 1-9
+marketing/man-digital-blog-graphics/references/components/P6yn6G.md
+  s_83549d9e4a90fe::t_bb0b3f6652364c 1-14
+marketing/man-digital-blog-graphics/references/components/PCERa.md
+  s_83549d9e4a90fe::t_16af1ec779ec3d 1-7
+marketing/man-digital-blog-graphics/references/components/PCfHV.md
+  s_83549d9e4a90fe::t_8e938702da7749 1-21
+marketing/man-digital-blog-graphics/references/components/PPpdM.md
+  s_83549d9e4a90fe::t_866ff0a9f7753c 1-30
+marketing/man-digital-blog-graphics/references/components/Pc9uc.md
+  s_83549d9e4a90fe::t_742646e3e9f0fd 1-17
+marketing/man-digital-blog-graphics/references/components/Pd0Ar.md
+  s_83549d9e4a90fe::t_dde5d3f9eab46a 1-7
+marketing/man-digital-blog-graphics/references/components/PmwYY.md
+  s_83549d9e4a90fe::t_f4ae217312f128 1-17
+marketing/man-digital-blog-graphics/references/components/QOl9O.md
+  s_83549d9e4a90fe::t_9d0e4ceddc771a 1-17
+marketing/man-digital-blog-graphics/references/components/QYjCY.md
+  s_83549d9e4a90fe::t_4c4d33382de41f 1-19
+marketing/man-digital-blog-graphics/references/components/QohGy.md
+  s_83549d9e4a90fe::t_d6e1b0a14cb303 1-17
+marketing/man-digital-blog-graphics/references/components/R7GXRf.md
+  s_83549d9e4a90fe::t_bbe71ccc13e37e 1-17
+marketing/man-digital-blog-graphics/references/components/R8DCVu.md
+  s_83549d9e4a90fe::t_dad4a5d5d1927d 1-19
+marketing/man-digital-blog-graphics/references/components/RXIfB.md
+  s_83549d9e4a90fe::t_ccad9ee1d89584 1-9
+marketing/man-digital-blog-graphics/references/components/S20AXj-anatomy.md
+  s_83549d9e4a90fe::t_3c02ca8363e4eb 1-36
+marketing/man-digital-blog-graphics/references/components/S20AXj.md
+  s_83549d9e4a90fe::t_ed9caa11fec75c 1-26
+marketing/man-digital-blog-graphics/references/components/S83Yn.md
+  s_83549d9e4a90fe::t_5845a20a39e61b 1-7
+marketing/man-digital-blog-graphics/references/components/SFEJX.md
+  s_83549d9e4a90fe::t_a994f6ef07a04b 1-17
+marketing/man-digital-blog-graphics/references/components/STUSm.md
+  s_83549d9e4a90fe::t_6ddf002c22831e 1-17
+marketing/man-digital-blog-graphics/references/components/SbBJV.md
+  s_83549d9e4a90fe::t_8f3d5725f2f533 1-30
+marketing/man-digital-blog-graphics/references/components/Ss4XV.md
+  s_83549d9e4a90fe::t_7c4cafeaf7b8f9 1-9
+marketing/man-digital-blog-graphics/references/components/T4JKb.md
+  s_83549d9e4a90fe::t_d4b434ccbdc941 1-21
+marketing/man-digital-blog-graphics/references/components/T69e7c.md
+  s_83549d9e4a90fe::t_790c20d9a6d261 1-18
+marketing/man-digital-blog-graphics/references/components/TEAdJ.md
+  s_83549d9e4a90fe::t_9e10edbd28713c 1-7
+marketing/man-digital-blog-graphics/references/components/TFZvq.md
+  s_83549d9e4a90fe::t_10afdae9cc9264 1-17
+marketing/man-digital-blog-graphics/references/components/TTb0V.md
+  s_83549d9e4a90fe::t_4c1c10e3561afd 1-20
+marketing/man-digital-blog-graphics/references/components/UE3nt.md
+  s_83549d9e4a90fe::t_f1aeb9a7ac3f8d 1-7
+marketing/man-digital-blog-graphics/references/components/UGkI1.md
+  s_83549d9e4a90fe::t_bd4e9a6d3174b0 1-9
+marketing/man-digital-blog-graphics/references/components/UsYRl.md
+  s_83549d9e4a90fe::t_8b5ca324a9a4da 1-17
+marketing/man-digital-blog-graphics/references/components/UwrVO.md
+  s_83549d9e4a90fe::t_ac09d78b2577b2 1-21
+marketing/man-digital-blog-graphics/references/components/Uyaly.md
+  s_83549d9e4a90fe::t_bda7017b60f110 1-7
+marketing/man-digital-blog-graphics/references/components/V4qUYI.md
+  s_83549d9e4a90fe::t_705a0bd5de8877 1-17
+marketing/man-digital-blog-graphics/references/components/V55uo.md
+  s_83549d9e4a90fe::t_0acc1a19533f83 1-7
+marketing/man-digital-blog-graphics/references/components/V5C2Z.md
+  s_83549d9e4a90fe::t_f9e339728ba5a1 1-19
+marketing/man-digital-blog-graphics/references/components/V5iH8.md
+  s_83549d9e4a90fe::t_f8ee38199d2a7b 1-7
+marketing/man-digital-blog-graphics/references/components/VJCMg.md
+  s_83549d9e4a90fe::t_4814acd3a19fdf 1-19
+marketing/man-digital-blog-graphics/references/components/VSVo4.md
+  s_83549d9e4a90fe::t_1a7b85e8deeaf8 1-39
+marketing/man-digital-blog-graphics/references/components/VXBXH.md
+  s_83549d9e4a90fe::t_37e1d7e45b25e6 1-17
+marketing/man-digital-blog-graphics/references/components/Vmhgt.md
+  s_83549d9e4a90fe::t_db66db6f6adf5d 1-9
+marketing/man-digital-blog-graphics/references/components/VoeXd.md
+  s_83549d9e4a90fe::t_bb008595d3950e 1-7
+marketing/man-digital-blog-graphics/references/components/VqQ1q.md
+  s_83549d9e4a90fe::t_fbc777324ebf40 1-7
+marketing/man-digital-blog-graphics/references/components/VsypW.md
+  s_83549d9e4a90fe::t_7e31f23684daf0 1-30
+marketing/man-digital-blog-graphics/references/components/W1wPN.md
+  s_83549d9e4a90fe::t_8f47fe4dca9873 1-17
+marketing/man-digital-blog-graphics/references/components/Wdvjp.md
+  s_83549d9e4a90fe::t_f6ba750516d499 1-25
+marketing/man-digital-blog-graphics/references/components/Wf0kc.md
+  s_83549d9e4a90fe::t_603d709ff954d5 1-9
+marketing/man-digital-blog-graphics/references/components/Wn3fM.md
+  s_83549d9e4a90fe::t_e2692e2b8c3b93 1-7
+marketing/man-digital-blog-graphics/references/components/WsUV2.md
+  s_83549d9e4a90fe::t_8eb0134dcdaecd 1-9
+marketing/man-digital-blog-graphics/references/components/X5rVj.md
+  s_83549d9e4a90fe::t_a942356081ef43 1-17
+marketing/man-digital-blog-graphics/references/components/XBFUT.md
+  s_83549d9e4a90fe::t_2e9f44d46e2853 1-7
+marketing/man-digital-blog-graphics/references/components/XMlIk.md
+  s_83549d9e4a90fe::t_b44850ec54e57f 1-17
+marketing/man-digital-blog-graphics/references/components/XRpJ2.md
+  s_83549d9e4a90fe::t_ddc00881251532 1-17
+marketing/man-digital-blog-graphics/references/components/XU9Jh.md
+  s_83549d9e4a90fe::t_c560719fae2205 1-7
+marketing/man-digital-blog-graphics/references/components/XYYB5.md
+  s_83549d9e4a90fe::t_dd9bfe50669235 1-9
+marketing/man-digital-blog-graphics/references/components/XlJSz.md
+  s_83549d9e4a90fe::t_c5a117e0f38c35 1-17
+marketing/man-digital-blog-graphics/references/components/Y3EFnY.md
+  s_83549d9e4a90fe::t_691e80b0ea4ec2 1-20
+marketing/man-digital-blog-graphics/references/components/Y3Tzyc.md
+  s_83549d9e4a90fe::t_076673fccac4bc 1-30
+marketing/man-digital-blog-graphics/references/components/YF7EE.md
+  s_83549d9e4a90fe::t_5d877084168e1a 1-21
+marketing/man-digital-blog-graphics/references/components/YJ0Pl.md
+  s_83549d9e4a90fe::t_9fb208dc1e88fd 1-17
+marketing/man-digital-blog-graphics/references/components/YO7kf.md
+  s_83549d9e4a90fe::t_2c68855acea925 1-9
+marketing/man-digital-blog-graphics/references/components/YQjgo.md
+  s_83549d9e4a90fe::t_48ed7e6b76b6c1 1-23
+marketing/man-digital-blog-graphics/references/components/ZK2C9.md
+  s_83549d9e4a90fe::t_0a2ca84ea0508e 1-17
+marketing/man-digital-blog-graphics/references/components/ZV7FP.md
+  s_83549d9e4a90fe::t_a3fa9287e069cc 1-17
+marketing/man-digital-blog-graphics/references/components/ZczXl.md
+  s_83549d9e4a90fe::t_461b765537ed10 1-9
+marketing/man-digital-blog-graphics/references/components/ZfZcc.md
+  s_83549d9e4a90fe::t_d927e14889cec2 1-19
+marketing/man-digital-blog-graphics/references/components/aCh62.md
+  s_83549d9e4a90fe::t_db55010ec0c948 1-17
+marketing/man-digital-blog-graphics/references/components/acPUD.md
+  s_83549d9e4a90fe::t_576d7f54865671 1-26
+marketing/man-digital-blog-graphics/references/components/axrAu.md
+  s_83549d9e4a90fe::t_74650f86706716 1-17
+marketing/man-digital-blog-graphics/references/components/b8SoH-action-chain.md
+  s_83549d9e4a90fe::t_1d958842d1b12b 1-23
+marketing/man-digital-blog-graphics/references/components/b8SoH-anatomy.md
+  s_83549d9e4a90fe::t_bdee91632c69ac 1-86
+marketing/man-digital-blog-graphics/references/components/b8SoH-central-hub.md
+  s_83549d9e4a90fe::t_a47310f12beccd 1-20
+marketing/man-digital-blog-graphics/references/components/b8SoH-connectors.md
+  s_83549d9e4a90fe::t_b72eae6673647c 1-19
+marketing/man-digital-blog-graphics/references/components/b8SoH-decorations.md
+  s_83549d9e4a90fe::t_eb4fee0fc2841b 1-22
+marketing/man-digital-blog-graphics/references/components/b8SoH-play-cards.md
+  s_83549d9e4a90fe::t_e4a37407399ffe 1-22
+marketing/man-digital-blog-graphics/references/components/b8SoH.md
+  s_83549d9e4a90fe::t_60e77bfcd3b62e 1-38
+marketing/man-digital-blog-graphics/references/components/b9mPY.md
+  s_83549d9e4a90fe::t_188140dc8bcaec 1-20
+marketing/man-digital-blog-graphics/references/components/bjCb3.md
+  s_83549d9e4a90fe::t_8e9763d3d2cfc6 1-9
+marketing/man-digital-blog-graphics/references/components/c1w4M.md
+  s_83549d9e4a90fe::t_e8c0b24d6b5134 1-21
+marketing/man-digital-blog-graphics/references/components/cDfXv.md
+  s_83549d9e4a90fe::t_bea22b217bc50b 1-19
+marketing/man-digital-blog-graphics/references/components/cRGY1.md
+  s_83549d9e4a90fe::t_548d90234edf7e 1-19
+marketing/man-digital-blog-graphics/references/components/chxsV.md
+  s_83549d9e4a90fe::t_317c012b7b1fbf 1-7
+marketing/man-digital-blog-graphics/references/components/cvoYg.md
+  s_83549d9e4a90fe::t_a1193268b2519d 1-7
+marketing/man-digital-blog-graphics/references/components/cxs00.md
+  s_83549d9e4a90fe::t_5a08e75cc059ce 1-17
+marketing/man-digital-blog-graphics/references/components/cyraK.md
+  s_83549d9e4a90fe::t_59f5103ee8e69c 1-21
+marketing/man-digital-blog-graphics/references/components/d45hgj.md
+  s_83549d9e4a90fe::t_69672b4654b2c4 1-17
+marketing/man-digital-blog-graphics/references/components/dI0RZ.md
+  s_83549d9e4a90fe::t_46fbc645c9a474 1-13
+marketing/man-digital-blog-graphics/references/components/dNJMv.md
+  s_83549d9e4a90fe::t_bfbca8dbe84c84 1-9
+marketing/man-digital-blog-graphics/references/components/dSYM9.md
+  s_83549d9e4a90fe::t_ff1add1214de0d 1-7
+marketing/man-digital-blog-graphics/references/components/e4Lqy.md
+  s_83549d9e4a90fe::t_99b90fd95407a3 1-17
+marketing/man-digital-blog-graphics/references/components/eLsK1.md
+  s_83549d9e4a90fe::t_0043ed787f7c7b 1-17
+marketing/man-digital-blog-graphics/references/components/eYM78.md
+  s_83549d9e4a90fe::t_4f4d1b29718bd7 1-9
+marketing/man-digital-blog-graphics/references/components/enyqD.md
+  s_83549d9e4a90fe::t_628c60e46ba6ed 1-9
+marketing/man-digital-blog-graphics/references/components/exi7v.md
+  s_83549d9e4a90fe::t_03fb68bbf594e6 1-19
+marketing/man-digital-blog-graphics/references/components/f3PFBi.md
+  s_83549d9e4a90fe::t_196a3639c050bf 1-17
+marketing/man-digital-blog-graphics/references/components/fKn3K.md
+  s_83549d9e4a90fe::t_0c1190aeb9bf59 1-32
+marketing/man-digital-blog-graphics/references/components/fVYda.md
+  s_83549d9e4a90fe::t_55d45260424431 1-9
+marketing/man-digital-blog-graphics/references/components/ffT7v.md
+  s_83549d9e4a90fe::t_00ddbf6c018379 1-7
+marketing/man-digital-blog-graphics/references/components/ftaD9.md
+  s_83549d9e4a90fe::t_4678a3d4b892c4 1-23
+marketing/man-digital-blog-graphics/references/components/g0Gr3.md
+  s_83549d9e4a90fe::t_4f85a7d20ec4e2 1-17
+marketing/man-digital-blog-graphics/references/components/g0uwc.md
+  s_83549d9e4a90fe::t_e2ac4f3d5645d2 1-19
+marketing/man-digital-blog-graphics/references/components/g77fJ3.md
+  s_83549d9e4a90fe::t_d928a5d5f9ee09 1-17
+marketing/man-digital-blog-graphics/references/components/gASqb.md
+  s_83549d9e4a90fe::t_cee08ced216575 1-9
+marketing/man-digital-blog-graphics/references/components/gFZ8y.md
+  s_83549d9e4a90fe::t_734f985762b4e4 1-19
+marketing/man-digital-blog-graphics/references/components/gGhJq.md
+  s_83549d9e4a90fe::t_29d8aaccc92d5b 1-17
+marketing/man-digital-blog-graphics/references/components/gHgAL.md
+  s_83549d9e4a90fe::t_65471910b7a11b 1-21
+marketing/man-digital-blog-graphics/references/components/gNA5Z.md
+  s_83549d9e4a90fe::t_216bcb5b4996ee 1-17
+marketing/man-digital-blog-graphics/references/components/gOlaQ.md
+  s_83549d9e4a90fe::t_c9ed00e0375c59 1-9
+marketing/man-digital-blog-graphics/references/components/gXQcn.md
+  s_83549d9e4a90fe::t_2bb64afe49110e 1-19
+marketing/man-digital-blog-graphics/references/components/gx2Vb.md
+  s_83549d9e4a90fe::t_a7d5c6d00e18c7 1-17
+marketing/man-digital-blog-graphics/references/components/gyGY4.md
+  s_83549d9e4a90fe::t_0d661ccecf260c 1-20
+marketing/man-digital-blog-graphics/references/components/h37Z1.md
+  s_83549d9e4a90fe::t_35223bc9edcac6 1-22
+marketing/man-digital-blog-graphics/references/components/hdgMM.md
+  s_83549d9e4a90fe::t_81353cb0c76823 1-17
+marketing/man-digital-blog-graphics/references/components/i5rrd.md
+  s_83549d9e4a90fe::t_fd4b105a1353b9 1-25
+marketing/man-digital-blog-graphics/references/components/id7JG.md
+  s_83549d9e4a90fe::t_be25ea2951aabe 1-17
+marketing/man-digital-blog-graphics/references/components/j7TFin.md
+  s_83549d9e4a90fe::t_53a2fc9807821a 1-18
+marketing/man-digital-blog-graphics/references/components/jNmrp.md
+  s_83549d9e4a90fe::t_26823211f3fd2e 1-27
+marketing/man-digital-blog-graphics/references/components/jS3aU.md
+  s_83549d9e4a90fe::t_8ff9b9103d5c57 1-21
+marketing/man-digital-blog-graphics/references/components/jWyvs.md
+  s_83549d9e4a90fe::t_dd8c209c100d5f 1-9
+marketing/man-digital-blog-graphics/references/components/jmis9.md
+  s_83549d9e4a90fe::t_d51ea852bee66b 1-17
+marketing/man-digital-blog-graphics/references/components/jrrkW.md
+  s_83549d9e4a90fe::t_6b604baf3ed5dc 1-24
+marketing/man-digital-blog-graphics/references/components/kC04H.md
+  s_83549d9e4a90fe::t_3c98b17a7eaefd 1-43
+marketing/man-digital-blog-graphics/references/components/kDHQJ.md
+  s_83549d9e4a90fe::t_fea1a5ea066ee2 1-17
+marketing/man-digital-blog-graphics/references/components/kNIBf.md
+  s_83549d9e4a90fe::t_fbb5382bf028db 1-23
+marketing/man-digital-blog-graphics/references/components/kPyZN.md
+  s_83549d9e4a90fe::t_054d7196b68f50 1-17
+marketing/man-digital-blog-graphics/references/components/kR1fH.md
+  s_83549d9e4a90fe::t_060f7587c6a0ab 1-19
+marketing/man-digital-blog-graphics/references/components/kRJNr.md
+  s_83549d9e4a90fe::t_3e169a49295104 1-19
+marketing/man-digital-blog-graphics/references/components/kWGxf.md
+  s_83549d9e4a90fe::t_0d9f278fa0779b 1-17
+marketing/man-digital-blog-graphics/references/components/kpDtk.md
+  s_83549d9e4a90fe::t_8bbc4fde1b5d42 1-9
+marketing/man-digital-blog-graphics/references/components/kzjzN.md
+  s_83549d9e4a90fe::t_3c27b44007885e 1-9
+marketing/man-digital-blog-graphics/references/components/l5NNCU.md
+  s_83549d9e4a90fe::t_bb9aea137f5479 1-34
+marketing/man-digital-blog-graphics/references/components/l6jnb.md
+  s_83549d9e4a90fe::t_26825ea6b00c7a 1-27
+marketing/man-digital-blog-graphics/references/components/lLDFt.md
+  s_83549d9e4a90fe::t_de2243a7421c51 1-28
+marketing/man-digital-blog-graphics/references/components/lLFX3.md
+  s_83549d9e4a90fe::t_b42f6ea129d6e1 1-7
+marketing/man-digital-blog-graphics/references/components/lP11x.md
+  s_83549d9e4a90fe::t_1fb2d9787e7e94 1-28
+marketing/man-digital-blog-graphics/references/components/liNMD.md
+  s_83549d9e4a90fe::t_831463d4c56b6b 1-15
+marketing/man-digital-blog-graphics/references/components/lk5IY.md
+  s_83549d9e4a90fe::t_da79413f4dd217 1-7
+marketing/man-digital-blog-graphics/references/components/llyux-anatomy.md
+  s_83549d9e4a90fe::t_8ad571d4c32c85 1-107
+marketing/man-digital-blog-graphics/references/components/llyux-capability-tiles.md
+  s_83549d9e4a90fe::t_9d57677d403d15 1-44
+marketing/man-digital-blog-graphics/references/components/llyux-connectors.md
+  s_83549d9e4a90fe::t_6f7ad5b9c93b99 1-19
+marketing/man-digital-blog-graphics/references/components/llyux-decorations.md
+  s_83549d9e4a90fe::t_346c1ffa376644 1-21
+marketing/man-digital-blog-graphics/references/components/llyux-layer-rows.md
+  s_83549d9e4a90fe::t_5ff1223646b9f2 1-20
+marketing/man-digital-blog-graphics/references/components/llyux.md
+  s_83549d9e4a90fe::t_3dfa2920077e1c 1-37
+marketing/man-digital-blog-graphics/references/components/loMOa.md
+  s_83549d9e4a90fe::t_39e5e934e66bc1 1-7
+marketing/man-digital-blog-graphics/references/components/m0AGw.md
+  s_83549d9e4a90fe::t_21814c819630e0 1-9
+marketing/man-digital-blog-graphics/references/components/mGR6X.md
+  s_83549d9e4a90fe::t_fccab809a7f9b2 1-7
+marketing/man-digital-blog-graphics/references/components/mXRG7.md
+  s_83549d9e4a90fe::t_356471948a4efb 1-19
+marketing/man-digital-blog-graphics/references/components/mxMXf.md
+  s_83549d9e4a90fe::t_e51803dfca75a6 1-19
+marketing/man-digital-blog-graphics/references/components/nAN4b.md
+  s_83549d9e4a90fe::t_5e9263939a1fcd 1-13
+marketing/man-digital-blog-graphics/references/components/nClmy.md
+  s_83549d9e4a90fe::t_e97470dc6c43fd 1-17
+marketing/man-digital-blog-graphics/references/components/nDCxe.md
+  s_83549d9e4a90fe::t_ee9c6f0a84d5dc 1-9
+marketing/man-digital-blog-graphics/references/components/nKaVf.md
+  s_83549d9e4a90fe::t_3d5b81105b39f3 1-18
+marketing/man-digital-blog-graphics/references/components/nRPmP-anatomy.md
+  s_83549d9e4a90fe::t_72d5c2a3071bdf 1-139
+marketing/man-digital-blog-graphics/references/components/nRPmP.md
+  s_83549d9e4a90fe::t_aee663d461b2bc 1-59
+marketing/man-digital-blog-graphics/references/components/nXTXW.md
+  s_83549d9e4a90fe::t_8dc53a6ef8f239 1-20
+marketing/man-digital-blog-graphics/references/components/nYhge.md
+  s_83549d9e4a90fe::t_7d4e46516ee81e 1-7
+marketing/man-digital-blog-graphics/references/components/naIqG.md
+  s_83549d9e4a90fe::t_ba5e2ae9a6bce9 1-17
+marketing/man-digital-blog-graphics/references/components/nia9w.md
+  s_83549d9e4a90fe::t_4ca30069327b15 1-27
+marketing/man-digital-blog-graphics/references/components/o8JsKS.md
+  s_83549d9e4a90fe::t_85eb01fe6b675f 1-21
+marketing/man-digital-blog-graphics/references/components/oAlzD.md
+  s_83549d9e4a90fe::t_ba0654f45b770e 1-9
+marketing/man-digital-blog-graphics/references/components/oCVLE.md
+  s_83549d9e4a90fe::t_78f006cf555510 1-21
+marketing/man-digital-blog-graphics/references/components/oEmxe.md
+  s_83549d9e4a90fe::t_bf3df61e2556e7 1-20
+marketing/man-digital-blog-graphics/references/components/oS90m.md
+  s_83549d9e4a90fe::t_2537bbde1c4b8b 1-17
+marketing/man-digital-blog-graphics/references/components/p4Dtt.md
+  s_83549d9e4a90fe::t_af9bed4e7416c9 1-29
+marketing/man-digital-blog-graphics/references/components/p6I4L.md
+  s_83549d9e4a90fe::t_585021090966fe 1-17
+marketing/man-digital-blog-graphics/references/components/p9Pio.md
+  s_83549d9e4a90fe::t_957cd810173988 1-17
+marketing/man-digital-blog-graphics/references/components/pArwu.md
+  s_83549d9e4a90fe::t_1581cd08f5726e 1-7
+marketing/man-digital-blog-graphics/references/components/pAw6X.md
+  s_83549d9e4a90fe::t_10cae20d7ff792 1-33
+marketing/man-digital-blog-graphics/references/components/pDKxe.md
+  s_83549d9e4a90fe::t_1ff2b122768b39 1-17
+marketing/man-digital-blog-graphics/references/components/pNnmc.md
+  s_83549d9e4a90fe::t_bdb9bc0bc6897e 1-7
+marketing/man-digital-blog-graphics/references/components/penfJ.md
+  s_83549d9e4a90fe::t_c192da2165cf5a 1-17
+marketing/man-digital-blog-graphics/references/components/ppwVj.md
+  s_83549d9e4a90fe::t_dbbc9d84fb8c4e 1-17
+marketing/man-digital-blog-graphics/references/components/q1ZWI.md
+  s_83549d9e4a90fe::t_23fd209da1e465 1-20
+marketing/man-digital-blog-graphics/references/components/q5n3w.md
+  s_83549d9e4a90fe::t_2c1d5df1874bc2 1-21
+marketing/man-digital-blog-graphics/references/components/qBrvo.md
+  s_83549d9e4a90fe::t_41d503cc109709 1-29
+marketing/man-digital-blog-graphics/references/components/qIQkx.md
+  s_83549d9e4a90fe::t_3210c8a2ca327d 1-13
+marketing/man-digital-blog-graphics/references/components/qctTA.md
+  s_83549d9e4a90fe::t_ec12eb5f298d46 1-20
+marketing/man-digital-blog-graphics/references/components/r4H9R.md
+  s_83549d9e4a90fe::t_85a4f622d8d4a9 1-17
+marketing/man-digital-blog-graphics/references/components/r4XvN.md
+  s_83549d9e4a90fe::t_eecbdb4bb697bc 1-7
+marketing/man-digital-blog-graphics/references/components/r4eLkl.md
+  s_83549d9e4a90fe::t_3375234600263e 1-15
+marketing/man-digital-blog-graphics/references/components/rCfDQ.md
+  s_83549d9e4a90fe::t_5e265841c033e7 1-20
+marketing/man-digital-blog-graphics/references/components/rOwJz.md
+  s_83549d9e4a90fe::t_343c4cdfba91bc 1-7
+marketing/man-digital-blog-graphics/references/components/rPAzG.md
+  s_83549d9e4a90fe::t_5a00ee568330a6 1-21
+marketing/man-digital-blog-graphics/references/components/rRoSd.md
+  s_83549d9e4a90fe::t_fb03408bbde8b4 1-28
+marketing/man-digital-blog-graphics/references/components/rYeKP.md
+  s_83549d9e4a90fe::t_59548be892208b 1-19
+marketing/man-digital-blog-graphics/references/components/s2Djt.md
+  s_83549d9e4a90fe::t_dadcf2c897b26b 1-7
+marketing/man-digital-blog-graphics/references/components/s2ZqRB.md
+  s_83549d9e4a90fe::t_e4c6e1a4dd605b 1-27
+marketing/man-digital-blog-graphics/references/components/sLRvD.md
+  s_83549d9e4a90fe::t_11929eb96ede74 1-9
+marketing/man-digital-blog-graphics/references/components/sLZgV.md
+  s_83549d9e4a90fe::t_85e870f163a58a 1-9
+marketing/man-digital-blog-graphics/references/components/sNcb7.md
+  s_83549d9e4a90fe::t_b666b2b0e99f71 1-17
+marketing/man-digital-blog-graphics/references/components/sQ8TR.md
+  s_83549d9e4a90fe::t_e8e63dd6167f82 1-33
+marketing/man-digital-blog-graphics/references/components/sQk0c.md
+  s_83549d9e4a90fe::t_31a704699474cb 1-23
+marketing/man-digital-blog-graphics/references/components/sW4Qc.md
+  s_83549d9e4a90fe::t_e69cdcba1e4859 1-7
+marketing/man-digital-blog-graphics/references/components/t16Aki.md
+  s_83549d9e4a90fe::t_32ba6ff8bd7dc4 1-17
+marketing/man-digital-blog-graphics/references/components/t1I6f.md
+  s_83549d9e4a90fe::t_e7276b5eda14d6 1-22
+marketing/man-digital-blog-graphics/references/components/t4PYrn.md
+  s_83549d9e4a90fe::t_507da103a62784 1-23
+marketing/man-digital-blog-graphics/references/components/t7CJQ.md
+  s_83549d9e4a90fe::t_12e30bddf66a59 1-17
+marketing/man-digital-blog-graphics/references/components/t8o5y.md
+  s_83549d9e4a90fe::t_d32dceb0ec3007 1-19
+marketing/man-digital-blog-graphics/references/components/tMsEe-anatomy.md
+  s_83549d9e4a90fe::t_a9b8761118593d 1-118
+marketing/man-digital-blog-graphics/references/components/tMsEe-column-headers.md
+  s_83549d9e4a90fe::t_fb7b8dd6c7c24e 1-21
+marketing/man-digital-blog-graphics/references/components/tMsEe-connectors.md
+  s_83549d9e4a90fe::t_7ca73bbcf4b8e7 1-21
+marketing/man-digital-blog-graphics/references/components/tMsEe-decorations.md
+  s_83549d9e4a90fe::t_93eb32076cc476 1-21
+marketing/man-digital-blog-graphics/references/components/tMsEe.md
+  s_83549d9e4a90fe::t_50b9b06fa6a005 1-38
+marketing/man-digital-blog-graphics/references/components/tMycI.md
+  s_83549d9e4a90fe::t_fa0014d99a72f0 1-24
+marketing/man-digital-blog-graphics/references/components/tPufj.md
+  s_83549d9e4a90fe::t_c0f5b1b9ba4423 1-21
+marketing/man-digital-blog-graphics/references/components/tnsHv.md
+  s_83549d9e4a90fe::t_f6462b96f44110 1-23
+marketing/man-digital-blog-graphics/references/components/toIXr.md
+  s_83549d9e4a90fe::t_4f26be2cf36539 1-9
+marketing/man-digital-blog-graphics/references/components/tqRKw.md
+  s_83549d9e4a90fe::t_52d674e6948eff 1-7
+marketing/man-digital-blog-graphics/references/components/tvqbC.md
+  s_83549d9e4a90fe::t_d616712f72e316 1-19
+marketing/man-digital-blog-graphics/references/components/u4YLL.md
+  s_83549d9e4a90fe::t_c26cf3079c9936 1-21
+marketing/man-digital-blog-graphics/references/components/u7BvG.md
+  s_83549d9e4a90fe::t_38374426d91cef 1-7
+marketing/man-digital-blog-graphics/references/components/u9s7MI.md
+  s_83549d9e4a90fe::t_c7d30b1bee08ed 1-21
+marketing/man-digital-blog-graphics/references/components/uGUnu.md
+  s_83549d9e4a90fe::t_9e2f9d2e82f7b6 1-9
+marketing/man-digital-blog-graphics/references/components/uIZrr.md
+  s_83549d9e4a90fe::t_8f14609ae48979 1-19
+marketing/man-digital-blog-graphics/references/components/uOjvY.md
+  s_83549d9e4a90fe::t_72a00f50810ac2 1-17
+marketing/man-digital-blog-graphics/references/components/ujAy2.md
+  s_83549d9e4a90fe::t_88a8787a0f4948 1-19
+marketing/man-digital-blog-graphics/references/components/ul9DN.md
+  s_83549d9e4a90fe::t_44402811d0112a 1-7
+marketing/man-digital-blog-graphics/references/components/v0oSD6.md
+  s_83549d9e4a90fe::t_11cb8ff05024e6 1-23
+marketing/man-digital-blog-graphics/references/components/v2O4y.md
+  s_83549d9e4a90fe::t_06bc50eda196b0 1-9
+marketing/man-digital-blog-graphics/references/components/v5aVuG.md
+  s_83549d9e4a90fe::t_812f1368e70eae 1-26
+marketing/man-digital-blog-graphics/references/components/v5vVj.md
+  s_83549d9e4a90fe::t_0bb30b7632dc05 1-17
+marketing/man-digital-blog-graphics/references/components/vlJgV.md
+  s_83549d9e4a90fe::t_cda5f2dc7a0bd2 1-25
+marketing/man-digital-blog-graphics/references/components/voulE.md
+  s_83549d9e4a90fe::t_cbb691ec1d5b16 1-27
+marketing/man-digital-blog-graphics/references/components/vvog0.md
+  s_83549d9e4a90fe::t_30568579a79c3c 1-17
+marketing/man-digital-blog-graphics/references/components/w0lcS.md
+  s_83549d9e4a90fe::t_411da9e912ce4a 1-15
+marketing/man-digital-blog-graphics/references/components/w8dYDV.md
+  s_83549d9e4a90fe::t_f75e04bbce3b42 1-21
+marketing/man-digital-blog-graphics/references/components/wA8q4.md
+  s_83549d9e4a90fe::t_0cecc7d4755d51 1-17
+marketing/man-digital-blog-graphics/references/components/wTMqf.md
+  s_83549d9e4a90fe::t_da50510d651ead 1-30
+marketing/man-digital-blog-graphics/references/components/wcgGl.md
+  s_83549d9e4a90fe::t_e04740a61724b0 1-17
+marketing/man-digital-blog-graphics/references/components/wgwpV.md
+  s_83549d9e4a90fe::t_86ad62749b1ef4 1-35
+marketing/man-digital-blog-graphics/references/components/wyrZ3.md
+  s_83549d9e4a90fe::t_d458750cc5d351 1-25
+marketing/man-digital-blog-graphics/references/components/x73R0.md
+  s_83549d9e4a90fe::t_34fb83e66576b8 1-7
+marketing/man-digital-blog-graphics/references/components/xAG2o.md
+  s_83549d9e4a90fe::t_1eb42024f438d8 1-25
+marketing/man-digital-blog-graphics/references/components/xJySU.md
+  s_83549d9e4a90fe::t_980fd3955c83a2 1-19
+marketing/man-digital-blog-graphics/references/components/xOLUX.md
+  s_83549d9e4a90fe::t_8893fbfdc51c2c 1-29
+marketing/man-digital-blog-graphics/references/components/xrbbT.md
+  s_83549d9e4a90fe::t_87c97c616e7d58 1-9
+marketing/man-digital-blog-graphics/references/components/xzcQj.md
+  s_83549d9e4a90fe::t_8f39731c2df672 1-7
+marketing/man-digital-blog-graphics/references/components/yZvWt.md
+  s_83549d9e4a90fe::t_1a83e1e420c755 1-17
+marketing/man-digital-blog-graphics/references/components/z3lOdk.md
+  s_83549d9e4a90fe::t_4132137a9f22dd 1-19
+marketing/man-digital-blog-graphics/references/components/z8Ai1.md
+  s_83549d9e4a90fe::t_644af68aaf4693 1-9
+marketing/man-digital-blog-graphics/references/components/zBqny.md
+  s_83549d9e4a90fe::t_ea3f3b66fae071 1-19
+marketing/man-digital-blog-graphics/references/components/zLNDk.md
+  s_83549d9e4a90fe::t_a2f817cb2c9221 1-21
+marketing/man-digital-blog-graphics/references/components/zLUkh.md
+  s_83549d9e4a90fe::t_6a590372965958 1-9
+marketing/man-digital-blog-graphics/references/components/zuu8y.md
+  s_83549d9e4a90fe::t_46c758bdc020d2 1-28
+marketing/man-digital-blog-graphics/references/container-spacing-and-topic-coding.md
+  s_83549d9e4a90fe::t_5d5dc8b683c0c7 1-103
+marketing/man-digital-blog-graphics/references/current-playground-audit.md
+  s_83549d9e4a90fe::t_bc43883fddbdc2 1-104
+marketing/man-digital-blog-graphics/references/deep-dives.md
+  s_83549d9e4a90fe::t_adf96b54c75147 1-291
+marketing/man-digital-blog-graphics/references/editable-pencil-source.md
+  s_83549d9e4a90fe::t_39aad887871a91 1-80
+marketing/man-digital-blog-graphics/references/figma-patterns.md
+  s_83549d9e4a90fe::t_a7cc92666243bf 1-192
+marketing/man-digital-blog-graphics/references/flow-connectors.md
+  s_83549d9e4a90fe::t_41e0e1b6526a0a 1-129
+marketing/man-digital-blog-graphics/references/gemini-pencil-learnings.md
+  s_83549d9e4a90fe::t_2fd3909bed88c5 1-58
+marketing/man-digital-blog-graphics/references/graphic-styles.md
+  s_83549d9e4a90fe::t_549d206d5039ee 1-95
+marketing/man-digital-blog-graphics/references/hubspot-placeholder-publish.md
+  s_83549d9e4a90fe::t_f632fd20fc6e09 1-228
+marketing/man-digital-blog-graphics/references/hubspot-post-fetch.md
+  s_83549d9e4a90fe::t_a60cc1beb48ef2 1-143
+marketing/man-digital-blog-graphics/references/image-placeholders.md
+  s_83549d9e4a90fe::t_76761cdb5d67eb 1-26
+marketing/man-digital-blog-graphics/references/library-scan-loop.md
+  s_83549d9e4a90fe::t_94f9396273eeb5 1-73
+marketing/man-digital-blog-graphics/references/master-template-fit-map.md
+  s_83549d9e4a90fe::t_374d8289bb1b41 1-133
+marketing/man-digital-blog-graphics/references/output-types.md
+  s_83549d9e4a90fe::t_a824ef4b05cba6 1-59
+marketing/man-digital-blog-graphics/references/pencil-workflow.md
+  s_83549d9e4a90fe::t_55a848e43f27f7 1-111
+marketing/man-digital-blog-graphics/references/playground-candidate-roster.md
+  s_83549d9e4a90fe::t_ea155ebcc7a6de 1-97
+marketing/man-digital-blog-graphics/references/preview-manifest.md
+  s_83549d9e4a90fe::t_68d7d096777b96 1-35
+marketing/man-digital-blog-graphics/references/production-quality-floor.md
+  s_83549d9e4a90fe::t_cac02d7295e240 1-109
+marketing/man-digital-blog-graphics/references/qa-checklist.md
+  s_83549d9e4a90fe::t_583c8f0287a70d 1-125
+marketing/man-digital-blog-graphics/references/readability-depth-gate.md
+  s_83549d9e4a90fe::t_154b8596ff3fbf 1-119
+marketing/man-digital-blog-graphics/references/selection-guide.md
+  s_83549d9e4a90fe::t_d3515decb048f6 1-70
+marketing/man-digital-blog-graphics/references/skill-optimization-protocol.md
+  s_83549d9e4a90fe::t_07a0118ffe0e6a 1-116
+marketing/man-digital-blog-graphics/references/source-paths.md
+  s_83549d9e4a90fe::t_8db027cdfc9bbd 1-108
+marketing/man-digital-blog-graphics/references/template-coverage.md
+  s_83549d9e4a90fe::t_d2531879eab204 1-40
+marketing/man-digital-blog-graphics/references/zoom-audit.md
+  s_83549d9e4a90fe::t_36dbedcb4d11c7 1-99
+marketing/man-digital-blog-graphics/scripts/check_registry.py
+  s_83549d9e4a90fe::t_9cc0cfa3f2da94 1-195
+marketing/man-digital-blog-graphics/scripts/check_required_nodes.py
+  s_83549d9e4a90fe::t_19ca5fa75267ee 1-34
+marketing/man-digital-blog-graphics/scripts/hubspot_placeholder_publish.py
+  s_83549d9e4a90fe::t_835296820940d1 1-697
+marketing/man-digital-lucid-charts/README.md
+  s_83549d9e4a90fe::t_a85c26f0e1ec1b 1-26
+marketing/man-digital-lucid-charts/SKILL.md
+  s_83549d9e4a90fe::t_64dcf45a49e3d8 1-137
+marketing/man-digital-lucid-charts/references/audit-loop.md
+  s_83549d9e4a90fe::t_af6948e7954fed 1-82
+marketing/man-digital-lucid-charts/references/brand-tokens.md
+  s_83549d9e4a90fe::t_df9ff09c7b65c2 1-52
+marketing/man-digital-lucid-charts/references/layout-and-fit.md
+  s_83549d9e4a90fe::t_45fa1bdd4bfe93 1-105
+marketing/man-digital-lucid-charts/references/lucid-workflow.md
+  s_83549d9e4a90fe::t_8c67f277d9916c 1-47
+marketing/man-digital-lucid-charts/references/svg-templates.md
+  s_83549d9e4a90fe::t_53807b7334284d 1-111
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.11",
+  "base_commit_sha": "4c3ec3aa5e9cffef5a0190af66db26806e8d3921",
+  "prompts": {},
+  "sessions": {
+    "s_83549d9e4a90fe": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "651467f9-3d7f-4e74-b9c6-215df2d246b9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "romeoman <romeo@man.digital>"
+    }
+  }
+}
