@@ -1,0 +1,5 @@
+interface:
+  display_name: "MAN Digital Blog Graphics"
+  short_description: "Production-grade MAN Digital Pencil graphics"
+  brand_color: "#000FC4"
+  default_prompt: "Use $man-digital-blog-graphics to create or audit a production-grade MAN Digital blog graphic in Pencil from this topic, post, or design feedback."

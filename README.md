@@ -20,13 +20,15 @@ mandigital-claude-skills/
 
 Everything related to producing content for MAN Digital.
 
-| Folder                                                                       | What it is                                                                                                                               |
-| ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| [`blog-production/`](./marketing/blog-production/)                           | The full 7-step blog pipeline (brief → research → fact-check → write → graphics → publish)                                               |
-| [`editing-checklist/`](./marketing/editing-checklist/)                       | Standalone editorial quality framework — use on any piece of writing                                                                     |
-| [`vibe-marketing-v2/`](./marketing/vibe-marketing-v2/)                       | 11-skill marketing suite (brand voice, positioning, lead magnets, email, newsletter, creative, etc.)                                     |
-| [`linkedin-post-creation/`](./marketing/linkedin-post-creation/)             | LinkedIn post writing skill                                                                                                              |
-| [`man-digital-marketing-assets/`](./marketing/man-digital-marketing-assets/) | Builds branded MAN Digital social/marketing assets (LinkedIn, Facebook, Instagram, YouTube, OG images) in Pencil from user-supplied copy |
+| Folder                                                                       | What it is                                                                                                                                                        |
+| ---------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`blog-production/`](./marketing/blog-production/)                           | The full 7-step blog pipeline (brief → research → fact-check → write → graphics → publish)                                                                        |
+| [`editing-checklist/`](./marketing/editing-checklist/)                       | Standalone editorial quality framework — use on any piece of writing                                                                                              |
+| [`vibe-marketing-v2/`](./marketing/vibe-marketing-v2/)                       | 11-skill marketing suite (brand voice, positioning, lead magnets, email, newsletter, creative, etc.)                                                              |
+| [`linkedin-post-creation/`](./marketing/linkedin-post-creation/)             | LinkedIn post writing skill                                                                                                                                       |
+| [`man-digital-marketing-assets/`](./marketing/man-digital-marketing-assets/) | Builds branded MAN Digital social/marketing assets (LinkedIn, Facebook, Instagram, YouTube, OG images) in Pencil from user-supplied copy                          |
+| [`man-digital-blog-graphics/`](./marketing/man-digital-blog-graphics/)       | Builds branded MAN Digital blog/article/HubSpot/LinkedIn in-body graphics and diagrams in Pencil                                                                  |
+| [`man-digital-lucid-charts/`](./marketing/man-digital-lucid-charts/)         | Builds on-brand MAN Digital diagrams (flowcharts, org charts, RevOps/CRM architecture, mind maps, sequence diagrams) in Lucidchart via the `@lucid` MCP connector |
 
 ### development/
 
