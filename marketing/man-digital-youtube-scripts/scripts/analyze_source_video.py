@@ -6,7 +6,14 @@ and how to fold the output into the Blueprint and Cue Sheet.
 
 Setup:
     pip install -r requirements.txt
-    export GEMINI_API_KEY="..."   # or GOOGLE_API_KEY -- never commit either
+
+    Then set your API key ONE of two ways (see ../README.md "Setting up your
+    API key" for the full walkthrough):
+      1. Export it in your shell profile, so every terminal/session has it:
+             export GEMINI_API_KEY="..."
+      2. Or copy ../.env.example to ../.env (same folder as SKILL.md) and put
+         the key there -- this script loads that file automatically. ../.env
+         is gitignored; never commit it.
 
 Usage:
     python analyze_source_video.py /path/to/video.mp4 --out video-events.json
@@ -23,9 +30,16 @@ import json
 import os
 import sys
 import time
+from pathlib import Path
 
+from dotenv import load_dotenv
 from google import genai
 from google.genai import types
+
+# Load ../.env (the skill folder root, next to .env.example) if present.
+# An already-exported shell variable always wins -- load_dotenv() never
+# overrides an existing os.environ value.
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 EVENT_SCHEMA = {
     "type": "object",

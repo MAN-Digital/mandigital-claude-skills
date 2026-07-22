@@ -48,12 +48,44 @@ paths and the fallback behavior when that repo isn't available.
 **Only for video-grounded storyboard mode** (analyzing a real source video, not just a
 transcript):
 
-- Python 3 with `pip install -r scripts/requirements.txt` (just `google-genai`)
-- A Gemini API key set as `GEMINI_API_KEY` or `GOOGLE_API_KEY` — get one at
-  `https://aistudio.google.com/apikey`. Never commit a real key; see `.env.example`.
+- Python 3 with `pip install -r scripts/requirements.txt` (`google-genai` + `python-dotenv`)
+- A Gemini API key — get one free at `https://aistudio.google.com/apikey`
 - See [`references/video-grounded-storyboard.md`](references/video-grounded-storyboard.md)
-  for setup, cost notes, and known limits (this script hasn't been run against a live video
-  in this environment yet — verify it on a sample clip first).
+  for cost notes and known limits (this script hasn't been run against a live video in this
+  environment yet — verify it on a sample clip first).
+
+### Setting up your API key
+
+The script looks for `GEMINI_API_KEY` (or `GOOGLE_API_KEY`) as an environment variable. Set
+it up **one of two ways** — pick whichever fits how you work:
+
+**Option 1 — shell profile (persists across every terminal and Claude Code session):**
+
+```bash
+echo 'export GEMINI_API_KEY="your-key-here"' >> ~/.zshrc   # or ~/.bashrc if you use bash
+source ~/.zshrc
+```
+
+**Option 2 — a local `.env` file scoped to just this skill:**
+
+```bash
+cd marketing/man-digital-youtube-scripts   # this skill's folder
+cp .env.example .env
+# open .env and paste your real key after GEMINI_API_KEY=
+```
+
+The script loads this `.env` automatically (via `python-dotenv`) — no export needed. `.env`
+is covered by this folder's own `.gitignore`, so it can't be committed by accident even if
+you copy this skill folder somewhere else.
+
+**Either way:**
+
+- Never paste a real key into `SKILL.md`, any `references/*.md` file, `.env.example`, or a
+  commit message — those are all version-controlled and, for this skill, public.
+- If you ever paste a key into chat with an AI assistant by mistake, revoke it at
+  `https://aistudio.google.com/apikey` and generate a new one.
+- Everyone on the team installing this skill needs their own key set up this way before
+  video-grounded storyboard mode will run — there's no shared/embedded key.
 
 ## Files
 

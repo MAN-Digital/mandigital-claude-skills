@@ -1,0 +1,8 @@
+# Never commit your real API key.
+.env
+.env.*
+!.env.example
+
+__pycache__/
+*.pyc
+.DS_Store
