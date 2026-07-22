@@ -47,9 +47,9 @@ python scripts/analyze_source_video.py "https://www.loom.com/share/XXXXXXXXXXXXX
 - **Local files work directly.** You do not need to host the video anywhere public — the
   script uploads it to Gemini's File API and references the returned file URI.
 - **YouTube URLs work directly** for public videos (not private/unlisted).
-- **Loom share URLs work directly too.** The script downloads the video first (via Loom's
-  `transcoded-url` endpoint — see "Loom download caveats" below), then uploads it through the
-  same local-file path as any other video.
+- **Loom share URLs work directly too.** The script downloads the video first, then uploads
+  it through the same local-file path as any other video — see "Loom download: two-tier
+  approach" below for how.
 - **Any other hosted link (Vimeo, a direct file URL) is not supported directly** — the Gemini
   API does not fetch arbitrary URLs. Download the file first, then run the script against the
   local path.
@@ -57,18 +57,51 @@ python scripts/analyze_source_video.py "https://www.loom.com/share/XXXXXXXXXXXXX
   storage cost — only the normal generation cost of the analysis call.
 - No length limit — long videos just cost more (see "Cost and model notes" below).
 
-### Loom download caveats
+### Loom download: two-tier approach
 
-The Loom download step uses `https://www.loom.com/api/campaigns/sessions/{id}/transcoded-url`
-— the same undocumented endpoint several independent open-source Loom downloaders rely on, not
-an official Loom API. Two things follow from that:
+**Tier 1 — `transcoded-url` endpoint.** Tries
+`https://www.loom.com/api/campaigns/sessions/{id}/transcoded-url` first — the same
+undocumented endpoint several independent open-source Loom downloaders rely on, not an
+official Loom API. When it returns 200, this is the fast path.
 
-- **It only works for public share links** where the video owner hasn't disabled downloads.
-  Private, password-protected, or download-restricted Looms will fail with a clear error.
-- **It could stop working if Loom changes that endpoint.** It's been stable enough for
-  multiple independent tools to depend on it, but there's no guarantee. If it breaks, download
-  the video manually from Loom's own UI and pass the local file path instead — that path is
-  unaffected.
+**Tier 2 — HLS reassembly from the embed page.** In testing, tier 1 returned `204 No Content`
+for a real video even though the video was genuinely public and playable — the endpoint
+appears to have been effectively disabled for at least some videos/workspaces, likely as
+platform hardening after Atlassian's acquisition of Loom. When tier 1 doesn't return 200, the
+script automatically falls back to:
+
+1. Fetching the public embed page (`https://www.loom.com/embed/{id}`) and pulling out the
+   signed HLS master playlist URL — the same one any anonymous viewer's browser uses to
+   actually play the video.
+2. Picking the highest-bandwidth video variant and the audio track from that master playlist.
+3. Rewriting each one's internal relative segment references into absolute URLs carrying the
+   same signed query string as the parent playlist. This step is necessary: Loom's CloudFront
+   signature covers a wildcard resource path, but neither ffmpeg nor any standard HLS client
+   propagates a parent playlist's query string down to the children it references, so the
+   segments 403 without this rewrite.
+4. Handing the rewritten local playlists to `ffmpeg` (`-protocol_whitelist file,http,https,
+tcp,tls,crypto`, muxing video + audio with `-c copy`) to produce the final MP4.
+
+**This requires `ffmpeg` on PATH** (`brew install ffmpeg` on a Mac). If it's missing, the
+script says so clearly rather than failing obscurely.
+
+**Caveats that still apply to both tiers:**
+
+- Only works for **public** share links. Private, password-protected, or genuinely
+  download-restricted Looms will fail — tier 2's error message says to download manually from
+  Loom's UI and pass the local file path instead, which is unaffected by any of this.
+- Both are unofficial/reverse-engineered mechanisms. Either could change if Loom changes its
+  page structure or CDN signing scheme. If both tiers ever fail, the manual-download-then-
+  local-file path is the permanent fallback.
+- **A metadata mismatch was observed** on the one real video tested: Loom's oEmbed API
+  reported a longer duration than the HLS stream actually served. The HLS-served length exactly
+  matched the sum of its own manifest's segment durations (so nothing was dropped in transit),
+  and the video's downloaded content read as complete and coherent start-to-finish (verified by
+  sampling frames and cross-checking against the Gemini analysis output). The likely
+  explanation: oEmbed's `duration` field is stale from before the creator trimmed the video in
+  Loom's editor, and the HLS stream reflects the current, correct, published cut. Still worth
+  a spot-check against Loom's own player if you need to be certain a given video downloaded
+  in full.
 
 ## What comes back
 
@@ -111,14 +144,16 @@ gemini-2.5-pro` if `flash` misses details on a first pass.
 
 ## Known limits — read before relying on this
 
-- **API auth confirmed working**: a real `GEMINI_API_KEY` was tested against a live text
-  generation call and returned a correct response, so the credential wiring (`.env` loading,
-  client construction) is verified.
-- **Loom URL parsing confirmed working**: the ID regex was tested against share/embed URL
-  formats with and without query strings.
-- **Not yet tested**: an actual Loom download (no real Loom URL was available to try), and a
-  full video-understanding call against real footage (structured JSON parsing, File API
-  upload/poll on a real video). Run one short real clip through the full pipeline before
-  trusting it for production work — SDK parameter names occasionally shift between
-  `google-genai` versions, and that's the first thing to check if it errors.
+- **Verified end-to-end against a real Loom video**: the tier-1 endpoint returned 204 for the
+  test video, the script correctly fell back to tier 2, ffmpeg correctly reassembled a
+  complete, playable MP4 from the signed HLS stream, Gemini correctly analyzed it, and the
+  resulting events matched the video's actual on-screen content when spot-checked against
+  sampled frames (verified on `gemini-2.5-flash`).
+  API auth (`.env` loading, client construction) and the Loom URL regex are also confirmed
+  working as part of that same run.
+- **Not yet separately tested**: a Loom video where tier 1 (`transcoded-url`) succeeds
+  directly, a YouTube URL, and `gemini-2.5-pro`. These follow the same documented patterns as
+  what's already verified, but haven't been exercised themselves — SDK parameter names
+  occasionally shift between `google-genai` versions, and that's the first thing to check if
+  one of them errors.
 - Arbitrary public URLs (Vimeo, a direct CDN link) still aren't supported — see above.

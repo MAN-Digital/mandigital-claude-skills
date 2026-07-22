@@ -24,23 +24,28 @@ No length limit -- long videos just cost more (Gemini bills roughly 300
 tokens per second of video at default resolution; see
 ../references/video-grounded-storyboard.md for the cost breakdown).
 
-NOTE: this script has not been run against a live API key, a real video, or a
-real Loom URL in this environment. The Gemini calls follow Gemini's
-documented File API and structured-output patterns; the Loom download uses
-Loom's undocumented `transcoded-url` endpoint (the same one several
-independent open-source Loom downloaders use) rather than an official API --
-it may break if Loom changes that endpoint, and only works for public share
-links the owner hasn't disabled downloads on. Verify on a short sample before
-relying on either path.
+Loom download: tries Loom's undocumented `transcoded-url` endpoint first; if
+that returns anything other than 200 (observed to happen for some
+videos/workspaces), falls back to reassembling the video from the signed HLS
+stream on the public embed page. The HLS fallback requires ffmpeg on PATH.
+
+Verified end-to-end against a real API key and a real Loom video (both the
+transcoded-url path failing over to the HLS fallback, and the resulting file
+being correctly analyzed by Gemini). YouTube URLs and the primary
+transcoded-url download path follow Gemini's/Loom's documented and
+widely-used patterns but have not themselves been separately tested here.
 """
 
 import argparse
 import json
 import os
 import re
+import shutil
+import subprocess
 import sys
 import tempfile
 import time
+import urllib.parse
 from pathlib import Path
 
 import requests
@@ -117,11 +122,114 @@ def get_client() -> genai.Client:
     return genai.Client(api_key=api_key)
 
 
+def _sign_relative_uri(base_dir: str, query: str, line: str) -> str:
+    """Rewrite a relative HLS playlist line to an absolute URL carrying the same
+    signed query string as its parent. Loom's CloudFront signature covers a
+    wildcard resource path, but naive HLS clients (including ffmpeg) won't
+    propagate a parent playlist's query string down to the children it
+    references -- so relative sub-playlist/segment URIs 403 unless we do it
+    ourselves."""
+    line = line.strip()
+    if not line or line.startswith("#") or line.startswith("http"):
+        return line
+    return f"{base_dir}/{line}?{query}"
+
+
+def _localize_playlist(playlist_url: str, out_path: str) -> None:
+    base_dir = playlist_url.split("?")[0].rsplit("/", 1)[0]
+    query = urllib.parse.urlparse(playlist_url).query
+    text = requests.get(playlist_url, timeout=30).text
+    signed = [_sign_relative_uri(base_dir, query, line) for line in text.splitlines()]
+    with open(out_path, "w") as f:
+        f.write("\n".join(signed))
+
+
+def _download_loom_via_embed_hls(video_id: str) -> str:
+    """Fallback for when Loom's transcoded-url endpoint doesn't return a download
+    link. Pulls the signed HLS manifest straight out of the public embed page --
+    the same one any anonymous viewer's browser uses to actually play the video
+    -- and reassembles video + audio into an MP4 with ffmpeg. Requires ffmpeg on
+    PATH."""
+    if shutil.which("ffmpeg") is None:
+        sys.exit(
+            "This Loom video needs the HLS fallback path, which requires ffmpeg "
+            "(brew install ffmpeg on a Mac). Install it and try again, or download "
+            "the video manually from Loom's UI and pass the local file path instead."
+        )
+
+    embed_html = requests.get(
+        f"https://www.loom.com/embed/{video_id}",
+        headers={"User-Agent": "Mozilla/5.0"},
+        timeout=30,
+    ).text
+    match = re.search(r'https://luna\.loom\.com/[^"\']*\.m3u8\?[^"\']*', embed_html)
+    if not match:
+        sys.exit(
+            "Could not find a playable stream on Loom's embed page either. This video "
+            "may genuinely be access-restricted -- download it manually from Loom's UI "
+            "and pass the local file path instead."
+        )
+    master_url = match.group(0)
+    master_base_dir = master_url.split("?")[0].rsplit("/", 1)[0]
+    query = urllib.parse.urlparse(master_url).query
+    lines = requests.get(master_url, timeout=30).text.splitlines()
+
+    audio_url = None
+    audio_line = next(
+        (l for l in lines if l.startswith("#EXT-X-MEDIA") and "TYPE=AUDIO" in l), None
+    )
+    if audio_line:
+        uri_match = re.search(r'URI="([^"]+)"', audio_line)
+        if uri_match:
+            audio_url = f"{master_base_dir}/{uri_match.group(1)}?{query}"
+
+    best_bandwidth, best_video_uri = -1, None
+    for i, line in enumerate(lines):
+        if line.startswith("#EXT-X-STREAM-INF"):
+            bw_match = re.search(r"BANDWIDTH=(\d+)", line)
+            bw = int(bw_match.group(1)) if bw_match else 0
+            uri = lines[i + 1].strip() if i + 1 < len(lines) else None
+            if uri and bw > best_bandwidth:
+                best_bandwidth, best_video_uri = bw, uri
+    if best_video_uri is None:
+        sys.exit("Could not find a video stream in Loom's HLS manifest.")
+    video_url = f"{master_base_dir}/{best_video_uri}?{query}"
+
+    tmp_dir = tempfile.mkdtemp(prefix="loom_hls_")
+    video_playlist = os.path.join(tmp_dir, "video.m3u8")
+    _localize_playlist(video_url, video_playlist)
+
+    ffmpeg_cmd = [
+        "ffmpeg", "-y",
+        "-protocol_whitelist", "file,http,https,tcp,tls,crypto", "-i", video_playlist,
+    ]
+    if audio_url:
+        audio_playlist = os.path.join(tmp_dir, "audio.m3u8")
+        _localize_playlist(audio_url, audio_playlist)
+        ffmpeg_cmd += ["-protocol_whitelist", "file,http,https,tcp,tls,crypto", "-i", audio_playlist]
+        ffmpeg_cmd += ["-map", "0:v", "-map", "1:a"]
+
+    out_path = os.path.join(tempfile.gettempdir(), f"loom_{video_id}_hls.mp4")
+    ffmpeg_cmd += ["-c", "copy", out_path]
+
+    print(f"Reassembling Loom video {video_id} from its HLS stream via ffmpeg...", file=sys.stderr)
+    result = subprocess.run(ffmpeg_cmd, capture_output=True, text=True)
+    if result.returncode != 0 or not os.path.exists(out_path):
+        sys.exit(
+            "ffmpeg failed to reassemble the Loom video from its HLS stream. ffmpeg "
+            f"stderr (last 2000 chars):\n{result.stderr[-2000:]}"
+        )
+    return out_path
+
+
 def resolve_loom_video(source: str) -> str:
     """Download a public Loom share/embed URL to a temp local MP4 and return its path.
 
-    Uses Loom's undocumented `transcoded-url` endpoint -- not an official API. Only
-    works for public share links where the owner hasn't disabled downloads."""
+    Tries Loom's undocumented `transcoded-url` endpoint first (fast, simple, and
+    what several independent open-source Loom downloaders use). If that doesn't
+    return a usable link -- observed to happen for some videos/workspaces, returning
+    204 with no body -- falls back to reassembling the video from the public embed
+    page's signed HLS stream instead."""
     match = LOOM_ID_RE.search(source)
     if not match:
         sys.exit(
@@ -131,22 +239,23 @@ def resolve_loom_video(source: str) -> str:
     video_id = match.group(1)
 
     resp = requests.post(f"https://www.loom.com/api/campaigns/sessions/{video_id}/transcoded-url")
-    if resp.status_code != 200:
-        sys.exit(
-            f"Loom did not return a download URL (HTTP {resp.status_code}). The video may "
-            "be private, password-protected, or have downloads disabled by its owner -- or "
-            "Loom may have changed this endpoint, since it's undocumented."
-        )
-    download_url = resp.json()["url"]
+    if resp.status_code == 200:
+        download_url = resp.json()["url"]
+        tmp_path = os.path.join(tempfile.gettempdir(), f"loom_{video_id}.mp4")
+        print(f"Downloading Loom video {video_id}...", file=sys.stderr)
+        with requests.get(download_url, stream=True, timeout=60) as r:
+            r.raise_for_status()
+            with open(tmp_path, "wb") as f:
+                for chunk in r.iter_content(chunk_size=1 << 20):
+                    f.write(chunk)
+        return tmp_path
 
-    tmp_path = os.path.join(tempfile.gettempdir(), f"loom_{video_id}.mp4")
-    print(f"Downloading Loom video {video_id}...", file=sys.stderr)
-    with requests.get(download_url, stream=True, timeout=60) as r:
-        r.raise_for_status()
-        with open(tmp_path, "wb") as f:
-            for chunk in r.iter_content(chunk_size=1 << 20):
-                f.write(chunk)
-    return tmp_path
+    print(
+        f"Loom's transcoded-url endpoint returned HTTP {resp.status_code} for this "
+        "video -- falling back to reassembling it from the embed page's HLS stream.",
+        file=sys.stderr,
+    )
+    return _download_loom_via_embed_hls(video_id)
 
 
 def upload_local_file(client: genai.Client, path: str) -> types.Part:

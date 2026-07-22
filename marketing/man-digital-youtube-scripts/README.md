@@ -53,9 +53,11 @@ transcript):
 - Python 3 with `pip install -r scripts/requirements.txt` (`google-genai`, `python-dotenv`,
   `requests`)
 - A Gemini API key — get one free at `https://aistudio.google.com/apikey`
+- `ffmpeg` on PATH (`brew install ffmpeg` on a Mac) — required for the Loom download
+  fallback (see below), not needed for local files or YouTube URLs
 - See [`references/video-grounded-storyboard.md`](references/video-grounded-storyboard.md)
-  for cost notes and known limits — auth is verified working; a live Loom download and a
-  full video analysis on real footage are not yet tested here.
+  for cost notes and known limits — **verified end-to-end against a real Loom video**,
+  including the download fallback and the resulting Gemini analysis.
 
 ### Setting up your API key
 
