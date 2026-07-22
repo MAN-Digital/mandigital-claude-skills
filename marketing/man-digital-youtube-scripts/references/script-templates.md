@@ -39,12 +39,19 @@ the file has no number for a claim, describe the qualitative change instead of i
 
 ## Brain-dump transform mode
 
-Triggered when the user pastes another video's script or transcript instead of giving a
-topic. About 90% of these are tutorial screen-shares in a tool, usually HubSpot.
+Triggered when the user pastes another video's script or transcript, or hands you an actual
+source video file/YouTube URL, instead of giving a topic. About 90% of these are tutorial
+screen-shares in a tool, usually HubSpot.
 
-1. **Read the whole transcript first.** Identify the actual sequence of on-screen actions —
-   what tool, what clicks, what gets shown, in what order. This sequence is the footage
-   being narrated over, and it stays intact.
+0. **If you have the actual source video (a file or a YouTube URL), not just typed
+   transcript text**, and it has enough distinct on-screen frames that guessing the sequence
+   from prose is risky, run
+   [video-grounded-storyboard.md](video-grounded-storyboard.md) first. It gives you a real,
+   timestamped event list instead of an inferred one — use that as your source-of-truth for
+   step 1 below rather than reading the video description you were given.
+1. **Read the whole transcript first** (or the video-events output from step 0). Identify
+   the actual sequence of on-screen actions — what tool, what clicks, what gets shown, in
+   what order. This sequence is the footage being narrated over, and it stays intact.
 2. **Do not translate line-by-line.** The source video's opinions, jokes, CTAs, and
    interpretation are not MAN Digital's. Only the screen-action sequence carries over.
 3. **Re-derive the angle.** For each screen beat, ask what MAN Digital would say about it

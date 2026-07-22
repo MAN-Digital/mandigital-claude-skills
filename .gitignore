@@ -1,0 +1,11 @@
+# Never commit secrets or local env files (see CONTRIBUTING.md)
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+
+# OS cruft
+.DS_Store

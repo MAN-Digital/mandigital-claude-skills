@@ -1,6 +1,6 @@
 ---
 name: man-digital-youtube-scripts
-description: Use when writing a YouTube video script for MAN Digital or Romeo Man — tutorials, promotional videos, or case studies, in shorts or long-form, either from a fresh topic/brief or by transforming ("brain dump" mode) another video's transcript into MAN Digital's own narration over similar footage.
+description: Use when writing a YouTube video script for MAN Digital or Romeo Man — tutorials, promotional videos, or case studies, in shorts or long-form, either from a fresh topic/brief or by transforming ("brain dump" mode) another video's transcript or source video into MAN Digital's own narration over similar footage. Delivers a teleprompter Reader Script and a synced Visual Cue Sheet for the video editor.
 ---
 
 # MAN Digital YouTube Script Creation
@@ -31,10 +31,15 @@ because the format was never confirmed.
 ## Step 2 — Determine the mode
 
 - **Fresh mode**: user gives a topic/brief → write from scratch.
-- **Brain-dump mode**: user pastes another video's transcript/script → go to
+- **Brain-dump mode**: user pastes another video's transcript/script, or hands you an actual
+  source video file/YouTube URL → go to
   [references/script-templates.md](references/script-templates.md), "Brain-dump transform
   mode." Never translate line-by-line — identify what's actually happening on screen, then
-  re-narrate it the way MAN Digital would explain it.
+  re-narrate it the way MAN Digital would explain it. If a real video file or YouTube URL is
+  provided (not just typed transcript text) and it has many on-screen frames, read
+  [references/video-grounded-storyboard.md](references/video-grounded-storyboard.md) first —
+  it grounds the walkthrough sequence and the Cue Sheet in the actual footage instead of
+  guessed screen actions.
 
 ## Step 3 — Ground the voice and positioning
 
@@ -60,24 +65,36 @@ variants of the same word.
 Read [references/script-templates.md](references/script-templates.md) for the shorts /
 long-form × tutorial / promotional / case-study structures.
 
+## Step 7 — Deliver two files, not one
+
+Read [references/output-export-contract.md](references/output-export-contract.md) before
+delivering anything. Every script ends as **two separate files**: Document A (Reader
+Script — teleprompter-only, zero visual references) and Document B (Visual Cue Sheet — the
+video editor's storyboard, synced to Document A by verbatim anchor quotes). Never merge them
+into one file. Run the file's §7.6 pre-export checklist before delivering.
+
 ## Quick reference — self-check before delivering
 
-| Check                                               | Rule                                           |
-| --------------------------------------------------- | ---------------------------------------------- |
-| Clarifying questions asked first                    | shorts/long-form + tutorial/promo/case-study   |
-| Every claim backed by a concrete example            | no unsupported theory or generic statements    |
-| Sentence length                                     | 8–15 words, one idea each                      |
-| Rhetorical or audience-directed questions           | zero — state the fact instead                  |
-| Hedging words (might, could, maybe, seems, perhaps) | zero — direct claims only                      |
-| Passive voice                                       | zero — active voice only                       |
-| Conditionals ("if you...", "imagine if")            | zero                                           |
-| Blocklist words                                     | zero — cross-check references/banned-words.md  |
-| Triplet overuse ("X, Y, and Z" repeated)            | vary list length/structure across the script   |
-| Third-party case studies                            | never — use MAN Digital's own client work only |
+| Check                                               | Rule                                                         |
+| --------------------------------------------------- | ------------------------------------------------------------ |
+| Clarifying questions asked first                    | shorts/long-form + tutorial/promo/case-study                 |
+| Every claim backed by a concrete example            | no unsupported theory or generic statements                  |
+| Sentence length                                     | 8–15 words, one idea each                                    |
+| Rhetorical or audience-directed questions           | zero — state the fact instead                                |
+| Hedging words (might, could, maybe, seems, perhaps) | zero — direct claims only                                    |
+| Passive voice                                       | zero — active voice only                                     |
+| Conditionals ("if you...", "imagine if")            | zero                                                         |
+| Blocklist words                                     | zero — cross-check references/banned-words.md                |
+| Triplet overuse ("X, Y, and Z" repeated)            | vary list length/structure across the script                 |
+| Third-party case studies                            | never — use MAN Digital's own client work only               |
+| Output                                              | two separate files (Reader Script + Cue Sheet), never merged |
+| Reader Script contains a visual reference           | zero — export failure, see output-export-contract.md §7.6    |
 
 ## Common mistakes
 
 - Writing the full script before asking the two format questions.
+- Merging the Reader Script and Visual Cue Sheet into one file, or letting a `[VISUAL]`
+  marker or timecode leak into the Reader Script — the reader will say it out loud.
 - Sentences with 2+ embedded clauses or em-dash asides — unreadable aloud for a non-native
   speaker, even when they read fine silently on a page.
 - Rhetorical hooks ("Sound familiar?", "Pretty slick, right?") — these are banned
