@@ -38,6 +38,13 @@ Run `/start-here` to bootstrap your brand context. See [`vibe-marketing-v2/READM
 
 Focused skill for writing LinkedIn posts in MAN Digital's voice with platform-native formatting.
 
+### [`man-digital-youtube-scripts/`](./man-digital-youtube-scripts/) — YouTube Scripts
+
+Writes YouTube video scripts (tutorial, promotional, or case study; shorts or long-form) in
+Romeo's voice and MAN Digital's positioning. Also handles "brain-dump" mode: paste another
+video's transcript and it transforms the same screen-share content into MAN Digital's own
+narration instead of translating it line-by-line.
+
 ---
 
 ## When to Use What
@@ -52,3 +59,4 @@ Focused skill for writing LinkedIn posts in MAN Digital's voice with platform-na
 | Generate ad creative or product photos  | `vibe-marketing-v2/creative`             |
 | Post on LinkedIn                        | `linkedin-post-creation/`                |
 | Repurpose one piece into 8 platforms    | `vibe-marketing-v2/content-atomizer`     |
+| Write a YouTube script                  | `man-digital-youtube-scripts/`           |
