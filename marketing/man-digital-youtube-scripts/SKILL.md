@@ -32,11 +32,11 @@ because the format was never confirmed.
 
 - **Fresh mode**: user gives a topic/brief → write from scratch.
 - **Brain-dump mode**: user pastes another video's transcript/script, or hands you an actual
-  source video file/YouTube URL → go to
+  source video file/YouTube/Loom URL → go to
   [references/script-templates.md](references/script-templates.md), "Brain-dump transform
   mode." Never translate line-by-line — identify what's actually happening on screen, then
-  re-narrate it the way MAN Digital would explain it. If a real video file or YouTube URL is
-  provided (not just typed transcript text) and it has many on-screen frames, read
+  re-narrate it the way MAN Digital would explain it. If a real video file, YouTube URL, or
+  Loom URL is provided (not just typed transcript text) and it has many on-screen frames, read
   [references/video-grounded-storyboard.md](references/video-grounded-storyboard.md) first —
   it grounds the walkthrough sequence and the Cue Sheet in the actual footage instead of
   guessed screen actions.

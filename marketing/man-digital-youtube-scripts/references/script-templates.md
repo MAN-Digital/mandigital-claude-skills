@@ -40,12 +40,12 @@ the file has no number for a claim, describe the qualitative change instead of i
 ## Brain-dump transform mode
 
 Triggered when the user pastes another video's script or transcript, or hands you an actual
-source video file/YouTube URL, instead of giving a topic. About 90% of these are tutorial
-screen-shares in a tool, usually HubSpot.
+source video file, YouTube URL, or Loom URL, instead of giving a topic. About 90% of these
+are tutorial screen-shares in a tool, usually HubSpot.
 
-0. **If you have the actual source video (a file or a YouTube URL), not just typed
-   transcript text**, and it has enough distinct on-screen frames that guessing the sequence
-   from prose is risky, run
+0. **If you have the actual source video (a file, a YouTube URL, or a Loom URL), not just
+   typed transcript text**, and it has enough distinct on-screen frames that guessing the
+   sequence from prose is risky, run
    [video-grounded-storyboard.md](video-grounded-storyboard.md) first. It gives you a real,
    timestamped event list instead of an inferred one — use that as your source-of-truth for
    step 1 below rather than reading the video description you were given.

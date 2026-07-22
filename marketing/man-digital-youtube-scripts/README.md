@@ -9,12 +9,14 @@ marketing theory.
 - Asks two mandatory questions before writing anything: shorts or long-form, and
   tutorial/promotional/case study.
 - Writes a fresh script from a topic or brief.
-- Or transforms ("brain-dump mode") a pasted transcript, source video file, or YouTube URL
-  from another video — usually a HubSpot tutorial screen-share — into MAN Digital's own
-  narration over the same footage, without translating it line-by-line.
+- Or transforms ("brain-dump mode") a pasted transcript, source video file, YouTube URL, or
+  Loom share URL from another video — usually a HubSpot tutorial screen-share — into MAN
+  Digital's own narration over the same footage, without translating it line-by-line.
 - For a real source video (not just typed transcript text), can run it through Gemini's
   video-understanding API to ground the walkthrough sequence in the actual footage instead
-  of a guessed one — see `references/video-grounded-storyboard.md`.
+  of a guessed one, including auto-downloading a public Loom share link first — see
+  `references/video-grounded-storyboard.md`. Skips anything over 3 minutes by default to
+  keep analysis cost predictable (`--force` or `--max-duration` to override).
 - Enforces a hard word/phrase blocklist and a non-native-speaker readability standard (short,
   single-idea sentences meant to be read aloud, not silently).
 - Delivers the finished script as **two separate files**, never one: a teleprompter Reader
@@ -28,7 +30,8 @@ into MAN Digital's own version.
 
 ## Inputs
 
-- A topic or brief, **or** a pasted transcript/script from another video to adapt.
+- A topic or brief, **or** a pasted transcript/script, local video file, YouTube URL, or
+  Loom share URL from another video to adapt.
 - Answers to the two gating questions (the skill asks for these itself if missing).
 
 ## Output
@@ -48,11 +51,15 @@ paths and the fallback behavior when that repo isn't available.
 **Only for video-grounded storyboard mode** (analyzing a real source video, not just a
 transcript):
 
-- Python 3 with `pip install -r scripts/requirements.txt` (`google-genai` + `python-dotenv`)
+- Python 3 with `pip install -r scripts/requirements.txt` (`google-genai`, `python-dotenv`,
+  `requests`)
 - A Gemini API key — get one free at `https://aistudio.google.com/apikey`
+- `ffprobe` (part of ffmpeg — `brew install ffmpeg`) for the 3-minute duration safety check.
+  Optional in the sense that the script degrades gracefully without it (prints a warning and
+  skips the check), but you lose the cost safety net.
 - See [`references/video-grounded-storyboard.md`](references/video-grounded-storyboard.md)
-  for cost notes and known limits (this script hasn't been run against a live video in this
-  environment yet — verify it on a sample clip first).
+  for cost notes and known limits — auth and the duration-gate logic are verified working;
+  a live Loom download and a full video analysis on real footage are not yet tested here.
 
 ### Setting up your API key
 

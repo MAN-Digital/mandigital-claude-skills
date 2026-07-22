@@ -2,11 +2,12 @@
 
 ## When to use this
 
-Only for brain-dump mode where the user hands you an actual **source video file or a public
-YouTube URL** — not just a pasted transcript — of a tutorial/screen-share, and the source has
-enough distinct on-screen frames that guessing the sequence from prose would risk the Reader
-Script and Visual Cue Sheet drifting out of sync. If all you have is text, skip this file and
-follow [script-templates.md](script-templates.md)'s brain-dump mode as before.
+Only for brain-dump mode where the user hands you an actual **source video file, a public
+YouTube URL, or a public Loom share URL** — not just a pasted transcript — of a
+tutorial/screen-share, and the source has enough distinct on-screen frames that guessing the
+sequence from prose would risk the Reader Script and Visual Cue Sheet drifting out of sync.
+If all you have is text, skip this file and follow
+[script-templates.md](script-templates.md)'s brain-dump mode as before.
 
 ## What it does
 
@@ -38,16 +39,53 @@ python scripts/analyze_source_video.py /path/to/video.mp4 --out video-events.jso
 
 # Public YouTube URL — referenced directly, no upload step
 python scripts/analyze_source_video.py "https://www.youtube.com/watch?v=XXXXXXXXXXX" --out video-events.json
+
+# Public Loom share URL — downloaded automatically, then uploaded like a local file
+python scripts/analyze_source_video.py "https://www.loom.com/share/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" --out video-events.json
 ```
 
 - **Local files work directly.** You do not need to host the video anywhere public — the
   script uploads it to Gemini's File API and references the returned file URI.
 - **YouTube URLs work directly** for public videos (not private/unlisted).
-- **Any other hosted link (Loom, Vimeo, a direct file URL) is not supported directly** — the
-  Gemini API does not fetch arbitrary URLs. Download the file first, then run the script
-  against the local path.
+- **Loom share URLs work directly too.** The script downloads the video first (via Loom's
+  `transcoded-url` endpoint — see "Loom download caveats" below), then uploads it through the
+  same local-file path as any other video.
+- **Any other hosted link (Vimeo, a direct file URL) is not supported directly** — the Gemini
+  API does not fetch arbitrary URLs. Download the file first, then run the script against the
+  local path.
 - Uploaded files are stored by Google for 48 hours, then deleted automatically. There's no
   storage cost — only the normal generation cost of the analysis call.
+
+### The 3-minute duration gate
+
+Local files and Loom downloads are checked with `ffprobe` before any Gemini call. Anything
+over 3 minutes (180s) is skipped by default, so a long recording can't quietly rack up cost —
+Gemini bills roughly 300 tokens per second of video. Raise or bypass it explicitly:
+
+```bash
+python scripts/analyze_source_video.py video.mp4 --max-duration 600   # raise the cap to 10 min
+python scripts/analyze_source_video.py video.mp4 --force              # ignore the cap entirely
+```
+
+This check is **not applied to YouTube URLs** — doing so would require adding `yt-dlp` just
+for metadata lookup, which this skill doesn't otherwise need. For YouTube, cost still scales
+with the video's actual length; check the video's length yourself before running a long one.
+
+If `ffprobe` isn't installed, the script prints a warning and skips the check rather than
+blocking you — install it (`brew install ffmpeg` on a Mac) to get the safety net back.
+
+### Loom download caveats
+
+The Loom download step uses `https://www.loom.com/api/campaigns/sessions/{id}/transcoded-url`
+— the same undocumented endpoint several independent open-source Loom downloaders rely on, not
+an official Loom API. Two things follow from that:
+
+- **It only works for public share links** where the video owner hasn't disabled downloads.
+  Private, password-protected, or download-restricted Looms will fail with a clear error.
+- **It could stop working if Loom changes that endpoint.** It's been stable enough for
+  multiple independent tools to depend on it, but there's no guarantee. If it breaks, download
+  the video manually from Loom's own UI and pass the local file path instead — that path is
+  unaffected.
 
 ## What comes back
 
@@ -90,10 +128,16 @@ gemini-2.5-pro` if `flash` misses details on a first pass.
 
 ## Known limits — read before relying on this
 
-- **Not tested against a live video in this environment.** The script is written from
-  Gemini's documented API patterns (File API upload, structured JSON output), but it has not
-  been run end-to-end against a real key and a real video here. Run it once on a short
-  sample clip and check `video-events.json` before trusting it on real production work — SDK
-  parameter names occasionally shift between `google-genai` versions, and this is the first
-  thing to check if the script errors.
-- Arbitrary public URLs (Loom, Vimeo, a direct CDN link) are not supported — see above.
+- **API auth confirmed working**: a real `GEMINI_API_KEY` was tested against a live text
+  generation call and returned a correct response, so the credential wiring (`.env` loading,
+  client construction) is verified.
+- **Duration gate and Loom URL parsing confirmed working**: tested directly against
+  synthetic 5-second and 200-second clips — the gate correctly passes short clips, blocks
+  long ones with a clear message, and `--force` correctly overrides it. The Loom ID regex
+  was tested against share/embed URL formats with and without query strings.
+- **Not yet tested**: an actual Loom download (no real Loom URL was available to try), and a
+  full video-understanding call against real footage (structured JSON parsing, File API
+  upload/poll on a real video). Run one short real clip through the full pipeline before
+  trusting it for production work — SDK parameter names occasionally shift between
+  `google-genai` versions, and that's the first thing to check if it errors.
+- Arbitrary public URLs (Vimeo, a direct CDN link) still aren't supported — see above.
