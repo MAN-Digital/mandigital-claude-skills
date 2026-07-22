@@ -20,10 +20,9 @@ Usage:
     python analyze_source_video.py "https://www.youtube.com/watch?v=XXXX" --out video-events.json
     python analyze_source_video.py "https://www.loom.com/share/XXXXXXXX..." --out video-events.json
 
-Local files, Loom share links, and YouTube URLs longer than --max-duration
-(default 180s / 3 min) are skipped before any Gemini call is made, to avoid
-paying for an analysis pass on a long recording by accident. Pass --force to
-analyze anyway, or --max-duration to raise the cap.
+No length limit -- long videos just cost more (Gemini bills roughly 300
+tokens per second of video at default resolution; see
+../references/video-grounded-storyboard.md for the cost breakdown).
 
 NOTE: this script has not been run against a live API key, a real video, or a
 real Loom URL in this environment. The Gemini calls follow Gemini's
@@ -39,7 +38,6 @@ import argparse
 import json
 import os
 import re
-import subprocess
 import sys
 import tempfile
 import time
@@ -55,7 +53,6 @@ from google.genai import types
 # overrides an existing os.environ value.
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
-DEFAULT_MAX_DURATION_SECONDS = 180  # 3 minutes -- keeps one analysis pass cheap
 LOOM_ID_RE = re.compile(r"loom\.com/(?:share|embed)/([a-f0-9]{32})", re.IGNORECASE)
 
 EVENT_SCHEMA = {
@@ -120,24 +117,6 @@ def get_client() -> genai.Client:
     return genai.Client(api_key=api_key)
 
 
-def probe_duration_seconds(path: str):
-    """Return video duration in seconds via ffprobe, or None if ffprobe isn't installed
-    or the duration can't be read (caller should treat None as 'unknown', not zero)."""
-    try:
-        result = subprocess.run(
-            [
-                "ffprobe", "-v", "error",
-                "-show_entries", "format=duration",
-                "-of", "default=noprint_wrappers=1:nokey=1",
-                path,
-            ],
-            capture_output=True, text=True, timeout=15,
-        )
-        return float(result.stdout.strip())
-    except (FileNotFoundError, ValueError, subprocess.TimeoutExpired):
-        return None
-
-
 def resolve_loom_video(source: str) -> str:
     """Download a public Loom share/embed URL to a temp local MP4 and return its path.
 
@@ -170,24 +149,6 @@ def resolve_loom_video(source: str) -> str:
     return tmp_path
 
 
-def check_duration_gate(path: str, max_duration: float, force: bool) -> None:
-    duration = probe_duration_seconds(path)
-    if duration is None:
-        print(
-            "Could not determine video duration (ffprobe not found or failed) -- "
-            "skipping the length check.",
-            file=sys.stderr,
-        )
-        return
-    if duration > max_duration and not force:
-        sys.exit(
-            f"Video is {duration / 60:.1f} min, over the {max_duration / 60:.0f}-min cap "
-            "(keeps a single analysis pass cheap -- Gemini bills roughly 300 tokens per "
-            "second of video at default resolution). Pass --force to analyze it anyway, "
-            "or --max-duration <seconds> to raise the cap."
-        )
-
-
 def upload_local_file(client: genai.Client, path: str) -> types.Part:
     print(f"Uploading {path} to Gemini's File API...", file=sys.stderr)
     uploaded = client.files.upload(file=path)
@@ -205,17 +166,13 @@ def upload_local_file(client: genai.Client, path: str) -> types.Part:
     )
 
 
-def build_video_part(client: genai.Client, source: str, max_duration: float, force: bool) -> types.Part:
+def build_video_part(client: genai.Client, source: str) -> types.Part:
     if source.startswith("http://") or source.startswith("https://"):
         if "loom.com" in source:
             local_path = resolve_loom_video(source)
-            check_duration_gate(local_path, max_duration, force)
             return upload_local_file(client, local_path)
 
         if "youtube.com" in source or "youtu.be" in source:
-            # No local file to probe -- Gemini references the URL directly, and we can't
-            # cheaply check duration without adding a yt-dlp dependency just for metadata.
-            # Cost still scales with the video's actual length; see the storyboard reference doc.
             return types.Part(file_data=types.FileData(file_uri=source))
 
         sys.exit(
@@ -227,7 +184,6 @@ def build_video_part(client: genai.Client, source: str, max_duration: float, for
     if not os.path.exists(source):
         sys.exit(f"File not found: {source}")
 
-    check_duration_gate(source, max_duration, force)
     return upload_local_file(client, source)
 
 
@@ -249,22 +205,10 @@ def main() -> None:
         help="'low' cuts cost roughly 3x but often can't read small on-screen text -- "
         "avoid for UI walkthroughs with field names/labels",
     )
-    parser.add_argument(
-        "--max-duration",
-        type=float,
-        default=DEFAULT_MAX_DURATION_SECONDS,
-        help=f"Skip analysis if the video is longer than this many seconds "
-        f"(default {DEFAULT_MAX_DURATION_SECONDS} = 3 min). Not enforced for YouTube URLs.",
-    )
-    parser.add_argument(
-        "--force",
-        action="store_true",
-        help="Analyze anyway even if the video is over --max-duration",
-    )
     args = parser.parse_args()
 
     client = get_client()
-    video_part = build_video_part(client, args.source, args.max_duration, args.force)
+    video_part = build_video_part(client, args.source)
 
     config_kwargs = {
         "response_mime_type": "application/json",

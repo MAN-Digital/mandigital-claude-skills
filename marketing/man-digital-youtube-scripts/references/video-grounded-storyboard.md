@@ -55,24 +55,7 @@ python scripts/analyze_source_video.py "https://www.loom.com/share/XXXXXXXXXXXXX
   local path.
 - Uploaded files are stored by Google for 48 hours, then deleted automatically. There's no
   storage cost — only the normal generation cost of the analysis call.
-
-### The 3-minute duration gate
-
-Local files and Loom downloads are checked with `ffprobe` before any Gemini call. Anything
-over 3 minutes (180s) is skipped by default, so a long recording can't quietly rack up cost —
-Gemini bills roughly 300 tokens per second of video. Raise or bypass it explicitly:
-
-```bash
-python scripts/analyze_source_video.py video.mp4 --max-duration 600   # raise the cap to 10 min
-python scripts/analyze_source_video.py video.mp4 --force              # ignore the cap entirely
-```
-
-This check is **not applied to YouTube URLs** — doing so would require adding `yt-dlp` just
-for metadata lookup, which this skill doesn't otherwise need. For YouTube, cost still scales
-with the video's actual length; check the video's length yourself before running a long one.
-
-If `ffprobe` isn't installed, the script prints a warning and skips the check rather than
-blocking you — install it (`brew install ffmpeg` on a Mac) to get the safety net back.
+- No length limit — long videos just cost more (see "Cost and model notes" below).
 
 ### Loom download caveats
 
@@ -131,10 +114,8 @@ gemini-2.5-pro` if `flash` misses details on a first pass.
 - **API auth confirmed working**: a real `GEMINI_API_KEY` was tested against a live text
   generation call and returned a correct response, so the credential wiring (`.env` loading,
   client construction) is verified.
-- **Duration gate and Loom URL parsing confirmed working**: tested directly against
-  synthetic 5-second and 200-second clips — the gate correctly passes short clips, blocks
-  long ones with a clear message, and `--force` correctly overrides it. The Loom ID regex
-  was tested against share/embed URL formats with and without query strings.
+- **Loom URL parsing confirmed working**: the ID regex was tested against share/embed URL
+  formats with and without query strings.
 - **Not yet tested**: an actual Loom download (no real Loom URL was available to try), and a
   full video-understanding call against real footage (structured JSON parsing, File API
   upload/poll on a real video). Run one short real clip through the full pipeline before
