@@ -1,0 +1,23 @@
+marketing/man-digital-youtube-scripts/README.md
+  s_a4fbd989c465f2::t_6b1fc1d539191f 56-57,59-60
+marketing/man-digital-youtube-scripts/references/video-grounded-storyboard.md
+  s_a4fbd989c465f2::t_75576a49f54cfd 50-52,60-104,147-158
+marketing/man-digital-youtube-scripts/scripts/analyze_source_video.py
+  s_a4fbd989c465f2::t_6deed07c548279 27-36,43-44,48,125-224,228-232,242-258
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "3abe7c5f397bc7bcb99ed7bc5627c03e1de92e0a",
+  "prompts": {},
+  "sessions": {
+    "s_a4fbd989c465f2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "38533dbe-5df8-446a-9e1c-0d5620dc529d",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "romeoman <romeo@man.digital>"
+    }
+  }
+}
