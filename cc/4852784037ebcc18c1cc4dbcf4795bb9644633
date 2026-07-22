@@ -1,0 +1,25 @@
+marketing/man-digital-youtube-scripts/.gitignore
+  s_a4fbd989c465f2::t_1c56929b5597b1 1-8
+marketing/man-digital-youtube-scripts/README.md
+  s_a4fbd989c465f2::t_50e61aa5125424 51-52,54-88
+marketing/man-digital-youtube-scripts/scripts/analyze_source_video.py
+  s_a4fbd989c465f2::t_7b891972fa5bd5 9-16,33,35,39-43
+marketing/man-digital-youtube-scripts/scripts/requirements.txt
+  s_a4fbd989c465f2::t_9b325365f5750e 2
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "cc4852784037ebcc18c1cc4dbcf4795bb9644633",
+  "prompts": {},
+  "sessions": {
+    "s_a4fbd989c465f2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "38533dbe-5df8-446a-9e1c-0d5620dc529d",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "romeoman <romeo@man.digital>"
+    }
+  }
+}
