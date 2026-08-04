@@ -1,6 +1,6 @@
 # EdtGZ - Prospecting Operating Architecture
 
-Source: `/Users/romeoman/Documents/Marketing/Design/Pencil/Playground.pen`
+Source: `/Users/diogosa/Documents/!MAN DIGITAL/Design/Pencil/Playground.pen`
 
 Observed frame: `Prospecting Agent vs Outbound-03`, 1190 x 1684.
 

@@ -4,9 +4,7 @@
 
 `.pen` files are encrypted. Use Pencil MCP tools for inspection and editing. Do not read, parse, or modify `.pen` file contents with shell, Python, or text editors. File-level copying/renaming of a known blank seed is allowed only to create a separate output file; after copying, open the copied `.pen` in Pencil/LivePen and confirm the active editor path before any Pencil MCP write.
 
-Use the primary Playground file as the component library only. Do not put test, proof, or finished graphic frames into the primary library. For every prompt/run/graphic, create a separate `.pen` file under:
-
-`/Users/romeoman/Documents/Marketing/Design/Pencil/Marketing Assets/`
+Use the primary Playground file as the component library only. Do not put test, proof, or finished graphic frames into the primary library. For every prompt/run/graphic, create a separate `.pen` file **in the destination folder the user confirmed at the start of the job** (see *Step 0* in `SKILL.md` — always ask; the asset belongs with its project). The shared `Pencil/Marketing Assets/` folder is only the fallback when the user declines to choose.
 
 Do not reuse a previous output file for a new prompt. One prompt equals one `.pen` file unless the user explicitly asks to continue editing that exact file.
 
@@ -17,8 +15,9 @@ Do not call Pencil write operations against a non-existent target `.pen` path an
 - Ensure the target `.pen` file exists.
 - Open the target file in Pencil.app/LivePen when switching outputs. On this Mac the
   application name is `Pencil.app`, so shell open commands should use `open -a Pencil`
-  with the iCloud-backed file path if the Finder-style `/Users/romeoman/Documents/...`
-  path is empty.
+  with the Google Drive path from `source-paths.md`. If `open` launches Pencil's new-file
+  picker instead of the target file, quit Pencil fully first, then re-run `open` with the
+  file path — a running instance can otherwise ignore the path argument.
 - Call `get_editor_state` and confirm the active editor path matches the intended file.
 - Only then delete seed frames or build the new graphic.
 - If a copied seed file is used to make a new `.pen`, the final output must contain only the intended graphic, not copied seed content.
@@ -32,9 +31,9 @@ Do not leave temporary probes in any production or proof frame. If you create a 
 1. Call `get_editor_state` with schema when available.
 2. If inspecting library components, call `open_document` for:
 
-   `/Users/romeoman/Documents/Marketing/Design/Pencil/Playground.pen`
+   `/Users/diogosa/Documents/!MAN DIGITAL/Design/Pencil/Playground.pen`
 
-   Use it read-only by default. For new output, create/open the prompt-specific `.pen` under `Marketing Assets/` instead of the primary Playground file.
+   Use it read-only by default. For new output, create/open the prompt-specific `.pen` in the user's confirmed destination folder instead of the primary Playground file.
 
 3. For component reads, pass `filePath` explicitly so the correct file is used even if the active editor reports another temporary file.
 4. Use `batch_get` for exact node IDs. Use `readDepth: 2` or `3` for frames and `readDepth: 4` or deeper for icons, pills, and nested component details.

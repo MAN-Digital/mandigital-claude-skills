@@ -1,11 +1,26 @@
 # Source Paths
 
+## Per-machine roots — read this first
+
+The brand source lives on each team member's own disk. Absolute paths in the rest of this
+document are written from **Diogo's machine**; on any other machine, translate the root
+using this table and keep the relative structure:
+
+| Machine | Design root | Notes |
+|---|---|---|
+| Diogo | `/Users/diogosa/Documents/!MAN DIGITAL/Design` | Local disk since 2026-07-10 (moved off Google Drive for Desktop — treat any old `GoogleDrive-…/Brand_Identity/Design/` reference as stale). |
+| Romeo | `/Users/romeoman/Documents/Marketing/Design` | Pencil MCP resolves this path for opened `.pen` documents. Shell/Finder operations (`ls`, `cp`, `mv`, `open`) may need the iCloud-backed path instead: `/Users/romeoman/Library/Mobile Documents/com~apple~CloudDocs/Documents/Marketing/Design` — check it if the Documents path appears empty. |
+| Anyone else | your copy of the `Design` folder | Locate it once, then substitute it as the root everywhere below. |
+
+The subtree under the root is the same everywhere: `Assets/`, `MAN Digital Design System/`,
+`Pencil/` (with `Playground.pen` and `Marketing Assets/`).
+
 ## Campaign & Brand Assets (logos, launch kits, decorations)
 
 Shared asset library for real campaign work — logos, partner/product launch kits,
 decorative elements, badges, client logos, and reference examples:
 
-`/Users/romeoman/Documents/Marketing/Design/Assets`
+`/Users/diogosa/Documents/!MAN DIGITAL/Design/Assets`
 
 Notable subfolders:
 
@@ -23,24 +38,18 @@ explicit visual direction over the default brand.
 
 **Pencil image-fill gotcha:** image-fill URLs resolve relative to the `.pen` file's folder, and
 relative paths up into sibling asset folders are unreliable. For real assets, **copy the needed
-PNG(s) into the same `Marketing Assets/` folder as the output `.pen` and reference them with a
-simple `./name.png`.** Prefer PNG over SVG for image fills (SVG fills render inconsistently).
+PNG(s) into the same folder as the output `.pen` — whichever destination folder the user chose —
+and reference them with a simple `./name.png`.** Prefer PNG over SVG for image fills (SVG fills render inconsistently).
 
 ## MAN Digital Design System
 
 Primary brand source of truth:
 
-`/Users/romeoman/Documents/Marketing/Design/MAN Digital Design System`
+`/Users/diogosa/Documents/!MAN DIGITAL/Design/MAN Digital Design System`
 
-Observed Codex desktop path note: on this machine, shell/Finder operations may need the
-iCloud-backed filesystem path:
-
-`/Users/romeoman/Library/Mobile Documents/com~apple~CloudDocs/Documents/Marketing/Design/MAN Digital Design System`
-
-Pencil MCP can still resolve the Finder-style `/Users/romeoman/Documents/...` path for
-opened `.pen` documents. Shell commands such as `ls`, `cp`, `mv`, and `open` may not.
-When creating or opening files from shell, check the iCloud path if the Finder-style
-path appears empty.
+This folder now lives on local disk (moved off the old Google Drive for Desktop shortcut on
+2026-07-10). Shell commands (`ls`, `cp`, `mv`, `open`) and Pencil MCP resolve this path
+directly with no sync delay.
 
 Read these first for meaningful design decisions:
 
@@ -61,13 +70,13 @@ Relevant asset folders:
 
 ## Pencil Files
 
+Pencil root (all Pencil files/folders live here):
+
+`/Users/diogosa/Documents/!MAN DIGITAL/Design/Pencil`
+
 Primary Pencil library file:
 
-`/Users/romeoman/Documents/Marketing/Design/Pencil/Playground.pen`
-
-Shell/open fallback:
-
-`/Users/romeoman/Library/Mobile Documents/com~apple~CloudDocs/Documents/Marketing/Design/Pencil/Playground.pen`
+`/Users/diogosa/Documents/!MAN DIGITAL/Design/Pencil/Playground.pen`
 
 Bundled repository reference copy:
 
@@ -77,22 +86,31 @@ Use `Playground.pen` as the read-only component/template source by default. New 
 
 When running inside this GitHub package on a machine without the local MAN Digital Pencil folder, use the bundled `assets/playground/Playground.pen` as a portable Pencil.dev reference. Prefer the live local `Playground.pen` when available because it is the newest editable library; treat the bundled file as a snapshot for component inspection and fallback context.
 
-Per-asset output folder (marketing assets):
+## Output folder — ASK, don't assume
 
-`/Users/romeoman/Documents/Marketing/Design/Pencil/Marketing Assets/`
+**The destination folder is a question you put to the user at the start of every job**, not a
+default you apply. Assets belong with the project they were made for; dumping everything into one
+shared folder disconnects them from their project. See *Step 0* in `SKILL.md`.
 
-Shell/open fallback:
+Ask up front (once per session/set), propose the project folder the request implies, and let the
+user confirm or type another path. Create it if it doesn't exist.
 
-`/Users/romeoman/Library/Mobile Documents/com~apple~CloudDocs/Documents/Marketing/Design/Pencil/Marketing Assets/`
+Shared fallback — **only** when the user declines to choose, and say out loud that's where it went:
 
-Every marketing asset gets its own `.pen` file in that folder unless the user explicitly
-provides a different new output file. Name the `.pen` and its top-level frame for the asset,
+`/Users/diogosa/Documents/!MAN DIGITAL/Design/Pencil/Marketing Assets/`
+
+Every marketing asset gets its own `.pen` file in the chosen folder, with its exports and any
+copied image assets beside it. Name the `.pen` and its top-level frame for the asset,
 e.g. `MAN Digital - LinkedIn Event Cover - {Topic}` or `MAN Digital - YouTube Thumbnail - {Topic}`.
 Do not build assets inside `Playground.pen`, and do not reuse a previous asset's file.
 
+Video-specific overlays/graphics group under a dated subfolder of the chosen destination, e.g.
+`{destination}/Video Overlays/{YYYY-MM}/`. Check for an existing dated folder for the video
+project in question before creating a new one, and keep same-video assets grouped together there.
+
 (The blog-graphics skill uses a separate `Skill Tests/` folder; keep marketing assets out of it.)
 
-Observed note from 2026-05-22: `/Users/romeoman/Documents/Marketing/Design/Pencil/Playground.lib.pen` exists but did not expose the useful reusable component library. The important components were found in `Playground.pen`.
+Observed note from 2026-05-22: `Playground.lib.pen` (same Pencil root) exists but did not expose the useful reusable component library. The important components were found in `Playground.pen`.
 
 Current audit note from 2026-05-22: `Playground.pen` had 269 top-level nodes. Pencil marked only 12 nodes as formal `reusable: true`, but the canvas also contains many non-reusable template frames that should be treated as library components for blog/social work. See `component-index.md` and `current-playground-audit.md`.
 
@@ -104,7 +122,8 @@ Treat that as stale unless the user confirms it. Prefer the Marketing path above
 
 ## Gemini Carousel Skill
 
-Existing skill and reference registry:
+Existing skill and reference registry (path unverified on this machine — carried over from
+an earlier author's setup; confirm with the user before relying on it):
 
 `/Users/romeoman/.agents/skills/carousel`
 
@@ -122,7 +141,7 @@ Use this as component memory and Pencil build discipline, but let the MAN Digita
 
 ## Gemini Pencil / Carousel System
 
-Additional Gemini-side sources discovered on 2026-05-23:
+Additional Gemini-side sources discovered on 2026-05-23 (also unverified on this machine):
 
 - `/Users/romeoman/.gemini/GEMINI.md`
 - `/Users/romeoman/.gemini/commands/carousel.toml`

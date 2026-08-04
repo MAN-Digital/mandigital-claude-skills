@@ -31,7 +31,7 @@ Then search local context for fresh data:
 
 - User memory entries about this skill, recent tests, failed nodes, corrected nodes, and exported screenshots.
 - Recent artifacts under `/Users/romeoman/Documents/Codex/2026-05-26/man-digital-blog-graphics-users-romeoman/exports/` when available.
-- Recent Pencil test files under `/Users/romeoman/Documents/Marketing/Design/Pencil/Skill Tests/`.
+- Recent Pencil test files under `/Users/diogosa/Documents/!MAN DIGITAL/Design/Pencil/Skill Tests/`.
 - Skill references for `Regression case`, `Hard Fail`, `TODO`, `fail`, `boring`, `mobile`, `Playground.pen`, `20 px`, `primitive`, `overlap`, `connector`, `rail`, and `random`.
 
 ## Review Procedure
