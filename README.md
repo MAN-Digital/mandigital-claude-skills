@@ -30,6 +30,7 @@ Everything related to producing content for MAN Digital.
 | [`man-digital-blog-graphics/`](./marketing/man-digital-blog-graphics/)       | Builds branded MAN Digital blog/article/HubSpot/LinkedIn in-body graphics and diagrams in Pencil                                                                                                                         |
 | [`man-digital-lucid-charts/`](./marketing/man-digital-lucid-charts/)         | Builds on-brand MAN Digital diagrams (flowcharts, org charts, RevOps/CRM architecture, mind maps, sequence diagrams) in Lucidchart via the `@lucid` MCP connector                                                        |
 | [`man-digital-youtube-scripts/`](./marketing/man-digital-youtube-scripts/)   | Writes YouTube video scripts (tutorial, promotional, case study; shorts or long-form) in Romeo's voice and MAN Digital's positioning, including transforming another video's transcript into MAN Digital's own narration |
+| [`video-production/`](./marketing/video-production/)                         | 11-skill video post-production pipeline driving Adobe Premiere Pro via MCP — ingest/sync → transcript-based cuts → pause pass → speed-up → graphics → caption QA, plus post-approval subtitle delivery (7 languages) and Shorts repurposing                |
 
 ### development/
 

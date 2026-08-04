@@ -45,6 +45,30 @@ Romeo's voice and MAN Digital's positioning. Also handles "brain-dump" mode: pas
 video's transcript and it transforms the same screen-share content into MAN Digital's own
 narration instead of translating it line-by-line.
 
+### [`man-digital-marketing-assets/`](./man-digital-marketing-assets/) — Branded Marketing Graphics
+
+Builds branded MAN Digital social/marketing assets (LinkedIn, Facebook, Instagram, YouTube
+thumbnails, OG images) in Pencil from user-supplied copy, at exact platform sizes with safe
+zones.
+
+### [`man-digital-blog-graphics/`](./man-digital-blog-graphics/) — Blog & HubSpot Graphics
+
+Builds branded MAN Digital blog/article in-body graphics and diagrams in Pencil.
+
+### [`man-digital-lucid-charts/`](./man-digital-lucid-charts/) — Lucidchart Diagrams
+
+Builds on-brand MAN Digital diagrams (flowcharts, org charts, RevOps/CRM architecture, mind
+maps, sequence diagrams) in Lucidchart via the `@lucid` MCP connector.
+
+### [`video-production/`](./video-production/) — The Video Pipeline
+
+An 11-skill suite that runs video post-production end to end by driving Adobe Premiere Pro
+via MCP: ingest and two-camera sync → transcript-based cut decisions → safe cut execution →
+pause tightening → pitch-preserved speed-up → motion graphics and placement → caption QA —
+plus post-approval YouTube subtitle delivery (7 languages) and Shorts repurposing.
+`video-00-pipeline` conducts the stages and stops at the human decision gates. See
+[`video-production/README.md`](./video-production/README.md).
+
 ---
 
 ## When to Use What
@@ -60,3 +84,9 @@ narration instead of translating it line-by-line.
 | Post on LinkedIn                        | `linkedin-post-creation/`                |
 | Repurpose one piece into 8 platforms    | `vibe-marketing-v2/content-atomizer`     |
 | Write a YouTube script                  | `man-digital-youtube-scripts/`           |
+| Build a branded social/marketing image  | `man-digital-marketing-assets/`          |
+| Build a blog in-body graphic            | `man-digital-blog-graphics/`             |
+| Draw an on-brand diagram                | `man-digital-lucid-charts/`              |
+| Edit a video from footage to delivery   | `video-production/`                      |
+| Subtitle an approved video (7 langs)    | `video-production/video-09-youtube-delivery/` |
+| Cut Shorts from a long-form video       | `video-production/video-10-shorts-repurposing/` |
