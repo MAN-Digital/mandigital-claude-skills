@@ -116,6 +116,13 @@ script says so clearly rather than failing obscurely.
 This is raw material for the Blueprint and Cue Sheet — not a finished deliverable, and never
 shown to the requester as-is.
 
+**Also transcribe the audio while you're here.** The delivery contract's `readme.txt`
+(output-export-contract.md §7.2) needs the source video's full spoken transcript. Reuse the
+same uploaded Gemini file with a second `generate_content` call ("Transcribe all spoken
+audio verbatim with MM:SS timestamps; if there is no speech, reply NO_SPEECH") instead of
+uploading again — the file stays available for 48 hours. A silent screen-recording gets the
+screen-event log in the readme instead.
+
 ## How to fold it into the Blueprint + Cue Sheet
 
 1. Use the event list's **order and content** to plan Blueprint beats

@@ -7,9 +7,11 @@ It contains no brand, product, or voice rules — those live in
 [non-native-readability.md](non-native-readability.md). This file governs format, file
 boundaries, and handoff only.
 
-Every script this skill produces ends in **two files**, never one merged file: a Reader
+Every script this skill produces ends in **two documents**, never one merged file: a Reader
 Script for the person on camera, and a Visual Cue Sheet for the motion-graphics/video
-editor. If the source material is a screen-share tutorial with many on-screen frames, see
+editor. Physically that is **four files** (§7.2): the Reader Script `.txt`, the Cue Sheet
+as `.md` plus a rendered `.pdf` twin, and a `readme.txt` recording the source video link,
+transcript, and fact-check status. If the source material is a screen-share tutorial with many on-screen frames, see
 [video-grounded-storyboard.md](video-grounded-storyboard.md) before building the Cue Sheet —
 grounding the cue sheet in the actual source video keeps the two files in sync instead of
 guessing at screen timing from a transcript.
@@ -89,19 +91,34 @@ not meant to be spoken is a hazard, because a reader under load will read it alo
 ### 4.2 Content rules
 
 - One idea per line, 8–15 words (see non-native-readability.md). Hard line break after each.
-- Blank line = a breath / short pause.
-- Beat separator (blank line, short marker, blank line) = full stop, new section.
-- No bullet points, no numbered lists. Lists become spoken sequences: `First… / Then… / And
-the last piece…`
+- **Max two lines per chunk, then a blank line. No exceptions.** This is the single most
+  repeated piece of on-set feedback: "Two lines, space, two lines, space is the best…
+  if there is space between them, I have time to breathe." A chunk of 3+ consecutive lines
+  scrolls too fast to read, and Romeo stops the take. The blank line IS the pacing — the
+  reader breathes where the whitespace is.
+- Beat separator (blank line, short marker, blank line) = full stop, new section. Beats are
+  the script's chapters — every long-form script must have them, visible to the reader, so
+  he always knows which chapter he is in.
+- **Enumerations: one item per line, each opening with a spoken ordinal** — `One: …` /
+  `Two: …` / `Three: …` (words, since they're read aloud; never bare digits, never a dash).
+  Without a visible marker per item the reader loses his place mid-list and the delivery
+  goes robotic: "we need these type of things, like one… because I don't know which one is
+  it." Never bury a list inside a prose sentence.
+- A line that must land (an emphasis beat like "This is where AI gets interesting.") sits
+  **isolated — blank line above and below** — so the reader can pause and give it weight.
+- Question lines keep their question mark — it carries the reader's intonation (see
+  non-native-readability.md).
 - **No visual references of any kind** — no `[VISUAL]` markers, no graphic numbers, no
   brackets pointing at anything on screen.
-- No rhetorical or audience-directed questions, no hedging, no passive voice — enforced by
-  non-native-readability.md.
+- No audience-directed questions, no hedging, no passive voice — enforced by
+  non-native-readability.md (structural self-answered questions are allowed).
 - Delivery cues default **OFF**: pace is encoded in layout only (blank-line rules above), and
   the file contains spoken lines exclusively. Turn ON only if the presenter specifically
   wants bracketed cues (`[pause]`, `[slow down]`, `[land this]`), sparse and never inside a
   spoken line.
 - No colors, fonts, or display settings — those belong to the prompter operator's own SOP.
+  (For reference: the settings that worked on set 2026-07-30 were scroll speed 75 / font
+  size 73 — the operator's numbers, not the script's concern.)
 
 ### 4.3 Body template
 
@@ -109,9 +126,14 @@ the last piece…`
 {{SPOKEN LINE}}
 
 {{SPOKEN LINE}}
-{{SPOKEN LINE — continues the same thought, no breath between}}
+{{SPOKEN LINE — continues the same thought, no breath between; a chunk NEVER exceeds two lines}}
 
 {{SPOKEN LINE THAT MUST LAND — isolated by blank lines above and below}}
+
+One: {{FIRST LIST ITEM ON ITS OWN LINE}}
+Two: {{SECOND LIST ITEM ON ITS OWN LINE}}
+
+Three: {{THIRD LIST ITEM — list items pair up in two-line chunks like everything else}}
 
 ---
 
@@ -220,13 +242,34 @@ one. Check for it explicitly (§7.6).
 
 ### 7.2 File naming
 
+Every export is **five files**:
+
 ```
-{{YYYY-MM-DD}}_{{SLUG}}_ReaderScript_v{{N}}.{{EXT}}
+{{YYYY-MM-DD}}_{{SLUG}}_ReaderScript_v{{N}}.txt
+{{YYYY-MM-DD}}_{{SLUG}}_ReaderScript_v{{N}}.pdf
 {{YYYY-MM-DD}}_{{SLUG}}_CueSheet_v{{N}}.md
+{{YYYY-MM-DD}}_{{SLUG}}_CueSheet_v{{N}}.pdf
+readme.txt
 ```
 
-Same date, same slug, same version number on both. A Reader Script edit that moves or
-rewords an anchored line invalidates the matching Cue Sheet, so both increment together.
+Same date, same slug, same version number on the versioned four. A Reader Script edit that
+moves or rewords an anchored line invalidates the matching Cue Sheet, so all of them
+increment together. Each document ships as a working format plus a `.pdf` twin for human
+review reading: the Reader Script's `.txt` is the **only** file the prompter ever loads
+(its PDF is for review, never the prompter), and the Cue Sheet's `.md` is the source of
+truth for the editor. PDFs are rendered from the final working files — identical content,
+never edited independently.
+
+**readme.txt** documents where the script came from. It contains:
+
+- Generation date, mode (fresh / brain-dump), format and target length.
+- The source video URL (Loom/YouTube) or the topic/brief for fresh mode.
+- Fact-check status: which claims were verified, against what, on what date.
+- The **full transcript of the source video** (from the Gemini analysis pass or a
+  dedicated transcription call against the same uploaded file). If the source has no
+  speech, say so and include the timestamped screen-event log instead.
+- Any anonymization notes (demo account names, email addresses to blur when rebuilding
+  frames).
 
 ### 7.3 Formats
 
@@ -234,6 +277,9 @@ rewords an anchored line invalidates the matching Cue Sheet, so both increment t
 
 - Default: `.txt`, UTF-8, plain. Most prompter apps ingest plain text cleanly and preserve
   hard line breaks.
+- Also render a `.pdf` twin of the `.txt` for review reading (same chain as the Cue Sheet
+  PDF below; preserve the line breaks and blank lines exactly — they are the pacing). The
+  PDF never goes near the prompter.
 - If the app requires it: `.docx` (single body style, no headings, no lists) or `.rtf`.
 - If `.md` is used, the body must still contain **no markdown syntax** — no `#`, `*`, `_`,
   `>`, `-` at line starts.
@@ -243,18 +289,62 @@ rewords an anchored line invalidates the matching Cue Sheet, so both increment t
 
 **Cue Sheet — the constraint is human readability at a desk.**
 
-- Default: `.md`.
+- Source of truth: `.md`. Always also render the same `.md` to `.pdf` (§7.2).
+- PDF rendering chain (first available wins): `pandoc` → Chromium-family browser headless
+  (`"/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"` or Google Chrome, with
+  `--headless --print-to-pdf={{OUT}} --no-pdf-header-footer {{HTML}}`, converting the md to
+  styled HTML first — the `markdown` pip module works for that) → `cupsfilter` as a last
+  resort. If every option fails, deliver the `.md` and flag the missing PDF — don't block
+  the export on it.
 - Alternatives if the builder's tooling requires: `.csv` (use §5.4 columns) or a table in
   the team's doc tool.
 
-### 7.4 Destination and delivery
+### 7.4 Destination and delivery — the Drive project folder
 
-1. Build both files in a working directory.
-2. Verify against §7.6.
-3. Copy both to the delivery location the requester specifies (ask if not given — don't
-   guess a folder).
-4. Present both files in one action, **Reader Script first**.
-5. Keep the response text after delivery to a short summary. The files carry the content.
+Scripts are filed into MAN Digital's Video project tree on the shared Google Drive. With
+Google Drive for Desktop it is mounted under your CloudStorage folder:
+
+```
+~/Library/CloudStorage/GoogleDrive-<you>@man.digital/<shared-drive-shortcut>/Video/
+```
+
+(Resolve the exact shortcut path on your machine once and keep using it; the folder IDs
+live in the team's internal docs, not here.)
+
+1. Build all four files (§7.2) in a working directory and verify against §7.6.
+2. **Find or create the project folder** under `01_Active_Projects/`:
+   - If a project folder for this video/topic already exists, use it — bump the version
+     number on the files instead of creating a twin folder.
+   - **Version bumps archive the old files.** When writing v{{N+1}} of any script files,
+     create an `Old_Versions/` folder inside that project's `Storyboards_&_Scripts/` (if it
+     doesn't exist yet) and move every superseded versioned file into it. The top level of
+     `Storyboards_&_Scripts/` holds only the current version plus `readme.txt`. Update
+     `readme.txt`: point its file list at the new version and append a short VERSION
+     HISTORY entry saying what changed and that the old files moved to `Old_Versions/`.
+   - Otherwise copy the **pristine template** at
+     `01_Active_Projects/[ New Project Template ]/YYYY-MM-DD_[ClientName]_[ProjectSubject]/`
+     (the inner folder) into `01_Active_Projects/` — never duplicate an old project (the
+     SOP's Clean Origin Rule). Delete stray `.DS_Store` files from the copy. Leave the
+     `[FolderName]_Master.*` project files untouched — existing projects keep them as-is.
+3. **Rename** the copy `YYYY-MM-DD_ManDigital_{{Topic}}` — date = script creation date,
+   topic in CamelCase. When the source material is HubSpot (a HubSpot tutorial/showcase
+   Loom, a HubSpot feature), prefix the topic with `Hubspot`: e.g.
+   `2026-07-30_ManDigital_HubspotBillingPortal`, matching siblings like
+   `2026-07-29_ManDigital_HubspotPriceBooks`. For client case studies the client name
+   replaces `ManDigital` (see `02_Archived_Projects_[COMPLETED_ONLY]/` for precedent —
+   check both active and archived folders to stay consistent with existing naming).
+4. Copy all four files into that project's `01_Pre_Production/Storyboards_&_Scripts/`.
+5. Present the files to the requester in one action, **Reader Script first**, and say
+   which project folder they were filed into.
+6. Keep the response text after delivery to a short summary. The files carry the content.
+
+**If Google Drive is offline or the mount is missing on this machine:** still run the full
+export — all five files, all checks. Do not try to recreate the project-folder template
+from scratch (the pristine template lives on Drive, so without it the tree would be a
+guess). Deliver the files from the working directory with an explicit notification: Drive
+is offline, the project folder still needs to be created from the template, and these
+files need to be imported into its `01_Pre_Production/Storyboards_&_Scripts/`. Only do
+this when Drive is actually unavailable — never as a shortcut.
 
 ### 7.5 Downstream consumption
 
@@ -269,6 +359,13 @@ rewords an anchored line invalidates the matching Cue Sheet, so both increment t
 Run all of these. Any failure blocks export.
 
 - [ ] Two files, not one.
+- [ ] No chunk in the Reader Script exceeds two lines; every chunk is followed by a blank
+      line.
+- [ ] Every enumeration is one item per line with a spoken ordinal ("One: …"), never buried
+      in a prose sentence.
+- [ ] Every interrogative line ends with a question mark.
+- [ ] Fact-check Pass 2 (SKILL.md Step 4) run on the finished text: every date, number,
+      price, feature name, and UI location re-verified online after drafting.
 - [ ] Reader Script contains zero visual references — searched for `[`, `VISUAL`, `graphic`,
       `fig`, digits used as visual labels.
 - [ ] Reader Script contains zero markdown syntax in the body.
@@ -280,7 +377,17 @@ Run all of these. Any failure blocks export.
 - [ ] Timecodes accumulate correctly and the final one is within tolerance of the target
       length.
 - [ ] Word count ≈ blueprint total, and total runtime at the stated wpm ≈ target.
-- [ ] Filenames match the §7.2 pattern; both files share date, slug, and version.
+- [ ] Filenames match the §7.2 pattern; ReaderScript/CueSheet files share date, slug, and
+      version.
+- [ ] Both `.pdf` twins (Reader Script + Cue Sheet) rendered from the final working files
+      (or their absence flagged per §7.3).
+- [ ] `readme.txt` present with source link, transcript (or screen-event log for silent
+      sources), and fact-check status.
+- [ ] Files filed into the Drive project folder's `01_Pre_Production/Storyboards_&_Scripts/`
+      per §7.4 — existing folder reused, or a fresh template copy named
+      `YYYY-MM-DD_ManDigital_{{Topic}}` (Hubspot-prefixed topic for HubSpot material).
+- [ ] On a version bump: superseded files moved into `Old_Versions/`, readme file list
+      updated to the new version, VERSION HISTORY entry appended.
 - [ ] Encoding is UTF-8; quotes are straight; no tabs; no trailing whitespace.
 - [ ] Blocklist scan clean (banned-words.md).
 - [ ] Beat separator confirmed to render or strip correctly in the target prompter app.
