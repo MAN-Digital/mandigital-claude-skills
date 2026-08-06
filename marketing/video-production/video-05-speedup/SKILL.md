@@ -8,6 +8,8 @@ when_to_use: After all cuts and pause passes are done, as the LAST timeline oper
 
 Implements the canonical SOP: `…/Video/04_Internal_SOPs/SOPs/SOP - Talking-Head Dialogue Speed-Up (Pitch-Preserved).md` (Google Drive). Read it when anything here is insufficient — the SOP wins on conflict. Rationale: Premiere's "Maintain Audio Pitch" time-stretch produces metallic artifacts on speech; this separates the time-stretch from the pitch correction.
 
+A vendored copy of that SOP lives at `references/SOP - Talking-Head Dialogue Speed-Up (Pitch-Preserved).md` (self-containment pass, 2026-08-04): read the Drive original first — it is the living version and still wins on conflict — and fall back to the vendored copy when Drive is unreachable; after a successful Drive read that shows differences, refresh the vendored copy and say so.
+
 ## 1. Measure and recommend
 
 From the sequence's word-level JSON: `wpm = word count / (last word end − first word start) × 60`.
@@ -34,8 +36,8 @@ Any other speed: `total cents = 1200 × log₂(1 ÷ speed)`, split into whole se
 **Via MCP (attempt first, verify each step by read-back):**
 1. Duplicate the sequence first (same rule as video-03-cuts — the pre-speedup cut is the rollback).
 2. `speed_change` / `set_clip_speed_qe` on every dialogue clip: target speed, **maintain audio pitch OFF**, ripple ON. Verify: new duration = old ÷ speed (±1 frame per clip boundary).
-3. Audio chain: if clips are **mono** (see `video-01-ingest`), skip the fill step entirely. If stereo with one recorded channel, the fill (Fill Left with Right / Fill Right with Left — the one that copies the *recorded* channel) is a Track Mixer insert, which the bridge likely cannot set — hand it to the user as a manual step.
-4. Pitch Shifter with the table values, Precision: High Precision, Pitch Settings: Individual Channels. Try `apply_audio_effect` per clip; if effect parameters can't be set through the bridge, hand the user the exact values as a manual checklist instead. Track-level insert (SOP default) is manual either way.
+3. Audio chain: if clips are **mono** (see `video-01-ingest`), skip the fill step entirely. If stereo with one recorded channel, the fill (Fill Left with Right / Fill Right with Left — the one that copies the *recorded* channel) is a Track Mixer insert, which the bridge CANNOT set (map-verified: track-level inserts are completely invisible to it) — hand it to the user as a manual step.
+4. Pitch Shifter with the table values, Precision: High Precision, Pitch Settings: Individual Channels. Try `apply_audio_effect` per clip — **the capability map (`video-01-ingest/references/premiere-mcp-map.md`) records it as broken in 26.3** (`list_available_audio_effects` returns `[]`, so no audio effect can be applied), so EXPECT the manual path: hand the user the exact values as a manual checklist. The one cheap try stays because it self-detects a fixed bridge after an upgrade — a success there means the map needs updating, say so. Track-level insert (SOP default) is manual either way.
 5. Report which steps ran automated vs. manual — never claim the audio chain is done without the pitch values actually applied.
 
 **Track Mixer caveat (from the SOP):** track-level fill/pitch assumes every clip on that track shares the speed. Mixed speeds or music on the track → apply per-clip.

@@ -36,16 +36,16 @@ Confirmed independently by layout: walkthrough ↔ sequential ↔ side-panel-abl
 
 ## The format call
 
-Every placed asset gets a format in the placement table: **full frame** 3840×2160 (default) · **⅔ split** 2560×2160 · **⅓ split** 1280×2160 · **alpha overlay**.
+Every placed asset gets a format in the placement table: **full frame** (default) · **⅔ split** · **⅓ split** · **alpha overlay**. Canvas sizes and Premiere preset pairings are CANONICAL in video-06-animate's format table (SKILL.md § "Formats — full frame, ⅔, ⅓, overlay") — cite formats by name here, never restate the numbers (consolidated 2026-08-06 so the sizes live in exactly one place).
 
 - Width-spending layouts (wide tables, maps, fans, crossings, long strikes) and any clip handing into another full-frame graphic: **full frame only**.
 - Single-column / naturally vertical content (stacked lists, chapter menus, headline-over-shell): split-able. **⅔** when the graphic should dominate or the talking stretch is long; **⅓** when the speaker should dominate and the content is a compact column.
 - Quotes and short stats that punctuate rather than explain: **alpha overlay** over the speaker (works over any layout) — or full frame when they deserve total focus. Whether a borderline asset is worth full frame is Tier 2: propose with the reason.
 - A split variant is authored by video-06 from the approved master and **keeps the master's cue table verbatim** — swapping master ↔ variant costs the editor zero timing work, so propose splits freely where the audio stretch suits a visible speaker.
 
-Name the preset pairing with the call, so the editor drops rather than builds: graphic clip `MD3 Graphic <side> <⅓|⅔> In/Out`, or `MD3 Graphic Slide <side> Full In/Out` for full frame; footage `MD2 Slide <⅓|⅔> In` (dodges opposite the graphic, same fraction) + `Hold` on clips between + `Back` at exit. Full frame needs no footage dodge. Which side the graphic sits on is the editor's call (Tier 3); the fraction is yours (Tier 1).
+Name the preset pairing with the call, so the editor drops rather than builds — take the exact graphic + footage preset strings from video-06's format table (one source since 2026-08-06; the shape: MD3 graphic In/Out + MD2 footage dodge at the same fraction on the opposite side, `Hold` on clips between, `Back` at exit; full frame needs no footage dodge). Which side the graphic sits on is the editor's call (Tier 3); the fraction is yours (Tier 1).
 
-Independent of the in-video format, **every asset also ships a 1280×2160 vertical** for Shorts repurposing (an asset with a ⅓ split already has it) — note in the placement table which assets still lack their vertical. Geometry in `references/geometry.md`.
+Verticals are **on demand** (Diogo, 2026-08-06): built only for Short-first designs, or on Diogo's explicit repurpose ask (policy, canvas size and the ⅓-split-shares-the-canvas equivalence live in video-06's format table) — placement tables no longer track missing verticals. Geometry in `references/geometry.md`.
 
 Cross-check against Gate 1: a split call on an illustration, or full-frame-forced on a clean walkthrough column, is a flag that one of the two classifications is wrong.
 

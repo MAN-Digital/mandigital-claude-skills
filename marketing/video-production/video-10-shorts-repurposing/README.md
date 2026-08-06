@@ -26,7 +26,14 @@ deliverable built from a duplicated sequence.
   timecodes, CTRL+F locate strings (raw source words, ASR errors included, so the
   editor can find them in Premiere), runtime checksums, and a CTA back to the
   long-form.
-- On Diogo's selection ("build S1 and L2"), emits one CUT ORDER per short in the
+- Ships the **attention stack** per YouTube candidate: a suggested title (feed text —
+  the promise; seed for video-09's upload-time title pass), **first-frame cover copy**
+  (an in-frame graphic between the speaker's face and the subtitles — a vertical
+  uploads no thumbnail file, so the first frames do that job, and the copy has to
+  exist at edit time), and the spoken hook (audio — the claim that pays both off).
+  All derived from the candidate's own script, three surfaces in one niche, each
+  leveraging its own medium, never duplicating one another.
+- On Diogo's selection ("build Y1 and L2"), emits one CUT ORDER per short in the
   video-02 format for execution by video-03-cuts on a duplicated 9:16 sequence.
 
 ## When should I use it?
@@ -61,6 +68,11 @@ Each slate is self-contained: header (source transcript, cut state, fps, CTA lin
 timecode validity), ranked candidates with scores/blueprints/spans/build notes,
 Near-misses, and a pickup list if any. Marginal candidates carry a "Worth building?"
 for/against block. After selection: one CUT ORDER file per chosen short.
+
+In Premiere, each short that gets built is filed into `00_Timelines/01_Active_Cuts`
+and colour-labelled by platform — **Rose** for the YouTube Shorts series, **Blue** for
+the LinkedIn series — in the same pass that cuts it, so a session that produces eight
+shorts still reads at a glance in the project panel.
 
 ## Prerequisites
 

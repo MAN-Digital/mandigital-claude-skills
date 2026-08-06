@@ -24,6 +24,10 @@ two-camera waveform synchronization.
   the edit-plan path is unavailable or trusted less.
 - Keeps unsynced footage parked after the synced content under an orange marker — never
   silently deleted.
+- Hosts the **Premiere MCP capability map** (`references/premiere-mcp-map.md`, folded in
+  from the memory layer 2026-08-06): the live-tested record of which bridge tools work,
+  lie, or destroy, version-pinned to PPro 26.3 + MCP 1.4.0 — the single source that
+  video-00/03/04/05 point at for bridge-capability questions.
 - Verifies everything by read-back (and a scratch-sequence test insertion when certainty
   matters).
 

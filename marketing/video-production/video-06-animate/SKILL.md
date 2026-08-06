@@ -13,7 +13,7 @@ description: >
   motion is written — use it for "resize this graphic for the video", "make this fit 4K", "adapt
   this design to 16:9", or when a title, legend or label is being cut off at the frame edge.
   Also owns the format pass (full-frame 3840×2160 vs ⅓ split 1280×2160 vs ⅔ split 2560×2160 vs
-  alpha overlay, plus the standing 1280×2160 vertical for Shorts repurposing) and the
+  alpha overlay, plus the on-demand 1280×2160 vertical for Short-first designs) and the
   master-timecode → animation-local cue rebasing — use it for "make the split version", "the 2560
   variant", "the vertical version", "rebase the cues", or when animation timestamps and
   transcript timestamps disagree.
@@ -266,12 +266,15 @@ each format is its own canvas and its own fit.
 | **⅔ split** | 1280×1080 | 2560×2160 | exact ⅔; speaker in the other ⅓ | graphic `MD3 Graphic <side> 2/3 In/Out` + footage `MD2 Slide <opposite> 2/3 In/Hold/Back` |
 | **⅓ split** | 640×1080 | 1280×2160 | exact ⅓; speaker in the other ⅔ | graphic `MD3 Graphic <side> 1/3 In/Out` + footage `MD2 Slide <opposite> 1/3 In/Hold/Back` |
 | **Overlay** | 1920×1080, alpha | 3840×2160 ProRes 4444 | floats over footage | drop on a higher track |
-| **Vertical** (standing) | 640×1080 | 1280×2160 | Shorts repurposing deliverable | used in the vertical edit, not the horizontal cut |
+| **Vertical** (on demand) | 640×1080 | 1280×2160 | Short-first designs; otherwise only on Diogo's explicit repurpose ask | used in the vertical edit, not the horizontal cut |
 
 Split widths are exact thirds of 3840 **on purpose** — the MD preset kit's offsets assume them, so
 the editor gets the whole choreography by dropping presets. These splits are *not* the
 9:16 Shorts-convertible panel (2160×3840 placed at 56.25%) — that's a separate spec in
-`video-07-graphics-placement/reference/geometry.md`; don't mix their numbers.
+`video-07-graphics-placement/references/geometry.md`; don't mix their numbers.
+**This table is the single canonical source for these canvas numbers and preset
+pairings** — video-07's format call cites it by name instead of restating them
+(consolidated 2026-08-06); change a number or preset string HERE and nowhere else.
 
 **Every asset ships a full-frame master. A split variant is built in addition, from the approved
 master, only where the split earns it:**
@@ -292,13 +295,18 @@ master's cue table verbatim** — same transcript anchors, same local frames —
 master ↔ variant at the same timecode with zero timing work. A reflow never rewords: data, copy
 and reading order are fixed. Canvas numbers and safe margins in `references/canvas-fit.md`.
 
-**Vertical is a standing deliverable, not a format choice.** Every asset also ships a
-**1280×2160 vertical** for Shorts repurposing — an asset with a ⅓ split already has it (same
-canvas); full-frame-only and ⅔ assets get a dedicated vertical adaptation. It happens in **two
-steps, and the first is design**: the source design gets a horizontal *and* a vertical variant at
-the design stage, then the fit pass and animation run per variant — a vertical is never a squeezed
-horizontal. 1280×2160 is deliberately not 9:16 (the user's chosen export): in the Shorts edit it's
-either side-cropped to true 9:16 or downscaled onto a background — so design it to survive both.
+**Vertical is on demand, not a standing deliverable (Diogo, 2026-08-06 — supersedes the
+2026-08-01 every-asset rule).** Build a 1280×2160 vertical only when vertical is the master
+format for that design — a Short-first asset, with every cue derived from the Short's own
+word-level transcript (a 16:9 master's cue table never transfers). Full-frame, ⅔ and ⅓
+masters ship with no vertical; repurposing an existing horizontal design to vertical happens
+only when Diogo asks for it explicitly. When one is built the two-step rule holds: the design
+gets its own vertical variant first, then the fit pass and animation run on it — a vertical is
+never a squeezed horizontal. 1280×2160 is deliberately not 9:16 (the user's chosen export): in
+the Shorts edit it's either side-cropped to true 9:16 or downscaled onto a background — so
+design it to survive both. For a Short whose reading-away windows are too short to hold an
+entrance (≲30f), deliver one continuous narration-correct render the editor cuts in and out
+of — every window IN must land on a settled, readable state — never per-window insert clips.
 Margins and crop numbers in `references/canvas-fit.md`.
 
 **Backgrounds are opaque everywhere except quote overlays (Diogo, 2026-08-01).** Full-frame

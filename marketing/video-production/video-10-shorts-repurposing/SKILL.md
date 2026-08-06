@@ -1,6 +1,6 @@
 ---
 name: video-10-shorts-repurposing
-description: Mines a finished long-form video's transcript for short-form vertical candidates and returns a scored candidate slate per platform — YouTube Shorts (sound-on lens) and LinkedIn vertical (mute-hook lens) — each with a Hook/Core/Close blueprint, word-exact spans, locate strings, and a CTA back to the long-form; then, on Diogo's selection, per-short CUT ORDERs for video-03-cuts. Use when the user says "make shorts from this", "repurpose the long-form", "find the reels in this video", "shorts candidates", "what shorts can we get out of this video", "cut a vertical from this", or drops a long-form transcript asking for short-form extraction. Standalone — runs outside the pipeline, on request only.
+description: Mines a finished long-form video's transcript for short-form vertical candidates and returns a scored candidate slate per platform — YouTube Shorts (sound-on lens) and LinkedIn vertical (mute-hook lens) — each with a Hook/Core/Close blueprint, a suggested title plus first-frame cover copy (the attention triad with the spoken hook — three surfaces, one niche, never duplicating; cover burned in at edit time, title seeding video-09's upload pass), word-exact spans, locate strings, and a CTA back to the long-form; then, on Diogo's selection, per-short CUT ORDERs for video-03-cuts. Use when the user says "make shorts from this", "repurpose the long-form", "find the reels in this video", "shorts candidates", "what shorts can we get out of this video", "cut a vertical from this", or drops a long-form transcript asking for short-form extraction. Standalone — runs outside the pipeline, on request only.
 when_to_use: After a long-form cut is locked (ideally approved) and its transcript exists — word-level JSON preferred, back-catalog SRT/CSV accepted with degraded precision. Any request to extract or repurpose short-form clips from long-form content. On a mid-edit transcript only with the explicit warning that any recut voids every timecode issued.
 allowed-tools: Bash(python3 ${CLAUDE_SKILL_DIR}/scripts/span_times.py *) Bash(python3 ${CLAUDE_SKILL_DIR}/scripts/render_pdf.py *) Read Glob Grep Write AskUserQuestion
 ---
@@ -13,6 +13,13 @@ CUT ORDER execution. The project backup (Documents 1–4, Shared Foundations, Ro
 Essentials) lives in Drive at
 `Video/04_Internal_SOPs/📚 Claude Projects/📃 Transcript Optimization/` — consult it
 when a craft question exceeds what is encoded here.
+
+Vendored copies of the two documents this skill's craft derives from — Document 3
+itself and Shared Foundations — live in `references/` (self-containment pass,
+2026-08-04): consult the Drive originals first (living versions), fall back to the
+vendored copies when Drive is unreachable, and refresh them when a Drive read shows
+differences. The rest of the project backup (Documents 1, 2, 4, Roadmap, Essentials,
+channel data) stays Drive-only — it belongs to other skills' territory.
 
 This skill is **read-only on the long-form**. It never proposes changes to the
 long-form cut and never runs as a pipeline stage — Diogo asks for it, at or after
@@ -136,6 +143,40 @@ Spoken CTA counts inside the length target; overlay-only CTA rides the payoff's 
 LinkedIn cuts: the conversion CTA lives in the **post copy**, which routes to the
 LinkedIn project — the video's close invites the comment instead.
 
+## The attention stack — title · cover copy · hook (Diogo, 2026-08-06)
+
+A Y candidate owns THREE simultaneous attention surfaces, and they work as one
+system in one niche while each leverages its own medium: the TITLE is feed text —
+the promise, search-shaped, declarative; the COVER COPY is an in-frame graphic
+(placed between the speaker's face and the subtitles) — the itch, the scroll-stop;
+the SPOKEN HOOK is audio — the claim that pays both off. Connected, never
+duplicating: a surface that restates another wastes one of three shots at
+attention. Write all three per candidate and check them AS A SET. (L candidates
+carry no title element — that surface is the LinkedIn post's first line, which
+belongs to the LinkedIn project.)
+
+A Short uploads no thumbnail file: the feed and grid show its FIRST FRAMES, so
+thumbnail-grade copy burned into those frames does the job a thumbnail does for a
+horizontal video — and it must exist at EDIT time, in the slate, not arrive at upload
+time in video-09's package. Every candidate card carries a **Cover copy** line in its
+Hook beat (template above):
+
+- **Derived from that candidate's own script** — look at the suggested spans and write
+  the line as: "if you want copy in the first frames acting as the call to watch, use
+  this." Never generic, never imported from another candidate.
+- **The thumbnail SOP contract, one stage earlier:** the spoken hook states the claim,
+  the cover copy creates the itch — connected, never duplicating. Restating the hook
+  overlay wastes the frame; protect the information gap (never disclose what the video
+  enumerates). Contrast is licensed here (it is a 0–2 s surface).
+- **Y-series: mandatory.** L-series: the mute-hook caption already owns the first
+  frames, so cover copy appears only when it adds something the caption doesn't —
+  redundancy is worse than absence there.
+- Production: 3–6 words, phone-legible, safe-zone — type/canvas rules live with
+  video-06; the editor burns it during the edit. At upload time video-09's
+  thumbnail-copy pass treats burned cover copy as the EXISTING thumbnail (analysis
+  mode, not a fresh proposal); for horizontal videos nothing changes — their
+  thumbnail copy still arrives in video-09's package.
+
 ## Output contract — two slate files, one per platform
 
 Deliver into `04_Project_Assets/Shorts_Repurposing_Scripts/` (template folder since
@@ -168,12 +209,15 @@ STRONG/PARTIAL/WEAK, RECOMMENDED, GATING and ⚑ are auto-badged — write them 
 uppercase words so the renderer catches them.
 
 ```
-### [S|L][n] · "[short label]" — RECOMMENDED (on the pick only)
+### [Y|L][n] · "[short label]" — RECOMMENDED (on the pick only)
 
 **Source** [hh:mm:ss:ff – hh:mm:ss:ff] · **Runtime** [n]s body + [n]s CTA = **[n]s**
    (branches, when they exist, as a small table: Branch | Body | Total | Trade)
 
 **Angle** — [one sentence: why this moment works on this feed]
+
+**Suggested title (Y)** "[≤ ~55 chars, declarative — leverages the hook; repeats
+   neither the spoken words nor the cover copy. Seed for video-09's title pass]"
 
 #### Score · [Platform] grammar
 
@@ -185,6 +229,10 @@ uppercase words so the renderer catches them.
 - **Audio** (Shorts) / **Caption, carries the hook on mute** (LinkedIn) "[exact line]"
 - **CTRL+F** `[raw source words]`   [ASR flag if relevant]
 - **Overlay** [3–5 words; Shorts supports the spoken hook, LinkedIn IS the hook]
+- **Cover copy (first frames)** "[3–6 words, thumbnail-grade — creates the itch the
+  hook pays off; never restates the Overlay or the spoken words. Mandatory on Y
+  candidates; on L candidates only when it adds something the mute-hook caption
+  doesn't already carry]"
 
 ##### Core · [range]
 - **Audio** "[exact words — the one idea + seed-fact]" · **CTRL+F** · **Overlay**
@@ -232,16 +280,44 @@ variants) live with video-06.
 
 ## Selection gate → execution handoff
 
-When Diogo picks ("build S1 and L2"), emit **one CUT ORDER per short** in the
+When Diogo picks ("build Y1 and L2"), emit **one CUT ORDER per short** in the
 video-02 format, with two adaptations: `sequence:` names a duplicate the executor
 creates first (`<project>_SHORT1_9x16`), and the Cuts table is the **complement** of
 the keep-spans (everything outside the short's parts, pre-sorted descending, plus any
 cold-open reorder noted as a Deferred move — reorders are not plain cuts).
 video-03-cuts executes under its normal safety protocol. Downstream by reference:
 vertical reframe + graphics → video-06 · caption template + QA → video-08 · upload
-subtitle tracks → video-09 in **Shorts** mode. Shorts metadata (title, description,
-pinned comment) and LinkedIn post copy are OUT of scope — flag them as routed to
-their own projects.
+subtitle tracks → video-09 in **Shorts** mode. Final upload metadata stays
+video-09's territory — the slate's per-candidate title is a SEED for that pass,
+not a bypass. Description and pinned comment remain OUT of scope, as does LinkedIn
+post copy (routed to the LinkedIn project).
+
+### Filing and colour label — part of the build, not an afterthought
+
+Every short sequence the executor creates is filed and labelled **in the same pass that
+builds it** (Diogo, 2026-08-05), so the project panel stays readable when eight shorts
+land in one session:
+
+1. **Bin — `00_Timelines/01_Active_Cuts`.** Duplicating a sequence drops the copy beside
+   the original, which on these projects means the project root. Move it with
+   `move_item_to_bin` (target `01_Active_Cuts`) and confirm with a `get_bin_contents`
+   read-back. This is the same bin template video-03-cuts already respects; shorts are
+   working timelines and live there with everything else. If the project has no such bin
+   (non-template project), leave the copy where Premiere put it — never create bins
+   uninvited.
+2. **Colour label — by platform, via `set_color_label`:**
+
+   | Lens | Label | `color_index` |
+   |---|---|---|
+   | YouTube Shorts (Y-series) | Rose | `6` |
+   | LinkedIn vertical (L-series) | Blue | `9` |
+
+   The label is what makes the two slates tellable apart at a glance in the panel, so it
+   tracks the *lens*, not the candidate. Leave the long-form master's own label alone.
+
+Verify both by read-back before reporting the build — `set_color_label` and
+`move_item_to_bin` are writes, and the Premiere bridge reports success for writes that
+did not land.
 
 ## Never
 

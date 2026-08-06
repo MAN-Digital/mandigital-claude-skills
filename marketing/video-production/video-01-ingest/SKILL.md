@@ -8,6 +8,12 @@ when_to_use: Right after media import, BEFORE any clip is added to a sequence; a
 
 Normalizes freshly imported talking-head footage so every video file lands on the timeline with **one audio clip, mono, carrying the recorded channel**.
 
+**The bridge capability map lives in this skill: `references/premiere-mcp-map.md`** —
+the live-tested record of which premiere-pro MCP tools work, lie, or destroy
+(version-pinned to PPro 26.3 + MCP 1.4.0; folded in from memory 2026-08-06). Read it
+before using any bridge tool you haven't already used this session. This skill is the
+map's home; video-00/03/04/05 point here.
+
 ## Why mono
 
 The mic records on one channel; the other is empty or a duplicate. Mono mapping means: one audio clip per video on the timeline (not A1+A2), no phantom empty channel, and — the compounding win — the **Fill Left with Right / Fill Right with Left step in the dialogue speed-up SOP becomes unnecessary**, because there is no empty channel to fill. Stereo Clip Channel Format is the fallback only when a clip genuinely carries two distinct channels worth keeping.

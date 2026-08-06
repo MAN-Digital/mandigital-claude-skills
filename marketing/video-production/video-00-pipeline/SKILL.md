@@ -8,6 +8,10 @@ when_to_use: Any request to run or resume the whole edit process rather than one
 
 This skill owns **sequencing and state only**. Every stage's actual rules live in its numbered skill — load that skill via the Skill tool when its stage begins and follow it fully. Never bypass a stage skill's internal gates (locks, audits, vetoes, calibrations); the conductor adds no shortcuts, only order.
 
+For any direct Premiere-bridge interaction between stages, the live-tested capability
+map at `video-01-ingest/references/premiere-mcp-map.md` (folded in 2026-08-06) says
+which MCP tools work, lie, or destroy — consult it rather than trusting a tool's name.
+
 ## The map
 
 Project root comes from the open `.prproj` (`<root>/03_Project_Files/Adobe/`); transcripts and pipeline log live in `<root>/04_Project_Assets/Transcripts/`. The folder **is** the state — detect the stage from artifacts, never from memory of past sessions:

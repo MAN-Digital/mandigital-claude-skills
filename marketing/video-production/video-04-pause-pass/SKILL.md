@@ -9,6 +9,10 @@ allowed-tools: Bash(python3 ${CLAUDE_SKILL_DIR}/scripts/gap_analysis.py *) Read 
 
 Runs on the **conformed word-level JSON** of an already-cut sequence. Produces a standard CUT ORDER (executed by `video-03-cuts` under the full duplicate/back-to-front/audit protocol) plus, optionally, a **punch plan** that masks the resulting jump cuts.
 
+When execution questions about the Premiere bridge arise (what a tool actually does,
+what lies): the capability map at `video-01-ingest/references/premiere-mcp-map.md`
+(folded in 2026-08-06) is authoritative.
+
 ## Philosophy
 
 Pauses under ~1s are delivery, not defect — sentence landings need their beat. This pass never deletes silence to zero (that's the machine-gun feel of Premiere's native pause tool); it *tightens* long gaps to a residual. Jump cuts are acceptable in online formats; masked jump cuts are better. The user vetoes individual trims — a pause after a punchline may be load-bearing.

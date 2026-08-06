@@ -8,6 +8,13 @@ when_to_use: Any request to perform destructive timeline edits in Premiere via M
 
 Executes cut decisions on a Premiere timeline through the `premiere-pro` MCP server. The mechanical tools work; the failure mode is **model arithmetic and rationalization**, not the bridge. This protocol exists because a July 2026 test over-deleted ~40s of keep-content and then invented false math to justify the result. Never let that happen again.
 
+**Bridge capability map: `video-01-ingest/references/premiere-mcp-map.md`** (folded in
+2026-08-06) — which tools lie or destroy, pinned to PPro 26.3. Two entries matter most
+here: `ripple_delete`'s single-track semantics on layered timelines, and the proven
+multi-track range-cut path (target-all → in/out → `extract_selection`, duration-delta
+as the sync detector, ranges executed descending — frame-exact on 11 tracks,
+2026-08-05). Consult the map before cutting anything with more than one track.
+
 ## Prime directives
 
 1. **Never edit the original sequence.** Always `duplicate_sequence` first, work on the copy (`set_active_sequence` to it). The original is the rollback.

@@ -16,10 +16,11 @@ see the frame and never comments on aesthetics).
   search is worth nothing.
 - Scopes every claim to the asset's own transcript window, verifies ordering with
   unanchored probes, and applies spacing (~animation + 6 s) and reading floors.
-- Makes the **format call** per asset — full frame 3840×2160 (default), ⅔ split
-  2560×2160, ⅓ split 1280×2160, or alpha overlay — with the MD2/MD3 preset pairing
-  named so the editor drops rather than builds, and tracks the 1280×2160 vertical every
-  asset also needs for Shorts repurposing.
+- Makes the **format call** per asset — full frame (default), ⅔ split, ⅓ split, or
+  alpha overlay — with the MD2/MD3 preset pairing named so the editor drops rather
+  than builds. Verticals are on demand (2026-08-06): Short-first designs or an
+  explicit repurpose ask only. (Canvas sizes and exact preset strings are canonical
+  in video-06-animate's format table since 2026-08-06.)
 - Emits **dual timecodes** for every cue: master cue (from sequence zero, for the
   editor) and MG cue (rebased to the asset's own IN point, for the motion designer).
 - On request, runs **gap-fill mode** — proposes NEW graphics for uncovered stretches as

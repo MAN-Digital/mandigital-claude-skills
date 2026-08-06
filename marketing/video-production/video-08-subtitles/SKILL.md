@@ -7,6 +7,13 @@ allowed-tools: Bash(python3 ${CLAUDE_SKILL_DIR}/scripts/*) Read Glob Grep Write
 
 # Subtitle QA & Flow — two ASR engines, one correct caption file
 
+The 08↔09 boundary, stated once (Diogo, 2026-08-04): **this skill makes the review
+captions for the edit suite** — CORRECTED + FLOW SRTs that go back into DaVinci on the
+conformed, pre-approval cut. **video-09 makes everything YouTube needs after approval** —
+the multi-language subtitle tracks and the optimization package (title, description,
+tags, first comment). Both produce .srt files; different lifecycle moment, different
+destination. Approval is the border: before it, this skill; after it, video-09.
+
 Two independent speech-to-text engines transcribed the same audio: DaVinci (in the styled SRT)
 and Premiere (in the transcript JSON, with per-word `confidence`). They disagree exactly where
 one of them is wrong — align them, arbitrate every difference with confidence + context, and

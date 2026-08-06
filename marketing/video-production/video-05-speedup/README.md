@@ -1,7 +1,10 @@
 # video-05-speedup — Talking-Head Dialogue Speed-Up (Pitch-Preserved)
 
 Measures a sequence's delivery pace in words per minute, recommends a modest
-pitch-preserved speed-up, and applies Diogo's SOP for it in Premiere. Pipeline stage 05:
+pitch-preserved speed-up, and applies Diogo's SOP for it in Premiere — via the MCP
+bridge where it can (clip speed), handing the user an exact manual checklist where it
+can't (the Pitch Shifter audio chain — effect parameters are not settable through the
+bridge in PPro 26.3). Pipeline stage 05:
 the **last timeline operation** — after all cuts and the pause pass, before graphics cue
 derivation.
 
@@ -65,4 +68,6 @@ derivation.
 - Mono audio prep from **video-01-ingest** lets the channel-fill step be skipped
   entirely; stereo clips with one recorded channel need the manual fill insert.
 - The canonical SOP document on Google Drive — read when anything in the skill is
-  insufficient; the SOP wins on conflict.
+  insufficient; the SOP wins on conflict. A vendored copy ships inside the skill at
+  `references/` as the fallback when Drive is unreachable (Drive original stays the
+  living version).
