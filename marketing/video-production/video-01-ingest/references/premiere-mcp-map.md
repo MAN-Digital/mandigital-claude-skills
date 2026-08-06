@@ -90,6 +90,31 @@ session has lost the server (spawn the binary with the env from `ps`, `initializ
 must be running). Verify connectivity with `ping` — returns project name + active
 sequence.
 
+## Strategic clock — the ExtendScript support floor ends September 2026
+
+The entire bridge — every typed tool AND the `execute_extendscript` escape hatch —
+runs on CEP + ExtendScript + the QE DOM. Adobe's stated position (community scripting
+guide ppro-scripting.docsforadobe.dev, **live-verified 2026-08-06**, quotes verbatim):
+"As of November 2025, Premiere Pro has moved to extensibility based on UXP" and
+"ExtendScript-based integrations are still supported, and the plan is for them to
+remain so, through September 2026."
+
+- Read that precisely: **a support floor, not an announced kill date** — after
+  September 2026 there is no promise, so any Premiere update may break CEP/ExtendScript
+  without notice. Plan as if the bridge's foundation becomes best-effort next month.
+- Migration path exists but is partial: upstream premiere-pro-mcp already ships a UXP
+  host (+16 `*_uxp` capabilities) and the bridge has a UXP preview backend (used today
+  only for the transcript pull) — but **UXP cannot yet do QE-DOM structural edits**,
+  which is exactly where the pipeline's proven destructive operations live
+  (`extract_selection`, splits, ripple). A hybrid (UXP reads, CEP edits) is the
+  realistic interim [per the 2026-08-02 claude.ai research audit, its grade B;
+  "no further ExtendScript API changes planned" is that audit's quote, not
+  re-verified].
+- Escalation triggers: any Premiere update that disables ExtendScript, or upstream
+  dropping CEP — either one makes the UXP migration immediate instead of parallel.
+- Source trail: `Video/04_Internal_SOPs/2026-08-02 — Pipeline deep audit (claude.ai
+  research).md` (renamed from its compass_artifact UUID name on 2026-08-06).
+
 ## Discipline — why read-back is mandatory
 
 - **The bridge often echoes the request instead of the resulting state** — several
