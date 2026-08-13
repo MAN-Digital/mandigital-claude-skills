@@ -124,14 +124,40 @@ then screenshot-verify. A clone you haven't rendered is not done.
   setCurrentPageAsync needed), then `getNodeByIdAsync(...).clone()` and append into the
   current page. One setCurrentPageAsync per call still applies.
 
-## Brandfetch Logo Link (verified Aug 2026)
+## Brandfetch Logo Link (verified Aug 2026) — sourcing only, NOT for mono variants
 
 Client ID lives in `~/openclaw-infra/.env` as `BRANDFETCH_CLIENT_ID`. Recipe:
 `https://cdn.brandfetch.io/<domain>/w/W/h/H/theme/<light|dark>/logo.png?c=<ID>`
-(`theme/light` = white variant, `theme/dark` = dark, omit theme = color; types logo/icon/symbol).
-Responses may be WebP despite .png — convert with sips before using as Figma fills.
-Coverage is patchy: few brands have true white variants (icon fallback otherwise), and the
+(`theme/light`/`theme/dark` pick a background-appropriate asset — usually still the COLOR
+mark, not a true single-color reproduction; omit theme = the plain color logo. Types
+logo/icon/symbol.) Responses may be WebP despite .png — convert with `sips` before using as
+a Figma fill. Coverage is patchy: few brands expose a genuine white variant this way, and the
 data can be WRONG (served a Microsoft logo for siili.com, GOPHOTO for amsterdamstandard.com,
 Etteplan for skyrise.tech) — always eyeball every fetched mark against the known brand.
-Logo consistency rule: every client logo ships as white + black + color (Client Logos page,
-section 05 variant matrix).
+
+**Use Brandfetch only to source a missing COLOR logo (raster or SVG) when no local/in-file
+asset exists.** Do NOT use `theme/dark`/`theme/light` PNGs as the white/black columns of a
+variant matrix — Romeo rejected this (Aug 2026): they're not true monochrome and not vectors.
+
+## True white/black mono variants — the correct method
+
+Logo consistency rule: every client logo ships as white + black + color. Build white/black
+by RECOLORING A VECTOR in Figma, never by fetching a themed raster:
+
+1. Prefer a vector source: the in-file tier-card logos on 🏢 Client Logos (each card's
+   `optical-box 164x40` first child is usually a VECTOR/GROUP tree, cloneable) or a local SVG
+   from `~/Documents/Marketing & Sales/Design/Assets/Client Logos/`. Only fall back to a
+   Brandfetch/site-scraped SVG (`.../logo.svg?c=<ID>`) if neither exists; if only a raster is
+   available, the white/black slots stay empty with a "raster only — no vector" note rather
+   than faking a mono variant.
+2. Recolor by walking `node.findAll(() => true)` plus the node itself, setting every SOLID/
+   GRADIENT fill and stroke to the target color. **Caveat:** two-tone marks (a knockout
+   wordmark inside a colored tile — Reprise's box, FintechOS's "OS" chip, WLC) turn into an
+   unreadable solid blob if EVERY fill is forced to one color. Split by luminance instead:
+   recolor dark fills (r+g+b < 1.5) to the target color, and either drop plain background-
+   plate rectangles or leave light fills as the chip's own background color. Judge by the
+   rendered screenshot, not the theory — always `get_screenshot` after recoloring and fix
+   blobs/invisible marks before moving to the next batch.
+3. As of Aug 2026 this rebuild is NOT yet done — the "05 — Variant matrix" section on
+   Client Logos (`40000598:2358`) still holds the rejected Brandfetch raster version. Redo
+   it with the vector+recolor method above before treating that section as finished.

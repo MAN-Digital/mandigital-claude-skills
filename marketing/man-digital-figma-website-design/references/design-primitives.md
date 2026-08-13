@@ -5,26 +5,27 @@
 The plugin page-list (`figma.root.children`) shows 40+ pages; the get_metadata no-nodeId
 listing TRUNCATES it — don't trust that. Key pages (Aug 2026):
 
-| Page | Holds |
-|---|---|
-| **🎨 Design System (40000555:2358)** | THE first stop. Organized in Figma Sections: 00 Cover+TOC (dark) · 01 Colors (all named MD/ tokens) · 02 Typography (BOTH scales) · 03 Spacing, Radii, Shadows & Motion (semantic roles + MP effect/motion/focus tokens) · 04 Badges & Accreditations (Badge Library clone) · 05 Nav & Footer (desktop+mobile) · 06 Components Desktop · 07 Components Mobile (flat REFRESH language) · 08 Mobbin Inspiration Shelf |
-| **🏢 Client Logos (40000570:2358)** | ALL client logos in 3 tiers (T1 enterprise/global · T2 scale-ups/SaaS · T3 software houses/consultancies), industry caption on every card, "Index by industry" text block + missing-logo list. White logo variants sit on #222222 cards. **Base = BaseLinker rebrand** — never label it Basecamp. 164×40 optical box. |
-| **💬 Testimonials (40000572:2358)** | Every attributed quote: 11 case-study cards + 2 website cards (real portraits from hubfs where they exist — itCraft, Amsterdam Standard, XPlus, Gürtl, Ciprandi; initials avatars otherwise, never stock) + all 28 HubSpot Marketplace reviews (5.0★) with reviewer, industry, size, services. |
-| **✨ Decorative Elements (40000579:2358)** | Motif library: local SVG assets + in-file motifs cloned from live designs + Mobbin inspiration shelf. Rule: max ONE motif per section, behind content, flat only. |
-| Badges & Awards — assets (40000311:2403) | Badge/award artwork MASTER (Badge Library frame 40000311:2404). DS chapter 04 holds a clone — edit the master here. |
-| RevOps Refresh — AI draft (40000296:2358) | Latest shipped design: desktop 40000296:2359 (1512w), mobile 40000329:2358 (360w), state references (case pagination 40000385:2358 / 40000459:2693, playbooks 40000444:2420) |
-| 👨‍💻 Service Page (10036:710) | Older service designs + component stock (popups, tabs, cards, faces, logo crops) |
-| 🏠 Homepage - 2025 / 🟢 Homepage 2024 (5375:3848) | Homepage designs; Homepage_v2 mobile 360w confirms the breakpoint pair |
-| 👨‍💻 Case Study · 📋 Blog · ☑️ Pricing (4209:25289) · Nav - 2025 | Their page families |
-| LP pages (ABM personas/verticals, Sprint, Events, PPC, NL) | Landing-page families |
-| Playground 2023 · Symbols | Legacy component stock |
-| ⛔️-prefixed pages | ARCHIVED — reference only, never extend |
+| Page                                                           | Holds                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **🎨 Design System (40000555:2358)**                           | THE first stop. Organized in Figma Sections: 00 Cover+TOC (dark) · 01 Colors (all named MD/ tokens) · 02 Typography (BOTH scales) · 03 Spacing, Radii, Shadows & Motion (semantic roles + MP effect/motion/focus tokens) · 04 Badges & Accreditations (Badge Library clone) · 05 Nav & Footer (desktop+mobile) · 06 Components Desktop · 07 Components Mobile (flat REFRESH language) · 08 Mobbin Inspiration Shelf                                                                                     |
+| **🏢 Client Logos (40000570:2358)**                            | ALL client logos in 3 tiers (T1 enterprise/global · T2 scale-ups/SaaS · T3 software houses/consultancies), industry caption on every card, "Index by industry" text block. White logo variants sit on #222222 cards. **Base = BaseLinker rebrand** — never label it Basecamp. 164×40 optical box. Section 05 "Variant matrix" (`40000598:2358`) is **NOT DONE** — holds rejected Brandfetch rasters, needs the vector+recolor rebuild (see `figma-mcp-playbook.md` → "True white/black mono variants"). |
+| **💬 Testimonials (40000572:2358)**                            | Every attributed quote: 11 case-study cards + 2 website cards (real portraits from hubfs where they exist — itCraft, Amsterdam Standard, XPlus, Gürtl, Ciprandi; initials avatars otherwise, never stock) + all 28 HubSpot Marketplace reviews (5.0★) with reviewer, industry, size, services.                                                                                                                                                                                                          |
+| **✨ Decorative Elements (40000579:2358)**                     | Motif library: local SVG assets + in-file motifs cloned from live designs + Mobbin inspiration shelf. Rule: max ONE motif per section, behind content, flat only.                                                                                                                                                                                                                                                                                                                                       |
+| Badges & Awards — assets (40000311:2403)                       | Badge/award artwork MASTER (Badge Library frame 40000311:2404). DS chapter 04 holds a clone — edit the master here.                                                                                                                                                                                                                                                                                                                                                                                     |
+| RevOps Refresh — AI draft (40000296:2358)                      | Latest shipped design: desktop 40000296:2359 (1512w), mobile 40000329:2358 (360w), state references (case pagination 40000385:2358 / 40000459:2693, playbooks 40000444:2420)                                                                                                                                                                                                                                                                                                                            |
+| 👨‍💻 Service Page (10036:710)                                    | Older service designs + component stock (popups, tabs, cards, faces, logo crops)                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| 🏠 Homepage - 2025 / 🟢 Homepage 2024 (5375:3848)              | Homepage designs; Homepage_v2 mobile 360w confirms the breakpoint pair                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| 👨‍💻 Case Study · 📋 Blog · ☑️ Pricing (4209:25289) · Nav - 2025 | Their page families                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| LP pages (ABM personas/verticals, Sprint, Events, PPC, NL)     | Landing-page families                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| Playground 2023 · Symbols                                      | Legacy component stock                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| ⛔️-prefixed pages                                              | ARCHIVED — reference only, never extend                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 
 New work goes on a draft page named "«Page» — AI draft". When designing for a family,
 spec-check THAT family's latest approved frames with `get_design_context` and match them.
 Consistency = match the file, not one page.
 
 ### Local asset folders (macOS)
+
 - Client logos (true-vector SVGs, per-client subfolders): `~/Documents/Marketing & Sales/Design/Assets/Client Logos/`
 - Decorative elements (SVG): `~/Documents/Marketing & Sales/Design/Assets/Decorrative Elements/`
 - Envato downloads land in: `~/Documents/Marketing & Sales/Design/Assets/Envato/<asset-name>/`
@@ -49,6 +50,7 @@ revops-card…) is the pre-refresh language with interactions/shadows — do not
 current standard is the FLAT, no-interaction language of the REFRESH frames.
 
 ### System facts to obey
+
 - Headings are **#222222 — never #0A0A0A** (that's footer/darkest surfaces only) and never pure black.
 - #999999 = MD/Charcoal Light (tertiary/captions in design); web implementation swaps it
   to #767676/#6b6b6b for WCAG. Discovery Orange states: hover #E85C18, active #DE5818;
@@ -63,19 +65,19 @@ current standard is the FLAT, no-interaction language of the REFRESH frames.
 
 ## Palette (exact — never approximate)
 
-| Token | Use |
-|---|---|
-| `#000FC4` | Primary blue: hero/section backgrounds, links, active states |
-| `#333FD0` | Secondary blue: featured tiles, icon fills |
-| `#5963D9` | Blue tint: borders on dark, secondary accents |
-| `#C8CCF2` | Light blue: muted text on dark |
-| `#E4E6F9` | Pale blue: muted text on featured blue cards, chips |
-| `#F7F7FF` | Ghost: tinted section/card backgrounds |
-| `#161654` | Dark navy: mobile quote cards |
-| `#F26620` | Orange: CTAs, markers — conversion elements only |
-| `#222222` | Headings (dark charcoal — the brand heading color) |
-| `#434343` | Body text |
-| `#0a0a0a` | Near-black alt heading/footer |
+| Token     | Use                                                                                                                                                     |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `#000FC4` | Primary blue: hero/section backgrounds, links, active states                                                                                            |
+| `#333FD0` | Secondary blue: featured tiles, icon fills                                                                                                              |
+| `#5963D9` | Blue tint: borders on dark, secondary accents                                                                                                           |
+| `#C8CCF2` | Light blue: muted text on dark                                                                                                                          |
+| `#E4E6F9` | Pale blue: muted text on featured blue cards, chips                                                                                                     |
+| `#F7F7FF` | Ghost: tinted section/card backgrounds                                                                                                                  |
+| `#161654` | Dark navy: mobile quote cards                                                                                                                           |
+| `#F26620` | Orange: CTAs, markers — conversion elements only                                                                                                        |
+| `#222222` | Headings (dark charcoal — the brand heading color)                                                                                                      |
+| `#434343` | Body text                                                                                                                                               |
+| `#0a0a0a` | Near-black alt heading/footer                                                                                                                           |
 | Grey rule | Muted text: `#767676` passes contrast ONLY on pure white; on tinted bg (#F7F7FF) use `#6b6b6b`. Never `#999999` — it fails WCAG and web will reject it. |
 
 Fonts: **Montserrat** (headings, weights 400–800; italics are synthesized on web — don't
@@ -102,17 +104,17 @@ never below 16px; sentence case.
 production. Use for service/LP family pages; use (A) elsewhere unless the family's frames
 say otherwise.
 
-| Element | Desktop | Mobile (360) |
-|---|---|---|
-| Hero H1 | 60 / 600 / -2.59px | **34 / 700 / -1px / lh 1.15** |
-| Section H2 | 44 / 700 / -2px (Montserrat) | **26 / 700 / -1px / lh 1.2** |
-| Eyebrow | 14–16, Lato 700, tracking 2px, uppercase | **11 / 700 / tracking 2px**, single line |
-| Hero paragraph | 20 / 1.4, 80–85% white | **15 / 1.5 / rgba(255,255,255,.85)** |
-| Body / intro | 16–18 Lato / 1.5 | 15 Lato / 1.5 |
-| FAQ question | 20 / 700 | **15 / 600 / -0.3px** |
-| Full-width statement banner | 44 / 700, two lines | **24 / 700 / -1px / 1.25**, natural wrap |
-| Card title | 16–17 / 600 Montserrat | 16 / 600 |
-| Card copy | 13–14 Lato | 13 Lato |
+| Element                     | Desktop                                  | Mobile (360)                             |
+| --------------------------- | ---------------------------------------- | ---------------------------------------- |
+| Hero H1                     | 60 / 600 / -2.59px                       | **34 / 700 / -1px / lh 1.15**            |
+| Section H2                  | 44 / 700 / -2px (Montserrat)             | **26 / 700 / -1px / lh 1.2**             |
+| Eyebrow                     | 14–16, Lato 700, tracking 2px, uppercase | **11 / 700 / tracking 2px**, single line |
+| Hero paragraph              | 20 / 1.4, 80–85% white                   | **15 / 1.5 / rgba(255,255,255,.85)**     |
+| Body / intro                | 16–18 Lato / 1.5                         | 15 Lato / 1.5                            |
+| FAQ question                | 20 / 700                                 | **15 / 600 / -0.3px**                    |
+| Full-width statement banner | 44 / 700, two lines                      | **24 / 700 / -1px / 1.25**, natural wrap |
+| Card title                  | 16–17 / 600 Montserrat                   | 16 / 600                                 |
+| Card copy                   | 13–14 Lato                               | 13 Lato                                  |
 
 ## Recurring patterns
 
