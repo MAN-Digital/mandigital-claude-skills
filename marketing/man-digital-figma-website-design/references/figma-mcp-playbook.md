@@ -67,3 +67,25 @@
 Every finished frame goes through `references/qa-checklist.md` — render, check tokens/type/
 spacing/components against the 🎨 Design System page, fix, re-render. A frame that hasn't
 been screenshot-verified is not done (the credentials-section lesson).
+
+## Envato download pipeline (scripted — keep browser use to one click)
+
+1. Search + preview via the Envato MCP (`search_*`, arg `searchTerms`); LOOK at the
+   cover_image and run the brand critique BEFORE downloading. Banned: stock people
+   photos, dated office imagery. Preferred: flat vectors, device mockups, textures
+   that pass the brand rules.
+2. Download needs the logged-in elements.envato.com/app.envato.com browser session:
+   open the item URL, one click on Download ("Automatically licensed" toast = license
+   registered). Do NOT drive multi-step UI flows — if the button needs more than one
+   click + one confirmation, stop and report.
+3. Organize by script (never by hand): unzip to
+   `~/Documents/Marketing & Sales/Design/Assets/Envato/<asset-name>/`,
+   one subfolder per asset, keep the license context in a note if provided.
+4. Then `upload_assets` into Figma for placement. Never leave watermarked previews.
+
+## Cloning gotcha (cost a broken footer)
+
+A cloned responsive frame appended into an auto-layout wrap can get SQUEEZED and its
+internal auto-layout re-wraps (1512×778 footer became 344×4234). After appending a
+big clone: set `layoutSizingHorizontal = 'FIXED'` and `resize()` to the source width,
+then screenshot-verify. A clone you haven't rendered is not done.

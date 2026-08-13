@@ -42,3 +42,18 @@ by memory of what you built.
 - [ ] 44px touch targets; two-color focus treatment (3px #0A0A0A inner + white halo).
 - [ ] One FAQSection per page for public questions.
 - [ ] Client logos in equal 164×40 optical boxes; only verified logos/quotes/claims.
+
+## Asset & badge canon
+- [ ] Footer/credentials show the ELITE hexagon badge — never the old diamond badge
+      (the old homepage designs still carry it; do not copy it forward). All THREE
+      accreditations appear: Onboarding, CRM Implementation, Custom Integration.
+- [ ] No stock people photos or dated "office stock" imagery — banned outright (brand
+      rule shared with the blog-graphics skill: no random stock imagery, no generic SaaS
+      decoration). Real team photos, product screenshots, flat vectors, device mockups only.
+
+## Brand critique loop (adapted from man-digital-blog-graphics audit-loop)
+For every Envato pick AND every finished frame: render/preview → strict scorecard critique
+(brand compliance, hierarchy, alignment/padding, content fit, mobile readability,
+composition efficiency) → fix critical → re-check. Max 2 rounds, then either ship or state
+the remaining limitation — never silently ship weak work. For assets: SEE the preview
+before downloading; verdict must name the intended use case.
