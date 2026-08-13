@@ -43,7 +43,14 @@
   UI patterns per SECTION — use it whenever a brief marks a section "New element" or the
   user asks for inspiration. Search by pattern name + industry ("pricing tiers b2b saas"),
   screenshot candidates, restyle the chosen pattern into MAN Digital tokens.
-- **Envato MCP** (`https://mcp.envato.com/mcp`, installed user-scope): 14 search tools —
+- **Magic Patterns MCP** (VERIFIED CONNECTED): `list_design_systems` → the active
+  "MAN Digital" system `ds-f7177682-6ec6-4ce2-bc21-f46ad4e9e37a` → `get_design_system` →
+  `read_design_system_files` for rules/* and component sources. It is the deduplicated
+  implementation layer of this Figma file — read its rules before designing.
+- **Mobbin MCP** (VERIFIED CONNECTED): returns inline section/screen images + mobbin_url.
+  Curated picks live on the Design System page "Inspiration Shelf" — refresh per project.
+- **Envato MCP** (`https://mcp.envato.com/mcp`, installed user-scope, VERIFIED — search
+  works unauthenticated): 14 search tools —
   `search_photos`, `search_graphics`, `search_fonts`, `search_web_templates`, etc.
   Argument is `searchTerms` (not query). Returns titles/authors/preview URLs (watermarked)
   + item URLs. NO downloads via MCP — pick via preview, download licensed originals from

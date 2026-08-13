@@ -7,7 +7,7 @@ listing TRUNCATES it — don't trust that. Key pages (Aug 2026):
 
 | Page | Holds |
 |---|---|
-| **🎨 Design System (40000555:2358)** | THE first stop: color tokens, both type scales as live specimens, spacing scale, cloned core components (CTA chip, case card, tab buttons, revops/roadmap/onboarding cards). Extended system lives in Magic Patterns; this page mirrors the production-verified subset |
+| **🎨 Design System (40000555:2358)** | THE first stop. 01 Colors (all named MD/ tokens incl. hover/active oranges, cyan, employer orange) · 02 Typography (BOTH scales) · 03 Spacing & Layout (semantic roles, radius, containers) · 04 Nav & Footer (desktop+mobile clones) · 05 Components Desktop · 06 Components Mobile (flat REFRESH language) · 07 Mobbin Inspiration Shelf |
 | Badges & Awards — assets (40000311:2403) | Badge/award artwork |
 | RevOps Refresh — AI draft (40000296:2358) | Latest shipped design: desktop 40000296:2359 (1512w), mobile 40000329:2358 (360w), state references (case pagination 40000385:2358 / 40000459:2693, playbooks 40000444:2420) |
 | 👨‍💻 Service Page (10036:710) | Older service designs + component stock (popups, tabs, cards, faces, logo crops) |
@@ -20,6 +20,34 @@ listing TRUNCATES it — don't trust that. Key pages (Aug 2026):
 New work goes on a draft page named "«Page» — AI draft". When designing for a family,
 spec-check THAT family's latest approved frames with `get_design_context` and match them.
 Consistency = match the file, not one page.
+
+## Implementation layer: Magic Patterns "MAN Digital" design system
+
+`list_design_systems` → **ds-f7177682-6ec6-4ce2-bc21-f46ad4e9e37a** (active) →
+`get_design_system` → `read_design_system_files`. ~100 components (Nav/MegaMenu/
+MobileNavigation, Footer, Hero/CTA/Pricing/Playbook/Challenge/Team/Testimonial sections,
+Button/Badge/TabList/Accordion/Modal/DataTable…) + rules. READ BEFORE DESIGNING:
+`rules/figma-source-of-truth.md` (named color variables, canonical section patterns),
+`rules/brand-and-color.md`, `rules/typography-rules.md`, `rules/spacing-and-misc-tokens.md`,
+`rules/figma-component-coverage.md` (maps every legacy Figma frame to its canonical
+component — do NOT invent new components for copied frames), `rules/release-quality-gates.md`.
+
+**DEPRECATED:** the old Service-Page stock (Roadmap/Onboarding popups, Tab Button Light,
+revops-card…) is the pre-refresh language with interactions/shadows — do not reuse. The
+current standard is the FLAT, no-interaction language of the REFRESH frames.
+
+### System facts to obey
+- Headings are **#222222 — never #0A0A0A** (that's footer/darkest surfaces only) and never pure black.
+- #999999 = MD/Charcoal Light (tertiary/captions in design); web implementation swaps it
+  to #767676/#6b6b6b for WCAG. Discovery Orange states: hover #E85C18, active #DE5818;
+  Employer Orange #F26419 is employer-brand only. Cyan #2DE4E6 decoration only.
+- Spacing primitives: 0/4/8/12/16/24/32/40/56/80/96 — 18/20/28/30/48/60/72 are BANNED as
+  page rhythm. Semantic roles: gutter 24/40/80, standard section 56/80/96, grid gap 24/32,
+  card padding 16–40. Web containers 1120/1280/720 (Figma canvas 1512/1348).
+- Radius 4/8/12/16/24/999 · controls 36/44/52 · icons 16/20/24 · nav bar 72 · motion 180ms ·
+  elevation 0 8px 24px rgba(0,15,196,.08) · client logos in a 164×40 optical box.
+- Decoration: BrandMotif set only (dot grids, orange circle, routed lines, diamonds),
+  max one per section. No gradients, blobs, textures, or illustrated people.
 
 ## Palette (exact — never approximate)
 
@@ -50,7 +78,17 @@ design real Montserrat italics), **Lato** (body, 400/700 + italics).
 - Mobile derives from desktop: same section order; intros under H2s may be omitted;
   copy may be shortened (web keeps full copy — this is a design-density choice).
 
-## Type scale (from the latest shipped exemplar's node specs — re-verify against the family you're designing in)
+## Type scales — TWO, pick by page family
+
+**(A) General web scale (Magic Patterns system):** Display 72/80 · H1 64/72 · H2 44/52 ·
+H3 32/40 · H4 24/32 · H5 20/28 (Montserrat 700 for Display–H2, 600 for H3–H5) · Lead 20/32 ·
+Body 18/28 · Body-S 16/24 · Label 14/20 Lato 700 · Caption 12/16 · Action 16/20 Lato 700 ·
+Metric 56/60. Mobile: H1 44/48, H2 36/42, H3 28/36, Metric 48/52. One H1 per page; body
+never below 16px; sentence case.
+
+**(B) Service-LP shipped scale (the REFRESH frames — table below):** tighter, verified in
+production. Use for service/LP family pages; use (A) elsewhere unless the family's frames
+say otherwise.
 
 | Element | Desktop | Mobile (360) |
 |---|---|---|

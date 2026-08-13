@@ -35,3 +35,10 @@ by memory of what you built.
       nothing invented.
 - [ ] Real assets (hubfs originals, provided photos, Envato-licensed) — no watermarked
       previews left in final frames.
+
+## Release gates (from Magic Patterns rules/release-quality-gates.md)
+- [ ] Layouts pass at 320 / 390 / 768 / 1280 / 1440 with realistic long content.
+- [ ] Discovery Orange CTAs: white Lato Bold 19/24 label; hover #E85C18, active #DE5818.
+- [ ] 44px touch targets; two-color focus treatment (3px #0A0A0A inner + white halo).
+- [ ] One FAQSection per page for public questions.
+- [ ] Client logos in equal 164×40 optical boxes; only verified logos/quotes/claims.
