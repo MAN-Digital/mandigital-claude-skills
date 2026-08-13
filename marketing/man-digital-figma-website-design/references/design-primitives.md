@@ -1,12 +1,22 @@
 # MD-Website design primitives (source: shipped RevOps refresh, Aug 2026)
 
-## File map
+## File map (survey it FIRST — the whole file is the reference, not one page)
 
-- File key: `IOhToZi5UBH5vNFV741HP3` (MD-Website). Work happens on draft pages
-  ("«Page» — AI draft"); reference examples: desktop `40000296:2359`
-  ("Service Page-Desktop_v2 — REFRESH", 1512w), mobile `40000329:2358` (360w),
-  state references: case pagination `40000385:2358` / `40000459:2693` (mobile),
-  playbooks master-detail states `40000444:2420`, client logos tray `40000429:29215`.
+`get_metadata` with no nodeId lists the pages. As of Aug 2026:
+
+| Page | Holds |
+|---|---|
+| 👨‍💻 Service Page (10036:710) | Service designs (Service Page-Desktop + _v2, 1512w) AND the reusable component stock: Roadmap/Onboarding popups, tab buttons, revops-cards, onboarding cards, faces strips, cropped client logos (tsh-clean 432×200), leader photos, plus the interactive-state REFERENCE frames (case pagination desktop 40000385:2358 / mobile 40000459:2693, playbooks master-detail 40000444:2420) |
+| 🟢 Homepage 2024 (5375:3848) | Homepage_2024_May + _v2 (1512w) and **Homepage_v2 mobile (360w)** — confirms the file-wide breakpoint pair |
+| Nav - 2025 (9672:1168) | Navigation designs |
+| 🏃🏻‍♂️‍➡️ LP Sprint Template (5848:71) | Landing-page/sprint templates |
+| ☑️ Homepage 2023 (3601:18027) | Archive — reference only, don't extend |
+
+New work goes on a draft page named "«Page» — AI draft". The latest shipped design
+(RevOps service refresh: desktop "Service Page-Desktop_v2 — REFRESH" 40000296:2359,
+mobile 40000329:2358) is the freshest APPROVED exemplar for specs — but when your page
+belongs to another family (homepage, LP, nav), spec-check THAT family's frames with
+`get_design_context` and match them. Consistency = match the file, not one page.
 
 ## Palette (exact — never approximate)
 
@@ -37,7 +47,7 @@ design real Montserrat italics), **Lato** (body, 400/700 + italics).
 - Mobile derives from desktop: same section order; intros under H2s may be omitted;
   copy may be shortened (web keeps full copy — this is a design-density choice).
 
-## Type scale (from shipped node specs)
+## Type scale (from the latest shipped exemplar's node specs — re-verify against the family you're designing in)
 
 | Element | Desktop | Mobile (360) |
 |---|---|---|

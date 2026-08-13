@@ -33,8 +33,11 @@ what you draw here becomes a dev contract, so exactness beats artistry.
 
 ## Workflow
 
-1. Open the draft page in the file (pages named like "RevOps Refresh — AI draft").
-   Duplicate the nearest existing page/section as the starting point — never a blank frame.
+1. **Survey the file first**: `get_metadata` (no nodeId) to list pages, then screenshot
+   the latest approved frames of the page FAMILY you're designing for (service page,
+   homepage, LP, nav — see the file map in the references). Work on a draft page
+   ("«Page» — AI draft"); duplicate the nearest existing page/section as the starting
+   point — never a blank frame.
 2. Harvest: live-page screenshots for layout truth, hubfs URLs for real assets,
    `get_design_context` on existing nodes for exact specs. Upload external images with
    `upload_assets`.
