@@ -1,0 +1,21 @@
+marketing/man-digital-figma-website-design/references/design-primitives.md
+  s_851be3810854a3::t_2441d6e8190a1c 10-14,27-35
+marketing/man-digital-figma-website-design/references/figma-mcp-playbook.md
+  s_851be3810854a3::t_b4421e57b51600 103-125
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "c6739ddc99a8db93b3e08579afdbb50a45261e4e",
+  "prompts": {},
+  "sessions": {
+    "s_851be3810854a3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "71705e1a-1535-4f32-adc1-66eac6b1de2a",
+        "model": "claude-fable-5"
+      },
+      "human_author": "romeoman <romeo@man.digital>"
+    }
+  }
+}
