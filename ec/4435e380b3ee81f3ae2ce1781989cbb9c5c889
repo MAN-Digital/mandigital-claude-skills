@@ -1,0 +1,27 @@
+marketing/man-digital-figma-website-design/SKILL.md
+  s_851be3810854a3::t_98ae0798b82b7a 36-40,54-57,62-67
+marketing/man-digital-figma-website-design/references/brief-format.md
+  s_851be3810854a3::t_5aa90b0907bf65 1-27
+marketing/man-digital-figma-website-design/references/design-primitives.md
+  s_851be3810854a3::t_149bf7cb570e21 5-6,10-18,20-22
+marketing/man-digital-figma-website-design/references/figma-mcp-playbook.md
+  s_851be3810854a3::t_378ec214ef77c0 31-62
+marketing/man-digital-figma-website-design/references/qa-checklist.md
+  s_851be3810854a3::t_688afbd7e25e17 1-37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "ec4435e380b3ee81f3ae2ce1781989cbb9c5c889",
+  "prompts": {},
+  "sessions": {
+    "s_851be3810854a3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "71705e1a-1535-4f32-adc1-66eac6b1de2a",
+        "model": "claude-fable-5"
+      },
+      "human_author": "romeoman <romeo@man.digital>"
+    }
+  }
+}
