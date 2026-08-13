@@ -61,6 +61,8 @@ what you draw here becomes a dev contract, so exactness beats artistry.
 `figma:figma-design-to-code` before any `get_design_context` call.
 Start every job at the **🎨 Design System page (40000555:2358)** in the file. Read
 `references/design-primitives.md` (tokens, type scales, naming, file map),
+`references/magic-patterns-tokens.md` (the FULL canonical token set — extended palette,
+semantic/status tokens, shadows, motion, themes),
 `references/figma-mcp-playbook.md` (tool traps + the toolbelt: Mobbin for inspiration,
 Envato MCP for stock assets, vector creation, image pipeline),
 `references/brief-format.md` (how briefs spec pages) and `references/qa-checklist.md`
