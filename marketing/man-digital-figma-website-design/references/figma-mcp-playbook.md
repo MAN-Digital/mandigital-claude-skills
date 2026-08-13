@@ -123,3 +123,15 @@ then screenshot-verify. A clone you haven't rendered is not done.
 - **Cross-page cloning without page-switch**: `await sourcePage.loadAsync()` (no
   setCurrentPageAsync needed), then `getNodeByIdAsync(...).clone()` and append into the
   current page. One setCurrentPageAsync per call still applies.
+
+## Brandfetch Logo Link (verified Aug 2026)
+
+Client ID lives in `~/openclaw-infra/.env` as `BRANDFETCH_CLIENT_ID`. Recipe:
+`https://cdn.brandfetch.io/<domain>/w/W/h/H/theme/<light|dark>/logo.png?c=<ID>`
+(`theme/light` = white variant, `theme/dark` = dark, omit theme = color; types logo/icon/symbol).
+Responses may be WebP despite .png — convert with sips before using as Figma fills.
+Coverage is patchy: few brands have true white variants (icon fallback otherwise), and the
+data can be WRONG (served a Microsoft logo for siili.com, GOPHOTO for amsterdamstandard.com,
+Etteplan for skyrise.tech) — always eyeball every fetched mark against the known brand.
+Logo consistency rule: every client logo ships as white + black + color (Client Logos page,
+section 05 variant matrix).
