@@ -2,21 +2,24 @@
 
 ## File map (survey it FIRST — the whole file is the reference, not one page)
 
-`get_metadata` with no nodeId lists the pages. As of Aug 2026:
+The plugin page-list (`figma.root.children`) shows 40+ pages; the get_metadata no-nodeId
+listing TRUNCATES it — don't trust that. Key pages (Aug 2026):
 
 | Page | Holds |
 |---|---|
-| 👨‍💻 Service Page (10036:710) | Service designs (Service Page-Desktop + _v2, 1512w) AND the reusable component stock: Roadmap/Onboarding popups, tab buttons, revops-cards, onboarding cards, faces strips, cropped client logos (tsh-clean 432×200), leader photos, plus the interactive-state REFERENCE frames (case pagination desktop 40000385:2358 / mobile 40000459:2693, playbooks master-detail 40000444:2420) |
-| 🟢 Homepage 2024 (5375:3848) | Homepage_2024_May + _v2 (1512w) and **Homepage_v2 mobile (360w)** — confirms the file-wide breakpoint pair |
-| Nav - 2025 (9672:1168) | Navigation designs |
-| 🏃🏻‍♂️‍➡️ LP Sprint Template (5848:71) | Landing-page/sprint templates |
-| ☑️ Homepage 2023 (3601:18027) | Archive — reference only, don't extend |
+| **🎨 Design System (40000555:2358)** | THE first stop: color tokens, both type scales as live specimens, spacing scale, cloned core components (CTA chip, case card, tab buttons, revops/roadmap/onboarding cards). Extended system lives in Magic Patterns; this page mirrors the production-verified subset |
+| Badges & Awards — assets (40000311:2403) | Badge/award artwork |
+| RevOps Refresh — AI draft (40000296:2358) | Latest shipped design: desktop 40000296:2359 (1512w), mobile 40000329:2358 (360w), state references (case pagination 40000385:2358 / 40000459:2693, playbooks 40000444:2420) |
+| 👨‍💻 Service Page (10036:710) | Older service designs + component stock (popups, tabs, cards, faces, logo crops) |
+| 🏠 Homepage - 2025 / 🟢 Homepage 2024 (5375:3848) | Homepage designs; Homepage_v2 mobile 360w confirms the breakpoint pair |
+| 👨‍💻 Case Study · 📋 Blog · ☑️ Pricing (4209:25289) · Nav - 2025 | Their page families |
+| LP pages (ABM personas/verticals, Sprint, Events, PPC, NL) | Landing-page families |
+| Playground 2023 · Symbols | Legacy component stock |
+| ⛔️-prefixed pages | ARCHIVED — reference only, never extend |
 
-New work goes on a draft page named "«Page» — AI draft". The latest shipped design
-(RevOps service refresh: desktop "Service Page-Desktop_v2 — REFRESH" 40000296:2359,
-mobile 40000329:2358) is the freshest APPROVED exemplar for specs — but when your page
-belongs to another family (homepage, LP, nav), spec-check THAT family's frames with
-`get_design_context` and match them. Consistency = match the file, not one page.
+New work goes on a draft page named "«Page» — AI draft". When designing for a family,
+spec-check THAT family's latest approved frames with `get_design_context` and match them.
+Consistency = match the file, not one page.
 
 ## Palette (exact — never approximate)
 

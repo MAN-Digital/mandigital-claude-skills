@@ -33,6 +33,11 @@ what you draw here becomes a dev contract, so exactness beats artistry.
 
 ## Workflow
 
+0. **Read the brief.** Pages usually come with a writer's/design brief (Google Doc or
+   YAML) whose content-plan table IS the wireframe: section order (binding), per-section
+   format, audience, and which existing page's pattern each section reuses. Extraction
+   guide: `references/brief-format.md`. No brief? Ask for one or draft the section table
+   yourself and get it approved first.
 1. **Survey the file first**: `get_metadata` (no nodeId) to list pages, then screenshot
    the latest approved frames of the page FAMILY you're designing for (service page,
    homepage, LP, nav — see the file map in the references). Work on a draft page
@@ -46,11 +51,17 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    `m-case-studies`), applying the mobile primitives (type scale, compact CTA, omitted
    intros) from `references/design-primitives.md`.
 5. Add state reference frames for anything interactive.
-6. Handoff: the node specs ARE the contract — development reads them with
+6. **QA gate — run `references/qa-checklist.md` on every frame** (tokens, type scale,
+   spacing, components-not-redrawn, both breakpoints, no clipped text) and iterate until
+   it passes. Screenshot-verify; a frame you haven't rendered is not done.
+7. Handoff: the node specs ARE the contract — development reads them with
    `get_design_context`; make sizes/spacings deliberate, not eyeballed.
 
 **REQUIRED SUB-SKILLS:** load `figma:figma-use` before any `use_figma` call and
 `figma:figma-design-to-code` before any `get_design_context` call.
-Read `references/design-primitives.md` (tokens, type scales, naming, patterns) and
-`references/figma-mcp-playbook.md` (tool traps: exports, flatten, metadata, tall frames)
-before touching the file.
+Start every job at the **🎨 Design System page (40000555:2358)** in the file. Read
+`references/design-primitives.md` (tokens, type scales, naming, file map),
+`references/figma-mcp-playbook.md` (tool traps + the toolbelt: Mobbin for inspiration,
+Envato MCP for stock assets, vector creation, image pipeline),
+`references/brief-format.md` (how briefs spec pages) and `references/qa-checklist.md`
+(the per-frame QA gate) before touching the file.

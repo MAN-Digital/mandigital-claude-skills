@@ -28,3 +28,35 @@
 - **Figma-internal inconsistencies happen** (desktop and mobile frames disagreeing on
   copy, dot palettes differing from the approved legend). Desktop + what's shipped live
   are canonical; flag, don't silently pick.
+
+## Vectors
+
+- YES, real vectors are possible: `figma.createNodeFromSvg(svgString)` (via `use_figma`)
+  imports an SVG string as native vector nodes — for icons, logos, decorative shapes.
+  Also available: `createVector`, boolean ops, `createNodeFromSvg` + recolor via fills.
+- Prefer READY-MADE first: the 🎨 Design System page, Badges & Awards page, hubfs SVGs,
+  then Envato graphics; draw from scratch last.
+
+## The designer's toolbelt (beyond Figma)
+
+- **Mobbin MCP** (`search_screens` / `search_sections` / `search_flows`): pull real shipped
+  UI patterns per SECTION — use it whenever a brief marks a section "New element" or the
+  user asks for inspiration. Search by pattern name + industry ("pricing tiers b2b saas"),
+  screenshot candidates, restyle the chosen pattern into MAN Digital tokens.
+- **Envato MCP** (`https://mcp.envato.com/mcp`, installed user-scope): 14 search tools —
+  `search_photos`, `search_graphics`, `search_fonts`, `search_web_templates`, etc.
+  Argument is `searchTerms` (not query). Returns titles/authors/preview URLs (watermarked)
+  + item URLs. NO downloads via MCP — pick via preview, download licensed originals from
+  elements.envato.com with the team subscription, then `upload_assets` into Figma.
+  Never leave watermarked previews in final frames.
+- **Real photos**: hubfs originals first (public URL without resize params), LinkedIn
+  photo-viewer for people (see hubspot-cms-pages skill), Envato for stock.
+- **Local image pipeline** (Bash): `sips` resize/convert, `cwebp`, Pillow `quantize` for
+  flat art (85→30KB on a dot pattern), raster-extraction from fake SVGs. Resize to ~2x
+  display size before `upload_assets`.
+
+## QA gate
+
+Every finished frame goes through `references/qa-checklist.md` — render, check tokens/type/
+spacing/components against the 🎨 Design System page, fix, re-render. A frame that hasn't
+been screenshot-verified is not done (the credentials-section lesson).
