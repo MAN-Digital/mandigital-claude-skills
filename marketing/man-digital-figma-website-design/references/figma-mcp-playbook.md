@@ -100,3 +100,26 @@ A cloned responsive frame appended into an auto-layout wrap can get SQUEEZED and
 internal auto-layout re-wraps (1512×778 footer became 344×4234). After appending a
 big clone: set `layoutSizingHorizontal = 'FIXED'` and `resize()` to the source width,
 then screenshot-verify. A clone you haven't rendered is not done.
+
+
+## Verified workflows (Aug 2026 session 2)
+
+- **SVG import**: `upload_assets count=N` → one curl per submitUrl with
+  `-F "file=@logo.svg;type=image/svg+xml;filename=nice-name.svg"`. Lands as an editable
+  vector tree on the CURRENT page (filename = layer name). Raster + `nodeId` = sets a fill
+  on that node (used for portraits/inspiration shots).
+- **White-logo detection**: after building logo cards, SCREENSHOT the grid — white/faint
+  brand marks vanish on white; flip those cards to #222222 with white captions. Never
+  recolor the mark itself.
+- **Marketplace reviews extraction** (app.hubspot.com listing): the on-page list renders
+  only 2 reviews; click "See all customer reviews" (opens 5/page modal), then click the
+  numbered/Next pagination harvesting `document.body.innerText` per page. Reviewer format
+  is "Lastname, I." with optional industry + company-size lines before "Helpful (0)". The
+  `/api/ecosystem/v1/reviews/search` POST exists but rejects guessed payloads — pagination
+  harvesting is the reliable path.
+- **Chapter organization**: wrap DS chapters in `figma.createSection()` nodes stacked at
+  x=0 with ~200px gaps. If a chapter's content grows, RESTACK all following sections —
+  section frames don't auto-flow.
+- **Cross-page cloning without page-switch**: `await sourcePage.loadAsync()` (no
+  setCurrentPageAsync needed), then `getNodeByIdAsync(...).clone()` and append into the
+  current page. One setCurrentPageAsync per call still applies.

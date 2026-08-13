@@ -7,8 +7,11 @@ listing TRUNCATES it — don't trust that. Key pages (Aug 2026):
 
 | Page | Holds |
 |---|---|
-| **🎨 Design System (40000555:2358)** | THE first stop. 01 Colors (all named MD/ tokens incl. hover/active oranges, cyan, employer orange) · 02 Typography (BOTH scales) · 03 Spacing & Layout (semantic roles, radius, containers) · 04 Nav & Footer (desktop+mobile clones) · 05 Components Desktop · 06 Components Mobile (flat REFRESH language) · 07 Mobbin Inspiration Shelf |
-| Badges & Awards — assets (40000311:2403) | Badge/award artwork |
+| **🎨 Design System (40000555:2358)** | THE first stop. Organized in Figma Sections: 00 Cover+TOC (dark) · 01 Colors (all named MD/ tokens) · 02 Typography (BOTH scales) · 03 Spacing, Radii, Shadows & Motion (semantic roles + MP effect/motion/focus tokens) · 04 Badges & Accreditations (Badge Library clone) · 05 Nav & Footer (desktop+mobile) · 06 Components Desktop · 07 Components Mobile (flat REFRESH language) · 08 Mobbin Inspiration Shelf |
+| **🏢 Client Logos (40000570:2358)** | ALL client logos in 3 tiers (T1 enterprise/global · T2 scale-ups/SaaS · T3 software houses/consultancies), industry caption on every card, "Index by industry" text block + missing-logo list. White logo variants sit on #222222 cards. **Base = BaseLinker rebrand** — never label it Basecamp. 164×40 optical box. |
+| **💬 Testimonials (40000572:2358)** | Every attributed quote: 11 case-study cards + 2 website cards (real portraits from hubfs where they exist — itCraft, Amsterdam Standard, XPlus, Gürtl, Ciprandi; initials avatars otherwise, never stock) + all 28 HubSpot Marketplace reviews (5.0★) with reviewer, industry, size, services. |
+| **✨ Decorative Elements (40000579:2358)** | Motif library: local SVG assets + in-file motifs cloned from live designs + Mobbin inspiration shelf. Rule: max ONE motif per section, behind content, flat only. |
+| Badges & Awards — assets (40000311:2403) | Badge/award artwork MASTER (Badge Library frame 40000311:2404). DS chapter 04 holds a clone — edit the master here. |
 | RevOps Refresh — AI draft (40000296:2358) | Latest shipped design: desktop 40000296:2359 (1512w), mobile 40000329:2358 (360w), state references (case pagination 40000385:2358 / 40000459:2693, playbooks 40000444:2420) |
 | 👨‍💻 Service Page (10036:710) | Older service designs + component stock (popups, tabs, cards, faces, logo crops) |
 | 🏠 Homepage - 2025 / 🟢 Homepage 2024 (5375:3848) | Homepage designs; Homepage_v2 mobile 360w confirms the breakpoint pair |
@@ -20,6 +23,15 @@ listing TRUNCATES it — don't trust that. Key pages (Aug 2026):
 New work goes on a draft page named "«Page» — AI draft". When designing for a family,
 spec-check THAT family's latest approved frames with `get_design_context` and match them.
 Consistency = match the file, not one page.
+
+### Local asset folders (macOS)
+- Client logos (true-vector SVGs, per-client subfolders): `~/Documents/Marketing & Sales/Design/Assets/Client Logos/`
+- Decorative elements (SVG): `~/Documents/Marketing & Sales/Design/Assets/Decorrative Elements/`
+- Envato downloads land in: `~/Documents/Marketing & Sales/Design/Assets/Envato/<asset-name>/`
+
+Import via `upload_assets` (multipart curl, `type=image/svg+xml`) — SVGs arrive as editable
+vectors on the CURRENT page, so `setCurrentPageAsync` the target page first. Many client
+logos are white variants: check the render and flip the card to #222222 when invisible.
 
 ## Implementation layer: Magic Patterns "MAN Digital" design system
 
