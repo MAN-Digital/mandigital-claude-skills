@@ -1,0 +1,21 @@
+marketing/man-digital-figma-website-design/SKILL.md
+  s_851be3810854a3::t_476d2577d8d73f 36-40
+marketing/man-digital-figma-website-design/references/design-primitives.md
+  s_851be3810854a3::t_21c5dea8007483 3,5-19,50
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "61868b3e318a26f62f9c7499d137c74073e762fe",
+  "prompts": {},
+  "sessions": {
+    "s_851be3810854a3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "71705e1a-1535-4f32-adc1-66eac6b1de2a",
+        "model": "claude-fable-5"
+      },
+      "human_author": "romeoman <romeo@man.digital>"
+    }
+  }
+}
