@@ -83,7 +83,18 @@ been screenshot-verified is not done (the credentials-section lesson).
    one subfolder per asset, keep the license context in a note if provided.
 4. Then `upload_assets` into Figma for placement. Never leave watermarked previews.
 
-## Cloning gotcha (cost a broken footer)
+## Cloning gotchas (each cost a broken component)
+Two more, caught by the full-page audit loop:
+- **Clones collapse to 1px height** when the source's FILL sizing loses its parent
+  context — set `layoutSizingVertical='FIXED'` + `resize()` to source dims after append.
+- **Selector-picked clones can be the WRONG NODE** (a "CTA chip" findAll matched the hero
+  paragraph). Verify every clone two ways: render it AND sanity-check node type/size
+  against the source. Text collapse trap: `resize()` after setting characters kills
+  autoresize height — re-set `textAutoResize='HEIGHT'` and verify height > 30 for
+  paragraphs.
+- **Verify token swatches programmatically** (read fills, compare to label hex) — small
+  screenshots wash out saturated colors and lie.
+
 
 A cloned responsive frame appended into an auto-layout wrap can get SQUEEZED and its
 internal auto-layout re-wraps (1512×778 footer became 344×4234). After appending a
