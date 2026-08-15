@@ -28,6 +28,14 @@
 - **Figma-internal inconsistencies happen** (desktop and mobile frames disagreeing on
   copy, dot palettes differing from the approved legend). Desktop + what's shipped live
   are canonical; flag, don't silently pick.
+- **Canonical section lookup comes before cloning a page frame.** Read Design System
+  chapters `40000828:2707` (Desktop), `40000828:2708` (Mobile) and `40000828:2709`
+  (interaction/code reuse). When a component exists, create an instance or intentional
+  variant. Do not clone the old reference frame and silently fork Pagination, Playbooks,
+  Team, forms, FAQ, navigation or footer behavior.
+- **Descriptions are implementation metadata.** Canonical component descriptions include
+  the approved source node and HubSpot file/classes. Preserve them when creating variants
+  and include the mapping in development handoff notes.
 
 ## Vectors
 
