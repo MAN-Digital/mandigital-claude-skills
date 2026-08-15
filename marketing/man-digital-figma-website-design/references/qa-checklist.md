@@ -13,6 +13,9 @@ by memory of what you built.
 ## Type
 - [ ] Every text node matches a row of the type scale (family, weight, size, letter-spacing,
       line-height) for its breakpoint. No 28px H2s on mobile (scale says 26), no faux specs.
+- [ ] Body copy, card copy, table cells, form guidance, and FAQ answers are at least
+      16px / 24px on desktop and mobile. Only labels, captions, metadata, and eyebrows
+      may use smaller type.
 - [ ] Montserrat headings / Lato body. No real Montserrat italics.
 - [ ] No clipped/overflowing text (screenshot check — resize-after-set collapses text nodes).
 
@@ -29,10 +32,21 @@ by memory of what you built.
 - [ ] Both breakpoints exist and agree in section order; mobile density rules applied
       (intros omitted where the pattern says so, compact CTA).
 - [ ] Interactive patterns have their state reference frames.
+- [ ] Every tab/disclosure that changes content has a complete named state at desktop and
+      mobile. Process states include stage label, title, What we do, What you own, and
+      Decision gate.
+- [ ] Outcome/transformation tabs use a unique semantic diagram per state: named sources
+      outside the workflow -> broken handoff -> disconnected object, then a Primary Blue
+      governed core -> straight connectors -> named revenue objects. Critical red marks
+      failure; CTA orange is absent; connectors do not cross labels.
+- [ ] Adjacent content-heavy sections do not repeat the same selector/master-detail UI.
+      Mobbin was checked for each novel section and the chosen pattern was restyled into
+      MAN Digital tokens.
 
 ## Content
 - [ ] Copy matches the brief/approved source verbatim; [TO BE ADDED] markers preserved,
       nothing invented.
+- [ ] Every briefed capability is visible; no `+N more` row hides required content.
 - [ ] Real assets (hubfs originals, provided photos, Envato-licensed) — no watermarked
       previews left in final frames.
 
@@ -47,6 +61,15 @@ by memory of what you built.
 - [ ] Footer/credentials show the ELITE hexagon badge — never the old diamond badge
       (the old homepage designs still carry it; do not copy it forward). All THREE
       accreditations appear: Onboarding, CRM Implementation, Custom Integration.
+- [ ] The service-specific capability is the dominant credential; general partnership
+      and accreditation cards are visually secondary.
+- [ ] Dark/brand-colour logo rows use approved white/reversed logos only; light sections
+      use approved dark/full-colour logos. A row never mixes treatments.
+- [ ] Founder cards appear before the canonical delivery-team row when both are present.
+- [ ] Strategy-call and FAQ sections use the canonical source components listed in
+      `component-canon.md`; the form keeps the full field/consent pattern.
+- [ ] Decorative motifs come from `40000579:2358`, max one composite motif per section,
+      behind content and never crossing readable text.
 - [ ] No stock people photos or dated "office stock" imagery — banned outright (brand
       rule shared with the blog-graphics skill: no random stock imagery, no generic SaaS
       decoration). Real team photos, product screenshots, flat vectors, device mockups only.

@@ -109,15 +109,22 @@ say otherwise.
 | Hero H1                     | 60 / 600 / -2.59px                       | **34 / 700 / -1px / lh 1.15**            |
 | Section H2                  | 44 / 700 / -2px (Montserrat)             | **26 / 700 / -1px / lh 1.2**             |
 | Eyebrow                     | 14–16, Lato 700, tracking 2px, uppercase | **11 / 700 / tracking 2px**, single line |
-| Hero paragraph              | 20 / 1.4, 80–85% white                   | **15 / 1.5 / rgba(255,255,255,.85)**     |
-| Body / intro                | 16–18 Lato / 1.5                         | 15 Lato / 1.5                            |
-| FAQ question                | 20 / 700                                 | **15 / 600 / -0.3px**                    |
+| Hero paragraph              | 20 / 1.4, 80–85% white                   | **16 / 24 / rgba(255,255,255,.85)**      |
+| Body / intro                | 18 / 28 Lato                             | **16 / 24 Lato**                         |
+| FAQ question                | 20 / 700                                 | **16 / 600 / -0.3px**                    |
 | Full-width statement banner | 44 / 700, two lines                      | **24 / 700 / -1px / 1.25**, natural wrap |
 | Card title                  | 16–17 / 600 Montserrat                   | 16 / 600                                 |
-| Card copy                   | 13–14 Lato                               | 13 Lato                                  |
+| Card copy                   | **16 / 24 Lato minimum**                 | **16 / 24 Lato minimum**                 |
+
+**Reading-size floor:** website body copy, card copy, table cells, form guidance, and
+FAQ answers are never smaller than **16px / 24px** at either breakpoint. Reserve smaller
+type only for compact labels, captions, metadata, and uppercase eyebrows.
 
 ## Recurring patterns
 
+- **Canonical component source map:** read `component-canon.md` before creating team,
+  strategy-call form, FAQ, credentials or decorative sections. Clone the listed source
+  nodes; do not substitute a simplified lookalike.
 - **Founder CTA chip:** founder photo (53px) + orange `#F26620` panel, title 16/600 +
   subline 12; compact variant on mobile. Lives in hero + used site-wide.
 - **Cards:** white, 1px `#E4E6F9`-family border, 4–6px radius. Featured card = blue
@@ -130,4 +137,11 @@ say otherwise.
 - **Carousel/pager:** round arrow buttons + `1 / N` counter (desktop) or dots (mobile),
   controls above the tray with next-card peek.
 - **Decorative:** dot-grid pattern on blue, orange/blue circles as accents — sparingly,
-  copied from existing frames rather than redrawn.
+  copied from `✨ Decorative Elements (40000579:2358)` rather than redrawn. Use at most
+  one composite motif per section, insert it behind content, and keep it clear of text.
+- **Long capability scope:** if the preceding section is a tabbed process, use a static
+  bento/grouped-card system instead of another master-detail selector. Show every
+  capability from the brief and state that final scope follows discovery.
+- **Credential hierarchy:** feature the credential most specific to the service first
+  (for Quote-to-Cash, the Quote-to-Cash Capability); keep Elite status and implementation,
+  onboarding and integration accreditations as supporting proof.

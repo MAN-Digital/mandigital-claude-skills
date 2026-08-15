@@ -30,6 +30,28 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    (e.g. leadership, proof), design 2–3 labeled variants (Variant A/B/C), show renders,
    and let the owner pick before detailing. For novel patterns, pull real shipped
    inspiration from **Mobbin** first, then restyle into MAN Digital tokens.
+6. **Match logo variants to background contrast.** On dark or brand-colour
+   backgrounds, use the approved white/reversed logo variant. On light backgrounds,
+   use the approved dark or full-colour variant. Never mix light and dark logo
+   treatments within one logo row, proof strip, or section.
+7. **Protect the reading-size floor.** Set website body copy, card copy, table cells,
+   form guidance, and FAQ answers at **16px / 24px minimum on desktop and mobile**.
+   Only compact labels, captions, metadata, and uppercase eyebrows may go below 16px.
+8. **Give adjacent sections different information architectures.** Do not follow a
+   stepper/master-detail section with another selector-and-detail section. Search Mobbin
+   per new section, then choose a pattern that changes the reading action (for example:
+   stepper -> bento capability grid -> principle rail -> proof feature). Keep every
+   briefed item visible; never hide content behind a vague `+N more` summary.
+9. **Use the canonical website components.** Team, form, FAQ, proof and decoration have
+   approved source nodes. Clone and adapt them instead of redrawing substitutes. Read
+   `references/component-canon.md` before editing those sections.
+10. **Make transformation tabs explain the operating change.** For outcome or
+   before/after tabs, design every state around its own revenue failure and governed
+   resolution. The failure side shows its real sources outside the workflow, a broken
+   handoff, and the disconnected downstream object; the governed side shows one Primary
+   Blue rule/core connected directly to named revenue objects. Use critical red for the
+   failure state, never CTA orange, and avoid decorative arches or abstract connectors.
+   Follow the full state contract in `references/component-canon.md`.
 
 ## Workflow
 
@@ -50,7 +72,10 @@ what you draw here becomes a dev contract, so exactness beats artistry.
 4. Get approval → build the mobile frame at 360 with `m-` section names (`m-hero`,
    `m-case-studies`), applying the mobile primitives (type scale, compact CTA, omitted
    intros) from `references/design-primitives.md`.
-5. Add state reference frames for anything interactive.
+5. Add state reference frames for anything interactive. Tabs and accordions require one
+   complete desktop state and one complete mobile state for **every** tab/item that changes
+   content. A process tab state always includes: stage label, title, What we do, What you
+   own, and Decision gate. Name states so development can map content without guessing.
 6. **QA gate — run `references/qa-checklist.md` on every frame** (tokens, type scale,
    spacing, components-not-redrawn, both breakpoints, no clipped text) and iterate until
    it passes. Screenshot-verify; a frame you haven't rendered is not done.
@@ -65,5 +90,7 @@ Start every job at the **🎨 Design System page (40000555:2358)** in the file. 
 semantic/status tokens, shadows, motion, themes),
 `references/figma-mcp-playbook.md` (tool traps + the toolbelt: Mobbin for inspiration,
 Envato MCP for stock assets, vector creation, image pipeline),
+`references/component-canon.md` (approved team, full form, FAQ, badge hierarchy,
+interaction-state and decoration source nodes),
 `references/brief-format.md` (how briefs spec pages) and `references/qa-checklist.md`
 (the per-frame QA gate) before touching the file.
