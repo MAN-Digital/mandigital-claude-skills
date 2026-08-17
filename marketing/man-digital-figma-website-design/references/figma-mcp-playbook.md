@@ -24,10 +24,18 @@
 - **Asset acquisition:** prefer the live site's hubfs originals (public URLs, no resize
   params = original). LinkedIn photos: open the profile-photo VIEWER for the 800×800
   variant (thumbnail tokens are size-bound; sidebar avatars navigate to the WRONG
-  profile — verify the licdn asset id). Extraction details: `hubspot-cms-pages` skill.
+  profile — verify the licdn asset id). Extraction details: `$man-digital-cms-pages`.
 - **Figma-internal inconsistencies happen** (desktop and mobile frames disagreeing on
   copy, dot palettes differing from the approved legend). Desktop + what's shipped live
   are canonical; flag, don't silently pick.
+- **Canonical section lookup comes before cloning a page frame.** Read Design System
+  chapters `40000828:2707` (Desktop), `40000828:2708` (Mobile) and `40000828:2709`
+  (interaction/code reuse). When a component exists, create an instance or intentional
+  variant. Do not clone the old reference frame and silently fork Pagination, Playbooks,
+  Team, forms, FAQ, navigation or footer behavior.
+- **Descriptions are implementation metadata.** Canonical component descriptions include
+  the approved source node and HubSpot file/classes. Preserve them when creating variants
+  and include the mapping in development handoff notes.
 
 ## Vectors
 
@@ -57,7 +65,7 @@
   elements.envato.com with the team subscription, then `upload_assets` into Figma.
   Never leave watermarked previews in final frames.
 - **Real photos**: hubfs originals first (public URL without resize params), LinkedIn
-  photo-viewer for people (see hubspot-cms-pages skill), Envato for stock.
+  photo-viewer for people (see `$man-digital-cms-pages`), Envato for stock.
 - **Local image pipeline** (Bash): `sips` resize/convert, `cwebp`, Pillow `quantize` for
   flat art (85→30KB on a dot pattern), raster-extraction from fake SVGs. Resize to ~2x
   display size before `upload_assets`.

@@ -28,6 +28,7 @@ Everything related to producing content for MAN Digital.
 | [`linkedin-post-creation/`](./marketing/linkedin-post-creation/)             | LinkedIn post writing skill                                                                                                                                                                                              |
 | [`man-digital-marketing-assets/`](./marketing/man-digital-marketing-assets/) | Builds branded MAN Digital social/marketing assets (LinkedIn, Facebook, Instagram, YouTube, OG images) in Pencil from user-supplied copy                                                                                 |
 | [`man-digital-blog-graphics/`](./marketing/man-digital-blog-graphics/)       | Builds branded MAN Digital blog/article/HubSpot/LinkedIn in-body graphics and diagrams in Pencil                                                                                                                         |
+| [`man-digital-figma-website-design/`](./marketing/man-digital-figma-website-design/) | Designs MAN Digital website pages and sections in the canonical Figma file, with desktop/mobile, component-reuse, state, QA, and HubSpot handoff rules                                                              |
 | [`man-digital-lucid-charts/`](./marketing/man-digital-lucid-charts/)         | Builds on-brand MAN Digital diagrams (flowcharts, org charts, RevOps/CRM architecture, mind maps, sequence diagrams) in Lucidchart via the `@lucid` MCP connector                                                        |
 | [`man-digital-youtube-scripts/`](./marketing/man-digital-youtube-scripts/)   | Writes YouTube video scripts (tutorial, promotional, case study; shorts or long-form) in Romeo's voice and MAN Digital's positioning, including transforming another video's transcript into MAN Digital's own narration |
 | [`man-digital-cms-pages/`](./marketing/man-digital-cms-pages/)               | Maintains and validates MAN Digital's HubSpot CMS theme, modules, pages, deployments, and CMS-specific performance work                                                                                                  |
@@ -63,6 +64,7 @@ Three skill packages we don't own but depend on. Each has a README inside `devel
 1. **Pick your use case:**
    - Writing a blog post? → [`marketing/blog-production/`](./marketing/blog-production/)
    - Writing other content (LinkedIn, email, landing page)? → [`marketing/vibe-marketing-v2/`](./marketing/vibe-marketing-v2/)
+   - Designing a MAN Digital website page in Figma? → [`marketing/man-digital-figma-website-design/`](./marketing/man-digital-figma-website-design/)
    - Editing anything? → [`marketing/editing-checklist/`](./marketing/editing-checklist/)
    - Setting up your dev environment? → [`development/`](./development/)
    - Maintaining the MAN Digital HubSpot website? → [`marketing/man-digital-cms-pages/`](./marketing/man-digital-cms-pages/)

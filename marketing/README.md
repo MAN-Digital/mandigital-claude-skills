@@ -57,6 +57,12 @@ Romeo's voice and MAN Digital's positioning. Also handles "brain-dump" mode: pas
 video's transcript and it transforms the same screen-share content into MAN Digital's own
 narration instead of translating it line-by-line.
 
+### [`man-digital-figma-website-design/`](./man-digital-figma-website-design/) — Website Design in Figma
+
+Designs new MAN Digital website pages and sections in the canonical MD-Website Figma file.
+Requires desktop and mobile frames, canonical component reuse, complete interaction states,
+brand-token QA, and an implementation-ready HubSpot handoff.
+
 ---
 
 ## When to Use What
@@ -69,6 +75,7 @@ narration instead of translating it line-by-line.
 | Build a landing page or sales copy      | `vibe-marketing-v2/direct-response-copy` |
 | Write an email sequence                 | `vibe-marketing-v2/email-sequences`      |
 | Generate ad creative or product photos  | `vibe-marketing-v2/creative`             |
+| Design a website page in Figma           | `man-digital-figma-website-design/`       |
 | Post on LinkedIn                        | `linkedin-post-creation/`                |
 | Repurpose one piece into 8 platforms    | `vibe-marketing-v2/content-atomizer`     |
 | Write a YouTube script                  | `man-digital-youtube-scripts/`           |

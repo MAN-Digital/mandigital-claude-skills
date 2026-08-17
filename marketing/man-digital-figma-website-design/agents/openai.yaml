@@ -1,0 +1,4 @@
+interface:
+  display_name: "MAN Digital Figma Website Design"
+  short_description: "Design MAN Digital web pages in Figma"
+  default_prompt: "Use $man-digital-figma-website-design to design a MAN Digital website page in desktop and mobile using the canonical Figma components."
