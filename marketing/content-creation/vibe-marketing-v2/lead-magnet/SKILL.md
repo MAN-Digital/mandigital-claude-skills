@@ -1,23 +1,12 @@
 ---
 name: lead-magnet
-version: 7.0
-description: >
-  Generate compelling lead magnet concepts AND build the actual lead magnet
-  content. Use when someone needs top-of-funnel ideas, wants to grow their
-  email list, or asks what should I give away for free. Triggers on: lead
-  magnet ideas for X, how do I build my list, what freebie should I create,
-  top of funnel for X, opt-in ideas, grow my email list, create a lead
-  magnet, build my checklist, write a guide. Outputs 3-5 lead magnet
-  concepts with hooks, formats, and clear bridges to the paid offer. After
-  user selects a concept, enters BUILD MODE and writes the full lead magnet
-  content -- checklists, templates, guides, quiz questions, swipe files.
-  Writes output to ./campaigns/{magnet-name}/lead-magnet.md. Uses web
-  search to research competitor lead magnets in the same space. Reads:
-  voice-profile.md, positioning.md, audience.md. Writes:
-  ./campaigns/{magnet-name}/lead-magnet.md, ./campaigns/{magnet-name}/brief.md,
-  assets.md, learnings.md. Chains to: /direct-response-copy for landing
-  page, /email-sequences for delivery + welcome sequence,
-  /content-atomizer for social promotion.
+description: >-
+  Generate lead-magnet concepts and build the selected asset. Use when someone
+  needs top-of-funnel ideas, wants to grow an email list, asks what to give away,
+  or requests an opt-in checklist, template, guide, quiz, or swipe file. Produces
+  three to five researched concepts with hooks and bridges to the paid offer,
+  then writes the complete selected lead magnet and campaign brief. Can chain to
+  landing-page copy, email delivery, and social-promotion workflows.
 ---
 
 # Lead Magnet Ideation + Build

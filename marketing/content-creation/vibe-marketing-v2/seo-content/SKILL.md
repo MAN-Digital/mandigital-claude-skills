@@ -1,20 +1,14 @@
 ---
 name: seo-content
-description: >
-  Create high-quality, SEO-optimized content that ranks AND reads like a human
-  wrote it. Use when turning keyword research into actual content pieces. Takes a
-  target keyword/cluster and produces a complete article optimized for search
-  while avoiding AI-sounding output. Performs live SERP analysis, integrates
-  People Also Ask questions, generates Article + FAQ JSON-LD schema markup, and
-  writes publication-ready content to disk. Supports content refresh mode for
-  updating existing articles based on SERP changes. Triggers on: write SEO
-  content for X, create article for keyword, write blog post about X, SEO
-  article, content for keyword cluster, refresh article, update blog post.
-  Outputs publication-ready content with proper structure, optimization, human
-  voice, and schema markup saved to ./campaigns/content/{keyword-slug}.md.
-  Dependencies: none (but enhanced by brand context and keyword plan). Reads:
-  voice-profile.md, keyword-plan.md, audience.md. Writes: content files,
-  assets.md, learnings.md. Chains to: /content-atomizer for social distribution.
+description: >-
+  Create publication-ready SEO content from a target keyword or cluster. Use
+  when writing or refreshing an article, blog post, or keyword-cluster page that
+  must rank while sounding human. Performs live SERP and People Also Ask
+  analysis, applies brand and audience context, generates Article and FAQ JSON-LD,
+  and saves the optimized content to ./campaigns/content/{keyword-slug}.md.
+  Triggers on requests to write SEO content, create an article for a keyword,
+  refresh an existing article, or update a blog post after SERP changes. Can
+  chain to /content-atomizer for social distribution.
 ---
 
 # /seo-content -- Publication-Ready SEO Content

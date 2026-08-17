@@ -74,7 +74,7 @@ source ~/.zshrc
 **Option 2 — a local `.env` file scoped to just this skill:**
 
 ```bash
-cd marketing/man-digital-youtube-scripts   # this skill's folder
+cd marketing/content-creation/man-digital-youtube-scripts   # this skill's folder
 cp .env.example .env
 # open .env and paste your real key after GEMINI_API_KEY=
 ```

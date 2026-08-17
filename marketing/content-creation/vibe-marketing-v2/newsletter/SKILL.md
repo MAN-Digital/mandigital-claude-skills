@@ -1,22 +1,12 @@
 ---
 name: newsletter
-version: 7.0
-description: >
-  Create best-in-class newsletters that people actually want to read. Use when
-  someone needs to write a newsletter edition, develop a newsletter format, or
-  improve their newsletter game. Covers multiple formats - roundup, deep-dive,
-  personal essay, curated links, news briefing. References patterns from Lenny
-  Rachitsky, Morning Brew, Greg Isenberg, Sahil Bloom, The Hustle, and top AI
-  newsletters. Triggers on: write newsletter, newsletter format, help with my
-  newsletter, newsletter edition about X, weekly roundup, news briefing about,
-  curated newsletter, newsletter strategy, newsletter growth, newsletter
-  monetization, newsletter platform. Outputs publication-ready newsletter
-  content or format templates. Uses web search to pull current news and trends
-  for news briefing and curated link formats. Writes newsletter edition to
-  ./campaigns/newsletters/{date}-{topic}.md. Reads: voice-profile.md,
-  audience.md, learnings.md. Writes:
-  ./campaigns/newsletters/{date}-{topic}.md, assets.md, learnings.md.
-  Chains to: /content-atomizer for social promotion of the newsletter edition.
+description: >-
+  Create publication-ready newsletters and reusable newsletter formats. Use
+  when asked for a newsletter edition, weekly roundup, deep dive, personal
+  essay, curated-links issue, news briefing, or advice on newsletter strategy,
+  growth, monetization, or platforms. Applies brand voice and audience context,
+  researches current news when needed, saves the edition in the campaign
+  workspace, and can chain to social repurposing.
 ---
 
 # Newsletter Skill

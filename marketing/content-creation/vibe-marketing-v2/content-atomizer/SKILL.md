@@ -1,26 +1,13 @@
 ---
 name: content-atomizer
-version: 7.0
-description: >
-  Transform one piece of content into platform-optimized assets across LinkedIn,
-  Twitter/X, Instagram, TikTok, YouTube, Threads, Bluesky, and Reddit. Use when
-  someone has existing content (blog post, newsletter, podcast, video) and wants
-  to maximize distribution. Covers format specs, hook formulas, algorithm signals,
-  and creator-tested patterns for each platform. Performs live web search for
-  recent algorithm changes before generating. Reads brand voice profile and
-  platform adaptation table for tone adjustments. Writes per-platform files to
-  organized campaign directories. Detects Buffer/Hootsuite API keys for optional
-  scheduling. Supports content calendar mode for full-week scheduling across all
-  platforms. Triggers on: repurpose this, turn this into social posts, atomize
-  this content, create social content from, LinkedIn post from this, thread from
-  this, schedule this across platforms, create content calendar from this,
-  repurpose for Threads, Bluesky post from this, Reddit strategy for this.
-  Outputs platform-specific content ready to publish, saved to organized
-  per-platform directories. Dependencies: none (but enhanced by brand context).
-  Reads: voice-profile.md, creative-kit.md, learnings.md, stack.md. Writes:
-  per-platform content files, assets.md, learnings.md. Chains to: /creative for
-  visual assets, /newsletter for email distribution, /seo-content for source
-  content.
+description: >-
+  Repurpose an existing blog post, newsletter, podcast, or video into
+  platform-optimized content for LinkedIn, X, Instagram, TikTok, YouTube,
+  Threads, Bluesky, and Reddit. Use when asked to atomize content, create social
+  posts or threads from a source, build a cross-platform content calendar, or
+  schedule a campaign. Applies current platform patterns and brand voice, writes
+  publish-ready files into organized campaign directories, and can chain to
+  creative, newsletter, and SEO workflows.
 ---
 
 # Content Atomizer Skill

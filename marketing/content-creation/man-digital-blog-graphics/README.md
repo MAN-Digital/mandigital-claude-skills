@@ -46,7 +46,7 @@ You do not need to understand the internals, but these pieces need to exist:
    The repo also includes a bundled copy at:
 
    ```text
-   marketing/man-digital-blog-graphics/assets/playground/Playground.pen
+   marketing/content-creation/man-digital-blog-graphics/assets/playground/Playground.pen
    ```
 
    This bundled copy is a backup/reference so the skill package travels with the core component library.
@@ -65,7 +65,7 @@ Use this if you do not want to touch Terminal.
 3. Go to:
 
    ```text
-   marketing/man-digital-blog-graphics
+   marketing/content-creation/man-digital-blog-graphics
    ```
 
 4. Copy the whole `man-digital-blog-graphics` folder.
@@ -91,14 +91,14 @@ Run this from the root of the repo:
 
 ```bash
 mkdir -p "$HOME/.codex/skills"
-cp -R marketing/man-digital-blog-graphics "$HOME/.codex/skills/"
+cp -R marketing/content-creation/man-digital-blog-graphics "$HOME/.codex/skills/"
 ```
 
 To update an existing install, replace only this skill folder:
 
 ```bash
 rm -rf "$HOME/.codex/skills/man-digital-blog-graphics"
-cp -R marketing/man-digital-blog-graphics "$HOME/.codex/skills/"
+cp -R marketing/content-creation/man-digital-blog-graphics "$HOME/.codex/skills/"
 ```
 
 ### How To Check That It Installed

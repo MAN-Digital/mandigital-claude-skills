@@ -1,78 +1,59 @@
 # MAN Digital — Claude Skills
 
-This is MAN Digital's shared library of Claude skills. Everything we use to run marketing pipelines and accelerate development, in one place.
+This is MAN Digital's shared library of Claude skills. Everything we use to run marketing pipelines and accelerate development lives here.
 
-If you work at MAN Digital and use Claude (Code, Desktop, or the API), this is your starting point.
+If you work at MAN Digital and use Claude Code, Claude Desktop, Codex, or the API, this is your starting point.
 
 ---
 
 ## How This Repo Is Organized
 
-Two top-level folders. That's it.
+The repository keeps two top-level areas. Marketing skills are split by the kind of work they support.
 
-```
+```text
 mandigital-claude-skills/
-├── marketing/      ← Skills for content, SEO, copy, social
-└── development/    ← Skills and tools for engineering work
+├── marketing/
+│   ├── content-creation/   ← Writing, editing, social, video, and visual content
+│   └── web-development/    ← Website design, CMS implementation, and performance
+└── development/            ← Engineering and AI-development workflows
 ```
 
-### marketing/
+| Area | What belongs there |
+| --- | --- |
+| [`marketing/content-creation/`](./marketing/content-creation/) | Blog production, editing, LinkedIn, YouTube, diagrams, graphics, marketing assets, and campaign skills |
+| [`marketing/web-development/`](./marketing/web-development/) | Figma website design, HubSpot CMS development, and PSI/Web Vitals auditing |
+| [`development/`](./development/) | Engineering, code review, agent workflows, and external development toolkits |
 
-Everything related to producing content for MAN Digital.
-
-| Folder                                                                       | What it is                                                                                                                                                                                                               |
-| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [`blog-production/`](./marketing/blog-production/)                           | The full 7-step blog pipeline (brief → research → fact-check → write → graphics → publish)                                                                                                                               |
-| [`editing-checklist/`](./marketing/editing-checklist/)                       | Standalone editorial quality framework — use on any piece of writing                                                                                                                                                     |
-| [`vibe-marketing-v2/`](./marketing/vibe-marketing-v2/)                       | 11-skill marketing suite (brand voice, positioning, lead magnets, email, newsletter, creative, etc.)                                                                                                                     |
-| [`linkedin-post-creation/`](./marketing/linkedin-post-creation/)             | LinkedIn post writing skill                                                                                                                                                                                              |
-| [`man-digital-marketing-assets/`](./marketing/man-digital-marketing-assets/) | Builds branded MAN Digital social/marketing assets (LinkedIn, Facebook, Instagram, YouTube, OG images) in Pencil from user-supplied copy                                                                                 |
-| [`man-digital-blog-graphics/`](./marketing/man-digital-blog-graphics/)       | Builds branded MAN Digital blog/article/HubSpot/LinkedIn in-body graphics and diagrams in Pencil                                                                                                                         |
-| [`man-digital-figma-website-design/`](./marketing/man-digital-figma-website-design/) | Designs MAN Digital website pages and sections in the canonical Figma file, with desktop/mobile, component-reuse, state, QA, and HubSpot handoff rules                                                              |
-| [`man-digital-lucid-charts/`](./marketing/man-digital-lucid-charts/)         | Builds on-brand MAN Digital diagrams (flowcharts, org charts, RevOps/CRM architecture, mind maps, sequence diagrams) in Lucidchart via the `@lucid` MCP connector                                                        |
-| [`man-digital-youtube-scripts/`](./marketing/man-digital-youtube-scripts/)   | Writes YouTube video scripts (tutorial, promotional, case study; shorts or long-form) in Romeo's voice and MAN Digital's positioning, including transforming another video's transcript into MAN Digital's own narration |
-| [`man-digital-cms-pages/`](./marketing/man-digital-cms-pages/)               | Maintains and validates MAN Digital's HubSpot CMS theme, modules, pages, deployments, and CMS-specific performance work                                                                                                  |
-| [`auditing-web-vitals/`](./marketing/auditing-web-vitals/)                   | Audits PSI/Lighthouse performance, accessibility, SEO, agentic browsing, and AEO extraction using repeatable measurements                                                                                                |
-
-### development/
-
-Skills and external tools for engineering and AI development workflows.
-
-| Folder                                                             | What it is                                                              |
-| ------------------------------------------------------------------ | ----------------------------------------------------------------------- |
-| [`claudefast-v5.3/`](./development/claudefast-v5.3/)               | ClaudeFast — AI development management system with efficient sub-agents |
-| [`gstack/`](./development/gstack/)                                 | External: brainstorming, YC office hours, QA, ship workflow             |
-| [`superpowers/`](./development/superpowers/)                       | External: the skill framework Claude uses (how SKILL.md works)          |
-| [`claude-memory-compiler/`](./development/claude-memory-compiler/) | External: one-time setup for persistent Claude memory                   |
+See the [marketing index](./marketing/) for the complete skill inventory.
 
 ---
 
 ## External Repos We Use
 
-Three skill packages we don't own but depend on. Each has a README inside `development/` that explains what it is, when to use it, and how to install.
+Three skill packages we don't own but depend on. Each has a README inside `development/` that explains what it is, when to use it, and how to install it.
 
-| Repo                                                                                  | Purpose                                                                                                   |
-| ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| [coleam00/claude-memory-compiler](https://github.com/coleam00/claude-memory-compiler) | Persistent memory across Claude sessions. **Set up once per project.**                                    |
-| [garrytan/gstack](https://github.com/garrytan/gstack)                                 | Brainstorming + dev workflow toolkit. `/office-hours`, `/qa`, `/ship`, `/review`, `/design-consultation`. |
-| [obra/superpowers](https://github.com/obra/superpowers)                               | The skill system itself — the framework that makes SKILL.md files work.                                   |
+| Repo | Purpose |
+| --- | --- |
+| [coleam00/claude-memory-compiler](https://github.com/coleam00/claude-memory-compiler) | Persistent memory across Claude sessions. **Set up once per project.** |
+| [garrytan/gstack](https://github.com/garrytan/gstack) | Brainstorming + dev workflow toolkit. `/office-hours`, `/qa`, `/ship`, `/review`, `/design-consultation`. |
+| [obra/superpowers](https://github.com/obra/superpowers) | The skill system itself—the framework that makes `SKILL.md` files work. |
 
 ---
 
 ## Quick Start
 
 1. **Pick your use case:**
-   - Writing a blog post? → [`marketing/blog-production/`](./marketing/blog-production/)
-   - Writing other content (LinkedIn, email, landing page)? → [`marketing/vibe-marketing-v2/`](./marketing/vibe-marketing-v2/)
-   - Designing a MAN Digital website page in Figma? → [`marketing/man-digital-figma-website-design/`](./marketing/man-digital-figma-website-design/)
-   - Editing anything? → [`marketing/editing-checklist/`](./marketing/editing-checklist/)
-   - Setting up your dev environment? → [`development/`](./development/)
-   - Maintaining the MAN Digital HubSpot website? → [`marketing/man-digital-cms-pages/`](./marketing/man-digital-cms-pages/)
-   - Auditing PageSpeed, Web Vitals, or AEO extraction? → [`marketing/auditing-web-vitals/`](./marketing/auditing-web-vitals/)
+   - Writing a blog post? → [`marketing/content-creation/blog-production/`](./marketing/content-creation/blog-production/)
+   - Writing other content? → [`marketing/content-creation/vibe-marketing-v2/`](./marketing/content-creation/vibe-marketing-v2/)
+   - Editing anything? → [`marketing/content-creation/editing-checklist/`](./marketing/content-creation/editing-checklist/)
+   - Designing a website page in Figma? → [`marketing/web-development/man-digital-figma-website-design/`](./marketing/web-development/man-digital-figma-website-design/)
+   - Maintaining the HubSpot website? → [`marketing/web-development/man-digital-cms-pages/`](./marketing/web-development/man-digital-cms-pages/)
+   - Auditing PSI, Web Vitals, SEO, or AEO? → [`marketing/web-development/auditing-web-vitals/`](./marketing/web-development/auditing-web-vitals/)
+   - Setting up a development workflow? → [`development/`](./development/)
 
-2. **Install a skill** by copying its folder into your Claude Code skills directory (or symlinking it). Each skill folder contains a `SKILL.md` that Claude reads to activate it.
+2. **Install a skill** by copying its skill folder—not the category folder—into your Claude or Codex skills directory. The skill's folder name remains unchanged.
 
-3. **Read the folder README** before using a skill — it explains scope, inputs, and outputs.
+3. **Read the skill's `SKILL.md`** for its activation rules and workflow.
 
 ---
 
@@ -80,10 +61,11 @@ Three skill packages we don't own but depend on. Each has a README inside `devel
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md). Quick rules:
 
-- New skills go into `marketing/` or `development/` only — no new top-level folders
-- Every skill folder must have a `SKILL.md` (the Claude-readable spec) and a `README.md` (for humans)
-- Use kebab-case for folder names
-- If a skill belongs in a pipeline, prefix it with `NN-` (e.g. `01-`, `02-`)
+- Put marketing skills in either `marketing/content-creation/` or `marketing/web-development/`.
+- Put engineering and AI-development skills in `development/`.
+- Every skill folder must contain a `SKILL.md`.
+- Use kebab-case for folder names.
+- If a skill belongs in a pipeline, prefix it with `NN-` (for example, `01-` or `02-`).
 
 ---
 

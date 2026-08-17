@@ -1,6 +1,10 @@
 ---
 name: linkedin-post-creation
-description: B2B LinkedIn post creation for high engagement. HOOKS ARE SACRED - spend 40% time on hooks (TAS/PAS/SCQA frameworks). MOBILE-FIRST formatting (one sentence per line, no paragraphs, short punchy sentences, NO EMOJIS). STRONG POV required - vanilla content fails. Research-driven with Exa.ai/Firecrawl. Seed content from topic/brain dump/article/similar post. 9-phase workflow: research → reverse outline → Y+U+I → parts → hooks → posts → formatting → 11-point editing → polish. Outputs 2 complete posts ready to publish.
+description: >-
+  Create high-engagement B2B LinkedIn posts from a topic, brain dump, article,
+  or similar post. Use when research-driven, mobile-first posts need strong
+  hooks, a clear point of view, platform-native formatting, and final editorial
+  polish. Produces two complete posts ready to publish.
 ---
 
 # LinkedIn Post Creation Skill

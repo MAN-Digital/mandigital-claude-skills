@@ -1,6 +1,5 @@
 ---
 name: direct-response-copy
-version: 7.0
 description: "Write copy that converts. Use when writing landing pages, emails, sales copy, headlines, CTAs, social posts, or any persuasive content. Triggers on: make this convert, write copy for X, help me sell X, punch this up, write a landing page, write sales copy, score this copy, generate headline variants. Produces internet-native copy that sounds like a smart friend explaining something while quietly deploying every persuasion principle in the book. Loads brand voice and positioning from memory, generates multiple variants for testing, scores copy on 7 dimensions, and suggests A/B tests. Includes complete reference material from Schwartz, Hopkins, Ogilvy, Halbert, Caples, Sugarman, and Collier. Reads: voice-profile.md, positioning.md, audience.md, creative-kit.md. Writes: ./campaigns/{name}/*.md, assets.md."
 ---
 

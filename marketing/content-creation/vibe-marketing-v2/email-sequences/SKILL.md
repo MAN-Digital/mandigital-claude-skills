@@ -1,24 +1,13 @@
 ---
 name: email-sequences
-version: 7.0
-description: >
-  Build email sequences that convert subscribers into customers. Use when you
-  have a lead magnet and need a welcome sequence, nurture sequence, or sales
-  sequence. Covers welcome, nurture, conversion, launch, re-engagement, and
-  post-purchase sequences. Triggers on: write welcome emails, email sequence
-  for, nurture sequence, convert my list, onboarding emails, launch sequence,
-  drip campaign, email funnel, write a welcome series, follow-up emails,
-  autoresponder sequence, cart abandonment emails. Outputs complete email
-  sequences with subject lines (3 A/B variants per email), timing, full copy,
-  and send-day recommendations. Writes each email as an individual file in
-  ./campaigns/{sequence-name}/emails/ with naming convention {nn}-{purpose}.md.
-  Detects Mailchimp, ConvertKit, and HubSpot API keys in .env and offers
-  direct automation setup if found. Loads brand voice and positioning from
-  memory, reads lead-magnet output if available, generates campaign summary
-  overview. Reads: voice-profile.md, positioning.md, audience.md,
-  creative-kit.md. Writes: ./campaigns/{name}/emails/*.md,
-  ./campaigns/{name}/brief.md, assets.md, learnings.md. Chains to:
-  /content-atomizer for social promotion of the lead magnet.
+description: >-
+  Build conversion-focused welcome, nurture, sales, launch, re-engagement,
+  onboarding, cart-abandonment, and post-purchase email sequences. Use when
+  asked for an email funnel, drip campaign, autoresponder, follow-up series, or
+  lead-magnet delivery flow. Produces complete emails with subject-line variants,
+  timing, send recommendations, campaign briefs, and brand-aware copy. Can use
+  available Mailchimp, ConvertKit, or HubSpot configuration and chain to content
+  repurposing workflows.
 ---
 
 # Email Sequences
