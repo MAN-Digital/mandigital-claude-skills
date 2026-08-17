@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from scripts.maintenance.bootstrap import configure_machine
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Install MAN Digital skill maintenance on macOS.")
+    parser.add_argument("--repo", type=Path, required=True)
+    parser.add_argument("--state-dir", type=Path, default=Path.home() / ".local/state/man-digital-skills")
+    parser.add_argument("--install-root", type=Path, action="append", default=[])
+    parser.add_argument("--codex", action="store_true")
+    parser.add_argument("--claude", action="store_true")
+    parser.add_argument("--launch-agents-dir", type=Path, default=Path.home() / "Library/LaunchAgents")
+    parser.add_argument("--no-load", action="store_true")
+    arguments = parser.parse_args()
+
+    install_roots = list(arguments.install_root)
+    if arguments.codex:
+        install_roots.append(Path.home() / ".codex/skills")
+    if arguments.claude:
+        install_roots.append(Path.home() / ".claude/skills")
+    if not install_roots:
+        parser.error("select --codex, --claude, or at least one --install-root")
+
+    result = configure_machine(
+        arguments.repo,
+        arguments.state_dir,
+        install_roots,
+        arguments.launch_agents_dir,
+        load_agent=not arguments.no_load,
+    )
+    print(f"Configured {len(result.symlinks)} managed skill links.")
+    print(f"LaunchAgent: {result.plist_path}")
+    if result.backups:
+        print(f"Backed up {len(result.backups)} previous installs under {result.backups[0].parents[1]}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
