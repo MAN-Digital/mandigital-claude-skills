@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import io
 import tempfile
 import unittest
+from contextlib import redirect_stdout
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -17,12 +19,13 @@ class PublishTests(unittest.TestCase):
                 pr_url="https://github.com/MAN-Digital/mandigital-claude-skills/pull/99"
             )
 
-            url = publish_changes(
-                repo,
-                "studio-mac",
-                assume_yes=True,
-                runner=runner,
-            )
+            with redirect_stdout(io.StringIO()):
+                url = publish_changes(
+                    repo,
+                    "studio-mac",
+                    assume_yes=True,
+                    runner=runner,
+                )
 
             flattened = [argument for call in runner.calls for argument in call]
             self.assertIn("--draft", flattened)

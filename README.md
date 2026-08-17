@@ -55,6 +55,8 @@ Three skill packages we don't own but depend on. Each has a README inside `devel
 
 3. **Read the skill's `SKILL.md`** for its activation rules and workflow.
 
+For shared installations across multiple computers, follow [Multi-machine maintenance](./MAINTENANCE.md).
+
 ---
 
 ## Contributing
