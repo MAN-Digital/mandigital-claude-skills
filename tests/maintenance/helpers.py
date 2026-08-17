@@ -68,3 +68,39 @@ class GitFixture:
         git(["commit", "-m", "invalid update"], self.seed)
         git(["push"], self.seed)
         return self.head(self.seed)
+
+
+def create_dirty_git_repo(root: Path) -> Path:
+    repo = root / "publisher"
+    git(["init", "-b", "main", str(repo)])
+    git(["config", "user.name", "Publisher Test"], repo)
+    git(["config", "user.email", "publisher@example.com"], repo)
+    skill = repo / "marketing" / "example-skill"
+    GitFixture._write_valid_skill(skill)
+    git(["add", "."], repo)
+    git(["commit", "-m", "initial"], repo)
+    (repo / "CHANGE.md").write_text("local change\n", encoding="utf-8")
+    return repo
+
+
+class RecordingRunner:
+    def __init__(self, pr_url: str) -> None:
+        self.pr_url = pr_url
+        self.calls: list[list[str]] = []
+
+    def __call__(
+        self,
+        args: list[str],
+        cwd: Path | None = None,
+        check: bool = True,
+    ) -> subprocess.CompletedProcess[str]:
+        arguments = [str(value) for value in args]
+        self.calls.append(arguments)
+        stdout = ""
+        if arguments[:3] == ["git", "branch", "--show-current"]:
+            stdout = "main\n"
+        elif arguments[:3] == ["git", "status", "--short"]:
+            stdout = "?? CHANGE.md\n"
+        elif arguments[:3] == ["gh", "pr", "create"]:
+            stdout = f"{self.pr_url}\n"
+        return subprocess.CompletedProcess(arguments, 0, stdout=stdout, stderr="")

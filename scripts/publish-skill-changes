@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import platform
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from scripts.maintenance.publish import PublishError, publish_changes
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Publish local skill changes as a draft pull request.")
+    parser.add_argument("--repo", type=Path, default=Path.cwd())
+    parser.add_argument("--machine", default=platform.node())
+    parser.add_argument("--yes", action="store_true", dest="assume_yes")
+    arguments = parser.parse_args()
+    try:
+        url = publish_changes(
+            arguments.repo,
+            arguments.machine,
+            assume_yes=arguments.assume_yes,
+        )
+    except PublishError as error:
+        print(f"FAIL: {error}", file=sys.stderr)
+        return 1
+    print(url)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
