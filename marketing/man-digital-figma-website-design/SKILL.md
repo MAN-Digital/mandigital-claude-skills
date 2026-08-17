@@ -1,6 +1,6 @@
 ---
 name: man-digital-figma-website-design
-description: Use when designing new website pages or sections, redesigning existing pages, or editing designs in the MAN Digital MD-Website Figma file (file key IOhToZi5UBH5vNFV741HP3) — service pages, landing pages, or section refreshes that must ship in BOTH desktop and mobile frames, stay consistent with the live man.digital brand and past page designs, and hand off exact specs to web development. Also use when asked to add case-study/proof sections, hero refreshes, master-detail patterns, or when pulling assets and components from the file or the live site into a new design.
+description: Use when designing new website pages or sections, redesigning existing pages, or editing designs in the MAN Digital MD-Website Figma file (file key IOhToZi5UBH5vNFV741HP3) — service pages, landing pages, or section refreshes that must ship in BOTH desktop and mobile frames, stay consistent with the live man.digital brand and past page designs, and hand off exact specs to web development. Also use when asked to add problem/"THE PROBLEM", case-study/proof, hero, onboarding, roadmap, playbook, principles, leadership, team, credentials, form, FAQ, footer, or outcome-tab sections; their canonical aliases and desktop/mobile sources are indexed in references/canonical-page-sections.md.
 ---
 
 # MAN Digital — Figma Website Design
@@ -57,7 +57,11 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    System page, locate the component, and verify its mapped HubSpot HTML, CSS and
    JavaScript source. If an implementation exists, instantiate or extend it; do not
    create parallel markup, pagination, tabs, forms, navigation or footer behavior.
-   Read `references/canonical-page-sections.md` for the exact node and code map.
+   Resolve the request aliases in `references/canonical-page-sections.md` for the exact
+   node and code map. "THE PROBLEM" routes to Revenue Workflows (`40000833:9074` +
+   `40000836:3045`); "Case Studies"/proof routes to `40000833:9134` +
+   `40000836:3082`. Node `40000836:3188` is Onboarding, not Case Studies. A registered
+   pattern is clone-and-adapt, never a candidate for new structural variants.
 12. **Do not improvise brand-colour roles.** Primary Blue `#000FC4` is the normal
    brand/section/active colour. Dark Navy `#161654` is restricted to approved mobile
    quote cards. CTA Orange `#F26620` is restricted to conversion actions. A source frame
@@ -71,9 +75,10 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    guide: `references/brief-format.md`. No brief? Ask for one or draft the section table
    yourself and get it approved first.
 1. **Survey the file first**: start at the canonical Desktop, Mobile and Interaction
-   chapters on `🎨 Design System`, then use `get_metadata` (no nodeId) to list pages and screenshot
-   the latest approved frames of the page FAMILY you're designing for (service page,
-   homepage, LP, nav — see the file map in the references). Work on a draft page
+   chapters on `🎨 Design System`, resolve the requested section in
+   `references/canonical-page-sections.md`, then use `get_metadata` (no nodeId) to list
+   pages and screenshot the latest approved frames of the page FAMILY you're designing
+   for (service page, homepage, LP, nav — see the file map in the references). Work on a draft page
    ("«Page» — AI draft"); duplicate the nearest existing page/section as the starting
    point — never a blank frame.
 2. Harvest: live-page screenshots for layout truth, hubfs URLs for real assets,
@@ -107,8 +112,8 @@ semantic/status tokens, shadows, motion, themes),
 Envato MCP for stock assets, vector creation, image pipeline),
 `references/component-canon.md` (approved team, full form, FAQ, badge hierarchy,
 interaction-state and decoration source nodes),
-`references/canonical-page-sections.md` (the canonical Desktop/Mobile component chapters,
-Pagination and Playbooks families, Quote-to-Cash states, colour restrictions and the
-Figma-to-HubSpot reuse gate),
+`references/canonical-page-sections.md` (request aliases, direct desktop/mobile sources,
+atomic component shelves, Pagination and Playbooks families, Quote-to-Cash states, colour
+restrictions and the Figma-to-HubSpot reuse gate),
 `references/brief-format.md` (how briefs spec pages) and `references/qa-checklist.md`
 (the per-frame QA gate) before touching the file.

@@ -24,6 +24,15 @@ New work goes on a draft page named "«Page» — AI draft". When designing for 
 spec-check THAT family's latest approved frames with `get_design_context` and match them.
 Consistency = match the file, not one page.
 
+### Canonical page-section sources
+
+All approved landing-page aliases, exact desktop/mobile nodes, atomic components,
+interaction variants and implementation reuse contracts live in
+`canonical-page-sections.md`. Resolve a section there before designing. Registered
+sections are clone-and-adapt patterns, not candidates for new structural variants. The
+map also records explicit gaps where a mobile design has not been approved and must not
+be invented.
+
 ### Local asset folders (macOS)
 
 - Client logos (true-vector SVGs, per-client subfolders): `~/Documents/Marketing & Sales/Design/Assets/Client Logos/`
@@ -125,6 +134,13 @@ type only for compact labels, captions, metadata, and uppercase eyebrows.
 - **Canonical component source map:** read `component-canon.md` before creating team,
   strategy-call form, FAQ, credentials or decorative sections. Clone the listed source
   nodes; do not substitute a simplified lookalike.
+- **Landing-page "THE PROBLEM" section:** canonical desktop `40000833:9074` + mobile
+  `40000836:3045`. Clone both; desktop is intro + dark problem card + blue solution card,
+  mobile is headline + stacked cards with the intro paragraph omitted. Do not redesign.
+- **Case Studies / proof section:** canonical desktop `40000833:9134` + mobile
+  `40000836:3082`. Desktop shows three cards with Counter pagination; mobile shows one
+  card per view with scroll snap and Mobile Counter. Node `40000836:3188` is Onboarding,
+  not Case Studies. Use `canonical-page-sections.md` for the complete pair and state map.
 - **Founder CTA chip:** founder photo (53px) + orange `#F26620` panel, title 16/600 +
   subline 12; compact variant on mobile. Lives in hero + used site-wide.
 - **Cards:** white, 1px `#E4E6F9`-family border, 4–6px radius. Featured card = blue

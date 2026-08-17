@@ -31,6 +31,9 @@ by memory of what you built.
 - [ ] Every recurring section uses the canonical component or a documented variant; the
       corresponding HubSpot section, CSS classes and JavaScript behavior were inspected
       before new code was written.
+- [ ] Case Studies uses desktop `40000833:9134` and mobile `40000836:3082` (not Onboarding
+      node `40000836:3188`): three cards + Counter on desktop; one card + scroll snap +
+      Mobile Counter on mobile.
 - [ ] Case Studies and Team contain a `Pagination` instance (`40000829:2707`); arrows,
       counters and dots were not recreated locally.
 - [ ] Playbooks reuse `40000832:29581` / `40000836:3319` and preserve all four categories,
