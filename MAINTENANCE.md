@@ -105,7 +105,9 @@ scripts/skills-doctor --repo . --bootstrap-cms
 python3 -m unittest discover -s tests/maintenance -v
 ```
 
-The versioned pre-commit hook runs quick checks. The pre-push hook runs the full offline repository doctor. GitHub Actions repeats the tests and complete CMS-enabled validation on pull requests and `main`.
+The versioned pre-commit hook runs quick checks. The pre-push hook runs the full offline repository doctor. GitHub Actions repeats the tests and offline validation on pull requests and `main`.
+
+The CMS source repository is private. To add CMS-source bootstrap validation in GitHub Actions, create a repository Actions secret named `CMS_SOURCE_TOKEN` containing a fine-grained token with read-only access to `MAN-Digital/man-digital-cms-pages`. Without that secret, the private step is skipped while every repository-contained skill and maintenance test is still validated. Local machines continue to run CMS validation through their existing GitHub credentials.
 
 ## Recover a Previous Install
 
@@ -125,4 +127,4 @@ Edit [`automation/managed-skills.txt`](./automation/managed-skills.txt) using on
 
 ## Central Validation Schedule
 
-GitHub Actions validates pull requests and pushes to `main`. It also runs a central health check every Monday at 07:00 UTC. Machine synchronization failures remain local and produce a non-zero LaunchAgent result plus logs in the machine state directory.
+GitHub Actions validates pull requests and pushes to `main`. It also runs a central health check every Monday at 07:00 UTC. Private CMS-source validation runs during those checks when `CMS_SOURCE_TOKEN` is configured. Machine synchronization failures remain local and produce a non-zero LaunchAgent result plus logs in the machine state directory.

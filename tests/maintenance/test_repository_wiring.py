@@ -26,6 +26,16 @@ class RepositoryWiringTests(unittest.TestCase):
         self.assertIn("macos-latest", workflow)
         self.assertIn("python3 -m unittest discover -s tests/maintenance -v", workflow)
 
+    def test_private_cms_validation_requires_an_explicit_secret(self) -> None:
+        workflow = (REPO_ROOT / ".github/workflows/validate-skills.yml").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("run: scripts/skills-doctor --repo .\n", workflow)
+        self.assertIn("CMS_SOURCE_TOKEN: ${{ secrets.CMS_SOURCE_TOKEN }}", workflow)
+        self.assertIn("if: env.CMS_SOURCE_TOKEN != ''", workflow)
+        self.assertIn("scripts/skills-doctor --repo . --bootstrap-cms", workflow)
+
     def test_readme_links_to_maintenance_guide(self) -> None:
         readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
 

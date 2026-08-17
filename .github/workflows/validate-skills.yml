@@ -24,6 +24,8 @@ permissions:
 jobs:
   repository-validation:
     runs-on: ubuntu-latest
+    env:
+      CMS_SOURCE_TOKEN: ${{ secrets.CMS_SOURCE_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -31,8 +33,15 @@ jobs:
           python-version: "3.12"
       - name: Run maintenance tests
         run: python3 -m unittest discover -s tests/maintenance -v
-      - name: Validate repository and CMS source
-        run: scripts/skills-doctor --repo . --bootstrap-cms
+      - name: Validate repository
+        run: scripts/skills-doctor --repo .
+      - name: Validate private CMS source
+        if: env.CMS_SOURCE_TOKEN != ''
+        env:
+          GH_TOKEN: ${{ env.CMS_SOURCE_TOKEN }}
+        run: |
+          gh auth setup-git
+          scripts/skills-doctor --repo . --bootstrap-cms
 
   macos-maintenance-tests:
     runs-on: macos-latest
