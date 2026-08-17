@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 import platform
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Sequence
 
@@ -54,7 +54,7 @@ def collect_status(
 
     return {
         "machine": platform.node(),
-        "checked_at": datetime.now(UTC).isoformat(),
+        "checked_at": datetime.now(timezone.utc).isoformat(),
         "repo": str(repo),
         "branch": branch,
         "commit": commit,

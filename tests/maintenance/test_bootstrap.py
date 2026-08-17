@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -50,7 +52,33 @@ class BootstrapTests(unittest.TestCase):
                 payload["StartCalendarInterval"],
                 [{"Hour": 9, "Minute": 0}, {"Hour": 17, "Minute": 0}],
             )
-            self.assertIn(str(REPO_ROOT / "scripts/skills-sync"), payload["ProgramArguments"])
+            self.assertEqual(payload["ProgramArguments"][0], sys.executable)
+            self.assertEqual(
+                payload["ProgramArguments"][1],
+                str(REPO_ROOT / "scripts/skills-sync"),
+            )
+
+    @unittest.skipUnless(Path("/usr/bin/python3").is_file(), "system Python is unavailable")
+    def test_maintenance_clis_start_with_macos_system_python(self) -> None:
+        scripts = (
+            "install-machine-maintenance",
+            "publish-skill-changes",
+            "skills-doctor",
+            "skills-status",
+            "skills-sync",
+        )
+
+        for script in scripts:
+            with self.subTest(script=script):
+                completed = subprocess.run(
+                    ["/usr/bin/python3", str(REPO_ROOT / "scripts" / script), "--help"],
+                    cwd=REPO_ROOT,
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+
+                self.assertEqual(completed.returncode, 0, completed.stderr)
 
     def test_repeated_bootstrap_is_idempotent(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

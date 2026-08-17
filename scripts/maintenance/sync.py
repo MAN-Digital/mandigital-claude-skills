@@ -3,7 +3,7 @@ from __future__ import annotations
 import shutil
 import tempfile
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Sequence
 
@@ -109,7 +109,7 @@ def sync_checkout(
                 "changed": result.changed,
                 "commit": result.commit,
                 "message": result.message,
-                "finished_at": datetime.now(UTC).isoformat(),
+                "finished_at": datetime.now(timezone.utc).isoformat(),
             },
         )
         return result
@@ -119,7 +119,7 @@ def sync_checkout(
             {
                 "ok": False,
                 "error": str(error),
-                "finished_at": datetime.now(UTC).isoformat(),
+                "finished_at": datetime.now(timezone.utc).isoformat(),
             },
         )
         if isinstance(error, SyncError):

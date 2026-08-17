@@ -3,9 +3,9 @@ from __future__ import annotations
 import re
 import subprocess
 import tempfile
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Callable, Sequence
+from typing import Callable, Optional, Sequence
 
 from .common import run_command
 from .doctor import validate_repository
@@ -15,12 +15,12 @@ class PublishError(RuntimeError):
     pass
 
 
-Runner = Callable[[Sequence[str], Path | None, bool], subprocess.CompletedProcess[str]]
+Runner = Callable[[Sequence[str], Optional[Path], bool], subprocess.CompletedProcess[str]]
 
 
 def build_branch_name(machine: str, timestamp: datetime) -> str:
     normalized = re.sub(r"[^a-z0-9]+", "-", machine.lower()).strip("-") or "unknown-machine"
-    return f"machine/{normalized}/{timestamp.astimezone(UTC).strftime('%Y%m%d-%H%M%S')}"
+    return f"machine/{normalized}/{timestamp.astimezone(timezone.utc).strftime('%Y%m%d-%H%M%S')}"
 
 
 def _run(
@@ -64,7 +64,7 @@ def publish_changes(
 
     branch = _run(runner, ["git", "branch", "--show-current"], repo).stdout.strip()
     if branch == "main":
-        branch = build_branch_name(machine, datetime.now(UTC))
+        branch = build_branch_name(machine, datetime.now(timezone.utc))
         _run(runner, ["git", "switch", "-c", branch], repo)
     elif not branch:
         raise PublishError("cannot publish from a detached checkout")

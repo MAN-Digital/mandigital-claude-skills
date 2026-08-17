@@ -7,7 +7,7 @@ import sys
 import tempfile
 import uuid
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Sequence
 
@@ -33,6 +33,7 @@ def build_launch_agent(
     repo = repo.resolve()
     state_dir = state_dir.resolve()
     arguments = [
+        sys.executable,
         str(repo / "scripts/skills-sync"),
         "--repo",
         str(repo),
@@ -102,7 +103,7 @@ def configure_machine(
     run_command(["git", "config", "core.hooksPath", ".githooks"], cwd=repo)
     state_dir.mkdir(parents=True, exist_ok=True)
     (state_dir / "logs").mkdir(parents=True, exist_ok=True)
-    stamp = datetime.now(UTC).strftime("%Y%m%d-%H%M%S")
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
     backup_root = state_dir / "backups" / f"{stamp}-{uuid.uuid4().hex[:8]}"
     backups: list[Path] = []
     symlinks: list[Path] = []
