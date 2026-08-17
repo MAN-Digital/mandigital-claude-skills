@@ -38,6 +38,18 @@ Run `/start-here` to bootstrap your brand context. See [`vibe-marketing-v2/READM
 
 Focused skill for writing LinkedIn posts in MAN Digital's voice with platform-native formatting.
 
+### [`man-digital-cms-pages/`](./man-digital-cms-pages/) — HubSpot CMS Pages
+
+Maintains and validates the MAN Digital HubSpot theme, modules, templates, and pages.
+Includes a safe canonical-source checkout helper, structural validator, publishing
+guardrails, and the CMS-specific performance workflow.
+
+### [`auditing-web-vitals/`](./auditing-web-vitals/) — PSI, Lighthouse, and AEO Audits
+
+Audits performance, accessibility, SEO, best practices, agentic browsing, and content
+extraction. Includes a dependency-free PageSpeed Insights CLI and repeat-measurement
+discipline for separating real changes from score noise.
+
 ### [`man-digital-youtube-scripts/`](./man-digital-youtube-scripts/) — YouTube Scripts
 
 Writes YouTube video scripts (tutorial, promotional, or case study; shorts or long-form) in
@@ -60,3 +72,5 @@ narration instead of translating it line-by-line.
 | Post on LinkedIn                        | `linkedin-post-creation/`                |
 | Repurpose one piece into 8 platforms    | `vibe-marketing-v2/content-atomizer`     |
 | Write a YouTube script                  | `man-digital-youtube-scripts/`           |
+| Maintain the MAN Digital HubSpot website | `man-digital-cms-pages/`                 |
+| Audit PSI, Web Vitals, SEO, or AEO       | `auditing-web-vitals/`                   |
