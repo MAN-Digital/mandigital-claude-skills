@@ -30,6 +30,8 @@ Everything related to producing content for MAN Digital.
 | [`man-digital-blog-graphics/`](./marketing/man-digital-blog-graphics/)       | Builds branded MAN Digital blog/article/HubSpot/LinkedIn in-body graphics and diagrams in Pencil                                                                                                                         |
 | [`man-digital-lucid-charts/`](./marketing/man-digital-lucid-charts/)         | Builds on-brand MAN Digital diagrams (flowcharts, org charts, RevOps/CRM architecture, mind maps, sequence diagrams) in Lucidchart via the `@lucid` MCP connector                                                        |
 | [`man-digital-youtube-scripts/`](./marketing/man-digital-youtube-scripts/)   | Writes YouTube video scripts (tutorial, promotional, case study; shorts or long-form) in Romeo's voice and MAN Digital's positioning, including transforming another video's transcript into MAN Digital's own narration |
+| [`man-digital-cms-pages/`](./marketing/man-digital-cms-pages/)               | Maintains and validates MAN Digital's HubSpot CMS theme, modules, pages, deployments, and CMS-specific performance work                                                                                                  |
+| [`auditing-web-vitals/`](./marketing/auditing-web-vitals/)                   | Audits PSI/Lighthouse performance, accessibility, SEO, agentic browsing, and AEO extraction using repeatable measurements                                                                                                |
 
 ### development/
 
@@ -63,6 +65,8 @@ Three skill packages we don't own but depend on. Each has a README inside `devel
    - Writing other content (LinkedIn, email, landing page)? → [`marketing/vibe-marketing-v2/`](./marketing/vibe-marketing-v2/)
    - Editing anything? → [`marketing/editing-checklist/`](./marketing/editing-checklist/)
    - Setting up your dev environment? → [`development/`](./development/)
+   - Maintaining the MAN Digital HubSpot website? → [`marketing/man-digital-cms-pages/`](./marketing/man-digital-cms-pages/)
+   - Auditing PageSpeed, Web Vitals, or AEO extraction? → [`marketing/auditing-web-vitals/`](./marketing/auditing-web-vitals/)
 
 2. **Install a skill** by copying its folder into your Claude Code skills directory (or symlinking it). Each skill folder contains a `SKILL.md` that Claude reads to activate it.
 

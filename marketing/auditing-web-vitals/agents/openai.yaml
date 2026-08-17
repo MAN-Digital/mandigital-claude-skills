@@ -1,0 +1,4 @@
+interface:
+  display_name: "Auditing Web Vitals"
+  short_description: "Audit PSI, Lighthouse, and extraction quality"
+  default_prompt: "Use $auditing-web-vitals to audit this site on mobile and desktop, identify the real bottleneck, and verify improvements with repeat measurements."

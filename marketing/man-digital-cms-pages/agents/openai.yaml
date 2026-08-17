@@ -1,0 +1,4 @@
+interface:
+  display_name: "MAN Digital CMS Pages"
+  short_description: "Maintain MAN Digital HubSpot CMS pages"
+  default_prompt: "Use $man-digital-cms-pages to inspect, update, or validate MAN Digital HubSpot CMS sources safely."
