@@ -11,5 +11,5 @@ components, live-site assets, and the exact primitives shipped with the RevOps r
   interaction families, colour roles and Figma-to-HubSpot implementation map
 
 Built from the shipped /revops-service redesign (Aug 2026). Sibling skills:
-`man-digital-marketing-assets` (social assets, Pencil), `hubspot-cms-pages`
+`man-digital-marketing-assets` (social assets, Pencil), `$man-digital-cms-pages`
 (implementing these designs on the website).
