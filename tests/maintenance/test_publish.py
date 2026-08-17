@@ -4,7 +4,7 @@ import io
 import tempfile
 import unittest
 from contextlib import redirect_stdout
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from scripts.maintenance.publish import build_branch_name, publish_changes
@@ -38,7 +38,7 @@ class PublishTests(unittest.TestCase):
     def test_branch_name_is_machine_scoped(self) -> None:
         value = build_branch_name(
             "Studio Mac",
-            datetime(2026, 8, 17, 12, 30, tzinfo=UTC),
+            datetime(2026, 8, 17, 12, 30, tzinfo=timezone.utc),
         )
 
         self.assertEqual(value, "machine/studio-mac/20260817-123000")

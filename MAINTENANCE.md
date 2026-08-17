@@ -25,9 +25,11 @@ Each machine needs:
 Choose a stable location and clone the repository:
 
 ```bash
-git clone https://github.com/MAN-Digital/mandigital-claude-skills.git "$HOME/Documents/Codex/mandigital-claude-skills"
-cd "$HOME/Documents/Codex/mandigital-claude-skills"
+git clone https://github.com/MAN-Digital/mandigital-claude-skills.git "$HOME/.local/share/mandigital-claude-skills"
+cd "$HOME/.local/share/mandigital-claude-skills"
 ```
+
+Keep the managed checkout outside macOS privacy-protected folders such as `Documents`, `Desktop`, and `Downloads`; background LaunchAgents may not be allowed to read scripts from those locations.
 
 Install maintenance for Codex:
 
