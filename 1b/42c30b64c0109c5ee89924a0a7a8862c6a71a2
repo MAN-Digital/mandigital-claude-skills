@@ -1,0 +1,29 @@
+marketing/man-digital-figma-website-design/README.md
+  s_c7ce83ed60f5e2::t_2a3d18417ce796 10-11
+marketing/man-digital-figma-website-design/references/design-primitives.md
+  s_c7ce83ed60f5e2::t_2a3d18417ce796 27-35,137-143
+marketing/man-digital-figma-website-design/SKILL.md
+  s_c7ce83ed60f5e2::t_2a3d18417ce796 3,60-64,78-81,115-117
+marketing/man-digital-figma-website-design/references/qa-checklist.md
+  s_c7ce83ed60f5e2::t_2a3d18417ce796 34-36
+marketing/man-digital-figma-website-design/references/canonical-page-sections.md
+  s_c7ce83ed60f5e2::t_0a36bfa7b4bb0b 3-4,9-11,13,15-27,33-36,38,40-57
+  s_c7ce83ed60f5e2::t_74b4a0c9020db3 63-102
+  s_c7ce83ed60f5e2::t_e6d5aeb98c00fd 107-111,121-125,131-136
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "1b42c30b64c0109c5ee89924a0a7a8862c6a71a2",
+  "prompts": {},
+  "sessions": {
+    "s_c7ce83ed60f5e2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a00f92-09bc-78b3-bf1b-5a6061d6fea0",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "romeoman <romeo@man.digital>"
+    }
+  }
+}
