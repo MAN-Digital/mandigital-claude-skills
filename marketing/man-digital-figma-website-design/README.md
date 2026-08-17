@@ -4,6 +4,10 @@ Design new pages/sections (or edit existing ones) in the MD-Website Figma file w
 brand consistency, in both desktop (1512) and mobile (360) frames, using the file's
 components, live-site assets, and the exact primitives shipped with the RevOps refresh.
 
+Figma references define layout, behavior, spacing, and visual treatment only. Page copy
+must come from the brief or another explicitly approved source and must never be carried
+over from the reference component.
+
 - `SKILL.md` — doctrine + workflow (desktop→approval→mobile, state reference frames, variants)
 - `references/design-primitives.md` — palette, type scales per breakpoint, naming, patterns
 - `references/figma-mcp-playbook.md` — Figma MCP tool traps (exports, flatten, tall frames)

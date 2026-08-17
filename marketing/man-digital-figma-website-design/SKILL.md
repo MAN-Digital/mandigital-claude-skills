@@ -18,9 +18,14 @@ what you draw here becomes a dev contract, so exactness beats artistry.
 2. **Desktop first, then mobile — both are mandatory.** Build and get approval on the
    desktop frame (1512px), then derive the mobile frame (360px) from the approved
    desktop. A page without its mobile frame is not done.
-3. **Desktop copy is canonical.** Mobile frames may shorten copy and omit section intro
-   paragraphs by design — but when the two frames disagree on wording, desktop wins.
-   Never invent copy; flag inconsistencies instead of silently changing approved text.
+3. **The brief owns the copy; Figma references own only the pattern.** Use source frames
+   for structure, behavior, spacing, and visual treatment — never copy their headings,
+   body text, labels, metrics, quotes, testimonials, or case-study details into the new
+   page. Populate every section with the exact brief or other explicitly approved copy.
+   If copy is missing or ambiguous, preserve an approved placeholder or stop and ask;
+   never borrow content from the reference component. After target-page copy is approved,
+   desktop is canonical when desktop and mobile wording disagree; mobile may shorten only
+   where the approved pattern or brief explicitly allows it.
 4. **Interactive patterns need STATE reference frames.** Carousels, tabs, master-detail,
    pagination: draw the states (selected tile, page 2 of N, open panel) in separate
    reference frames next to the page so development knows the behavior, not just the
@@ -73,7 +78,9 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    YAML) whose content-plan table IS the wireframe: section order (binding), per-section
    format, audience, and which existing page's pattern each section reuses. Extraction
    guide: `references/brief-format.md`. No brief? Ask for one or draft the section table
-   yourself and get it approved first.
+   yourself and get it approved first. Do not use copy visible in a reference Figma frame
+   to fill a content gap; reference-frame text is sample/source-page content, not approved
+   copy for the page being designed.
 1. **Survey the file first**: start at the canonical Desktop, Mobile and Interaction
    chapters on `🎨 Design System`, resolve the requested section in
    `references/canonical-page-sections.md`, then use `get_metadata` (no nodeId) to list

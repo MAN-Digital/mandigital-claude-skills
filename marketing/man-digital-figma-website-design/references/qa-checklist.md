@@ -56,6 +56,9 @@ by memory of what you built.
       MAN Digital tokens.
 
 ## Content
+- [ ] No headings, body text, labels, metrics, quotes, testimonials, or case-study details
+      were copied from a reference Figma component. Every target-page text node is traceable
+      to the brief or another explicitly approved copy source.
 - [ ] Copy matches the brief/approved source verbatim; [TO BE ADDED] markers preserved,
       nothing invented.
 - [ ] Every briefed capability is visible; no `+N more` row hides required content.
