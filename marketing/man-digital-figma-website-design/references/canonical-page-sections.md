@@ -51,7 +51,7 @@ Resolve ordinary request language here before treating a section as new. A match
 | 12 | **Strategy-call Form** — strategy call, contact form, book a call, consultation form, HubSpot form | [40000835:30048](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40000835-30048&m=dev) | [40000837:3277](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40000837-3277&m=dev) | `sections/11-form.html` and the existing HubSpot form embed. |
 | 13 | **FAQ** — FAQ, FAQs, questions, common questions, objections, Q&A | [40000835:30110](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40000835-30110&m=dev) | [40000837:3318](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40000837-3318&m=dev) | `sections/12-faq.html` and accessible disclosure behavior. |
 | 14 | **Footer** — footer, global footer, landing-page footer | [40000835:30229](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40000835-30229&m=dev) | [40000837:3434](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40000837-3434&m=dev) | Active global theme footer. |
-| 15 | **Quote-to-Cash Outcome Tabs** — quote-to-cash, QTC outcomes, outcome tabs, pricing/approvals/contracts/billing/visibility | [set 40000832:30153](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40000832-30153&m=dev) | **No approved mobile node** | Code status `[future]`; verify before implementation. |
+| 15 | **Quote-to-Cash Outcome Tabs** — quote-to-cash, QTC outcomes, outcome tabs, pricing/approvals/contracts/billing/visibility | [default Pricing source 40000820:2358](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40000820-2358&m=dev) · [family 40000832:30153](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40000832-30153&m=dev) | **No approved mobile node** | Code status `[future]`; verify before implementation. |
 
 The correct **Case Studies — Mobile** node is `40000836:3082`.
 `40000836:3188` is **Onboarding — Mobile**, not Case Studies.
@@ -100,6 +100,16 @@ nodes above show them in landing-page context.
 | FAQ item | [40000563:2727](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40000563-2727&m=dev) |
 | Statement banner | [40000563:2734](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40000563-2734&m=dev) |
 
+## Decorative component registry
+
+`✨ Decorative Elements` is the only page allowed to contain decoration masters. Page
+sections and `🎨 Design System` components use instances; they never own detached vectors,
+duplicates or local decoration masters.
+
+| Component | Sole master source | Consumer contract |
+| --- | --- | --- |
+| Connective arcs — blue section | [component 40000864:2416](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40000864-2416&m=dev) on [✨ Decorative Elements 40000579:2358](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40000579-2358&m=dev) | Use an instance at most once per Primary Blue section, behind content and clear of text. The Quote-to-Cash source and all five Design System states resolve to this master. |
+
 ## Interaction families
 
 ### Pagination — `40000829:2707`
@@ -128,6 +138,9 @@ transition with transform/opacity. No hover-only content, accordions or links ou
 
 ### Quote-to-Cash outcome tabs — `40000832:30153`
 
+Default page source: [Pricing `40000820:2358`](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40000820-2358&m=dev).
+Canonical Design System default instance: [Pricing `40000835:30235`](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40000835-30235&m=dev).
+
 Variants: [Pricing `40000832:29698`](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40000832-29698&m=dev),
 [Approvals `40000832:29810`](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40000832-29810&m=dev),
 [Contracts `40000832:29924`](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40000832-29924&m=dev),
@@ -136,6 +149,8 @@ Variants: [Pricing `40000832:29698`](https://www.figma.com/design/IOhToZi5UBH5vN
 Every state owns its
 before statement, source artefacts, broken handoff, disconnected object, governed rule
 and named revenue objects. Grouped design rules remain at `40000823:2422`.
+Every state uses the connective-arcs instance from `40000864:2416`; update that master
+only on `✨ Decorative Elements`, never inside this component family.
 
 There is no approved mobile layout. Do not auto-stack, compress or invent one. Add mobile
 to the family only after a reviewed source exists.

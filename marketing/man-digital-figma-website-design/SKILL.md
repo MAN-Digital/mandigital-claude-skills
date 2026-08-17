@@ -71,6 +71,12 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    brand/section/active colour. Dark Navy `#161654` is restricted to approved mobile
    quote cards. CTA Orange `#F26620` is restricted to conversion actions. A source frame
    using a legacy colour does not authorize that colour in a new component.
+13. **Decorative masters live in exactly one place.** `✨ Decorative Elements`
+   (`40000579:2358`) is the sole master page for website decoration components. Every
+   landing-page section and Design System component must use an instance whose main
+   component resolves to that page; never create, detach, redraw or maintain a decoration
+   master elsewhere. Change a decoration at its master so every consumer updates. The
+   canonical blue-section connective-arcs master is `40000864:2416`.
 
 ## Workflow
 
@@ -94,6 +100,8 @@ what you draw here becomes a dev contract, so exactness beats artistry.
 3. Build desktop sections at 1512 (content column 1348), naming them "«Thing» Section".
    Instantiate the canonical component when one exists. When copy or content changes,
    override the instance or create an intentional variant; do not detach and redraw it.
+   For decoration, instantiate a component from `✨ Decorative Elements`; do not clone
+   decorative vectors into the page or the Design System.
 4. Get approval → build the mobile frame at 360 with `m-` section names (`m-hero`,
    `m-case-studies`), applying the mobile primitives (type scale, compact CTA, omitted
    intros) from `references/design-primitives.md`.

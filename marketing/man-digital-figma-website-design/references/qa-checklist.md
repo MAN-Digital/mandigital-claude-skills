@@ -86,8 +86,11 @@ by memory of what you built.
 - [ ] Founder cards appear before the canonical delivery-team row when both are present.
 - [ ] Strategy-call and FAQ sections use the canonical source components listed in
       `component-canon.md`; the form keeps the full field/consent pattern.
-- [ ] Decorative motifs come from `40000579:2358`, max one composite motif per section,
-      behind content and never crossing readable text.
+- [ ] Every decorative motif is an instance whose main component resolves to the sole
+      master page `40000579:2358`; no landing-page or Design System frame contains a
+      detached copy, redrawn vectors or another decoration master.
+- [ ] Decorative motifs are limited to one composite motif per section, behind content
+      and never crossing readable text. Quote-to-Cash states use `40000864:2416`.
 - [ ] No stock people photos or dated "office stock" imagery — banned outright (brand
       rule shared with the blog-graphics skill: no random stock imagery, no generic SaaS
       decoration). Real team photos, product screenshots, flat vectors, device mockups only.
