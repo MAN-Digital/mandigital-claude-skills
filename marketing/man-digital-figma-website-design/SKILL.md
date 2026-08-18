@@ -51,7 +51,10 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    story on a landing page, use Highlighted Case Study desktop `40000892:2954` and mobile
    `40000894:2961`. It requires an approved company logo and client image, separate centered
    name/company/role fields, two verified results, and one attributable approved quote. It
-   has no outbound case-study link, and its proof copy always comes from the brief.
+   has no outbound case-study link, and its proof copy always comes from the brief. Preserve
+   its approved Intercom-inspired layout: a wide white story/proof area plus Blue 100
+   testimonial band on desktop, and stacked full-width proof rows plus a portrait-first
+   testimonial band on mobile. Never restore the old narrow dark split panel.
 10. **Make transformation tabs explain the operating change.** For outcome or
    before/after tabs, design every state around its own revenue failure and governed
    resolution. The failure side shows its real sources outside the workflow, a broken

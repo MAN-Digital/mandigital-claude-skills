@@ -24,7 +24,7 @@ references.
 | 01 | Hero | `40000833:8980` | `40000836:2972` | Global theme navigation plus approved page hero. |
 | 02 | Revenue Workflows | `40000833:9074` | `40000836:3045` | `sections/02-workflows.html`, `.rv-workflows`. |
 | 03 | Case Studies | `40000833:9134` | `40000836:3082` | `sections/03-cases.html`, `.rv-cases`, `revops-refresh-2025.js`. |
-| 03b | Highlighted Case Study | `40000892:2954` | `40000894:2961` | Single landing-page proof feature; no outbound case-study link. |
+| 03b | Highlighted Case Study | `40000892:2954` | `40000894:2961` | Intercom-inspired single landing-page proof feature; no outbound case-study link. |
 | 04 | Fix Banner | `40000833:9151` | `40000836:3098` | `sections/04-fixbanner.html`, `.rv-fixbanner`. |
 | 05 | Onboarding | `40000833:9279` | `40000836:3188` | `sections/05-onboarding.html`, `.rv-onboarding`. |
 | 06 | Roadmap | `40000833:9341` | `40000836:3236` | `sections/06-roadmap.html`, `.rv-roadmap`. |
@@ -43,6 +43,13 @@ references.
 - Responsive Design System wrapper: `40000894:2949`.
 - Desktop master: `40000892:2954`; mobile master: `40000894:2961`.
 - Review examples: desktop `40000912:2962`; mobile `40000912:2995`.
+- Approved composition is Intercom-inspired. Desktop is `1512×981`: wide white story and
+  proof area, then a Blue 100 testimonial band with the quote left and a prominent centered
+  `160×160` portrait identity right.
+- Mobile is `360×1293`: story first, two stacked full-width result rows, then a Blue 100
+  portrait-first testimonial band with a centered `144×144` client image and identity.
+- Never restore the superseded narrow dark quote panel or squeeze the two mobile results
+  into side-by-side cards.
 - Use only when a landing page highlights one case study. For multiple stories, use the
   registered `03 Case Studies` carousel/card family instead.
 - Include an approved company logo, approved 1:1 client image, separate centered client
