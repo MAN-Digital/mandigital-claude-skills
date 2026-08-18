@@ -50,8 +50,10 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    `references/component-canon.md` before editing those sections. For one featured customer
    story on a landing page, use Highlighted Case Study desktop `40000892:2954` and mobile
    `40000894:2961`. It requires an approved company logo and client image, separate centered
-   name/company/role fields, two verified results, and one attributable approved quote. It
-   has no outbound case-study link, and its proof copy always comes from the brief. Preserve
+   name/company/role fields, and two verified results. Prefer one attributable approved client
+   quote. When no approved quote exists, use a clearly labeled outcome sourced from the brief
+   or supplied case study, remove quotation marks, and do not imply direct client attribution.
+   It has no outbound case-study link, and production copy remains brief-owned. Preserve
    its approved Intercom-inspired layout: a wide white story/proof area plus Blue 100
    testimonial band on desktop, and stacked full-width proof rows plus a portrait-first
    testimonial band on mobile. Never restore the old narrow dark split panel.

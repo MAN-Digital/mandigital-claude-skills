@@ -44,8 +44,8 @@ references.
 - Desktop master: `40000892:2954`; mobile master: `40000894:2961`.
 - Review examples: desktop `40000912:2962`; mobile `40000912:2995`.
 - Approved composition is Intercom-inspired. Desktop is `1512×981`: wide white story and
-  proof area, then a Blue 100 testimonial band with the quote left and a prominent centered
-  `160×160` portrait identity right.
+  proof area, then a Blue 100 proof band with the quote or sourced outcome left and a
+  prominent centered `160×160` portrait identity right.
 - Mobile is `360×1293`: story first, two stacked full-width result rows, then a Blue 100
   portrait-first testimonial band with a centered `144×144` client image and identity.
 - Never restore the superseded narrow dark quote panel or squeeze the two mobile results
@@ -53,16 +53,25 @@ references.
 - Use only when a landing page highlights one case study. For multiple stories, use the
   registered `03 Case Studies` carousel/card family instead.
 - Include an approved company logo, approved 1:1 client image, separate centered client
-  name/company/role lines, two verified results, and one attributable approved quote.
+  name/company/role lines, and two verified results. Prefer one attributable approved quote.
+  If none exists, label the band `CASE-STUDY OUTCOME`, remove quotation marks, and use a
+  factual statement traceable to the brief or supplied case-study source. Do not imply the
+  named client said it.
 - Prefer numeric metrics only when verified. Otherwise use concise qualitative outcomes;
   never invent a number, result, project claim, testimonial, or attribution.
-- The brief owns every headline, summary, metric/outcome and quote. Reference-frame copy is
-  pattern context only and must never be copied into a new landing page.
+- The brief owns every production headline, summary, metric/outcome and quote. Reference-frame
+  copy is pattern context only and must never be copied into a new landing page. A populated
+  Design System review example may use concise content from an explicitly supplied source,
+  but that example is not campaign-copy approval.
 - Do not add a "Read case study", "Learn more", or other outbound case-study link. The
   proof story is intentionally self-contained on the landing page.
-- The current review examples use Truvio logo source `40000598:29561` and Kris Nagrabski's
-  verified identity fields to demonstrate layout only; their bracketed proof remains
-  placeholder copy and is not approved campaign content.
+- The responsive wrapper `40000894:2949` keeps masters and populated examples in separate,
+  aligned, non-overlapping rows.
+- The current review examples use Truvio logo source `40000598:29561`, Kris Nagrabski's
+  verified public LinkedIn portrait, his centered name/company/role fields, and concise
+  qualitative outcomes grounded in the supplied Truvio case-study PDF. They contain no
+  placeholder tokens, fabricated metric, or fabricated testimonial, and remain review-only
+  rather than approved campaign content.
 
 The canonical HubSpot source checkout is maintained by the `man-digital-cms-pages` skill
 under `references/source/pages/revops-service/`. Treat the mapped HTML, CSS and JavaScript
