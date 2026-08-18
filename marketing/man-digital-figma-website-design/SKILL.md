@@ -54,6 +54,12 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    quote. When no approved quote exists, use a clearly labeled outcome sourced from the brief
    or supplied case study, remove quotation marks, and do not imply direct client attribution.
    It has no outbound case-study link, and production copy remains brief-owned. Preserve
+   the adaptive company-logo treatment: keep `Logo / Wordmark visible` on and
+   `Logo / Icon crop visible` off for wide wordmarks; reverse the properties for tall,
+   square, or icon-only marks. The compact slot is `44×44` desktop and `36×36` mobile,
+   hugs its active width, and lets the adjacent label fill the reclaimed space. Preserve
+   the source aspect ratio with `FIT`: crop the slot for optical alignment, never stretch,
+   squash, detach, or crop away part of the logo artwork. Keep
    its approved Intercom-inspired layout: a wide white story/proof area plus Blue 100
    testimonial band on desktop, and stacked full-width proof rows plus a portrait-first
    testimonial band on mobile. Never restore the old narrow dark split panel.

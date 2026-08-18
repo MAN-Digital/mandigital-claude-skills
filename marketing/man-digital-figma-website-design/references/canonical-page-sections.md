@@ -57,6 +57,12 @@ references.
   If none exists, label the band `CASE-STUDY OUTCOME`, remove quotation marks, and use a
   factual statement traceable to the brief or supplied case-study source. Do not imply the
   named client said it.
+- Treat the company-logo slot as a maximum box. Wide wordmarks use the default
+  `Logo / Wordmark visible = true` and `Logo / Icon crop visible = false`. Tall, square,
+  or icon-only marks reverse those properties, use a compact `44×44` desktop or `36×36`
+  mobile slot, and let the adjacent client label reclaim the unused width. Preserve source
+  proportions with `FIT`: crop the slot for optical alignment, never stretch or crop away
+  logo artwork.
 - Prefer numeric metrics only when verified. Otherwise use concise qualitative outcomes;
   never invent a number, result, project claim, testimonial, or attribution.
 - The brief owns every production headline, summary, metric/outcome and quote. Reference-frame
