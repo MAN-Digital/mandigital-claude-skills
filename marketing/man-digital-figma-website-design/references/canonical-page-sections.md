@@ -24,6 +24,7 @@ references.
 | 01 | Hero | `40000833:8980` | `40000836:2972` | Global theme navigation plus approved page hero. |
 | 02 | Revenue Workflows | `40000833:9074` | `40000836:3045` | `sections/02-workflows.html`, `.rv-workflows`. |
 | 03 | Case Studies | `40000833:9134` | `40000836:3082` | `sections/03-cases.html`, `.rv-cases`, `revops-refresh-2025.js`. |
+| 03b | Highlighted Case Study | `40000892:2954` | `40000894:2961` | Single landing-page proof feature; no outbound case-study link. |
 | 04 | Fix Banner | `40000833:9151` | `40000836:3098` | `sections/04-fixbanner.html`, `.rv-fixbanner`. |
 | 05 | Onboarding | `40000833:9279` | `40000836:3188` | `sections/05-onboarding.html`, `.rv-onboarding`. |
 | 06 | Roadmap | `40000833:9341` | `40000836:3236` | `sections/06-roadmap.html`, `.rv-roadmap`. |
@@ -36,6 +37,25 @@ references.
 | 13 | FAQ | `40000835:30110` | `40000837:3318` | `sections/12-faq.html` and accessible disclosure behavior. |
 | 14 | Footer | `40000835:30229` | `40000837:3434` | Active global theme footer. |
 | 15 | Quote-to-Cash Outcome Tabs | set `40000832:30153` | Pending approved source | Code status `[future]`; verify before implementation. |
+
+### Highlighted Case Study — single-story proof contract
+
+- Responsive Design System wrapper: `40000894:2949`.
+- Desktop master: `40000892:2954`; mobile master: `40000894:2961`.
+- Review examples: desktop `40000912:2962`; mobile `40000912:2995`.
+- Use only when a landing page highlights one case study. For multiple stories, use the
+  registered `03 Case Studies` carousel/card family instead.
+- Include an approved company logo, approved 1:1 client image, separate centered client
+  name/company/role lines, two verified results, and one attributable approved quote.
+- Prefer numeric metrics only when verified. Otherwise use concise qualitative outcomes;
+  never invent a number, result, project claim, testimonial, or attribution.
+- The brief owns every headline, summary, metric/outcome and quote. Reference-frame copy is
+  pattern context only and must never be copied into a new landing page.
+- Do not add a "Read case study", "Learn more", or other outbound case-study link. The
+  proof story is intentionally self-contained on the landing page.
+- The current review examples use Truvio logo source `40000598:29561` and Kris Nagrabski's
+  verified identity fields to demonstrate layout only; their bracketed proof remains
+  placeholder copy and is not approved campaign content.
 
 The canonical HubSpot source checkout is maintained by the `man-digital-cms-pages` skill
 under `references/source/pages/revops-service/`. Treat the mapped HTML, CSS and JavaScript

@@ -1,6 +1,6 @@
 ---
 name: man-digital-figma-website-design
-description: Use when designing new website pages or sections, redesigning existing pages, or editing designs in the MAN Digital MD-Website Figma file (file key IOhToZi5UBH5vNFV741HP3) — service pages, landing pages, or section refreshes that must ship in BOTH desktop and mobile frames, stay consistent with the live man.digital brand and past page designs, and hand off exact specs to web development. Also use when asked to add case-study/proof sections, hero refreshes, master-detail patterns, or when pulling assets and components from the file or the live site into a new design.
+description: Use when designing new website pages or sections, redesigning existing pages, or editing designs in the MAN Digital MD-Website Figma file (file key IOhToZi5UBH5vNFV741HP3) — service pages, landing pages, or section refreshes that must ship in BOTH desktop and mobile frames, stay consistent with the live man.digital brand and past page designs, and hand off exact specs to web development. Also use when asked to add case-study/proof sections, including a single highlighted case study, hero refreshes, master-detail patterns, or when pulling assets and components from the file or the live site into a new design.
 ---
 
 # MAN Digital — Figma Website Design
@@ -18,9 +18,12 @@ what you draw here becomes a dev contract, so exactness beats artistry.
 2. **Desktop first, then mobile — both are mandatory.** Build and get approval on the
    desktop frame (1512px), then derive the mobile frame (360px) from the approved
    desktop. A page without its mobile frame is not done.
-3. **Desktop copy is canonical.** Mobile frames may shorten copy and omit section intro
-   paragraphs by design — but when the two frames disagree on wording, desktop wins.
-   Never invent copy; flag inconsistencies instead of silently changing approved text.
+3. **The brief owns the copy; Figma references own only the pattern.** Use source frames
+   for structure, behavior, spacing, and visual treatment — never copy their headings,
+   body text, labels, metrics, quotes, testimonials, or case-study details into a new page.
+   Populate every section with the exact brief or other explicitly approved copy. After
+   copy is approved, desktop is canonical when breakpoint wording differs; mobile may
+   shorten only where the approved pattern or brief explicitly allows it.
 4. **Interactive patterns need STATE reference frames.** Carousels, tabs, master-detail,
    pagination: draw the states (selected tile, page 2 of N, open panel) in separate
    reference frames next to the page so development knows the behavior, not just the
@@ -44,7 +47,11 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    briefed item visible; never hide content behind a vague `+N more` summary.
 9. **Use the canonical website components.** Team, form, FAQ, proof and decoration have
    approved source nodes. Clone and adapt them instead of redrawing substitutes. Read
-   `references/component-canon.md` before editing those sections.
+   `references/component-canon.md` before editing those sections. For one featured customer
+   story on a landing page, use Highlighted Case Study desktop `40000892:2954` and mobile
+   `40000894:2961`. It requires an approved company logo and client image, separate centered
+   name/company/role fields, two verified results, and one attributable approved quote. It
+   has no outbound case-study link, and its proof copy always comes from the brief.
 10. **Make transformation tabs explain the operating change.** For outcome or
    before/after tabs, design every state around its own revenue failure and governed
    resolution. The failure side shows its real sources outside the workflow, a broken
