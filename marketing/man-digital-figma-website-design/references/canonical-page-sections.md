@@ -53,8 +53,10 @@ references.
 - Use only when a landing page highlights one case study. For multiple stories, use the
   registered `03 Case Studies` carousel/card family instead.
 - Include an approved company logo, approved 1:1 client image, separate centered client
-  name/company/role lines, and two verified results. Prefer one attributable approved quote.
-  If none exists, label the band `CASE-STUDY OUTCOME`, remove quotation marks, and use a
+  name/company/role lines, and two results grounded in approved evidence. Use `RESULTS` as
+  the visible proof-row label; never show `VERIFIED RESULTS`. Verification remains an
+  internal content gate. Prefer one attributable approved quote. If none exists, label the
+  band `CASE-STUDY OUTCOME`, remove quotation marks, and use a
   factual statement traceable to the brief or supplied case-study source. Do not imply the
   named client said it.
 - Treat the company-logo slot as a maximum box. Wide wordmarks use the default
