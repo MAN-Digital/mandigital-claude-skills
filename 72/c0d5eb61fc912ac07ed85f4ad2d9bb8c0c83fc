@@ -1,0 +1,22 @@
+marketing/man-digital-figma-website-design/SKILL.md
+  s_c7ce83ed60f5e2::t_6857e9468cde54 3,21-26,50-54
+marketing/man-digital-figma-website-design/references/canonical-page-sections.md
+  s_c7ce83ed60f5e2::t_6857e9468cde54 27,41-58
+  s_c7ce83ed60f5e2::t_c529372436893d 59
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "72c0d5eb61fc912ac07ed85f4ad2d9bb8c0c83fc",
+  "prompts": {},
+  "sessions": {
+    "s_c7ce83ed60f5e2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a00f92-09bc-78b3-bf1b-5a6061d6fea0",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "romeoman <romeo@man.digital>"
+    }
+  }
+}
