@@ -80,9 +80,11 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    Its `HOW WE WORK` eyebrow inherits the canonical service-page eyebrow token: Lato
    Bold **13px / 18px desktop and 11px / 16px mobile**, uppercase with 2px tracking.
    On desktop, group the three actions with zero inter-row gap and give every bounded
-   cell equal **24px top and bottom padding**. Use dividers only between action rows;
-   never add a closing divider after the final action because the card border already
-   closes the group. Never fake bottom padding with parent spacing.
+   cell equal **24px top and bottom padding**. Use one divider above the action region
+   and dividers between action rows; never add a closing divider after the final action
+   because the card border already closes the group. Never fake bottom padding with
+   parent spacing. Apply the full acceptance contract in
+   `references/component-canon.md#arc-component-contract`.
 
 ## Workflow
 

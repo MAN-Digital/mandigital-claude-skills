@@ -42,13 +42,22 @@ by memory of what you built.
       `40000833:9341` and Mobile `40000836:3236` components, preserves Architect →
       Realise → Compound, replaces example wording with brief-owned copy, and maps to
       the existing `.rv-roadmap` implementation.
+- [ ] ARC page sections remain attached instances. Reusable structural corrections were
+      made in the canonical source; page instances use overrides only for page-owned
+      copy. The source and at least one real instance were screenshot-checked afterward.
+- [ ] ARC contains exactly three numbered phases, one taxonomy label and three concise
+      actions per phase. Copy sells the delivery method rather than instructing an app
+      user; no “select,” helper or placeholder UI language was introduced.
 - [ ] ARC action rows are Lato Regular 16px / 24px on desktop and mobile and fill the
       available cell width. Only phase numbers, taxonomy labels, and the desktop legend
       use smaller type; legacy 15px desktop / 14px mobile action copy is not retained.
 - [ ] Desktop ARC action cells use zero inter-row gap, equal 24px top/bottom padding,
-      and dividers only between rows. The final action has no closing divider because the
-      card border closes the group. Parent spacing does not create hidden extra padding
-      below a bullet.
+      one divider above the action region, and dividers between rows. The final action
+      has no closing divider because the card border closes the group. Parent spacing
+      does not create hidden extra padding below a bullet.
+- [ ] ARC preserves the desktop legend and bullet-colour mapping. Mobile uses the
+      canonical stacked cards without importing desktop table decoration; all nine
+      actions remain visible and unclipped.
 - [ ] Recurring elements are CLONES of the Design System page / source-page components,
       not redraws (CTA chip, cards, pagers, badges, quote cards).
 - [ ] Section naming: desktop "«Thing» Section", mobile `m-*`.

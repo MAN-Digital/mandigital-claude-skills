@@ -9,7 +9,7 @@ layout. Screenshot the result at both breakpoints.
 | Pattern | Canonical source | Required treatment |
 | --- | --- | --- |
 | Hero shell | `40000296:2361` | Reuse the service-page hero composition. When the service sits inside the revenue bow tie, highlight its exact position using `40000296:8615` as the process reference. |
-| ARC method | Desktop `40000833:9341`; Mobile `40000836:3236` | ARC is MAN Digital's operating method: **Architect → Realise → Compound**. Use it when a section explains the company framework, delivery method or continuous improvement model. Keep exactly three phases with three concise actions each. The source copy is illustrative; replace it with brief-owned copy and run the editing checklist. Preserve the desktop legend and the stacked mobile composition. Every action row uses Lato Regular 16px / 24px at both breakpoints and fills its cell width; never retain legacy 15px desktop or 14px mobile action copy. Desktop dividers appear only between action rows; the card border closes the final row. |
+| ARC method | Desktop `40000833:9341`; Mobile `40000836:3236` | ARC is MAN Digital's operating method: **Architect → Realise → Compound**. Instantiate the canonical component and follow the complete ARC contract below; never redraw it as generic process cards. |
 | Delivery team | `40000296:9063`; compact row `40000299:30340` | Place the delivery team directly **under** accountable founder cards. Desktop uses the full compact row. Mobile uses a clipped horizontal carousel with a clear swipe cue; keep every team card in the scroll content. |
 | Full strategy-call form | `40000308:2538` | Use the complete form composition, not a compact four-field substitute. Preserve first/last name, business email, phone, help, website, referral source, consent controls, privacy copy, reCAPTCHA and the orange primary CTA. Reflow vertically on mobile at the 16/24 reading floor. |
 | FAQ | Full section `40000296:9168`; composition group `40000296:9169` | The user-linked `40000296:9170` is only the background rectangle. Clone the full composition: left headline/decorative rail plus right accordion, first answer open, blue plus/minus controls. Extend the accordion to the brief's exact visible questions and create open-state references. |
@@ -22,6 +22,51 @@ layout. Screenshot the result at both breakpoints.
 The full numbered section inventory and HubSpot source mapping lives in
 `canonical-page-sections.md`. Its component IDs override older reference-frame-only
 chapters when a reusable asset exists.
+
+## ARC component contract
+
+Use this contract whenever a page explains MAN Digital's method, delivery model or
+continuous-improvement approach.
+
+1. **Reuse the source.** Instantiate Desktop `40000833:9341` and Mobile
+   `40000836:3236`. Keep the instance attached. Put reusable structural corrections in
+   the canonical source; use instance overrides only for page-owned copy. Never detach,
+   redraw or create a parallel roadmap component. The mapped implementation remains
+   `sections/06-roadmap.html` and `.rv-roadmap`.
+2. **Keep ARC recognisable.** Preserve exactly three ordered phases—**Architect →
+   Realise → Compound**—with phase numbers, one taxonomy label and exactly three concise
+   actions per phase. Preserve the desktop legend and its bullet-colour mapping. Mobile
+   uses the approved stacked cards and does not inherit desktop table decoration.
+3. **Write for a landing page, not an app.** Treat source wording as illustrative.
+   Replace the eyebrow, heading, introduction, taxonomy labels and actions with
+   brief-owned copy, then run the editing checklist. Keep actions outcome-led and easy
+   to scan; do not add UI commands such as “select a criterion,” helper instructions or
+   unexplained labels. Do not invent claims, deliverables or process language.
+4. **Use the service-page type contract.** The section eyebrow is Lato Bold **13/18
+   desktop** and **11/16 mobile**, uppercase with 2px tracking. It remains a compact
+   pre-heading, never a 20px lead. Action copy is Lato Regular **16/24 at both
+   breakpoints**, fills the available cell width and never falls back to legacy 15px
+   desktop or 14px mobile text. Headline and introduction inherit the Service-LP scale.
+   Keep the approved alignment: centered section introduction on desktop and the
+   canonical left-aligned mobile composition.
+5. **Make the desktop cells optically even.** Use three equal phase cards. Every action
+   cell has zero inter-row gap and equal **24px top and bottom padding** around the 24px
+   text line. Do not simulate bottom padding with phase or parent `itemSpacing`; inspect
+   the visible space above and below every bullet, not only the numeric frame height.
+   Keep each bullet and its text vertically centred as one row.
+6. **Close the table once.** Use one divider between the card header and the first action,
+   then one divider between each action row. The final action has **no closing divider**:
+   the card border already closes the group. A second line above the card bottom creates
+   an awkward doubled ending.
+7. **Keep colour roles semantic.** Use Primary Blue `#000FC4` for the normal ARC brand
+   treatment and the approved workflow/adoption colours for bullets and legend. Dark
+   Navy `#161654` remains mobile-quote-card-only and CTA Orange `#F26620` remains
+   conversion-only; neither becomes an ARC phase or status colour.
+8. **Verify source and use.** Screenshot the canonical source and at least one real page
+   instance at each breakpoint after a structural edit. Confirm the instance inherited
+   the change, all nine actions are visible, desktop rows align, mobile text does not
+   clip, dividers do not double, and adjacent sections neither overlap nor acquire an
+   unintended gap.
 
 ## Interaction content contract
 
