@@ -73,6 +73,9 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    with a one-off method diagram, generic process cards, or an unrelated roadmap. ARC
    action rows are Lato Regular **16px / 24px at both breakpoints** and fill the available
    cell width; only phase numbers, taxonomy labels, and the desktop legend may be smaller.
+   On desktop, group the three actions with zero inter-row gap and give every bounded
+   cell equal **24px top and bottom padding**. Dividers form the cell boundaries, including
+   a closing divider after the final action; never fake bottom padding with parent spacing.
 
 ## Workflow
 

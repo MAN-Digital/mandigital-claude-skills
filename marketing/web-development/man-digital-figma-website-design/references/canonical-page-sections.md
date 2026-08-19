@@ -55,7 +55,9 @@ copy at the current 16/24 floor. In particular, every ARC action row is Lato Reg
 16px / 24px on desktop and mobile and fills the available cell width. Phase numbers,
 uppercase taxonomy labels and the desktop legend are compact metadata and may remain
 below 16px. Never inherit the legacy 15px desktop or 14px mobile action sizes. The
-implementation continues to reuse
+desktop action group has zero inter-row gap: each divider-bounded row uses 24px top and
+bottom padding, and the final row has a closing divider. Do not use phase `itemSpacing`
+as invisible bottom padding inside an action cell. The implementation continues to reuse
 `sections/06-roadmap.html` and `.rv-roadmap`; do not create a parallel method module.
 
 ### Pagination — `40000829:2707`
