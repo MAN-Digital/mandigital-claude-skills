@@ -107,6 +107,10 @@ by memory of what you built.
 ## Content
 - [ ] Copy matches the brief/approved source verbatim; [TO BE ADDED] markers preserved,
       nothing invented.
+- [ ] No visible text explains the design, content order, hierarchy, interaction model,
+      implementation, or component itself. Internal rationale and helper instructions
+      live only in layer names, descriptions, rules groups, or handoff notes—not in
+      visitor-facing landing-page copy.
 - [ ] When an editing pass is requested, the Editing Checklist's eight dimensions are
       documented and both enforcement scripts pass before final copy enters Figma.
       Editing may tighten syntax but does not remove a required content slot, dependency

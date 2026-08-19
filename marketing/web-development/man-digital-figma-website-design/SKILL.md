@@ -109,6 +109,14 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    package language, counts, pills, tiers, `+N more`, Dark Navy, or CTA Orange. These
    component sets own their responsive states: never copy their states into generic
    Interaction State Reference frames or create a second page-local component family.
+16. **Keep design rationale off the published canvas.** Every visible line on a service
+   or landing page must help the visitor understand the problem, offer, proof, outcome,
+   next step, or an approved qualification. Do not publish self-referential captions or
+   internal explanations such as “presented in the order it matters,” “this section
+   shows,” “select a criterion,” hierarchy justifications, layout notes, implementation
+   instructions, or component guidance. Put that information in layer names, component
+   descriptions, rules groups, or handoff notes instead. Before completion, scan both
+   breakpoints for meta-copy and remove it without inventing replacement copy.
 
 ## Workflow
 
