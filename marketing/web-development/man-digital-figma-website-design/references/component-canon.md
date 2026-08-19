@@ -155,9 +155,9 @@ without turning the section into pricing cards, a dense bento grid, or applicati
 6. **Let the component sets own the state references.** The Desktop and Mobile component
    sets are the complete state documentation. Do not copy these ten states into generic
    `Interaction State References` boards, scatter page-local duplicates beside a layout,
-   or create a second component family. Keep generic Desktop `40000634:2375` and Mobile
-   `40000639:2375` reference boards free of this family, and keep one rules group for both
-   breakpoints.
+   or create a second component family. The obsolete generic Desktop and Mobile reference
+   boards were deleted; do not recreate them. Keep only the canonical component sets,
+   attached page instances and one shared rules group for both breakpoints.
 7. **Implement as an accessible disclosure.** Use headings containing native buttons,
    stable IDs, `aria-expanded`, and `aria-controls`; preserve logical source order and
    keep every capability in the source DOM for AEO. JavaScript progressively controls

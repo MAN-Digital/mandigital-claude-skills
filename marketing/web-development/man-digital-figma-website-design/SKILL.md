@@ -117,6 +117,14 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    instructions, or component guidance. Put that information in layer names, component
    descriptions, rules groups, or handoff notes instead. Before completion, scan both
    breakpoints for meta-copy and remove it without inventing replacement copy.
+17. **Finish with a developer-readiness pass.** Active implementation frames must be
+   named clearly and contain only the approved, contiguous section sequence; hide or
+   archive superseded variants. Resolve every missing font before handoff and use
+   explicit SVG/vector or canonical component icons rather than icon-font glyphs. Keep
+   pagination fully inside its section with deliberate bottom padding, and move
+   decorative motifs clear of headings, body copy and controls. Document state counts,
+   accessibility behavior, mapped HubSpot reuse and any unverified proof, URL, form or
+   booking dependency as a release gate—never silently present an assumption as final.
 
 ## Workflow
 
@@ -156,7 +164,10 @@ what you draw here becomes a dev contract, so exactness beats artistry.
 7. Handoff: the node specs ARE the contract — development reads them with
    `get_design_context`; make sizes/spacings deliberate, not eyeballed. The handoff must
    name the canonical component, source node, mapped HubSpot file/classes and any
-   intentional divergence from the existing implementation.
+   intentional divergence from the existing implementation. It must also name every
+   interactive state's count and accessible behavior, confirm that the active Desktop
+   and Mobile frames are the only implementation targets, and list unresolved content
+   proof, direct URLs, form IDs or booking endpoints as explicit release gates.
 
 **REQUIRED SUB-SKILLS:** load `figma:figma-use` before any `use_figma` call and
 `figma:figma-design-to-code` before any `get_design_context` call.

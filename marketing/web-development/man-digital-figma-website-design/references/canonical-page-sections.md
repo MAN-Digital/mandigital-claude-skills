@@ -107,7 +107,9 @@ The `Counter` property is editable. Desktop Case Studies uses the Counter varian
 three cards per page. Mobile Case Studies uses the Mobile Counter for one card per view.
 Desktop and Mobile Team use the appropriate reusable pagination treatment. Controls stay
 keyboard-operable, retain accessible labels, and use the coded state management in
-`revops-refresh-2025.js`.
+`revops-refresh-2025.js`. Keep the complete pagination instance inside the section with
+deliberate bottom padding. A carousel may preview the next card, but labels and controls
+must not collide with the mask, decorative motifs or section edge.
 
 ### Playbooks — `40000832:29581`
 
@@ -162,7 +164,10 @@ Before implementation:
 5. Reuse Pagination, Playbooks, forms, global navigation and footer exactly where mapped.
 6. Check colour roles, white-logo usage, keyboard behavior, touch targets and responsive
    states.
-7. Record any intentional design/code divergence before shipping.
+7. Confirm there are no missing fonts or icon-font glyphs; use canonical or explicit SVG
+   icons so the developer receives deterministic assets.
+8. Record any intentional design/code divergence and any unresolved proof, direct URL,
+   form ID or booking endpoint as a release gate before shipping.
 
 If the design and live implementation disagree, use the approved component for visual
 intent and the live code for existing behavior, then surface the conflict. Do not silently

@@ -20,6 +20,8 @@ by memory of what you built.
       on mobile, uppercase with 2px tracking. A different size is allowed only for an
       approved hero-specific pre-heading, not for a section eyebrow.
 - [ ] Montserrat headings / Lato body. No real Montserrat italics.
+- [ ] No node reports a missing font. Icons use canonical components or explicit
+      SVG/vector paths—never Font Awesome or another icon-font glyph.
 - [ ] No clipped/overflowing text (screenshot check — resize-after-set collapses text nodes).
 
 ## Layout & spacing
@@ -35,7 +37,8 @@ by memory of what you built.
       corresponding HubSpot section, CSS classes and JavaScript behavior were inspected
       before new code was written.
 - [ ] Case Studies and Team contain a `Pagination` instance (`40000829:2707`); arrows,
-      counters and dots were not recreated locally.
+      counters and dots were not recreated locally. Pagination is fully visible inside
+      the section and has deliberate bottom padding; it is not flush-clipped by the frame.
 - [ ] Playbooks reuse `40000832:29581` / `40000836:3319` and preserve all four categories,
       six items per category and all 24 detail panels in the DOM.
 - [ ] Grouped service capability scope reuses Service Scope Disclosure Desktop set
@@ -111,6 +114,9 @@ by memory of what you built.
       implementation, or component itself. Internal rationale and helper instructions
       live only in layer names, descriptions, rules groups, or handoff notes—not in
       visitor-facing landing-page copy.
+- [ ] Active Desktop and Mobile implementation frames are unmistakably named, contain
+      only the approved contiguous section sequence, and superseded explorations are
+      hidden or archived outside the implementation target.
 - [ ] When an editing pass is requested, the Editing Checklist's eight dimensions are
       documented and both enforcement scripts pass before final copy enters Figma.
       Editing may tighten syntax but does not remove a required content slot, dependency
@@ -125,6 +131,9 @@ by memory of what you built.
 - [ ] 44px touch targets; two-color focus treatment (3px #0A0A0A inner + white halo).
 - [ ] One FAQSection per page for public questions.
 - [ ] Client logos in equal 164×40 optical boxes; only verified logos/quotes/claims.
+- [ ] Every external proof point has a verified source and direct destination URL. Any
+      unresolved case-study claim, testimonial attribution, route, form ID or booking
+      endpoint is written into the developer handoff as a release gate.
 
 ## Asset & badge canon
 - [ ] Primary Blue `#000FC4` is used for normal brand/section/active states; Dark Navy
@@ -141,7 +150,7 @@ by memory of what you built.
 - [ ] Strategy-call and FAQ sections use the canonical source components listed in
       `component-canon.md`; the form keeps the full field/consent pattern.
 - [ ] Decorative motifs come from `40000579:2358`, max one composite motif per section,
-      behind content and never crossing readable text.
+      behind content and never crossing readable text, controls or pagination.
 - [ ] No stock people photos or dated "office stock" imagery — banned outright (brand
       rule shared with the blog-graphics skill: no random stock imagery, no generic SaaS
       decoration). Real team photos, product screenshots, flat vectors, device mockups only.
