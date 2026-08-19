@@ -144,9 +144,13 @@ approved hero-specific specification.
 - **Decorative:** dot-grid pattern on blue, orange/blue circles as accents — sparingly,
   copied from `✨ Decorative Elements (40000579:2358)` rather than redrawn. Use at most
   one composite motif per section, insert it behind content, and keep it clear of text.
-- **Long capability scope:** if the preceding section is a tabbed process, use a static
-  bento/grouped-card system instead of another master-detail selector. Show every
-  capability from the brief and state that final scope follows discovery.
+- **Long capability scope:** reuse the responsive Service Scope Disclosure family:
+  Desktop set `40001115:3242`, Mobile set `40001115:3473`, Design System chapter
+  `40001114:3012`, and rules `40001114:3029`. It has five ordered groups with one open
+  group at a time and keeps every briefed capability designed into the component. When
+  the preceding section is another disclosure or selector, test the adjacent reading
+  action during composition rather than inventing a second local pattern. Do not hide
+  the remainder behind a `+N more` summary.
 - **Credential hierarchy:** feature the credential most specific to the service first
   (for Quote-to-Cash, the Quote-to-Cash Capability); keep Elite status and implementation,
   onboarding and integration accreditations as supporting proof.

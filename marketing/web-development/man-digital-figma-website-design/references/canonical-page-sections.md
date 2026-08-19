@@ -37,6 +37,7 @@ references.
 | 13 | FAQ | `40000835:30110` | `40000837:3318` | `sections/12-faq.html` and accessible disclosure behavior. |
 | 14 | Footer | `40000835:30229` | `40000837:3434` | Active global theme footer. |
 | 15 | Quote-to-Cash Outcome Tabs | set `40000832:30153` | Pending approved source | Code status `[future]`; verify before implementation. |
+| 16 | Service Scope Disclosure | set `40001115:3242` | set `40001115:3473` | Code status `[future]`; no approved HubSpot module mapped as of 2026-08-19. |
 
 The canonical HubSpot source checkout is maintained by the `man-digital-cms-pages` skill
 under `references/source/pages/revops-service/`. Treat the mapped HTML, CSS and JavaScript
@@ -122,6 +123,23 @@ and named revenue objects. Grouped design rules remain at `40000823:2422`.
 
 There is no approved mobile layout. Do not auto-stack, compress or invent one. Add mobile
 to the family only after a reviewed source exists.
+
+### Service Scope Disclosure — `40001115:3242` / `40001115:3473`
+
+The complete Design System chapter is `40001114:3012`; the shared Desktop/Mobile rules
+group is `40001114:3029`. Reuse the five `Open` variants for Commercial workflow,
+Contract to cash, Connected systems, Governance & insight, and Adoption that holds.
+Exactly one group is open per state, every capability stays designed into the component,
+and page use remains an attached instance. The component sets themselves are the state
+reference source: do not duplicate their states inside generic Interaction State
+Reference frames. Approved Quote-to-Cash use is Desktop instance `40001116:3030` and
+Mobile instance `40001116:3068`.
+
+Titles are Lato Bold 18/24 and capability copy is Lato Regular 16/24. Primary Blue
+`#000FC4` marks active disclosure state; Dark Navy and CTA Orange are not allowed here.
+The family is service-scope disclosure, not pricing, FAQ, ARC, Onboarding, Playbooks, or
+outcome tabs. No approved HubSpot source is mapped as of 2026-08-19; search the active
+theme before coding and keep the mapping `[future]` until an implementation is verified.
 
 ## Colour and logo roles
 

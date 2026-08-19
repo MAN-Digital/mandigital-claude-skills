@@ -38,6 +38,16 @@ by memory of what you built.
       counters and dots were not recreated locally.
 - [ ] Playbooks reuse `40000832:29581` / `40000836:3319` and preserve all four categories,
       six items per category and all 24 detail panels in the DOM.
+- [ ] Grouped service capability scope reuses Service Scope Disclosure Desktop set
+      `40001115:3242` and Mobile set `40001115:3473`; page sections remain attached
+      instances and the shared rules group remains at `40001114:3029`.
+- [ ] Service Scope Disclosure has exactly five ordered states and one open group per
+      state. Every brief-owned capability remains designed-in and source/DOM available;
+      no package, tier, count, pill, helper command, or `+N more` shortcut was added.
+- [ ] Service Scope Disclosure titles are Lato Bold 18/24 and capability text is Lato
+      Regular 16/24. Primary Blue marks the active state; Dark Navy and CTA Orange are
+      absent. Desktop and Mobile state sets live only in the dedicated Design System
+      chapter `40001114:3012`, with no duplicate copies in generic reference boards.
 - [ ] A project implementation sequence reuses Onboarding Standard
       `40000833:9279` / `40000836:3188` or Detailed `40001088:3017` /
       `40001088:3144`; it does not become another ARC section, master-detail panel or

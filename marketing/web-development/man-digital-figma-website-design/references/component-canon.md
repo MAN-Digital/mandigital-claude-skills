@@ -19,6 +19,7 @@ layout. Screenshot the result at both breakpoints.
 | Pagination | Component set `40000829:2707` | Reuse the Desktop Counter, Mobile Counter or Mobile Dots variant. Case Studies and Team must contain an instance of this family; never redraw their arrows, counter or dots. |
 | Playbooks | Desktop component set `40000832:29581`; mobile component `40000836:3319` | Reuse the four category states and the coded 24-panel DOM contract. Mobile changes layout, not content or state semantics. |
 | Quote-to-Cash outcome tabs | Desktop component set `40000832:30153`; rule source `40000823:2422` | Reuse the five governed states. No approved mobile component exists; do not invent or auto-stack one. |
+| Service Scope Disclosure | Desktop set `40001115:3242`; Mobile set `40001115:3473`; chapter `40001114:3012`; rules `40001114:3029` | Reuse the five-state responsive disclosure for grouped service capabilities. Canonical sets own all states; page instances stay attached and generic reference boards must not duplicate them. |
 
 The full numbered section inventory and HubSpot source mapping lives in
 `canonical-page-sections.md`. Its component IDs override older reference-frame-only
@@ -123,6 +124,54 @@ continuous-improvement approach.
    clip, dividers do not double, and adjacent sections neither overlap nor acquire an
    unintended gap.
 
+## Service Scope Disclosure contract
+
+Use this family when a service page needs to group a long, brief-owned capability scope
+without turning the section into pricing cards, a dense bento grid, or application UI.
+
+1. **Reuse the responsive source.** Instantiate Desktop set `40001115:3242` or Mobile
+   set `40001115:3473` from chapter `40001114:3012`. Keep page use attached. Structural
+   corrections belong in the canonical component; page instances override only approved
+   copy. The complete in-canvas rules group is `40001114:3029`. Approved Quote-to-Cash
+   page uses are Desktop instance `40001116:3030` and Mobile instance `40001116:3068`.
+2. **Preserve the five-state content model.** Keep exactly five ordered `Open` variants:
+   Commercial workflow, Contract to cash, Connected systems, Governance & insight, and
+   Adoption that holds. Exactly one group is open in each state. Every brief-owned
+   capability remains designed into its group and present in source/DOM order; never
+   replace content with `+N more`, counts, package names, tier labels, or placeholder UI.
+3. **Use it only for service scope.** This family describes what MAN Digital can shape,
+   configure, connect, govern, and embed. It is not FAQ, Onboarding, ARC, Playbooks,
+   outcome tabs, pricing, or a qualification flow. Reuse those canonical families for
+   their own jobs.
+4. **Keep the approved responsive geometry.** Desktop uses the wide horizontal section
+   and Mobile uses the compact vertical stack. Preserve the source padding, dividers,
+   open-state rhythm, icon alignment, and equal closed-row spacing. Group titles are
+   Lato Bold 18/24; capability copy is Lato Regular 16/24. The normal section eyebrow
+   remains 13/18 Desktop and 11/16 Mobile with the canonical uppercase tracking.
+5. **Keep colours semantic.** Use Primary Blue `#000FC4` for the active/open treatment,
+   the approved light neutral surfaces and standard body greys. Dark Navy `#161654` is
+   mobile-quote-card-only. CTA Orange `#F26620` is conversion-only and must not mark an
+   open row, disclosure icon, count, or decoration.
+6. **Let the component sets own the state references.** The Desktop and Mobile component
+   sets are the complete state documentation. Do not copy these ten states into generic
+   `Interaction State References` boards, scatter page-local duplicates beside a layout,
+   or create a second component family. Keep generic Desktop `40000634:2375` and Mobile
+   `40000639:2375` reference boards free of this family, and keep one rules group for both
+   breakpoints.
+7. **Implement as an accessible disclosure.** Use headings containing native buttons,
+   stable IDs, `aria-expanded`, and `aria-controls`; preserve logical source order and
+   keep every capability in the source DOM for AEO. JavaScript progressively controls
+   one-open-at-a-time behavior. Keyboard focus must remain visible, touch targets must
+   meet 44px, and reduced motion must not block state changes.
+8. **Verify HubSpot before coding.** As of 2026-08-19, no approved HubSpot module has
+   been mapped to this family. Search the active theme for an equivalent disclosure
+   before implementation. If none exists, mark the mapping `[future]` and implement the
+   contract deliberately; do not borrow FAQ markup or styling without verification.
+9. **QA every state and one real use.** Screenshot all five Desktop variants, all five
+   Mobile variants, and at least one attached page instance at each breakpoint. Verify
+   one open group, no clipped labels, all capabilities in the source component, 18/24
+   titles, 16/24 body copy, approved colours, and no duplicate states in generic boards.
+
 ## Interaction content contract
 
 For each process tab, create a separate named state at desktop and mobile with all five
@@ -162,10 +211,12 @@ Decorative arcs, ornamental pipelines and ambiguous AI-drawn vectors are not evi
 a stuck workflow. Use them only as background decoration elsewhere; this pattern relies on
 the broken handoff and disconnected object to communicate the failure immediately.
 
-For adjacent sections, change the interaction model. If implementation uses a stepper or
-master-detail tabs, present service scope as a Mobbin-informed bento/grouped-card system,
-not another selector beside another detail panel. Every briefed capability stays visible;
-do not collapse the remainder into `+N more`.
+For adjacent sections, change the reading action when two selectors would compete. The
+canonical Service Scope Disclosure is the default grouped-scope pattern, but it must be
+composition-tested beside tabs, steppers and other disclosures. Keep every briefed
+capability available and never collapse the remainder into `+N more`; if the page needs a
+different rhythm, create a reviewed variant in the canonical family rather than a local
+lookalike.
 
 ## Logo contrast
 

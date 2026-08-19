@@ -100,6 +100,15 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    Desktop uses 12px stage dots centred on a 2px rule that begins and ends at the first
    and last dot centres. Detailed Desktop and Mobile use transparent 16×24 check slots
    aligned to the first 24px text line, with one rounded 2px check path inside.
+15. **Use the canonical Service Scope Disclosure for grouped capability scope.**
+   Instantiate Desktop set `40001115:3242` or Mobile set `40001115:3473` from Design
+   System chapter `40001114:3012`; the complete behavior and content rules live in
+   `40001114:3029`. Keep exactly five ordered groups, one open group at a time, every
+   brief-owned capability designed into its state, and page uses attached as instances.
+   Use title text at 18/24 and capability text at the 16/24 reading floor. Do not add
+   package language, counts, pills, tiers, `+N more`, Dark Navy, or CTA Orange. These
+   component sets own their responsive states: never copy their states into generic
+   Interaction State Reference frames or create a second page-local component family.
 
 ## Workflow
 
@@ -127,6 +136,9 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    complete desktop state and one complete mobile state for **every** tab/item that changes
    content. A process tab state always includes: stage label, title, What we do, What you
    own, and Decision gate. Name states so development can map content without guessing.
+   When a canonical component set already contains every responsive state, keep those
+   states in the Design System family and use attached instances on pages; do not duplicate
+   them inside generic Interaction State Reference boards.
    A linear implementation sequence is not a tab by default: use the canonical Onboarding
    component, keep all stages visible, and create interaction states only when the approved
    brief genuinely defines an interactive behavior.
