@@ -39,6 +39,9 @@ by memory of what you built.
       `40000833:9341` and Mobile `40000836:3236` components, preserves Architect →
       Realise → Compound, replaces example wording with brief-owned copy, and maps to
       the existing `.rv-roadmap` implementation.
+- [ ] ARC action rows are Lato Regular 16px / 24px on desktop and mobile and fill the
+      available cell width. Only phase numbers, taxonomy labels, and the desktop legend
+      use smaller type; legacy 15px desktop / 14px mobile action copy is not retained.
 - [ ] Recurring elements are CLONES of the Design System page / source-page components,
       not redraws (CTA chip, cards, pagers, badges, quote cards).
 - [ ] Section naming: desktop "«Thing» Section", mobile `m-*`.

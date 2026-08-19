@@ -51,7 +51,11 @@ revenue operating model, realises it in HubSpot, and compounds the result throug
 adoption and improvement. Keep the three phases, numbering, three actions per phase,
 colour semantics, desktop legend and stacked mobile layout. Treat all source wording as
 example copy: replace it with the page brief, run the editing checklist, and keep body
-copy at the current 16/24 floor. The implementation continues to reuse
+copy at the current 16/24 floor. In particular, every ARC action row is Lato Regular
+16px / 24px on desktop and mobile and fills the available cell width. Phase numbers,
+uppercase taxonomy labels and the desktop legend are compact metadata and may remain
+below 16px. Never inherit the legacy 15px desktop or 14px mobile action sizes. The
+implementation continues to reuse
 `sections/06-roadmap.html` and `.rv-roadmap`; do not create a parallel method module.
 
 ### Pagination — `40000829:2707`

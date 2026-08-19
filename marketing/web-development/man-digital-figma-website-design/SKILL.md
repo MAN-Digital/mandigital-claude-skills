@@ -37,6 +37,8 @@ what you draw here becomes a dev contract, so exactness beats artistry.
 7. **Protect the reading-size floor.** Set website body copy, card copy, table cells,
    form guidance, and FAQ answers at **16px / 24px minimum on desktop and mobile**.
    Only compact labels, captions, metadata, and uppercase eyebrows may go below 16px.
+   A canonical component with legacy 15px desktop or 14px mobile reading text is not an
+   exception: correct the source or apply an explicit 16/24 override before reuse.
 8. **Give adjacent sections different information architectures.** Do not follow a
    stepper/master-detail section with another selector-and-detail section. Search Mobbin
    per new section, then choose a pattern that changes the reading action (for example:
@@ -68,7 +70,9 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    `40000833:9341` and Mobile `40000836:3236` components, then replace their example
    copy with brief-owned content. Preserve the three-phase structure, numbers, taxonomy
    labels, colour-coded bullets, desktop legend, and mobile stack. Do not replace ARC
-   with a one-off method diagram, generic process cards, or an unrelated roadmap.
+   with a one-off method diagram, generic process cards, or an unrelated roadmap. ARC
+   action rows are Lato Regular **16px / 24px at both breakpoints** and fill the available
+   cell width; only phase numbers, taxonomy labels, and the desktop legend may be smaller.
 
 ## Workflow
 
