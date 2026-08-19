@@ -64,9 +64,9 @@ The full visual and implementation acceptance rules are in
 
 ### ARC method — `40000833:9341` / `40000836:3236`
 
-ARC is the default MAN Digital method framework: **Architect → Realise → Compound**.
+ARC is the default MAN Digital method framework: **Architect → Run → Compound**.
 Use these canonical components for sections that explain how MAN Digital architects a
-revenue operating model, realises it in HubSpot, and compounds the result through
+revenue operating model, runs it in HubSpot, and compounds the result through
 adoption and improvement. Keep the three phases, numbering, three actions per phase,
 colour semantics, desktop legend and stacked mobile layout. Treat all source wording as
 example copy: replace it with the page brief, run the editing checklist, and keep body
@@ -80,6 +80,8 @@ below 16px. Never inherit the legacy 15px desktop or 14px mobile action sizes. T
 desktop action group has zero inter-row gap: each divider-bounded row uses 24px top and
 bottom padding. Use one divider above the action region and dividers between rows; the
 final row has no closing divider because the card border already closes the group. Do
+not rename the middle ARC phase to `Realise` or `Build`; preserve `Run` in every desktop
+and mobile source and instance. Legitimate non-phase copy may still use “build.” Do
 not use phase `itemSpacing` as invisible bottom padding inside an action cell. Apply the
 full acceptance contract in `component-canon.md#arc-component-contract`. The
 implementation continues to reuse `sections/06-roadmap.html` and `.rv-roadmap`; do not

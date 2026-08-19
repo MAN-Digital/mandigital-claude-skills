@@ -52,8 +52,11 @@ by memory of what you built.
       disclosure JavaScript was introduced.
 - [ ] A MAN Digital method/framework section reuses the ARC Desktop
       `40000833:9341` and Mobile `40000836:3236` components, preserves Architect →
-      Realise → Compound, replaces example wording with brief-owned copy, and maps to
+      Run → Compound, replaces example wording with brief-owned copy, and maps to
       the existing `.rv-roadmap` implementation.
+- [ ] The middle ARC phase is exactly `Run` in desktop and mobile sources and instances;
+      it has not been renamed to `Realise` or `Build`. Non-phase brief copy is reviewed
+      separately and is not changed by this nomenclature check.
 - [ ] ARC page sections remain attached instances. Reusable structural corrections were
       made in the canonical source; page instances use overrides only for page-owned
       copy. The source and at least one real instance were screenshot-checked afterward.

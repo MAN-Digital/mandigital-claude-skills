@@ -10,7 +10,7 @@ layout. Screenshot the result at both breakpoints.
 | --- | --- | --- |
 | Hero shell | `40000296:2361` | Reuse the service-page hero composition. When the service sits inside the revenue bow tie, highlight its exact position using `40000296:8615` as the process reference. |
 | Implementation / Onboarding | Standard Desktop `40000833:9279`, Mobile `40000836:3188`; Detailed Desktop `40001088:3017`, Mobile `40001088:3144` | Use the visible five-stage timeline for project delivery. Choose Detailed when every stage needs work, client responsibility and a decision gate. Keep instances attached and apply the complete contract below. |
-| ARC method | Desktop `40000833:9341`; Mobile `40000836:3236` | ARC is MAN Digital's operating method: **Architect → Realise → Compound**. Instantiate the canonical component and follow the complete ARC contract below; never redraw it as generic process cards. |
+| ARC method | Desktop `40000833:9341`; Mobile `40000836:3236` | ARC is MAN Digital's operating method: **Architect → Run → Compound**. These phase names are canonical; `Realise` and `Build` are not valid substitutes for `Run`. Instantiate the canonical component and follow the complete ARC contract below; never redraw it as generic process cards. |
 | Delivery team | `40000296:9063`; compact row `40000299:30340` | Place the delivery team directly **under** accountable founder cards. Desktop uses the full compact row. Mobile uses a clipped horizontal carousel with a clear swipe cue; keep every team card in the scroll content. |
 | Full strategy-call form | `40000308:2538` | Use the complete form composition, not a compact four-field substitute. Preserve first/last name, business email, phone, help, website, referral source, consent controls, privacy copy, reCAPTCHA and the orange primary CTA. Reflow vertically on mobile at the 16/24 reading floor. |
 | FAQ | Full section `40000296:9168`; composition group `40000296:9169` | The user-linked `40000296:9170` is only the background rectangle. Clone the full composition: left headline/decorative rail plus right accordion, first answer open, blue plus/minus controls. Extend the accordion to the brief's exact visible questions and create open-state references. |
@@ -79,9 +79,11 @@ continuous-improvement approach.
    redraw or create a parallel roadmap component. The mapped implementation remains
    `sections/06-roadmap.html` and `.rv-roadmap`.
 2. **Keep ARC recognisable.** Preserve exactly three ordered phases—**Architect →
-   Realise → Compound**—with phase numbers, one taxonomy label and exactly three concise
+   Run → Compound**—with phase numbers, one taxonomy label and exactly three concise
    actions per phase. Preserve the desktop legend and its bullet-colour mapping. Mobile
    uses the approved stacked cards and does not inherit desktop table decoration.
+   Never relabel the middle phase as `Realise` or `Build`; those words may appear only
+   where the page brief legitimately uses them outside the ARC phase names.
 3. **Write for a landing page, not an app.** Treat source wording as illustrative.
    Replace the eyebrow, heading, introduction, taxonomy labels and actions with
    brief-owned copy, then run the editing checklist. Keep actions outcome-led and easy
