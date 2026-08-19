@@ -37,6 +37,10 @@ what you draw here becomes a dev contract, so exactness beats artistry.
 7. **Protect the reading-size floor.** Set website body copy, card copy, table cells,
    form guidance, and FAQ answers at **16px / 24px minimum on desktop and mobile**.
    Only compact labels, captions, metadata, and uppercase eyebrows may go below 16px.
+   On service and landing pages, every section eyebrow uses **Lato Bold 13px / 18px
+   on desktop and 11px / 16px on mobile**, uppercase with **2px tracking**. Reuse this
+   token for ARC and other section pre-headings; never enlarge it into lead or heading
+   scale. The approved hero pre-heading is a separate, hero-specific treatment.
    A canonical component with legacy 15px desktop or 14px mobile reading text is not an
    exception: correct the source or apply an explicit 16/24 override before reuse.
 8. **Give adjacent sections different information architectures.** Do not follow a
@@ -73,6 +77,8 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    with a one-off method diagram, generic process cards, or an unrelated roadmap. ARC
    action rows are Lato Regular **16px / 24px at both breakpoints** and fill the available
    cell width; only phase numbers, taxonomy labels, and the desktop legend may be smaller.
+   Its `HOW WE WORK` eyebrow inherits the canonical service-page eyebrow token: Lato
+   Bold **13px / 18px desktop and 11px / 16px mobile**, uppercase with 2px tracking.
    On desktop, group the three actions with zero inter-row gap and give every bounded
    cell equal **24px top and bottom padding**. Dividers form the cell boundaries, including
    a closing divider after the final action; never fake bottom padding with parent spacing.

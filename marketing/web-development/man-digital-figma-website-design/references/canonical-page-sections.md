@@ -51,7 +51,10 @@ revenue operating model, realises it in HubSpot, and compounds the result throug
 adoption and improvement. Keep the three phases, numbering, three actions per phase,
 colour semantics, desktop legend and stacked mobile layout. Treat all source wording as
 example copy: replace it with the page brief, run the editing checklist, and keep body
-copy at the current 16/24 floor. In particular, every ARC action row is Lato Regular
+copy at the current 16/24 floor. The `HOW WE WORK` eyebrow uses the canonical
+service-page eyebrow token: Lato Bold 13px / 18px on desktop and 11px / 16px on mobile,
+uppercase with 2px tracking. Do not retain the legacy 20px desktop or 12px mobile
+eyebrow. In particular, every ARC action row is Lato Regular
 16px / 24px on desktop and mobile and fills the available cell width. Phase numbers,
 uppercase taxonomy labels and the desktop legend are compact metadata and may remain
 below 16px. Never inherit the legacy 15px desktop or 14px mobile action sizes. The

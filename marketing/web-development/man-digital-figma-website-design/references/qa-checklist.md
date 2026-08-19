@@ -16,6 +16,9 @@ by memory of what you built.
 - [ ] Body copy, card copy, table cells, form guidance, and FAQ answers are at least
       16px / 24px on desktop and mobile. Only labels, captions, metadata, and eyebrows
       may use smaller type.
+- [ ] Service/LP section eyebrows are Lato Bold 13px / 18px on desktop and 11px / 16px
+      on mobile, uppercase with 2px tracking. A different size is allowed only for an
+      approved hero-specific pre-heading, not for a section eyebrow.
 - [ ] Montserrat headings / Lato body. No real Montserrat italics.
 - [ ] No clipped/overflowing text (screenshot check — resize-after-set collapses text nodes).
 
