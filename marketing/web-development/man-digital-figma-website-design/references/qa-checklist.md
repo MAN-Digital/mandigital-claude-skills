@@ -46,6 +46,10 @@ by memory of what you built.
       card contains stage number, title, `WORK → CLIENT → GATE` metadata and three
       corresponding bullets. Desktop uses five equal columns; mobile uses the same
       content in a natural stack with no clipped titles or fixed-height copy loss.
+- [ ] Detailed Desktop stage dots are 12px and centred on a 2px rail that starts at the
+      first dot centre and ends at the last. Desktop and mobile checks use transparent
+      16×24 first-line slots with rounded 2px paths; white checks reverse on the blue
+      first card and Primary Blue checks remain on light cards.
 - [ ] Onboarding page sections remain attached instances and map to the existing
       `sections/05-onboarding.html` / `.rv-onboarding` implementation. Detailed fields
       extend that markup and CSS; no parallel module, hidden-tab DOM or unnecessary

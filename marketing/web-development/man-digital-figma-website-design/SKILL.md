@@ -96,7 +96,10 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    approved copy to fit a fixed card; grow the canonical variant at the source. Page
    instances stay attached and implementation extends `sections/05-onboarding.html`
    and `.rv-onboarding` instead of creating a parallel module. Apply the full contract
-   in `references/component-canon.md#implementation--onboarding-contract`.
+   in `references/component-canon.md#implementation--onboarding-contract`. Detailed
+   Desktop uses 12px stage dots centred on a 2px rule that begins and ends at the first
+   and last dot centres. Detailed Desktop and Mobile use transparent 16×24 check slots
+   aligned to the first 24px text line, with one rounded 2px check path inside.
 
 ## Workflow
 

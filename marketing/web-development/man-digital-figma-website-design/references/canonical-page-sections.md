@@ -55,6 +55,13 @@ sequence into an accordion. Desktop keeps five equal columns under one rail; mob
 stacks the same five cards. Reading copy remains 16/24 and long mobile titles wrap within
 the card content width.
 
+Detailed Desktop's 12px stage dots sit through the centre of a 2px rail whose endpoints
+are the Stage 01 and Stage 05 dot centres. Both breakpoints place every rounded 2px check
+inside a transparent 16×24 slot aligned to the first 24px copy line. The row gap is 6px
+on desktop and 4px on mobile, keeping the existing text start while giving the glyph a
+consistent optical box. Checks reverse to white on the Primary Blue first card and remain
+Primary Blue on light cards; the slot itself never receives a fill.
+
 Both variants reuse `sections/05-onboarding.html` and `.rv-onboarding`. Coding extends
 the existing stage markup and CSS for the detailed fields, keeps every stage in DOM
 order and adds no disclosure JavaScript. If source copy is edited, run the Editing

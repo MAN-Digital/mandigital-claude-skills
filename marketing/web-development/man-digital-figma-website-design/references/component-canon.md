@@ -54,14 +54,22 @@ method; Onboarding explains the concrete project run.
    Dark Navy `#161654` remains mobile-quote-card-only and CTA Orange `#F26620` remains
    conversion-only. Keep the rail and card rhythm simple; do not add decorative arches,
    connector webs or unrelated process illustrations.
-6. **Reuse the shipped implementation.** The component maps to
+6. **Align markers and checks as one system.** Detailed Desktop uses 12px stage dots
+   vertically centred on a 2px timeline rule. The rule begins at the centre of Stage 01
+   and ends at the centre of Stage 05; it never runs past the final marker. At both
+   breakpoints, every bullet uses a transparent 16×24 icon slot aligned to the first
+   24px text line, with the check path centred inside it and drawn with a 2px round stroke.
+   Keep the slot unfilled: checks are white on the Primary Blue Stage 01 card and Primary
+   Blue on light cards. Preserve the approved text start with a 6px desktop row gap and
+   4px mobile row gap; do not top-align a bare 12–14px SVG frame beside multiline copy.
+7. **Reuse the shipped implementation.** The component maps to
    `sections/05-onboarding.html` and `.rv-onboarding`. Extend that section's existing
    markup and styles for the Detailed content slots; do not create a second onboarding
    module or parallel class family. Render all five stages in source/DOM order. Use
    semantic list/card markup and stable stage IDs; desktop is a five-column layout and
    mobile is a natural vertical stack. JavaScript is not required for disclosure.
    Motion, if added, is progressive enhancement and must respect reduced-motion settings.
-7. **Run the content and visual gates.** When an editor pass is requested, load
+8. **Run the content and visual gates.** When an editor pass is requested, load
    `../../content-creation/editing-checklist/SKILL.md`, document all eight checks, and
    run both enforcement scripts before inserting final copy. Then screenshot the source
    and one real instance at each breakpoint. Verify all five stages, 15 detailed bullets,
