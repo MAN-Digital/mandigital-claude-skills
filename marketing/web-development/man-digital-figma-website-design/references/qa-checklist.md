@@ -46,8 +46,9 @@ by memory of what you built.
       available cell width. Only phase numbers, taxonomy labels, and the desktop legend
       use smaller type; legacy 15px desktop / 14px mobile action copy is not retained.
 - [ ] Desktop ARC action cells use zero inter-row gap, equal 24px top/bottom padding,
-      divider boundaries, and a closing divider after the final action. Parent spacing
-      does not create hidden extra padding below a bullet.
+      and dividers only between rows. The final action has no closing divider because the
+      card border closes the group. Parent spacing does not create hidden extra padding
+      below a bullet.
 - [ ] Recurring elements are CLONES of the Design System page / source-page components,
       not redraws (CTA chip, cards, pagers, badges, quote cards).
 - [ ] Section naming: desktop "«Thing» Section", mobile `m-*`.
