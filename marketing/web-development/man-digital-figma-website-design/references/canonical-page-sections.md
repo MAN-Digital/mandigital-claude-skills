@@ -26,6 +26,7 @@ references.
 | 03 | Case Studies | `40000833:9134` | `40000836:3082` | `sections/03-cases.html`, `.rv-cases`, `revops-refresh-2025.js`. |
 | 04 | Fix Banner | `40000833:9151` | `40000836:3098` | `sections/04-fixbanner.html`, `.rv-fixbanner`. |
 | 05 | Onboarding | `40000833:9279` | `40000836:3188` | `sections/05-onboarding.html`, `.rv-onboarding`. |
+| 05B | Onboarding — Detailed | `40001088:3017` | `40001088:3144` | Extend `sections/05-onboarding.html` and `.rv-onboarding`; never create a parallel module. |
 | 06 | ARC Method / Roadmap | `40000833:9341` | `40000836:3236` | `sections/06-roadmap.html`, `.rv-roadmap`. |
 | 07 | Playbooks | set `40000832:29581` | `40000836:3319` | `sections/07-playbooks.html`, `.rv-playbooks`, `revops-refresh-2025.js`. |
 | 08 | Principles | `40000835:3025` | `40000837:2938` | `sections/08-principles.html`, `.rv-principles`. |
@@ -42,6 +43,24 @@ under `references/source/pages/revops-service/`. Treat the mapped HTML, CSS and 
 as existing implementation, not inspiration to rebuild.
 
 ## Interaction families
+
+### Implementation / Onboarding — Standard and Detailed
+
+Use Standard `40000833:9279` / `40000836:3188` for concise five-step onboarding copy.
+Use Detailed `40001088:3017` / `40001088:3144` when each implementation stage must show
+three complete fields: work delivered, client responsibility and decision gate. The
+Detailed metadata reads `WORK → CLIENT → GATE`; the three bullets below it follow that
+same order. Do not trim a stage to fit, hide stages behind tabs, or convert the mobile
+sequence into an accordion. Desktop keeps five equal columns under one rail; mobile
+stacks the same five cards. Reading copy remains 16/24 and long mobile titles wrap within
+the card content width.
+
+Both variants reuse `sections/05-onboarding.html` and `.rv-onboarding`. Coding extends
+the existing stage markup and CSS for the detailed fields, keeps every stage in DOM
+order and adds no disclosure JavaScript. If source copy is edited, run the Editing
+Checklist before Figma insertion and preserve all approved facts and decision points.
+The full visual and implementation acceptance rules are in
+`component-canon.md#implementation--onboarding-contract`.
 
 ### ARC method — `40000833:9341` / `40000836:3236`
 

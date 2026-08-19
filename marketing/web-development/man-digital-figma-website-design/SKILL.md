@@ -85,6 +85,17 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    because the card border already closes the group. Never fake bottom padding with
    parent spacing. Apply the full acceptance contract in
    `references/component-canon.md#arc-component-contract`.
+14. **Use Onboarding for an implementation sequence.** When a service page explains
+   how a project runs, instantiate the canonical Onboarding family rather than drawing
+   process tabs, a master-detail panel or another ARC section. Use Standard Desktop
+   `40000833:9279` / Mobile `40000836:3188` for concise steps and Detailed Desktop
+   `40001088:3017` / Mobile `40001088:3144` when every stage must show delivery work,
+   client responsibility and a decision gate. Keep all stages visible: five equal
+   timeline columns on desktop and the same five cards stacked on mobile. Never shorten
+   approved copy to fit a fixed card; grow the canonical variant at the source. Page
+   instances stay attached and implementation extends `sections/05-onboarding.html`
+   and `.rv-onboarding` instead of creating a parallel module. Apply the full contract
+   in `references/component-canon.md#implementation--onboarding-contract`.
 
 ## Workflow
 
@@ -112,6 +123,9 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    complete desktop state and one complete mobile state for **every** tab/item that changes
    content. A process tab state always includes: stage label, title, What we do, What you
    own, and Decision gate. Name states so development can map content without guessing.
+   A linear implementation sequence is not a tab by default: use the canonical Onboarding
+   component, keep all stages visible, and create interaction states only when the approved
+   brief genuinely defines an interactive behavior.
 6. **QA gate — run `references/qa-checklist.md` on every frame** (tokens, type scale,
    spacing, components-not-redrawn, both breakpoints, no clipped text) and iterate until
    it passes. Screenshot-verify; a frame you haven't rendered is not done.

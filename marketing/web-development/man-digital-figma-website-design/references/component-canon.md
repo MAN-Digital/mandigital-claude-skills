@@ -9,6 +9,7 @@ layout. Screenshot the result at both breakpoints.
 | Pattern | Canonical source | Required treatment |
 | --- | --- | --- |
 | Hero shell | `40000296:2361` | Reuse the service-page hero composition. When the service sits inside the revenue bow tie, highlight its exact position using `40000296:8615` as the process reference. |
+| Implementation / Onboarding | Standard Desktop `40000833:9279`, Mobile `40000836:3188`; Detailed Desktop `40001088:3017`, Mobile `40001088:3144` | Use the visible five-stage timeline for project delivery. Choose Detailed when every stage needs work, client responsibility and a decision gate. Keep instances attached and apply the complete contract below. |
 | ARC method | Desktop `40000833:9341`; Mobile `40000836:3236` | ARC is MAN Digital's operating method: **Architect → Realise → Compound**. Instantiate the canonical component and follow the complete ARC contract below; never redraw it as generic process cards. |
 | Delivery team | `40000296:9063`; compact row `40000299:30340` | Place the delivery team directly **under** accountable founder cards. Desktop uses the full compact row. Mobile uses a clipped horizontal carousel with a clear swipe cue; keep every team card in the scroll content. |
 | Full strategy-call form | `40000308:2538` | Use the complete form composition, not a compact four-field substitute. Preserve first/last name, business email, phone, help, website, referral source, consent controls, privacy copy, reCAPTCHA and the orange primary CTA. Reflow vertically on mobile at the 16/24 reading floor. |
@@ -22,6 +23,50 @@ layout. Screenshot the result at both breakpoints.
 The full numbered section inventory and HubSpot source mapping lives in
 `canonical-page-sections.md`. Its component IDs override older reference-frame-only
 chapters when a reusable asset exists.
+
+## Implementation / Onboarding contract
+
+Use this contract when a page explains the stages of an implementation, onboarding or
+other client delivery sequence. It is different from ARC: ARC explains the MAN Digital
+method; Onboarding explains the concrete project run.
+
+1. **Choose the density variant.** Use Standard Desktop `40000833:9279` and Mobile
+   `40000836:3188` when each stage has a short output list. Use Detailed Desktop
+   `40001088:3017` and Mobile `40001088:3144` when each stage must preserve three
+   complete content slots: delivery work, client responsibility and decision gate.
+   Instantiate the component and keep the page instance attached.
+2. **Keep one visible sequence.** Desktop uses five equal columns under one continuous
+   stage rail, ordered 01 through 05. Mobile stacks the same five cards in the same order.
+   This is not a tab, carousel, accordion or app selector. Do not hide four stages behind
+   a selected state and do not create pagination for a five-stage implementation.
+3. **Preserve the content contract.** Every detailed stage contains: stage number, stage
+   title, fixed `WORK → CLIENT → GATE` metadata, then exactly three bullets in that order.
+   All brief-owned work, client input, dependencies and decisions remain represented.
+   Tighten syntax only after an editing-checklist pass; never delete a field or decision
+   to satisfy a fixed frame height. Cards and their section grow with content.
+4. **Use the service-page type contract.** The section eyebrow is Lato Bold **13/18
+   desktop** and **11/16 mobile**, uppercase with 2px tracking. Desktop H2 is 44/52;
+   mobile H2 is 26/31.2. Introduction and stage bullets are at least **16/24** at both
+   breakpoints; only stage markers and the fixed metadata may be smaller. Long mobile
+   titles use a fixed content width with height auto-resize, never auto-width clipping.
+5. **Keep colour and hierarchy semantic.** Stage 01 may use Primary Blue `#000FC4` with
+   white type to establish the start; remaining cards use the approved light surface.
+   Dark Navy `#161654` remains mobile-quote-card-only and CTA Orange `#F26620` remains
+   conversion-only. Keep the rail and card rhythm simple; do not add decorative arches,
+   connector webs or unrelated process illustrations.
+6. **Reuse the shipped implementation.** The component maps to
+   `sections/05-onboarding.html` and `.rv-onboarding`. Extend that section's existing
+   markup and styles for the Detailed content slots; do not create a second onboarding
+   module or parallel class family. Render all five stages in source/DOM order. Use
+   semantic list/card markup and stable stage IDs; desktop is a five-column layout and
+   mobile is a natural vertical stack. JavaScript is not required for disclosure.
+   Motion, if added, is progressive enhancement and must respect reduced-motion settings.
+7. **Run the content and visual gates.** When an editor pass is requested, load
+   `../../content-creation/editing-checklist/SKILL.md`, document all eight checks, and
+   run both enforcement scripts before inserting final copy. Then screenshot the source
+   and one real instance at each breakpoint. Verify all five stages, 15 detailed bullets,
+   attached instances, 16/24 reading copy, title wrapping, equal desktop card heights,
+   no clipping and no adjacent-section overlap.
 
 ## ARC component contract
 

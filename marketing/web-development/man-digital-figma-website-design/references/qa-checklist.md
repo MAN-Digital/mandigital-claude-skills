@@ -38,6 +38,18 @@ by memory of what you built.
       counters and dots were not recreated locally.
 - [ ] Playbooks reuse `40000832:29581` / `40000836:3319` and preserve all four categories,
       six items per category and all 24 detail panels in the DOM.
+- [ ] A project implementation sequence reuses Onboarding Standard
+      `40000833:9279` / `40000836:3188` or Detailed `40001088:3017` /
+      `40001088:3144`; it does not become another ARC section, master-detail panel or
+      locally drawn stepper.
+- [ ] Detailed Onboarding keeps five ordered stages visible at both breakpoints. Every
+      card contains stage number, title, `WORK → CLIENT → GATE` metadata and three
+      corresponding bullets. Desktop uses five equal columns; mobile uses the same
+      content in a natural stack with no clipped titles or fixed-height copy loss.
+- [ ] Onboarding page sections remain attached instances and map to the existing
+      `sections/05-onboarding.html` / `.rv-onboarding` implementation. Detailed fields
+      extend that markup and CSS; no parallel module, hidden-tab DOM or unnecessary
+      disclosure JavaScript was introduced.
 - [ ] A MAN Digital method/framework section reuses the ARC Desktop
       `40000833:9341` and Mobile `40000836:3236` components, preserves Architect →
       Realise → Compound, replaces example wording with brief-owned copy, and maps to
@@ -78,6 +90,10 @@ by memory of what you built.
 ## Content
 - [ ] Copy matches the brief/approved source verbatim; [TO BE ADDED] markers preserved,
       nothing invented.
+- [ ] When an editing pass is requested, the Editing Checklist's eight dimensions are
+      documented and both enforcement scripts pass before final copy enters Figma.
+      Editing may tighten syntax but does not remove a required content slot, dependency
+      or decision gate to make a component fit.
 - [ ] Every briefed capability is visible; no `+N more` row hides required content.
 - [ ] Real assets (hubfs originals, provided photos, Envato-licensed) — no watermarked
       previews left in final frames.
