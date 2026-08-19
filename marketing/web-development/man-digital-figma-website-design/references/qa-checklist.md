@@ -35,6 +35,10 @@ by memory of what you built.
       counters and dots were not recreated locally.
 - [ ] Playbooks reuse `40000832:29581` / `40000836:3319` and preserve all four categories,
       six items per category and all 24 detail panels in the DOM.
+- [ ] A MAN Digital method/framework section reuses the ARC Desktop
+      `40000833:9341` and Mobile `40000836:3236` components, preserves Architect →
+      Realise → Compound, replaces example wording with brief-owned copy, and maps to
+      the existing `.rv-roadmap` implementation.
 - [ ] Recurring elements are CLONES of the Design System page / source-page components,
       not redraws (CTA chip, cards, pagers, badges, quote cards).
 - [ ] Section naming: desktop "«Thing» Section", mobile `m-*`.

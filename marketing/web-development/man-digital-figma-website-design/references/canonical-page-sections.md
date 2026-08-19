@@ -26,7 +26,7 @@ references.
 | 03 | Case Studies | `40000833:9134` | `40000836:3082` | `sections/03-cases.html`, `.rv-cases`, `revops-refresh-2025.js`. |
 | 04 | Fix Banner | `40000833:9151` | `40000836:3098` | `sections/04-fixbanner.html`, `.rv-fixbanner`. |
 | 05 | Onboarding | `40000833:9279` | `40000836:3188` | `sections/05-onboarding.html`, `.rv-onboarding`. |
-| 06 | Roadmap | `40000833:9341` | `40000836:3236` | `sections/06-roadmap.html`, `.rv-roadmap`. |
+| 06 | ARC Method / Roadmap | `40000833:9341` | `40000836:3236` | `sections/06-roadmap.html`, `.rv-roadmap`. |
 | 07 | Playbooks | set `40000832:29581` | `40000836:3319` | `sections/07-playbooks.html`, `.rv-playbooks`, `revops-refresh-2025.js`. |
 | 08 | Principles | `40000835:3025` | `40000837:2938` | `sections/08-principles.html`, `.rv-principles`. |
 | 09 | Leadership | `40000835:3055` | `40000837:2963` | `sections/08z-leadership.html`, `.rv-leadership`. |
@@ -42,6 +42,17 @@ under `references/source/pages/revops-service/`. Treat the mapped HTML, CSS and 
 as existing implementation, not inspiration to rebuild.
 
 ## Interaction families
+
+### ARC method — `40000833:9341` / `40000836:3236`
+
+ARC is the default MAN Digital method framework: **Architect → Realise → Compound**.
+Use these canonical components for sections that explain how MAN Digital architects a
+revenue operating model, realises it in HubSpot, and compounds the result through
+adoption and improvement. Keep the three phases, numbering, three actions per phase,
+colour semantics, desktop legend and stacked mobile layout. Treat all source wording as
+example copy: replace it with the page brief, run the editing checklist, and keep body
+copy at the current 16/24 floor. The implementation continues to reuse
+`sections/06-roadmap.html` and `.rv-roadmap`; do not create a parallel method module.
 
 ### Pagination — `40000829:2707`
 

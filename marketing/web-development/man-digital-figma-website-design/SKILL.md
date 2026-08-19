@@ -62,6 +62,13 @@ what you draw here becomes a dev contract, so exactness beats artistry.
    brand/section/active colour. Dark Navy `#161654` is restricted to approved mobile
    quote cards. CTA Orange `#F26620` is restricted to conversion actions. A source frame
    using a legacy colour does not authorize that colour in a new component.
+13. **Use ARC for the MAN Digital method.** When a page explains how MAN Digital
+   approaches, delivers, or improves revenue work, use the canonical ARC framework:
+   **Architect → Realise → Compound**. Instantiate the approved Desktop
+   `40000833:9341` and Mobile `40000836:3236` components, then replace their example
+   copy with brief-owned content. Preserve the three-phase structure, numbers, taxonomy
+   labels, colour-coded bullets, desktop legend, and mobile stack. Do not replace ARC
+   with a one-off method diagram, generic process cards, or an unrelated roadmap.
 
 ## Workflow
 
