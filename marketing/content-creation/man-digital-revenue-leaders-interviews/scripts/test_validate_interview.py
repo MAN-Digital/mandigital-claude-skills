@@ -225,6 +225,66 @@ class ValidatorTests(unittest.TestCase):
             ("interview-intro.html", "<svg xmlns=", "<span data-removed-svg="),
         )
 
+    def test_unverified_linkedin_identity_is_rejected(self) -> None:
+        self.assert_rejected(
+            "status must be verified",
+            (
+                "metadata.example.json",
+                '"status": "verified"',
+                '"status": "candidate"',
+            ),
+        )
+
+    def test_linkedin_identity_needs_two_signals(self) -> None:
+        self.assert_rejected(
+            "at least two non-empty matched signals",
+            (
+                "metadata.example.json",
+                '"Exact full name: Carol Chen",\n      "Role at recording: VP, Revenue Operations at Flywire",\n      "Career history: VP, Head of Global Sales Operations at WeWork"',
+                '"Exact full name: Carol Chen"',
+            ),
+        )
+
+    def test_linkedin_identity_needs_two_sources(self) -> None:
+        self.assert_rejected(
+            "at least two unique HTTPS evidence URLs from independent hosts",
+            (
+                "metadata.example.json",
+                '"https://www.linkedin.com/in/carolchenrevops",\n      "https://www.listennotes.com/podcasts/the-revops-abm/understanding-revenue-x0ZQElCiNYk/",\n      "https://www.revenueoperationsalliance.com/author/carol/"',
+                '"https://www.linkedin.com/in/carolchenrevops"',
+            ),
+        )
+
+    def test_rendered_linkedin_url_must_match_verification(self) -> None:
+        self.assert_rejected(
+            "rendered LinkedIn link must exactly match",
+            (
+                "interview-intro.html",
+                "https://www.linkedin.com/in/carolchenrevops",
+                "https://www.linkedin.com/in/wrong-person",
+            ),
+        )
+
+    def test_source_linkedin_url_must_match_verification(self) -> None:
+        self.assert_rejected(
+            "source.json provided.linkedinProfile must match",
+            (
+                "source.json",
+                "https://www.linkedin.com/in/carolchenrevops",
+                "https://www.linkedin.com/in/wrong-person",
+            ),
+        )
+
+    def test_linkedin_profile_url_cannot_include_tracking(self) -> None:
+        self.assert_rejected(
+            "canonical HTTPS LinkedIn /in/ URL without tracking",
+            (
+                "metadata.example.json",
+                '"profileUrl": "https://www.linkedin.com/in/carolchenrevops"',
+                '"profileUrl": "https://www.linkedin.com/in/carolchenrevops?trk=example"',
+            ),
+        )
+
     def test_malformed_metadata_is_reported_cleanly(self) -> None:
         self.assert_rejected(
             "invalid metadata.example.json",

@@ -32,7 +32,7 @@ Write for search clarity, not keyword stuffing:
 - Open Graph image must be HTTPS and publicly loadable. A YouTube source uses its own thumbnail and records `openGraphImageSource: "youtube-thumbnail"`. A non-video source records `openGraphImageSource: "user-provided-image"`. Never select a random inline image or invent an image.
 - Keep the URL slug concise and stable. Do not change a live slug without explicit redirect/migration authorization.
 
-Before saving, check title/description lengths, spelling of the guest/company, image URL, tag, and campaign. After saving, reopen settings or inspect the preview metadata so the save is evidenced rather than assumed.
+Before saving, check title/description lengths, spelling of the guest/company, the completed LinkedIn identity verification record and exact rendered URL, image URL, tag, and campaign. After saving, reopen settings or inspect the preview metadata so the save is evidenced rather than assumed.
 
 ## HubSpot workflow
 
@@ -41,7 +41,7 @@ Before saving, check title/description lengths, spelling of the guest/company, i
 3. Save the supported SEO/social fields and approved image, then verify the rendered `title`, meta description, `og:title`, `og:description`, and `og:image` in the actual preview.
 4. Find the exact series tag and attach it to the post. If it is missing, obtain authorization before creating it.
 5. Resolve the canonical campaign ID and automatically associate the blog post asset. A missing or unverified association means the draft is not ready for handoff. Creating a replacement campaign requires explicit authorization and a corresponding canonical-ID update.
-6. Reopen the settings and campaign view to verify persisted values.
+6. Reopen the draft and verify that every LinkedIn action resolves to the normalized verified profile URL, then reopen the settings and campaign view to verify persisted values.
 7. Preview desktop/tablet/mobile. Leave the post unpublished unless publication was separately authorized.
 
 Connector or API writes must follow their own confirmation requirements. If connector permissions are missing, use the authenticated HubSpot UI only for the authorized in-scope change; do not treat missing connector access as permission to publish.
@@ -55,6 +55,7 @@ Report exact values and evidence for:
 - source type, source completeness, evidence-map coverage, and whether automatic captions or notes were used;
 - SEO title and meta description;
 - Open Graph title, description, and image;
+- LinkedIn verification provider, matched signals, canonical profile URL, and saved-link verification;
 - exact tag and campaign association;
 - responsive preview result;
 - publication state (`draft`, `scheduled`, or `published`).

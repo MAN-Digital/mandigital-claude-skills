@@ -10,7 +10,7 @@ Use this skill when creating, updating, or QA-checking a post in the `Revenue Le
 
 - Approved desktop and mobile Figma frames
 - YouTube URL, Granola transcript/notes export, Markdown transcript, or reviewed answers
-- Verified guest details, portrait, company information, and LinkedIn URL
+- Guest details, portrait, company information, and a LinkedIn candidate URL to verify with Apollo.io or Exa
 - HubSpot access for saving and reviewing the draft
 - The canonical `Revenue Leaders Interviews` campaign and tag
 
@@ -25,7 +25,7 @@ Use this skill when creating, updating, or QA-checking a post in the `Revenue Le
 
 ## Included example
 
-`assets/carol-chen/` contains the tested Carol Chen draft example, including the intro, article body, CSS, LinkedIn SVG, metadata contract, and evidence map. It demonstrates eight complete source-adapted questions, a clean full-width video embed, and internal draft-state tracking without reader-facing generation notices.
+`assets/carol-chen/` contains the tested Carol Chen draft example, including the intro, article body, CSS, LinkedIn SVG, metadata contract, evidence map, and cross-source LinkedIn identity record. It demonstrates eight complete source-adapted questions, a clean full-width video embed, and internal draft-state tracking without reader-facing generation notices.
 
 ## Validation
 
@@ -50,6 +50,7 @@ YouTube intake uses `youtube-transcript-api` first, `yt-dlp` captions second, an
 - `man-digital-design-system` for brand decisions
 - `man-digital-cms-pages` for HubSpot CMS source validation and uploads
 - Native Chrome access for final live preview checks when available
+- Apollo.io no-credit people search or Exa people search for guest identity verification
 - `uv`/`uvx`, or preinstalled `youtube-transcript-api` and `yt-dlp`, for public YouTube intake
 - CPU/disk capacity for the optional `--whisper-fallback`; it is never triggered silently
 - Explicit authorization before creating a replacement campaign, scheduling, or publishing

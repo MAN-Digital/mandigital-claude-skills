@@ -6,6 +6,7 @@ from __future__ import annotations
 import hashlib
 import json
 import sys
+import datetime as dt
 import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 from pathlib import Path
@@ -13,6 +14,25 @@ from urllib.parse import urlparse
 
 
 REQUIRED_SERIES = "Revenue Leaders Interviews"
+LINKEDIN_PROVIDERS = {"apollo", "exa", "apollo+exa"}
+
+
+def is_canonical_linkedin_profile(value: object) -> bool:
+    if not isinstance(value, str) or not value:
+        return False
+    parsed = urlparse(value)
+    parts = [part for part in parsed.path.split("/") if part]
+    return (
+        parsed.scheme == "https"
+        and parsed.netloc == "www.linkedin.com"
+        and len(parts) == 2
+        and parts[0] == "in"
+        and bool(parts[1])
+        and not parsed.params
+        and not parsed.query
+        and not parsed.fragment
+        and not value.endswith("/")
+    )
 
 
 class InterviewParser(HTMLParser):
@@ -105,7 +125,7 @@ def validate(asset_dir: Path) -> list[str]:
     required_metadata = {
         "editorialState", "sourceType", "embedVideo", "leadMediaMode", "seoTitle", "metaDescription", "openGraphTitle",
         "openGraphDescription", "openGraphImage", "openGraphImageSource", "tag", "campaign", "campaignId",
-        "questionSelectionMethod", "designReference", "questions", "draft",
+        "questionSelectionMethod", "designReference", "linkedinVerification", "questions", "draft",
     }
     absent = sorted(required_metadata - metadata.keys())
     if absent:
@@ -143,6 +163,46 @@ def validate(asset_dir: Path) -> list[str]:
     parsed_source = urlparse(design_reference) if isinstance(design_reference, str) else urlparse("")
     if parsed_source.scheme != "https" or parsed_source.netloc != "www.figma.com" or "node-id=" not in parsed_source.query:
         errors.append("designReference must be an HTTPS Figma node URL")
+
+    linkedin_verification = metadata.get("linkedinVerification")
+    verified_profile_url = ""
+    if not isinstance(linkedin_verification, dict):
+        errors.append("linkedinVerification must be an object")
+    else:
+        if linkedin_verification.get("status") != "verified":
+            errors.append("linkedinVerification status must be verified")
+        if linkedin_verification.get("provider") not in LINKEDIN_PROVIDERS:
+            errors.append(f"linkedinVerification provider must be one of {sorted(LINKEDIN_PROVIDERS)}")
+        verified_at = linkedin_verification.get("verifiedAt")
+        if not isinstance(verified_at, str):
+            errors.append("linkedinVerification verifiedAt must use YYYY-MM-DD")
+        else:
+            try:
+                dt.date.fromisoformat(verified_at)
+            except ValueError:
+                errors.append("linkedinVerification verifiedAt must use YYYY-MM-DD")
+        profile_url = linkedin_verification.get("profileUrl")
+        if not is_canonical_linkedin_profile(profile_url):
+            errors.append("linkedinVerification profileUrl must be a canonical HTTPS LinkedIn /in/ URL without tracking")
+        else:
+            verified_profile_url = str(profile_url)
+        matched_signals = linkedin_verification.get("matchedSignals")
+        if not isinstance(matched_signals, list) or len(matched_signals) < 2 or not all(
+            isinstance(item, str) and item.strip() for item in matched_signals
+        ):
+            errors.append("linkedinVerification requires at least two non-empty matched signals")
+        evidence_urls = linkedin_verification.get("evidenceUrls")
+        evidence_urls_valid = isinstance(evidence_urls, list) and all(
+            isinstance(item, str) and urlparse(item).scheme == "https" and urlparse(item).netloc
+            for item in evidence_urls
+        )
+        evidence_hosts = {
+            urlparse(item).netloc.lower() for item in evidence_urls
+        } if evidence_urls_valid else set()
+        if not evidence_urls_valid or len(set(evidence_urls)) < 2 or len(evidence_hosts) < 2:
+            errors.append("linkedinVerification requires at least two unique HTTPS evidence URLs from independent hosts")
+        elif verified_profile_url and verified_profile_url not in evidence_urls:
+            errors.append("linkedinVerification evidenceUrls must include the canonical profileUrl")
 
     editorial_state = metadata.get("editorialState")
     allowed_states = {
@@ -212,6 +272,8 @@ def validate(asset_dir: Path) -> list[str]:
             errors.append("LinkedIn links must use target=_blank and rel=noopener noreferrer")
         if not link.get("aria-label"):
             errors.append("LinkedIn links require an aria-label")
+        if verified_profile_url and href != verified_profile_url:
+            errors.append("every rendered LinkedIn link must exactly match linkedinVerification profileUrl")
 
     for source in parser.image_sources:
         if source.startswith(("data:", "file:")) or "figma.com" in source:
@@ -267,6 +329,11 @@ def validate(asset_dir: Path) -> list[str]:
                 errors.append("source.json sourceType must match metadata sourceType")
             if source_manifest.get("embedVideo") is not embed_video:
                 errors.append("source.json embedVideo must match metadata embedVideo")
+            provided = source_manifest.get("provided")
+            if not isinstance(provided, dict):
+                errors.append("source.json provided must be an object")
+            elif verified_profile_url and provided.get("linkedinProfile") != verified_profile_url:
+                errors.append("source.json provided.linkedinProfile must match linkedinVerification profileUrl")
             missing_inputs = source_manifest.get("missingPromptInputs")
             if not isinstance(missing_inputs, list):
                 errors.append("source.json missingPromptInputs must be a list")

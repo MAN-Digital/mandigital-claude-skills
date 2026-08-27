@@ -73,7 +73,7 @@ Use `--content-kind notes` when only enhanced notes are available. Notes-only in
 Read `missingPromptInputs` from `source.json`. Ask for only the unresolved items:
 
 - `guestImage`: approved HTTPS portrait or HubSpot Files URL;
-- `linkedinProfile`: verified guest profile URL;
+- `linkedinProfile`: candidate guest profile URL. Verify it with the LinkedIn identity workflow before treating the input as resolved or rendering it;
 - `openGraphImage`: approved 16:9 article/OG image URL for Markdown, Granola, or another non-video source. This is the user-provided lead image when no video is embedded.
 
 For YouTube, always use the highest-quality available YouTube thumbnail as the Open Graph candidate and record `openGraphImageSource: "youtube-thumbnail"`; do not ask for or substitute a separate title card. The thumbnail may be copied to HubSpot Files, but it must not also be rendered above the embedded player. Markdown and Granola sources have no automatic image candidate, so the user must provide the image in the prompt before handoff.
@@ -129,6 +129,7 @@ The wrapper must span `100%` of the available blog-body width, use a transparent
 ## Metadata assembly
 
 - Generate the SEO title and meta description from the completed article, then use the same reviewed values for Open Graph title and description.
+- Add a complete `linkedinVerification` record only after Apollo.io or Exa cross-source verification. The normalized profile URL must exactly match `source.json.provided.linkedinProfile` and every rendered LinkedIn action.
 - Set `sourceType` to `youtube`, `markdown`, or `granola` and `embedVideo` to the actual rendered choice.
 - For YouTube, transfer the YouTube thumbnail to HubSpot Files when required by the CMS workflow; verify the final public HTTPS `og:image` in preview and confirm that the same image is absent from the article body.
 - For Markdown/Granola, stop before HubSpot handoff if the user-provided lead/Open Graph image or guest assets remain unresolved.
