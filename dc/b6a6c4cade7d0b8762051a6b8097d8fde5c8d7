@@ -1,0 +1,58 @@
+marketing/content-creation/man-digital-revenue-leaders-interviews/assets/carol-chen/interview-body.html
+  s_b2b9d5301fd010::t_0b1a54c47e40d1 28-29,56,58-59,64,66-67,72,74-75,80,82-91,96,98-99,109-110
+  s_b2b9d5301fd010::t_9289e4bbfdb8fe 7,47,51
+marketing/content-creation/man-digital-revenue-leaders-interviews/scripts/validate_interview.py
+  s_b2b9d5301fd010::t_baae406e701baf 108,123-124,130-132,134-142,144,170-171,187-188,312-313,318-323,350,357-359,362-363
+  s_b2b9d5301fd010::t_0fa43458d4271a 360-361
+marketing/content-creation/man-digital-revenue-leaders-interviews/assets/carol-chen/evidence-map.json
+  s_b2b9d5301fd010::t_af1cb220476e7c 17,23-26,29-32,35-38,41-50
+marketing/content-creation/man-digital-revenue-leaders-interviews/SKILL.md
+  s_b2b9d5301fd010::t_86ae859ce90fcf 12,21-23,32,34-35,56
+marketing/content-creation/man-digital-revenue-leaders-interviews/assets/carol-chen/interview-post.css
+  s_b2b9d5301fd010::t_0fa43458d4271a 165-176
+  s_b2b9d5301fd010::t_9289e4bbfdb8fe 177,179,181,183-186,188
+  s_b2b9d5301fd010::t_2f1bfdbcc51d60 157,159,161,178,182,187
+marketing/content-creation/man-digital-revenue-leaders-interviews/assets/carol-chen/metadata.example.json
+  s_b2b9d5301fd010::t_af1cb220476e7c 13-15,18-23
+  s_9828a14f8d6675::t_ebdfed25f2ec15 6,8
+marketing/content-creation/man-digital-revenue-leaders-interviews/references/figma-and-design-contract.md
+  s_b2b9d5301fd010::t_86ae859ce90fcf 5,42,48,54,58
+marketing/content-creation/man-digital-revenue-leaders-interviews/scripts/test_validate_interview.py
+  s_b2b9d5301fd010::t_fb8bae5a5d586e 56,94,96-159
+  s_b2b9d5301fd010::t_0fa43458d4271a 161-164
+  s_b2b9d5301fd010::t_7a7cd74eaa076a 160
+marketing/content-creation/man-digital-revenue-leaders-interviews/references/source-ingestion-and-drafting.md
+  s_b2b9d5301fd010::t_86ae859ce90fcf 90,99,103,111
+  s_b2b9d5301fd010::t_0fa43458d4271a 127
+  s_b2b9d5301fd010::t_f000edddf08732 128
+marketing/content-creation/man-digital-revenue-leaders-interviews/references/editorial-seo-and-hubspot.md
+  s_b2b9d5301fd010::t_86ae859ce90fcf 7,12,54
+marketing/content-creation/man-digital-revenue-leaders-interviews/README.md
+  s_b2b9d5301fd010::t_86ae859ce90fcf 3,28
+marketing/content-creation/man-digital-revenue-leaders-interviews/assets/carol-chen/interview-intro.html
+  s_9828a14f8d6675::t_f973044cf3829f 9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "dcb6a6c4cade7d0b8762051a6b8097d8fde5c8d7",
+  "prompts": {},
+  "sessions": {
+    "s_9828a14f8d6675": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a03f82-7741-76d1-a466-196740152419",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "romeoman <romeo@man.digital>"
+    },
+    "s_b2b9d5301fd010": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a03ee0-3cea-7201-ac17-6c5dc9b18b83",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "romeoman <romeo@man.digital>"
+    }
+  }
+}
