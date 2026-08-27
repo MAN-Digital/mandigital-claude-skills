@@ -10,6 +10,7 @@ Skills for writing, editing, repurposing, and producing MAN Digital content and 
 | [`man-digital-blog-graphics/`](./man-digital-blog-graphics/) | Branded blog, article, HubSpot, and LinkedIn graphics |
 | [`man-digital-lucid-charts/`](./man-digital-lucid-charts/) | Branded diagrams, process maps, and architecture visuals |
 | [`man-digital-marketing-assets/`](./man-digital-marketing-assets/) | Social images, banners, ads, thumbnails, and share graphics |
+| [`man-digital-revenue-leaders-interviews/`](./man-digital-revenue-leaders-interviews/) | Revenue Leaders Interview HubSpot blog drafts, metadata, campaign association, and QA |
 | [`man-digital-youtube-scripts/`](./man-digital-youtube-scripts/) | YouTube narration scripts and visual cue sheets |
 | [`vibe-marketing-v2/`](./vibe-marketing-v2/) | Brand, positioning, copy, email, SEO, creative, and repurposing workflows |
 

@@ -1,0 +1,58 @@
+# Editorial, SEO, and HubSpot contract
+
+## Editorial states
+
+Use one explicit state throughout a draft:
+
+- `draft-sample-answers`: layout demonstration only. Every answer and pull quote is `illustrative`; one visible `.rli-sample-notice` states that the copy is not the guest's words.
+- `draft-transcript-reviewed`: copy was checked against a reliable recording/transcript but still awaits final editorial/guest approval. Every answer and pull quote is `transcript-reviewed`; one visible `.rli-approval-notice` states that publication approval is still pending.
+- `approved`: questions, answers, pull quotes, bio, company facts, and links are approved. Every answer and pull quote is `approved`; no draft notice or draft placeholder may remain.
+
+Automatic captions and first-person sample copy are not quote-safe. Do not remove the warning or advance the state based only on an automatic transcript.
+
+## Series metadata
+
+Use the same series vocabulary everywhere:
+
+- HubSpot tag: `Revenue Leaders Interviews`
+- HubSpot campaign: `Revenue Leaders Interviews`
+- Canonical MAN Digital portal campaign ID: `38b1a8b6-07c6-48e4-84de-16de94802392`
+- Open Graph image: the approved 16:9 interview title card hosted on HubSpot Files.
+
+Resolve the canonical campaign ID first and verify its exact name. Search by exact name only as a diagnostic fallback. Reuse the canonical record; never create punctuation, singular/plural, or capitalization variants. If the canonical ID no longer resolves, request explicit authorization before creating a replacement and update this reference plus the example metadata with the new ID.
+
+## SEO fields
+
+Write for search clarity, not keyword stuffing:
+
+- SEO title target: about 30–60 characters. Pattern: `<topic/result> | <guest name>`.
+- Meta description target: about 120–160 characters. State who the guest is and the useful decisions covered.
+- Open Graph title and description normally match the approved SEO title and meta description. HubSpot may derive the rendered `og:title` and `og:description` from those two fields instead of exposing separate inputs; verify the rendered preview tags rather than inventing unavailable controls. Diverge only when a supported field exists and the user requests a reviewed social-specific message.
+- Open Graph image must be HTTPS, publicly loadable, and use the approved title card rather than a random inline image.
+- Keep the URL slug concise and stable. Do not change a live slug without explicit redirect/migration authorization.
+
+Before saving, check title/description lengths, spelling of the guest/company, image URL, tag, and campaign. After saving, reopen settings or inspect the preview metadata so the save is evidenced rather than assumed.
+
+## HubSpot workflow
+
+1. Identify the portal, blog ID, and post ID. Confirm the post is a draft.
+2. Apply scoped body/intro HTML and post Head HTML CSS. Preserve stable CSS markers for idempotent replacement.
+3. Save the supported SEO/social fields and approved image, then verify the rendered `title`, meta description, `og:title`, `og:description`, and `og:image` in the actual preview.
+4. Find the exact series tag and attach it to the post. If it is missing, obtain authorization before creating it.
+5. Resolve the canonical campaign ID and automatically associate the blog post asset. A missing or unverified association means the draft is not ready for handoff. Creating a replacement campaign requires explicit authorization and a corresponding canonical-ID update.
+6. Reopen the settings and campaign view to verify persisted values.
+7. Preview desktop/tablet/mobile. Leave the post unpublished unless publication was separately authorized.
+
+Connector or API writes must follow their own confirmation requirements. If connector permissions are missing, use the authenticated HubSpot UI only for the authorized in-scope change; do not treat missing connector access as permission to publish.
+
+## Draft handoff checklist
+
+Report exact values and evidence for:
+
+- post ID and editor URL;
+- editorial state and whether any sample/unapproved copy remains;
+- SEO title and meta description;
+- Open Graph title, description, and image;
+- exact tag and campaign association;
+- responsive preview result;
+- publication state (`draft`, `scheduled`, or `published`).

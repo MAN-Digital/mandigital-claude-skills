@@ -1,0 +1,4 @@
+interface:
+  display_name: "MAN Digital Revenue Leaders Interviews"
+  short_description: "Build safe, on-brand interview blog posts"
+  default_prompt: "Use $man-digital-revenue-leaders-interviews to create and validate a draft Revenue Leaders Interview blog post."
