@@ -12,7 +12,7 @@ Use this skill when creating, updating, or QA-checking a post in the `Revenue Le
 - YouTube URL, Granola transcript/notes export, Markdown transcript, or reviewed answers
 - Guest details, portrait, company information, and a LinkedIn candidate URL to verify with Apollo.io or Exa
 - HubSpot access for saving and reviewing the draft
-- The canonical `Revenue Leaders Interviews` campaign and tag
+- The canonical `Revenue Leaders Interviews` campaign and its single allowed tag
 
 ## Outputs
 
@@ -20,6 +20,8 @@ Use this skill when creating, updating, or QA-checking a post in the `Revenue Le
 - Normalized source manifest and question-by-question evidence map
 - Optional responsive privacy-enhanced YouTube embed
 - A complete HubSpot draft with SEO and Open Graph metadata
+- One managed JSON-LD graph in Head HTML, including `VideoObject` when YouTube is embedded
+- Exactly one HubSpot tag: `Revenue Leaders Interviews`
 - Automatic association with the canonical `Revenue Leaders Interviews` campaign
 - Static validation results and responsive HubSpot preview QA
 
@@ -33,6 +35,7 @@ From this skill directory, run:
 
 ```bash
 python3 scripts/test_ingest_interview_source.py
+python3 scripts/test_build_interview_schema.py
 python3 scripts/test_validate_interview.py
 python3 scripts/validate_interview.py assets/carol-chen
 ```
@@ -41,6 +44,14 @@ To normalize a source before drafting:
 
 ```bash
 python3 scripts/ingest_interview_source.py SOURCE --output work/guest-name
+```
+
+To build the managed Head HTML schema after the HubSpot draft URL is known:
+
+```bash
+python3 scripts/build_interview_schema.py work/guest-name \
+  --page-url "https://www.man.digital/blog/the-final-draft-slug" \
+  --output work/guest-name/head-html.schema.html
 ```
 
 YouTube intake uses `youtube-transcript-api` first, `yt-dlp` captions second, and an opt-in local `faster-whisper` fallback. It captures captions, video metadata, a thumbnail/Open Graph candidate, provider history, and an optional privacy-enhanced embed. Granola and Markdown intake reports the guest image, LinkedIn URL, or Open Graph image that still needs to be supplied in the prompt.

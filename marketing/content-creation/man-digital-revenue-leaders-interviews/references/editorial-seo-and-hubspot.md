@@ -22,6 +22,11 @@ Use the same series vocabulary everywhere:
 
 Resolve the canonical campaign ID first and verify its exact name. Search by exact name only as a diagnostic fallback. Reuse the canonical record; never create punctuation, singular/plural, or capitalization variants. If the canonical ID no longer resolves, request explicit authorization before creating a replacement and update this reference plus the example metadata with the new ID.
 
+The tag is a singleton classification for this series, not an additional topic label. Set
+`tagIds` to `[canonicalRevenueLeadersInterviewsTagId]` by replacement. Never merge with the
+post's previous tags and never run the general BlogRunner contextual tag picker. Reopen the
+draft, require one saved ID, and resolve it through the tags API to the exact series name.
+
 ## SEO fields
 
 Write for search clarity, not keyword stuffing:
@@ -38,8 +43,8 @@ Before saving, check title/description lengths, spelling of the guest/company, t
 
 1. Identify the portal, blog ID, and post ID. Confirm the post is a draft.
 2. Apply scoped body/intro HTML and post Head HTML CSS. Preserve stable CSS markers for idempotent replacement.
-3. Save the supported SEO/social fields and approved image, then verify the rendered `title`, meta description, `og:title`, `og:description`, and `og:image` in the actual preview.
-4. Find the exact series tag and attach it to the post. If it is missing, obtain authorization before creating it.
+3. Save the supported SEO/social fields, approved image, and marker-bounded managed JSON-LD graph, then verify the rendered `title`, meta description, `og:title`, `og:description`, `og:image`, and structured data in the actual preview.
+4. Find the exact series tag and replace the post's `tagIds` with that one canonical ID. If it is missing, obtain authorization before creating it. Reopen the draft and resolve the saved singleton ID back to the exact tag name.
 5. Resolve the canonical campaign ID and automatically associate the blog post asset. A missing or unverified association means the draft is not ready for handoff. Creating a replacement campaign requires explicit authorization and a corresponding canonical-ID update.
 6. Reopen the draft and verify that every LinkedIn action resolves to the normalized verified profile URL, then reopen the settings and campaign view to verify persisted values.
 7. Preview desktop/tablet/mobile. Leave the post unpublished unless publication was separately authorized.

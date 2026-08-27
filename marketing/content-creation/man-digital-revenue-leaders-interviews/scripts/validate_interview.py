@@ -14,6 +14,7 @@ from urllib.parse import urlparse
 
 
 REQUIRED_SERIES = "Revenue Leaders Interviews"
+REQUIRED_TAGS = [REQUIRED_SERIES]
 LINKEDIN_PROVIDERS = {"apollo", "exa", "apollo+exa"}
 
 
@@ -123,9 +124,10 @@ def validate(asset_dir: Path) -> list[str]:
         return [f"invalid metadata.example.json: {exc}"]
 
     required_metadata = {
-        "editorialState", "sourceType", "embedVideo", "leadMediaMode", "seoTitle", "metaDescription", "openGraphTitle",
-        "openGraphDescription", "openGraphImage", "openGraphImageSource", "tag", "campaign", "campaignId",
-        "questionSelectionMethod", "designReference", "linkedinVerification", "questions", "draft",
+        "editorialState", "sourceType", "embedVideo", "leadMediaMode", "articleTitle", "seoTitle", "metaDescription",
+        "openGraphTitle", "openGraphDescription", "openGraphImage", "openGraphImageSource", "tags", "tagPolicy",
+        "campaign", "campaignId", "questionSelectionMethod", "designReference", "guest", "schema",
+        "linkedinVerification", "questions", "draft",
     }
     absent = sorted(required_metadata - metadata.keys())
     if absent:
@@ -281,10 +283,56 @@ def validate(asset_dir: Path) -> list[str]:
         if urlparse(source).scheme != "https":
             errors.append(f"image source must be HTTPS: {source}")
 
-    if metadata.get("tag") != REQUIRED_SERIES or metadata.get("campaign") != REQUIRED_SERIES:
-        errors.append(f"tag and campaign must both be {REQUIRED_SERIES!r}")
+    if "tag" in metadata:
+        errors.append("use the singleton tags array; legacy scalar tag metadata is not allowed")
+    if metadata.get("tags") != REQUIRED_TAGS:
+        errors.append(f"tags must contain exactly one item: {REQUIRED_SERIES!r}")
+    if metadata.get("tagPolicy") != "replace-singleton":
+        errors.append("tagPolicy must be replace-singleton")
+    if "tagIds" in metadata:
+        tag_ids = metadata.get("tagIds")
+        if not isinstance(tag_ids, list) or len(tag_ids) != 1 or not str(tag_ids[0]).strip():
+            errors.append("when recorded, tagIds must contain exactly one non-empty canonical tag ID")
+    if metadata.get("campaign") != REQUIRED_SERIES:
+        errors.append(f"campaign must be {REQUIRED_SERIES!r}")
     if metadata.get("campaignId") != "38b1a8b6-07c6-48e4-84de-16de94802392":
         errors.append("campaignId must reference the canonical Revenue Leaders Interviews campaign")
+
+    guest = metadata.get("guest")
+    if not isinstance(guest, dict):
+        errors.append("guest must be an object")
+    else:
+        for field in ("name", "jobTitle", "company"):
+            if not isinstance(guest.get(field), str) or not guest[field].strip():
+                errors.append(f"guest.{field} must be a non-empty string")
+        if urlparse(str(guest.get("image") or "")).scheme != "https":
+            errors.append("guest.image must use HTTPS")
+
+    schema = metadata.get("schema")
+    if not isinstance(schema, dict):
+        errors.append("schema must be an object")
+    else:
+        if schema.get("enabled") is not True:
+            errors.append("schema.enabled must be true")
+        if schema.get("mode") != "managed-graph":
+            errors.append("schema.mode must be managed-graph")
+        if schema.get("pageUrlSource") != "hubspot-draft":
+            errors.append("schema.pageUrlSource must be hubspot-draft")
+        author = schema.get("author")
+        if not isinstance(author, dict):
+            errors.append("schema.author must be an object")
+        else:
+            if not isinstance(author.get("name"), str) or not author["name"].strip():
+                errors.append("schema.author.name must be a non-empty string")
+            author_url = urlparse(str(author.get("url") or ""))
+            if author_url.scheme != "https" or author_url.netloc != "www.man.digital":
+                errors.append("schema.author.url must be a canonical MAN Digital HTTPS URL")
+            same_as = author.get("sameAs")
+            if not isinstance(same_as, list) or not same_as or not all(
+                isinstance(item, str) and urlparse(item).scheme == "https" and urlparse(item).netloc
+                for item in same_as
+            ):
+                errors.append("schema.author.sameAs requires at least one HTTPS identity URL")
     if metadata.get("draft") is not True:
         errors.append("the bundled example must remain a draft")
 

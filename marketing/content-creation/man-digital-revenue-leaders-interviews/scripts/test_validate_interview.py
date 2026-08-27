@@ -194,6 +194,46 @@ class ValidatorTests(unittest.TestCase):
             ),
         )
 
+    def test_extra_series_tag_is_rejected(self) -> None:
+        self.assert_rejected(
+            "tags must contain exactly one item",
+            (
+                "metadata.example.json",
+                '"tags": [\n    "Revenue Leaders Interviews"\n  ]',
+                '"tags": [\n    "Revenue Leaders Interviews",\n    "Revenue Operations"\n  ]',
+            ),
+        )
+
+    def test_non_replacing_tag_policy_is_rejected(self) -> None:
+        self.assert_rejected(
+            "tagPolicy must be replace-singleton",
+            (
+                "metadata.example.json",
+                '"tagPolicy": "replace-singleton"',
+                '"tagPolicy": "append"',
+            ),
+        )
+
+    def test_multiple_saved_tag_ids_are_rejected(self) -> None:
+        self.assert_rejected(
+            "tagIds must contain exactly one",
+            (
+                "metadata.example.json",
+                '"tagPolicy": "replace-singleton",',
+                '"tagPolicy": "replace-singleton",\n  "tagIds": ["123", "456"],',
+            ),
+        )
+
+    def test_disabled_schema_is_rejected(self) -> None:
+        self.assert_rejected(
+            "schema.enabled must be true",
+            (
+                "metadata.example.json",
+                '"enabled": true',
+                '"enabled": false',
+            ),
+        )
+
     def test_non_youtube_source_cannot_enable_video_embed(self) -> None:
         self.assert_rejected(
             "only YouTube sources may enable embedVideo",
