@@ -26,7 +26,8 @@ references.
 | 03 | Case Studies | `40000833:9134` | `40000836:3082` | `sections/03-cases.html`, `.rv-cases`, `revops-refresh-2025.js`. |
 | 04 | Fix Banner | `40000833:9151` | `40000836:3098` | `sections/04-fixbanner.html`, `.rv-fixbanner`. |
 | 05 | Onboarding | `40000833:9279` | `40000836:3188` | `sections/05-onboarding.html`, `.rv-onboarding`. |
-| 06 | Roadmap | `40000833:9341` | `40000836:3236` | `sections/06-roadmap.html`, `.rv-roadmap`. |
+| 05B | Onboarding — Detailed | `40001088:3017` | `40001088:3144` | Extend `sections/05-onboarding.html` and `.rv-onboarding`; never create a parallel module. |
+| 06 | ARC Method / Roadmap | `40000833:9341` | `40000836:3236` | `sections/06-roadmap.html`, `.rv-roadmap`. |
 | 07 | Playbooks | set `40000832:29581` | `40000836:3319` | `sections/07-playbooks.html`, `.rv-playbooks`, `revops-refresh-2025.js`. |
 | 08 | Principles | `40000835:3025` | `40000837:2938` | `sections/08-principles.html`, `.rv-principles`. |
 | 09 | Leadership | `40000835:3055` | `40000837:2963` | `sections/08z-leadership.html`, `.rv-leadership`. |
@@ -36,12 +37,63 @@ references.
 | 13 | FAQ | `40000835:30110` | `40000837:3318` | `sections/12-faq.html` and accessible disclosure behavior. |
 | 14 | Footer | `40000835:30229` | `40000837:3434` | Active global theme footer. |
 | 15 | Quote-to-Cash Outcome Tabs | set `40000832:30153` | Pending approved source | Code status `[future]`; verify before implementation. |
+| 16 | Service Scope Disclosure | set `40001115:3242` | set `40001115:3473` | Code status `[future]`; no approved HubSpot module mapped as of 2026-08-19. |
 
 The canonical HubSpot source checkout is maintained by the `man-digital-cms-pages` skill
 under `references/source/pages/revops-service/`. Treat the mapped HTML, CSS and JavaScript
 as existing implementation, not inspiration to rebuild.
 
 ## Interaction families
+
+### Implementation / Onboarding — Standard and Detailed
+
+Use Standard `40000833:9279` / `40000836:3188` for concise five-step onboarding copy.
+Use Detailed `40001088:3017` / `40001088:3144` when each implementation stage must show
+three complete fields: work delivered, client responsibility and decision gate. The
+Detailed metadata reads `WORK → CLIENT → GATE`; the three bullets below it follow that
+same order. Do not trim a stage to fit, hide stages behind tabs, or convert the mobile
+sequence into an accordion. Desktop keeps five equal columns under one rail; mobile
+stacks the same five cards. Reading copy remains 16/24 and long mobile titles wrap within
+the card content width.
+
+Detailed Desktop's 12px stage dots sit through the centre of a 2px rail whose endpoints
+are the Stage 01 and Stage 05 dot centres. Both breakpoints place every rounded 2px check
+inside a transparent 16×24 slot aligned to the first 24px copy line. The row gap is 6px
+on desktop and 4px on mobile, keeping the existing text start while giving the glyph a
+consistent optical box. Checks reverse to white on the Primary Blue first card and remain
+Primary Blue on light cards; the slot itself never receives a fill.
+
+Both variants reuse `sections/05-onboarding.html` and `.rv-onboarding`. Coding extends
+the existing stage markup and CSS for the detailed fields, keeps every stage in DOM
+order and adds no disclosure JavaScript. If source copy is edited, run the Editing
+Checklist before Figma insertion and preserve all approved facts and decision points.
+The full visual and implementation acceptance rules are in
+`component-canon.md#implementation--onboarding-contract`.
+
+### ARC method — `40000833:9341` / `40000836:3236`
+
+ARC is the default MAN Digital method framework: **Architect → Run → Compound**.
+Use these canonical components for sections that explain how MAN Digital architects a
+revenue operating model, runs it in HubSpot, and compounds the result through
+adoption and improvement. Keep the three phases, numbering, three actions per phase,
+colour semantics, desktop legend and stacked mobile layout. Treat all source wording as
+example copy: replace it with the page brief, run the editing checklist, and keep body
+copy at the current 16/24 floor. The `HOW WE WORK` eyebrow uses the canonical
+service-page eyebrow token: Lato Bold 13px / 18px on desktop and 11px / 16px on mobile,
+uppercase with 2px tracking. Do not retain the legacy 20px desktop or 12px mobile
+eyebrow. In particular, every ARC action row is Lato Regular
+16px / 24px on desktop and mobile and fills the available cell width. Phase numbers,
+uppercase taxonomy labels and the desktop legend are compact metadata and may remain
+below 16px. Never inherit the legacy 15px desktop or 14px mobile action sizes. The
+desktop action group has zero inter-row gap: each divider-bounded row uses 24px top and
+bottom padding. Use one divider above the action region and dividers between rows; the
+final row has no closing divider because the card border already closes the group. Do
+not rename the middle ARC phase to `Realise` or `Build`; preserve `Run` in every desktop
+and mobile source and instance. Legitimate non-phase copy may still use “build.” Do
+not use phase `itemSpacing` as invisible bottom padding inside an action cell. Apply the
+full acceptance contract in `component-canon.md#arc-component-contract`. The
+implementation continues to reuse `sections/06-roadmap.html` and `.rv-roadmap`; do not
+create a parallel method module.
 
 ### Pagination — `40000829:2707`
 
@@ -55,7 +107,9 @@ The `Counter` property is editable. Desktop Case Studies uses the Counter varian
 three cards per page. Mobile Case Studies uses the Mobile Counter for one card per view.
 Desktop and Mobile Team use the appropriate reusable pagination treatment. Controls stay
 keyboard-operable, retain accessible labels, and use the coded state management in
-`revops-refresh-2025.js`.
+`revops-refresh-2025.js`. Keep the complete pagination instance inside the section with
+deliberate bottom padding. A carousel may preview the next card, but labels and controls
+must not collide with the mask, decorative motifs or section edge.
 
 ### Playbooks — `40000832:29581`
 
@@ -71,6 +125,23 @@ and named revenue objects. Grouped design rules remain at `40000823:2422`.
 
 There is no approved mobile layout. Do not auto-stack, compress or invent one. Add mobile
 to the family only after a reviewed source exists.
+
+### Service Scope Disclosure — `40001115:3242` / `40001115:3473`
+
+The complete Design System chapter is `40001114:3012`; the shared Desktop/Mobile rules
+group is `40001114:3029`. Reuse the five `Open` variants for Commercial workflow,
+Contract to cash, Connected systems, Governance & insight, and Adoption that holds.
+Exactly one group is open per state, every capability stays designed into the component,
+and page use remains an attached instance. The component sets themselves are the state
+reference source: do not duplicate their states inside generic Interaction State
+Reference frames. Approved Quote-to-Cash use is Desktop instance `40001116:3030` and
+Mobile instance `40001116:3068`.
+
+Titles are Lato Bold 18/24 and capability copy is Lato Regular 16/24. Primary Blue
+`#000FC4` marks active disclosure state; Dark Navy and CTA Orange are not allowed here.
+The family is service-scope disclosure, not pricing, FAQ, ARC, Onboarding, Playbooks, or
+outcome tabs. No approved HubSpot source is mapped as of 2026-08-19; search the active
+theme before coding and keep the mapping `[future]` until an implementation is verified.
 
 ## Colour and logo roles
 
@@ -93,7 +164,10 @@ Before implementation:
 5. Reuse Pagination, Playbooks, forms, global navigation and footer exactly where mapped.
 6. Check colour roles, white-logo usage, keyboard behavior, touch targets and responsive
    states.
-7. Record any intentional design/code divergence before shipping.
+7. Confirm there are no missing fonts or icon-font glyphs; use canonical or explicit SVG
+   icons so the developer receives deterministic assets.
+8. Record any intentional design/code divergence and any unresolved proof, direct URL,
+   form ID or booking endpoint as a release gate before shipping.
 
 If the design and live implementation disagree, use the approved component for visual
 intent and the live code for existing behavior, then surface the conflict. Do not silently

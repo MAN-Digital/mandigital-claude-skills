@@ -108,7 +108,7 @@ say otherwise.
 | --------------------------- | ---------------------------------------- | ---------------------------------------- |
 | Hero H1                     | 60 / 600 / -2.59px                       | **34 / 700 / -1px / lh 1.15**            |
 | Section H2                  | 44 / 700 / -2px (Montserrat)             | **26 / 700 / -1px / lh 1.2**             |
-| Eyebrow                     | 14–16, Lato 700, tracking 2px, uppercase | **11 / 700 / tracking 2px**, single line |
+| Section eyebrow             | **13 / 18, Lato 700, tracking 2px, uppercase** | **11 / 16, Lato 700, tracking 2px, uppercase**, single line |
 | Hero paragraph              | 20 / 1.4, 80–85% white                   | **16 / 24 / rgba(255,255,255,.85)**      |
 | Body / intro                | 18 / 28 Lato                             | **16 / 24 Lato**                         |
 | FAQ question                | 20 / 700                                 | **16 / 600 / -0.3px**                    |
@@ -119,6 +119,11 @@ say otherwise.
 **Reading-size floor:** website body copy, card copy, table cells, form guidance, and
 FAQ answers are never smaller than **16px / 24px** at either breakpoint. Reserve smaller
 type only for compact labels, captions, metadata, and uppercase eyebrows.
+
+**Section-eyebrow contract:** the row above is exact for service and landing pages,
+including ARC. Do not promote a section eyebrow to 20px or inherit an arbitrary label
+size from a source frame. Hero pre-headings are a separate pattern and retain the
+approved hero-specific specification.
 
 ## Recurring patterns
 
@@ -139,9 +144,13 @@ type only for compact labels, captions, metadata, and uppercase eyebrows.
 - **Decorative:** dot-grid pattern on blue, orange/blue circles as accents — sparingly,
   copied from `✨ Decorative Elements (40000579:2358)` rather than redrawn. Use at most
   one composite motif per section, insert it behind content, and keep it clear of text.
-- **Long capability scope:** if the preceding section is a tabbed process, use a static
-  bento/grouped-card system instead of another master-detail selector. Show every
-  capability from the brief and state that final scope follows discovery.
+- **Long capability scope:** reuse the responsive Service Scope Disclosure family:
+  Desktop set `40001115:3242`, Mobile set `40001115:3473`, Design System chapter
+  `40001114:3012`, and rules `40001114:3029`. It has five ordered groups with one open
+  group at a time and keeps every briefed capability designed into the component. When
+  the preceding section is another disclosure or selector, test the adjacent reading
+  action during composition rather than inventing a second local pattern. Do not hide
+  the remainder behind a `+N more` summary.
 - **Credential hierarchy:** feature the credential most specific to the service first
   (for Quote-to-Cash, the Quote-to-Cash Capability); keep Elite status and implementation,
   onboarding and integration accreditations as supporting proof.
