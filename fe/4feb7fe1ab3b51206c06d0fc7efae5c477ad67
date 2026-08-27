@@ -1,0 +1,37 @@
+marketing/content-creation/man-digital-revenue-leaders-interviews/assets/carol-chen/metadata.example.json
+  s_b2b9d5301fd010::t_1070c90266be6d 5,11
+marketing/content-creation/man-digital-revenue-leaders-interviews/scripts/test_validate_interview.py
+  s_b2b9d5301fd010::t_1070c90266be6d 161-180
+marketing/content-creation/man-digital-revenue-leaders-interviews/references/editorial-seo-and-hubspot.md
+  s_b2b9d5301fd010::t_1070c90266be6d 21,32
+marketing/content-creation/man-digital-revenue-leaders-interviews/references/figma-and-design-contract.md
+  s_b2b9d5301fd010::t_1070c90266be6d 40,43,60
+marketing/content-creation/man-digital-revenue-leaders-interviews/SKILL.md
+  s_b2b9d5301fd010::t_1070c90266be6d 23,41
+marketing/content-creation/man-digital-revenue-leaders-interviews/references/source-ingestion-and-drafting.md
+  s_b2b9d5301fd010::t_1070c90266be6d 77,79,111,125,133-134
+marketing/content-creation/man-digital-revenue-leaders-interviews/scripts/ingest_interview_source.py
+  s_b2b9d5301fd010::t_1070c90266be6d 168-169,176-179,402-403,430-432,456,461-462
+marketing/content-creation/man-digital-revenue-leaders-interviews/scripts/validate_interview.py
+  s_b2b9d5301fd010::t_1070c90266be6d 106-107,121,242-252,295-305,362-364
+marketing/content-creation/man-digital-revenue-leaders-interviews/scripts/test_ingest_interview_source.py
+  s_b2b9d5301fd010::t_1070c90266be6d 111,127-128,140,164-168
+marketing/content-creation/man-digital-revenue-leaders-interviews/assets/carol-chen/source.json
+  s_b2b9d5301fd010::t_1070c90266be6d 29,34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "fe4feb7fe1ab3b51206c06d0fc7efae5c477ad67",
+  "prompts": {},
+  "sessions": {
+    "s_b2b9d5301fd010": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a03ee0-3cea-7201-ac17-6c5dc9b18b83",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "romeoman <romeo@man.digital>"
+    }
+  }
+}
