@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<!--
+  Worked example: slotted timeline on the default canvas (1920x1080 CSS px, rendered at
+  --scale 2 for a 3840x2160 output). No size flags needed on any command below.
+
+  Every element gets its own non-overlapping window followed by a static hold, so
+  each animation can be independently retimed in After Effects. Nothing moves during
+  a hold, which is what lets time remapping freeze cleanly.
+
+  Preview:      open in a browser, run __preview() in the console
+  Determinism:  python ../scripts/render_frames.py --file bar-reveal.html --verify
+  Holds:        python ../scripts/render_frames.py --file bar-reveal.html --check-holds
+  Render:       python ../scripts/render_frames.py --file bar-reveal.html --fps 25 --out frames/
+  Encode:       python ../scripts/encode.py --frames frames/ --fps 25 --profile edit --out bars.mov
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  :root {
+    --bg: #0d1117; --panel: #161b22; --line: #262d36;
+    --text: #e6edf3; --muted: #8b949e; --accent: #3b82f6;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    width: 1920px; height: 1080px;
+    display: grid; place-items: center;
+    background: var(--bg);
+    font: 400 16px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--text);
+  }
+  /* Sized for the 1920x1080 frame, not shrunk into the middle of it: the card spans
+     1650px (86% of the width) and no type is under the 27px legibility floor
+     (= 54 real px once --scale 2 is applied).
+     Verify with --check-fit before touching the animation. */
+  .card {
+    width: 1650px; padding: 70px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 20px;
+  }
+  .title { font-size: 48px; font-weight: 600; letter-spacing: -0.02em; }
+  .sub   { margin-top: 8px; font-size: 28px; color: var(--muted); }
+  .total { margin-top: 48px; font-size: 84px; font-weight: 700;
+           letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .rows  { margin-top: 48px; display: grid; gap: 26px; }
+  .row   { display: grid; grid-template-columns: 280px 1fr 200px; align-items: center; gap: 28px; }
+  .label { font-size: 28px; color: var(--muted); }
+  .track { height: 22px; background: #21262d; border-radius: 11px; overflow: hidden; }
+  .fill  { height: 100%; background: var(--accent); border-radius: 11px;
+           transform-origin: left center; transform: scaleX(0); }
+  .value { font-size: 28px; text-align: right; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+  <div class="card" id="card">
+    <h1 class="title" id="title">Pipeline by source</h1>
+    <p class="sub" id="sub">Closed-won, trailing 90 days</p>
+    <div class="total" id="total">0</div>
+    <div class="rows" id="rows"></div>
+  </div>
+
+<script>
+// ---- harness subset (full version in ../assets/harness.js) ----
+const clamp01 = (x) => (x < 0 ? 0 : x > 1 ? 1 : x);
+const ease = { outQuint: (t) => 1 - Math.pow(1 - t, 5) };
+const at = (t, d, dur, fn = ease.outQuint) => fn(clamp01((t - d) / dur));
+const lerp = (a, b, p) => a + (b - a) * p;
+
+class Timeline {
+  constructor({ fps = 25 } = {}) { this.fps = fps; this.segments = []; this._n = {}; }
+  slot(name, { at: a, frames: len, hold = 0 }) {
+    const s = { name, startFrame: a, endFrame: a + len, holdEndFrame: a + len + hold,
+                start: a / this.fps, duration: len / this.fps };
+    this.segments.push(s); this._n[name] = s; return s;
+  }
+  static spread({ fps = 25, names = [], frames: len = 20, hold = 4 }) {
+    const tl = new Timeline({ fps }); let c = 0;
+    for (const n of names) { tl.slot(n, { at: c, frames: len, hold }); c += len + hold; }
+    return tl;
+  }
+  p(name, t) { const s = this._n[name]; return s ? at(t, s.start, s.duration) : 0; }
+  get duration() { return Math.max(...this.segments.map(s => s.holdEndFrame)) / this.fps; }
+  export() {
+    window.__duration = this.duration;
+    window.__fps = this.fps;
+    window.__segments = this.segments.map(({ name, startFrame, endFrame, holdEndFrame }) =>
+      ({ name, startFrame, endFrame, holdEndFrame }));
+    return this;
+  }
+}
+
+// ---- data ----
+const DATA = [
+  { key: "outbound", label: "Outbound", value: 412000 },
+  { key: "inbound",  label: "Inbound",  value: 318000 },
+  { key: "partner",  label: "Partner",  value: 246000 },
+  { key: "referral", label: "Referral", value: 158000 },
+  { key: "events",   label: "Events",   value: 94000  },
+];
+const MAX = Math.max(...DATA.map(d => d.value));
+const TOTAL = DATA.reduce((s, d) => s + d.value, 0);
+
+// ---- build DOM once; __renderAt only mutates values ----
+const rowsEl = document.getElementById("rows");
+const els = DATA.map((d) => {
+  const row = document.createElement("div");
+  row.className = "row";
+  row.innerHTML = `<div class="label">${d.label}</div>` +
+                  `<div class="track"><div class="fill"></div></div>` +
+                  `<div class="value">0</div>`;
+  rowsEl.appendChild(row);
+  return { fill: row.querySelector(".fill"), value: row.querySelector(".value") };
+});
+const card = document.getElementById("card");
+const title = document.getElementById("title");
+const sub = document.getElementById("sub");
+const totalEl = document.getElementById("total");
+const fmt = (n) => "$" + Math.round(n).toLocaleString("en-US");
+
+// ---- slots: one window per element, static hold between ----
+// hold:4 assumes you'll time-remap. Raise it if you want to cut without remapping.
+const tl = Timeline.spread({
+  fps: 25,
+  names: ["card", "title", "sub", "total", ...DATA.map(d => d.key)],
+  frames: 20,
+  hold: 4,
+});
+
+// ---- the contract ----
+window.__renderAt = function (t) {
+  const c = tl.p("card", t);
+  card.style.opacity = c;
+  card.style.transform = `translateY(${lerp(30, 0, c)}px) scale(${lerp(0.98, 1, c)})`;
+
+  const ti = tl.p("title", t);
+  title.style.opacity = ti;
+  title.style.transform = `translateY(${lerp(12, 0, ti)}px)`;
+
+  const su = tl.p("sub", t);
+  sub.style.opacity = su;
+  sub.style.transform = `translateY(${lerp(12, 0, su)}px)`;
+
+  totalEl.textContent = fmt(lerp(0, TOTAL, tl.p("total", t)));
+
+  DATA.forEach((d, i) => {
+    const p = tl.p(d.key, t);
+    els[i].fill.style.transform = `scaleX(${(d.value / MAX) * p})`;
+    els[i].value.textContent = fmt(lerp(0, d.value, p));
+  });
+};
+
+tl.export();
+
+// ---- preview ----
+window.__preview = function (fps = 25) {
+  window.__preview.stop();
+  let f = 0; const total = Math.round(window.__duration * fps);
+  window.__preview._id = setInterval(() => {
+    window.__renderAt(f / fps); f = (f + 1) % (total + 1);
+  }, 1000 / fps);
+};
+window.__preview.stop = function () {
+  if (window.__preview._id) clearInterval(window.__preview._id);
+  window.__preview._id = null;
+};
+
+window.__renderAt(0);
+</script>
+</body>
+</html>

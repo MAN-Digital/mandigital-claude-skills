@@ -46,6 +46,7 @@ Three skill packages we don't own but depend on. Each has a README inside `devel
    - Writing a blog post? → [`marketing/content-creation/blog-production/`](./marketing/content-creation/blog-production/)
    - Writing other content? → [`marketing/content-creation/vibe-marketing-v2/`](./marketing/content-creation/vibe-marketing-v2/)
    - Editing anything? → [`marketing/content-creation/editing-checklist/`](./marketing/content-creation/editing-checklist/)
+   - Producing or repurposing a video? → [`marketing/content-creation/video-production/`](./marketing/content-creation/video-production/)
    - Designing a website page in Figma? → [`marketing/web-development/man-digital-figma-website-design/`](./marketing/web-development/man-digital-figma-website-design/)
    - Maintaining the HubSpot website? → [`marketing/web-development/man-digital-cms-pages/`](./marketing/web-development/man-digital-cms-pages/)
    - Auditing PSI, Web Vitals, SEO, or AEO? → [`marketing/web-development/auditing-web-vitals/`](./marketing/web-development/auditing-web-vitals/)

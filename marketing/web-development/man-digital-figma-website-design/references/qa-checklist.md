@@ -16,7 +16,12 @@ by memory of what you built.
 - [ ] Body copy, card copy, table cells, form guidance, and FAQ answers are at least
       16px / 24px on desktop and mobile. Only labels, captions, metadata, and eyebrows
       may use smaller type.
+- [ ] Service/LP section eyebrows are Lato Bold 13px / 18px on desktop and 11px / 16px
+      on mobile, uppercase with 2px tracking. A different size is allowed only for an
+      approved hero-specific pre-heading, not for a section eyebrow.
 - [ ] Montserrat headings / Lato body. No real Montserrat italics.
+- [ ] No node reports a missing font. Icons use canonical components or explicit
+      SVG/vector paths—never Font Awesome or another icon-font glyph.
 - [ ] No clipped/overflowing text (screenshot check — resize-after-set collapses text nodes).
 
 ## Layout & spacing
@@ -32,9 +37,59 @@ by memory of what you built.
       corresponding HubSpot section, CSS classes and JavaScript behavior were inspected
       before new code was written.
 - [ ] Case Studies and Team contain a `Pagination` instance (`40000829:2707`); arrows,
-      counters and dots were not recreated locally.
+      counters and dots were not recreated locally. Pagination is fully visible inside
+      the section and has deliberate bottom padding; it is not flush-clipped by the frame.
 - [ ] Playbooks reuse `40000832:29581` / `40000836:3319` and preserve all four categories,
       six items per category and all 24 detail panels in the DOM.
+- [ ] Grouped service capability scope reuses Service Scope Disclosure Desktop set
+      `40001115:3242` and Mobile set `40001115:3473`; page sections remain attached
+      instances and the shared rules group remains at `40001114:3029`.
+- [ ] Service Scope Disclosure has exactly five ordered states and one open group per
+      state. Every brief-owned capability remains designed-in and source/DOM available;
+      no package, tier, count, pill, helper command, or `+N more` shortcut was added.
+- [ ] Service Scope Disclosure titles are Lato Bold 18/24 and capability text is Lato
+      Regular 16/24. Primary Blue marks the active state; Dark Navy and CTA Orange are
+      absent. Desktop and Mobile state sets live only in the dedicated Design System
+      chapter `40001114:3012`, with no duplicate copies in generic reference boards.
+- [ ] A project implementation sequence reuses Onboarding Standard
+      `40000833:9279` / `40000836:3188` or Detailed `40001088:3017` /
+      `40001088:3144`; it does not become another ARC section, master-detail panel or
+      locally drawn stepper.
+- [ ] Detailed Onboarding keeps five ordered stages visible at both breakpoints. Every
+      card contains stage number, title, `WORK → CLIENT → GATE` metadata and three
+      corresponding bullets. Desktop uses five equal columns; mobile uses the same
+      content in a natural stack with no clipped titles or fixed-height copy loss.
+- [ ] Detailed Desktop stage dots are 12px and centred on a 2px rail that starts at the
+      first dot centre and ends at the last. Desktop and mobile checks use transparent
+      16×24 first-line slots with rounded 2px paths; white checks reverse on the blue
+      first card and Primary Blue checks remain on light cards.
+- [ ] Onboarding page sections remain attached instances and map to the existing
+      `sections/05-onboarding.html` / `.rv-onboarding` implementation. Detailed fields
+      extend that markup and CSS; no parallel module, hidden-tab DOM or unnecessary
+      disclosure JavaScript was introduced.
+- [ ] A MAN Digital method/framework section reuses the ARC Desktop
+      `40000833:9341` and Mobile `40000836:3236` components, preserves Architect →
+      Run → Compound, replaces example wording with brief-owned copy, and maps to
+      the existing `.rv-roadmap` implementation.
+- [ ] The middle ARC phase is exactly `Run` in desktop and mobile sources and instances;
+      it has not been renamed to `Realise` or `Build`. Non-phase brief copy is reviewed
+      separately and is not changed by this nomenclature check.
+- [ ] ARC page sections remain attached instances. Reusable structural corrections were
+      made in the canonical source; page instances use overrides only for page-owned
+      copy. The source and at least one real instance were screenshot-checked afterward.
+- [ ] ARC contains exactly three numbered phases, one taxonomy label and three concise
+      actions per phase. Copy sells the delivery method rather than instructing an app
+      user; no “select,” helper or placeholder UI language was introduced.
+- [ ] ARC action rows are Lato Regular 16px / 24px on desktop and mobile and fill the
+      available cell width. Only phase numbers, taxonomy labels, and the desktop legend
+      use smaller type; legacy 15px desktop / 14px mobile action copy is not retained.
+- [ ] Desktop ARC action cells use zero inter-row gap, equal 24px top/bottom padding,
+      one divider above the action region, and dividers between rows. The final action
+      has no closing divider because the card border closes the group. Parent spacing
+      does not create hidden extra padding below a bullet.
+- [ ] ARC preserves the desktop legend and bullet-colour mapping. Mobile uses the
+      canonical stacked cards without importing desktop table decoration; all nine
+      actions remain visible and unclipped.
 - [ ] Recurring elements are CLONES of the Design System page / source-page components,
       not redraws (CTA chip, cards, pagers, badges, quote cards).
 - [ ] Section naming: desktop "«Thing» Section", mobile `m-*`.
@@ -55,6 +110,17 @@ by memory of what you built.
 ## Content
 - [ ] Copy matches the brief/approved source verbatim; [TO BE ADDED] markers preserved,
       nothing invented.
+- [ ] No visible text explains the design, content order, hierarchy, interaction model,
+      implementation, or component itself. Internal rationale and helper instructions
+      live only in layer names, descriptions, rules groups, or handoff notes—not in
+      visitor-facing landing-page copy.
+- [ ] Active Desktop and Mobile implementation frames are unmistakably named, contain
+      only the approved contiguous section sequence, and superseded explorations are
+      hidden or archived outside the implementation target.
+- [ ] When an editing pass is requested, the Editing Checklist's eight dimensions are
+      documented and both enforcement scripts pass before final copy enters Figma.
+      Editing may tighten syntax but does not remove a required content slot, dependency
+      or decision gate to make a component fit.
 - [ ] Every briefed capability is visible; no `+N more` row hides required content.
 - [ ] Real assets (hubfs originals, provided photos, Envato-licensed) — no watermarked
       previews left in final frames.
@@ -65,6 +131,9 @@ by memory of what you built.
 - [ ] 44px touch targets; two-color focus treatment (3px #0A0A0A inner + white halo).
 - [ ] One FAQSection per page for public questions.
 - [ ] Client logos in equal 164×40 optical boxes; only verified logos/quotes/claims.
+- [ ] Every external proof point has a verified source and direct destination URL. Any
+      unresolved case-study claim, testimonial attribution, route, form ID or booking
+      endpoint is written into the developer handoff as a release gate.
 
 ## Asset & badge canon
 - [ ] Primary Blue `#000FC4` is used for normal brand/section/active states; Dark Navy
@@ -81,7 +150,7 @@ by memory of what you built.
 - [ ] Strategy-call and FAQ sections use the canonical source components listed in
       `component-canon.md`; the form keeps the full field/consent pattern.
 - [ ] Decorative motifs come from `40000579:2358`, max one composite motif per section,
-      behind content and never crossing readable text.
+      behind content and never crossing readable text, controls or pagination.
 - [ ] No stock people photos or dated "office stock" imagery — banned outright (brand
       rule shared with the blog-graphics skill: no random stock imagery, no generic SaaS
       decoration). Real team photos, product screenshots, flat vectors, device mockups only.

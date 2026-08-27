@@ -55,8 +55,37 @@ When sources disagree, use this order:
 4. **Gemini carousel registry** — reusable component memory and build discipline.
 5. **User prompt / copy** — headline, body, CTA, target channel, and final intent.
 
+## Step 0 — Ask Where the Asset Goes (ALWAYS, before any design work)
+
+**Never assume a destination folder.** Assets belong to the project they were made for, not to a
+shared bucket where every unrelated MAN Digital asset piles up. Before reading specs, before
+opening Playground, before creating any `.pen`:
+
+**Ask the user for the destination folder.** Use `AskUserQuestion` with the project folders that
+plausibly fit (recent/named project directories, the folder of any file the user referenced in the
+request) plus the shared `Marketing Assets/` fallback from `source-paths.md`. The user can always
+type their own path via "Other".
+
+- If the request already names or implies a project path — the user pasted a path, pointed at a
+  brief/design/deck in a project folder, or said "for the Revenue Hub launch" where that folder
+  exists — **propose that folder as the first option** and let them confirm. Confirming is fast;
+  guessing silently is what scatters the work.
+- **Ask once per session/set, not once per asset.** For a multi-asset kit, get the folder up front
+  and reuse it for every asset in that kit. Only re-ask if the user starts a different project.
+- If the user declines to choose or says "wherever", fall back to the shared `Marketing Assets/`
+  folder and **say explicitly** that's where it landed, so they can move it.
+
+**Everything for the asset goes in that folder** — the `.pen` source, any PNGs copied in for image
+fills (Pencil resolves image-fill URLs relative to the `.pen`, so they must be siblings), and the
+final exports. Do not split the source into one place and the export into another.
+
+Create the folder if it doesn't exist, confirm the path resolves before building, and repeat the
+chosen path back to the user in your final report alongside the export paths.
+
 ## Required Startup
 
+0. **Complete Step 0 above — you have the user's confirmed destination folder.** Do not proceed
+   without it.
 1. Read `references/asset-specs.md` — confirm the exact asset type, canvas size, ratio, and safe zones **before** designing.
 2. Read `references/brand-rules.md` — colors, type, logos, decoration.
 3. Read `references/source-paths.md` — design-system, Playground, and output-folder paths.
@@ -98,6 +127,8 @@ not enough — the real design language lives in the file.
 
 ## Default Workflow
 
+0. **Ask for and lock the destination folder** (see *Step 0* above). Every path in the steps
+   below — `.pen`, copied image assets, exports — is inside that folder.
 1. **Identify the asset type first.** Map the request to a row in `asset-specs.md`, lock the
    canvas size, aspect ratio, and safe zones. If the asset is a carousel → route to `carousel`.
    If the user names a size that conflicts with the spec, prefer the spec unless they are explicit.
@@ -129,8 +160,9 @@ not enough — the real design language lives in the file.
    plan: treat the output as a static image at its smallest real display size (a YouTube thumbnail
    shows ~168–320 px wide; a banner is read on mobile). Few, large words for covers; respect the
    feed-post type minimums; vary weight (bold title, weight-500 subtitle).
-6. **Choose and OPEN the output `.pen`.** One `.pen` per asset under the Marketing Assets output
-   folder (see `source-paths.md`). Never build in `Playground.pen`; never reuse a prior asset's
+6. **Choose and OPEN the output `.pen`.** One `.pen` per asset **in the destination folder the
+   user confirmed in Step 0** — not the shared `Marketing Assets/` folder unless that's what they
+   picked. Never build in `Playground.pen`; never reuse a prior asset's
    file. **Pencil's `filePath` argument is unreliable — it reads/writes the _active editor_, not
    the path you pass.** So: create the file (copy a blank seed), **`open -a Pencil "<file>"`**,
    then `get_editor_state` and confirm the active editor path matches before any write. For a
@@ -179,10 +211,12 @@ not enough — the real design language lives in the file.
      deleting and rebuilding from scratch, then re-screenshot and re-critique until clean.
    - Confirm the source is still editable (not a flattened image) and that the last
      `batch_design` reported no `issues detected` before trusting any screenshot.
-10. **Export per spec.** Export each asset as its own file at the `asset-specs.md` format and
-    size: PNG/JPG sRGB for most, **JPG ~85–90% and ≤2 MB for YouTube thumbnails**, JPG/PNG (not
-    WebP) for Open Graph. The `.pen` stays editable; only the export is flattened. Hand the user
-    the export path(s) plus any "add this image here" placeholder notes.
+10. **Export per spec, into the same destination folder.** Export each asset as its own file at
+    the `asset-specs.md` format and size: PNG/JPG sRGB for most, **JPG ~85–90% and ≤2 MB for
+    YouTube thumbnails**, JPG/PNG (not WebP) for Open Graph. The export sits beside its `.pen` in
+    the user's chosen project folder — never in a different folder from the source. The `.pen`
+    stays editable; only the export is flattened. Hand the user the destination folder, the export
+    path(s), plus any "add this image here" placeholder notes.
 
 ## Final Verification Gate — pass EVERY line before saying "done"
 
@@ -191,6 +225,7 @@ the actual `snapshot_layout` / `batch_get` numbers and zoomed screenshots — no
 fails, fix it and re-verify. Small misses (a 7px label/dot overlap, an off-rail label, the same
 style as the last asset) are exactly what this gate exists to catch.
 
+- [ ] **Location:** the user was asked for the destination folder and confirmed it; the `.pen`, any copied image assets, and the export all sit in that folder — not the shared `Marketing Assets/` bucket by default, not split across folders.
 - [ ] **Size:** exported dimensions match the `asset-specs.md` row exactly (`sips`-verified), correct format/cap.
 - [ ] **No clipping:** `snapshot_layout(problemsOnly)` clean for content (decoration bleed is OK).
 - [ ] **No overlap:** every text node's rectangle compared to neighbours and visual zones — nothing touches/overlaps (titles clear the hero; labels clear their dots by an equal margin).
@@ -207,7 +242,10 @@ Only when every box is checked do you export-and-report. State that the gate pas
 
 ## Output & Naming
 
-- One `.pen` per asset in the Marketing Assets output folder (see `source-paths.md`).
+- **Destination is asked, never assumed** — the user's confirmed project folder from Step 0. The
+  shared `Marketing Assets/` folder in `source-paths.md` is only the fallback when they decline
+  to pick one, and you say so out loud when you use it.
+- One `.pen` per asset in that folder, with its exports and any copied image assets beside it.
 - Name the `.pen` and the top-level frame for the asset, e.g.
   `MAN Digital - LinkedIn Event Cover - {Topic}` or `MAN Digital - YouTube Thumbnail - {Topic}`.
 - Build at 1× the spec, or design large at the same ratio (e.g. company cover at 4200 × 700)
@@ -244,6 +282,10 @@ Social assets are mostly consumed on phones, and exported images do not become r
 
 ## Non-Negotiables
 
+- **Always ask where the asset goes before building.** Assets live with the project they belong
+  to. Ask for the destination folder up front (Step 0), once per session/set, offering likely
+  project folders plus the shared fallback. Never silently drop work into `Marketing Assets/`,
+  and never split the `.pen` and its export across different folders.
 - **Confirm the asset type and lock the `asset-specs.md` size + safe zones before building.**
   Guessing a platform size is the most common failure, and platforms change specs (e.g. the
   LinkedIn event cover is now **16:9 / 1920 × 1080**, not the old 4:1). When the user shows a

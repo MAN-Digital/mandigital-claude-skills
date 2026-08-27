@@ -1,6 +1,6 @@
 # fKn3K - Closing Key Takeaways
 
-Source: `/Users/romeoman/Documents/Marketing/Design/Pencil/Playground.pen`
+Source: `/Users/diogosa/Documents/!MAN DIGITAL/Design/Pencil/Playground.pen`
 
 Observed frame: `Prospecting Agent vs Outbound-06`, 1190 x 1684.
 

@@ -75,7 +75,7 @@ Use these before inventing decoration:
 - Pale depth shapes and background planes: `xLkzv`, `NZhqk`, `i8rgC`, `I6QCPl`, `HQP5q`, `oCVLE`, `EzX4X`.
 - Gemini/carousel decoration references: `VsypW` soft circles, `xOLUX` blue geometric pattern, `p4Dtt` orange union accent, and `GogdW` orange/blue circle-path accent. Verify availability in the active Pencil file; if unavailable, recreate the same editable anatomy only when it fits the composition.
 - Icon and stage systems: `KVqAt-stage-medallions`, `KVqAt-pill-rows`, `b8SoH-central-hub`, `llyux-capability-tiles`, `nRPmP` orbit steps.
-- Logo/brand marks: approved assets in `/Users/romeoman/Documents/Marketing/Design/MAN Digital Design System/assets/`, especially `logo-mono-blue.png`, `logo-mono-white.png`, and `logo-color.png`.
+- Logo/brand marks: approved assets in `/Users/diogosa/Documents/!MAN DIGITAL/Design/MAN Digital Design System/assets/`, especially `logo-mono-blue.png`, `logo-mono-white.png`, and `logo-color.png`.
 - Design-system decor assets: `assets/decor/dot-mesh.svg`, `dot-column.svg`, `ellipse-fading.svg`, `etched-sphere.svg`, `circle-shadow-fade.svg`, `ellipse-thin-stroke.svg`, `diamond-hollow.svg`, and restrained orange chevrons/circles when the composition needs a small directional accent.
 
 Keep these elements low contrast and behind content. Do not add random shapes that are not traceable to the Playground, Gemini carousel registry, Figma source, or design-system asset library.

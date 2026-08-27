@@ -4,7 +4,7 @@ Preview PNGs are stored at:
 
 `assets/previews/playground/<nodeId>.png`
 
-These were exported from `/Users/romeoman/Documents/Marketing/Design/Pencil/Playground.pen` at 0.25 scale on 2026-05-23. Use them for quick visual selection only. Always inspect the live Pencil node before editing.
+These were exported from `/Users/diogosa/Documents/!MAN DIGITAL/Design/Pencil/Playground.pen` at 0.25 scale on 2026-05-23. Use them for quick visual selection only. Always inspect the live Pencil node before editing.
 
 ## Coverage
 

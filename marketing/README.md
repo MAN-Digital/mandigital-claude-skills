@@ -20,6 +20,7 @@ marketing/
 | [`man-digital-marketing-assets/`](./content-creation/man-digital-marketing-assets/) | Creating social images, banners, thumbnails, ads, and share graphics |
 | [`man-digital-revenue-leaders-interviews/`](./content-creation/man-digital-revenue-leaders-interviews/) | Turning YouTube, Granola, or Markdown interviews into complete HubSpot blog drafts |
 | [`man-digital-youtube-scripts/`](./content-creation/man-digital-youtube-scripts/) | Writing MAN Digital YouTube scripts and visual cue sheets |
+| [`video-production/`](./content-creation/video-production/) | Running the 11-skill Adobe Premiere Pro video pipeline, multilingual subtitle delivery, and Shorts repurposing |
 | [`vibe-marketing-v2/`](./content-creation/vibe-marketing-v2/) | Brand voice, positioning, email, newsletter, creative, SEO, and repurposing workflows |
 
 See the [content-creation index](./content-creation/) for category details.
@@ -44,6 +45,7 @@ See the [web-development index](./web-development/) for category details.
 | Create a Revenue Leaders Interview post | `content-creation/man-digital-revenue-leaders-interviews/` |
 | Create a branded visual | `content-creation/man-digital-blog-graphics/` or `content-creation/man-digital-marketing-assets/` |
 | Write a YouTube script | `content-creation/man-digital-youtube-scripts/` |
+| Produce, subtitle, or repurpose a video | `content-creation/video-production/` |
 | Design a website page in Figma | `web-development/man-digital-figma-website-design/` |
 | Maintain the HubSpot website | `web-development/man-digital-cms-pages/` |
 | Audit PSI, Web Vitals, SEO, or AEO | `web-development/auditing-web-vitals/` |
