@@ -13,9 +13,24 @@ python3 scripts/ingest_interview_source.py "https://www.youtube.com/watch?v=VIDE
   --linkedin-url "https://www.linkedin.com/in/.../"
 ```
 
-The script uses `yt-dlp` to capture video metadata and available manual or automatic captions without downloading the video. It writes `source-content.md` and `source.json`, including the video ID, privacy-enhanced embed URL, thumbnail/Open Graph image candidate, caption kind, source hash, and missing prompt inputs.
+The free ingestion cascade is deterministic:
 
-If the video has no downloadable captions, stop and ask for a transcript or Markdown export. Do not infer the interview from the title or description alone.
+1. `youtube-transcript-api` retrieves the selected caption track.
+2. `yt-dlp` retrieves metadata and provides a caption fallback.
+3. Only when `--whisper-fallback` is explicitly supplied, `faster-whisper` downloads the audio and transcribes it locally on CPU with INT8 compute.
+
+Installed CLIs are reused. Otherwise the first two tools run ephemerally through `uvx`, so the skill does not modify the caller's Python environment. The script writes `source-content.md` and `source.json`, including the provider and fallback history, generated-caption flag, video ID, privacy-enhanced embed URL, thumbnail/Open Graph image candidate, caption kind, source hash, and missing prompt inputs.
+
+If a video has neither manual nor automatic captions, opt into the local fallback:
+
+```bash
+python3 scripts/ingest_interview_source.py "https://www.youtube.com/watch?v=VIDEO_ID" \
+  --output work/guest-name \
+  --whisper-fallback \
+  --whisper-model small
+```
+
+Local Whisper downloads the audio and a model, and may take substantial CPU time. If it also fails, stop and ask for a transcript or Markdown export. Do not infer the interview from the title or description alone.
 
 ### Markdown or plain-text transcript
 
@@ -116,4 +131,4 @@ Do not autoplay. When `--no-embed-video` is chosen, omit the block and record `e
 - For YouTube, transfer the chosen thumbnail or user-supplied title card to HubSpot Files when required by the CMS workflow; verify the final public HTTPS `og:image` in preview.
 - For Markdown/Granola, stop before HubSpot handoff if the requested Open Graph image or guest assets remain unresolved.
 
-Official behavior references: [yt-dlp metadata and subtitle options](https://github.com/yt-dlp/yt-dlp/blob/master/README.md), [Granola transcript copying](https://docs.granola.ai/help-center/taking-notes/transcription), and [Granola note sharing/export behavior](https://docs.granola.ai/help-center/sharing/sharing-notes).
+Official behavior references: [youtube-transcript-api](https://github.com/jdepoix/youtube-transcript-api), [yt-dlp metadata and subtitle options](https://github.com/yt-dlp/yt-dlp/blob/master/README.md), [faster-whisper](https://github.com/SYSTRAN/faster-whisper), [Granola transcript copying](https://docs.granola.ai/help-center/taking-notes/transcription), and [Granola note sharing/export behavior](https://docs.granola.ai/help-center/sharing/sharing-notes).

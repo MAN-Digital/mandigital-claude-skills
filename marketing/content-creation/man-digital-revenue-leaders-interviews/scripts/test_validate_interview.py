@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import importlib.util
-import hashlib
 import json
 import shutil
 import tempfile
@@ -43,82 +42,14 @@ class ValidatorTests(unittest.TestCase):
         self.assertEqual(VALIDATOR.validate(EXAMPLE_DIR), [])
 
     def test_source_derived_youtube_bundle_passes(self) -> None:
-        with tempfile.TemporaryDirectory(prefix="rli-youtube-validator-test-") as temp_dir:
-            asset_dir = Path(temp_dir) / "interview"
-            shutil.copytree(EXAMPLE_DIR, asset_dir)
-            metadata_path = asset_dir / "metadata.example.json"
-            metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
-            metadata.update(
-                {
-                    "editorialState": "draft-source-derived",
-                    "sourceType": "youtube",
-                    "embedVideo": True,
-                }
-            )
-            metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
-
-            intro_path = asset_dir / "interview-intro.html"
-            intro_path.write_text(
-                intro_path.read_text(encoding="utf-8").replace(
-                    'data-rli-editorial-state="draft-sample-answers"',
-                    'data-rli-editorial-state="draft-source-derived"',
-                ),
-                encoding="utf-8",
-            )
-            body_path = asset_dir / "interview-body.html"
-            body = body_path.read_text(encoding="utf-8")
-            body = body.replace(
-                'data-rli-editorial-state="draft-sample-answers"',
-                'data-rli-editorial-state="draft-source-derived"',
-            ).replace(
-                'class="rli-sample-notice"', 'class="rli-source-notice"'
-            ).replace(
-                'data-answer-state="illustrative"',
-                'data-answer-state="source-derived"',
-            ).replace(
-                'data-editorial-state="illustrative"',
-                'data-editorial-state="source-derived"',
-            )
-            body = body.replace(
-                "</figure>",
-                """</figure>
-  <div class="rli-video"><iframe src="https://www.youtube-nocookie.com/embed/example123" title="Interview with Carol Chen"></iframe></div>""",
-                1,
-            )
-            body_path.write_text(body, encoding="utf-8")
-
-            content = "[00:00:01.000] Source evidence.\n"
-            (asset_dir / "source-content.md").write_text(content, encoding="utf-8")
-            content_hash = hashlib.sha256(content.encode("utf-8")).hexdigest()
-            source = {
-                "sourceType": "youtube",
-                "embedVideo": True,
-                "missingPromptInputs": [],
-                "contentFile": "source-content.md",
-                "contentSha256": content_hash,
-                "youtube": {
-                    "embedUrl": "https://www.youtube-nocookie.com/embed/example123"
-                },
-            }
-            (asset_dir / "source.json").write_text(
-                json.dumps(source, indent=2) + "\n", encoding="utf-8"
-            )
-            evidence = {
-                "sourceSha256": content_hash,
-                "questions": [
-                    {
-                        "question": question,
-                        "sourceRefs": ["00:00:01"],
-                        "evidence": ["Source evidence."],
-                        "coverage": "direct",
-                    }
-                    for question in metadata["approvedQuestions"]
-                ],
-            }
-            (asset_dir / "evidence-map.json").write_text(
-                json.dumps(evidence, indent=2) + "\n", encoding="utf-8"
-            )
-            self.assertEqual(VALIDATOR.validate(asset_dir), [])
+        metadata = json.loads(
+            (EXAMPLE_DIR / "metadata.example.json").read_text(encoding="utf-8")
+        )
+        source = json.loads((EXAMPLE_DIR / "source.json").read_text(encoding="utf-8"))
+        self.assertEqual(metadata["editorialState"], "draft-source-derived")
+        self.assertEqual(source["transcriptProvider"], "youtube-transcript-api")
+        self.assertTrue(source["transcriptIsGenerated"])
+        self.assertEqual(VALIDATOR.validate(EXAMPLE_DIR), [])
 
     def test_changed_question_wording_is_rejected(self) -> None:
         self.assert_rejected(
@@ -135,7 +66,7 @@ class ValidatorTests(unittest.TestCase):
             "rli-article must declare exactly",
             (
                 "interview-body.html",
-                'data-rli-editorial-state="draft-sample-answers"',
+                'data-rli-editorial-state="draft-source-derived"',
                 'data-rli-editorial-state="approved"',
             ),
         )
@@ -145,25 +76,25 @@ class ValidatorTests(unittest.TestCase):
             "data-answer-state=approved",
             (
                 "interview-intro.html",
-                'data-rli-editorial-state="draft-sample-answers"',
+                'data-rli-editorial-state="draft-source-derived"',
                 'data-rli-editorial-state="approved"',
             ),
             (
                 "interview-body.html",
-                'data-rli-editorial-state="draft-sample-answers"',
+                'data-rli-editorial-state="draft-source-derived"',
                 'data-rli-editorial-state="approved"',
             ),
             (
                 "metadata.example.json",
-                '"editorialState": "draft-sample-answers"',
+                '"editorialState": "draft-source-derived"',
                 '"editorialState": "approved"',
             ),
         )
 
-    def test_missing_sample_notice_is_rejected(self) -> None:
+    def test_missing_source_notice_is_rejected(self) -> None:
         self.assert_rejected(
-            "exactly one visible rli-sample-notice",
-            ("interview-body.html", 'class="rli-sample-notice"', 'class="removed-notice"'),
+            "exactly one visible rli-source-notice",
+            ("interview-body.html", 'class="rli-source-notice"', 'class="removed-notice"'),
         )
 
     def test_wrong_campaign_id_is_rejected(self) -> None:
@@ -181,8 +112,8 @@ class ValidatorTests(unittest.TestCase):
             "only YouTube sources may enable embedVideo",
             (
                 "metadata.example.json",
-                '"embedVideo": false',
-                '"embedVideo": true',
+                '"sourceType": "youtube"',
+                '"sourceType": "markdown"',
             ),
         )
 
@@ -191,8 +122,13 @@ class ValidatorTests(unittest.TestCase):
             "sample sourceType is only valid",
             (
                 "metadata.example.json",
-                '"editorialState": "draft-sample-answers"',
+                '"editorialState": "draft-source-derived"',
                 '"editorialState": "draft-transcript-reviewed"',
+            ),
+            (
+                "metadata.example.json",
+                '"sourceType": "youtube"',
+                '"sourceType": "sample"',
             ),
         )
 

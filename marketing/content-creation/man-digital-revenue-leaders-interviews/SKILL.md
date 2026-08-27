@@ -17,7 +17,7 @@ Build each interview as a HubSpot blog post, not as a new theme. Preserve the ex
 
 ## Required outcome
 
-1. Normalize the supplied source. Run `python3 scripts/ingest_interview_source.py <source> --output <working-directory>` for public YouTube or local Markdown. Use `--source-type granola` for a copied Granola transcript or Markdown export. Resolve every `PROMPT_REQUIRED` field with the user; never fabricate missing guest assets or profile details.
+1. Normalize the supplied source. Run `python3 scripts/ingest_interview_source.py <source> --output <working-directory>` for public YouTube or local Markdown. YouTube intake uses the free caption cascade documented in the source-ingestion reference; only add `--whisper-fallback` when local audio transcription is acceptable. Use `--source-type granola` for a copied Granola transcript or Markdown export. Resolve every `PROMPT_REQUIRED` field with the user; never fabricate missing guest assets or profile details.
 2. Inspect the approved Figma desktop and mobile frames and the current HubSpot blog template before editing.
 3. Create an internal evidence map from every approved question to source timestamps or source passages. Draft the full post only from that evidence; a source-derived draft remains visibly unapproved until reviewed.
 4. Reuse the Carol structure: intro, lead image, optional privacy-enhanced YouTube embed, the notice required by the current editorial state, context blocks, one Q/A section per approved question, pull quote, takeaways, guest card, and LinkedIn action. Record the approved Figma source and exact ordered questions in metadata so the validator can reject wording or order drift.
@@ -46,6 +46,9 @@ The bundled Carol assets document the known-good structure and draft-safety patt
 - `assets/carol-chen/interview-body.html`
 - `assets/carol-chen/interview-post.css`
 - `assets/carol-chen/metadata.example.json`
+- `assets/carol-chen/source.json`
+- `assets/carol-chen/source-content.md`
+- `assets/carol-chen/evidence-map.json`
 - `assets/carol-chen/linkedin-icon.svg`
 
-Copy the structure, replace guest-specific content and assets, preserve the safeguards, and validate the new directory before applying it to HubSpot.
+The Carol example is generated from the bundled YouTube transcript, remains `draft-source-derived`, and deliberately leaves unsupported answers as transparent placeholders. Copy the structure, replace guest-specific content and assets, preserve the safeguards, and validate the new directory before applying it to HubSpot.

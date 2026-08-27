@@ -22,6 +22,9 @@ TIMING_RE = re.compile(
     r"^(?P<start>(?:\d{2}:)?\d{2}:\d{2}[.,]\d{3})\s+-->\s+"
 )
 TAG_RE = re.compile(r"<[^>]+>")
+TRANSCRIPT_API_PACKAGE = "youtube-transcript-api==1.2.4"
+YT_DLP_PACKAGE = "yt-dlp"
+WHISPER_PACKAGE = "faster-whisper>=1.1,<2"
 
 
 def sha256_text(value: str) -> str:
@@ -97,6 +100,55 @@ def parse_vtt(path: Path) -> str:
             output.append(f"[{timestamp}] {new_text}")
         previous_full = caption
     return "\n\n".join(output).strip() + "\n"
+
+
+def format_timestamp(seconds: float) -> str:
+    milliseconds = max(0, round(seconds * 1000))
+    hours, milliseconds = divmod(milliseconds, 3_600_000)
+    minutes, milliseconds = divmod(milliseconds, 60_000)
+    whole_seconds, milliseconds = divmod(milliseconds, 1000)
+    return f"{hours:02d}:{minutes:02d}:{whole_seconds:02d}.{milliseconds:03d}"
+
+
+def parse_transcript_api_json(value: str) -> tuple[str, int]:
+    """Normalize youtube-transcript-api JSON into timestamped Markdown."""
+    payload = json.loads(value)
+    if isinstance(payload, list) and len(payload) == 1 and isinstance(payload[0], list):
+        payload = payload[0]
+    if not isinstance(payload, list):
+        raise ValueError("youtube-transcript-api returned an unexpected JSON shape")
+    output: list[str] = []
+    for item in payload:
+        if not isinstance(item, dict):
+            continue
+        caption = clean_caption(str(item.get("text") or ""))
+        if not caption:
+            continue
+        try:
+            start = float(item.get("start") or 0)
+        except (TypeError, ValueError):
+            start = 0
+        output.append(f"[{format_timestamp(start)}] {caption}")
+    if not output:
+        raise ValueError("youtube-transcript-api returned an empty transcript")
+    return "\n\n".join(output) + "\n", len(output)
+
+
+def tool_command(executable: str, package: str) -> list[str]:
+    """Use an installed CLI or run the pinned free package ephemerally with uvx."""
+    installed = shutil.which(executable)
+    if installed:
+        return [installed]
+    uvx = shutil.which("uvx")
+    if uvx:
+        return [uvx, "--from", package, executable]
+    raise ValueError(
+        f"{executable} is unavailable; install it or install uv so the skill can run it ephemerally"
+    )
+
+
+def transcript_language(language: str) -> str:
+    return language.rstrip(".*") or "en"
 
 
 def first_heading(markdown: str, fallback: str) -> str:
@@ -199,13 +251,11 @@ def choose_vtt(directory: Path, video_id: str) -> Path:
     return candidates[0]
 
 
-def run_yt_dlp(source_url: str, language: str) -> tuple[dict[str, object], str, str]:
-    executable = shutil.which("yt-dlp")
-    if not executable:
-        raise ValueError("yt-dlp is required for YouTube ingestion but is not installed")
+def fetch_youtube_metadata(source_url: str) -> dict[str, object]:
+    command = tool_command("yt-dlp", YT_DLP_PACKAGE)
     metadata_run = subprocess.run(
-        [
-            executable,
+        command
+        + [
             "--dump-single-json",
             "--skip-download",
             "--no-playlist",
@@ -217,14 +267,41 @@ def run_yt_dlp(source_url: str, language: str) -> tuple[dict[str, object], str, 
         text=True,
     )
     metadata = json.loads(metadata_run.stdout)
-    video_id = str(metadata.get("id") or "")
-    if not video_id:
+    if not str(metadata.get("id") or ""):
         raise ValueError("yt-dlp metadata did not include a video ID")
+    return metadata
+
+
+def run_transcript_api(video_id: str, language: str) -> tuple[str, str, int]:
+    selected_language = transcript_language(language)
+    command = tool_command("youtube_transcript_api", TRANSCRIPT_API_PACKAGE)
+    result = subprocess.run(
+        command
+        + [
+            video_id,
+            "--languages",
+            selected_language,
+            "--format",
+            "json",
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    content, segment_count = parse_transcript_api_json(result.stdout)
+    return content, selected_language, segment_count
+
+
+def run_yt_dlp_captions(
+    source_url: str, language: str, metadata: dict[str, object]
+) -> tuple[str, str, int]:
+    command = tool_command("yt-dlp", YT_DLP_PACKAGE)
+    video_id = str(metadata.get("id") or "")
     with tempfile.TemporaryDirectory(prefix="rli-youtube-") as temp_dir:
         output_template = str(Path(temp_dir) / "%(id)s.%(ext)s")
         subprocess.run(
-            [
-                executable,
+            command
+            + [
                 "--skip-download",
                 "--write-subs",
                 "--write-auto-subs",
@@ -247,7 +324,61 @@ def run_yt_dlp(source_url: str, language: str) -> tuple[dict[str, object], str, 
         if not content.strip():
             raise ValueError("downloaded captions produced an empty transcript")
         language_code = vtt_path.name.removeprefix(f"{video_id}.").removesuffix(".vtt")
-    return metadata, content, language_code
+    return content, language_code, content.count("\n\n") + 1
+
+
+def run_local_whisper(
+    source_url: str, metadata: dict[str, object], *, model: str
+) -> tuple[str, str, int]:
+    """Download audio and transcribe locally. This is opt-in because models are large."""
+    yt_dlp = tool_command("yt-dlp", YT_DLP_PACKAGE)
+    uv = shutil.which("uv")
+    if not uv:
+        raise ValueError("local Whisper fallback requires uv")
+    video_id = str(metadata.get("id") or "")
+    helper = Path(__file__).with_name("local_whisper_transcribe.py")
+    with tempfile.TemporaryDirectory(prefix="rli-whisper-") as temp_dir:
+        output_template = str(Path(temp_dir) / "%(id)s.%(ext)s")
+        subprocess.run(
+            yt_dlp
+            + [
+                "-f",
+                "bestaudio/best",
+                "--no-playlist",
+                "-o",
+                output_template,
+                "--",
+                source_url,
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        candidates = sorted(Path(temp_dir).glob(f"{video_id}.*"))
+        if not candidates:
+            raise ValueError("yt-dlp did not produce audio for local Whisper")
+        result = subprocess.run(
+            [
+                uv,
+                "run",
+                "--with",
+                WHISPER_PACKAGE,
+                "python",
+                str(helper),
+                str(candidates[0]),
+                "--model",
+                model,
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    payload = json.loads(result.stdout)
+    segments = payload.get("segments") if isinstance(payload, dict) else None
+    if not isinstance(segments, list):
+        raise ValueError("local Whisper returned an unexpected JSON shape")
+    content, segment_count = parse_transcript_api_json(json.dumps(segments))
+    return content, str(payload.get("language") or "unknown"), segment_count
 
 
 def ingest_youtube(
@@ -259,11 +390,37 @@ def ingest_youtube(
     guest_image: str | None,
     linkedin_url: str | None,
     og_image: str | None,
+    whisper_fallback: bool = False,
+    whisper_model: str = "small",
 ) -> dict[str, object]:
     if not is_youtube_url(source_url):
         raise ValueError("YouTube source must be a youtube.com or youtu.be URL")
-    metadata, content, language_code = run_yt_dlp(source_url, language)
+    metadata = fetch_youtube_metadata(source_url)
     video_id = str(metadata["id"])
+    attempts: list[dict[str, str]] = []
+    provider = "youtube-transcript-api"
+    try:
+        content, language_code, segment_count = run_transcript_api(video_id, language)
+    except (ValueError, OSError, subprocess.CalledProcessError, json.JSONDecodeError) as exc:
+        attempts.append({"provider": provider, "result": f"failed: {exc}"})
+        provider = "yt-dlp"
+        try:
+            content, language_code, segment_count = run_yt_dlp_captions(
+                source_url, language, metadata
+            )
+        except (ValueError, OSError, subprocess.CalledProcessError) as fallback_exc:
+            attempts.append({"provider": provider, "result": f"failed: {fallback_exc}"})
+            if not whisper_fallback:
+                raise ValueError(
+                    "YouTube captions were unavailable. Re-run with --whisper-fallback "
+                    "to download the audio and transcribe it locally."
+                ) from fallback_exc
+            provider = "faster-whisper"
+            content, language_code, segment_count = run_local_whisper(
+                source_url, metadata, model=whisper_model
+            )
+    attempts.append({"provider": provider, "result": "success"})
+    generated = provider == "faster-whisper" or subtitle_kind(metadata, language_code) == "automatic-captions"
     thumbnail = og_image or str(metadata.get("thumbnail") or "") or None
     manifest: dict[str, object] = {
         "schemaVersion": 1,
@@ -275,6 +432,10 @@ def ingest_youtube(
         "sourceDescription": str(metadata.get("description") or ""),
         "contentKind": subtitle_kind(metadata, language_code),
         "contentLanguage": language_code,
+        "transcriptProvider": provider,
+        "transcriptIsGenerated": generated,
+        "transcriptSegmentCount": segment_count,
+        "transcriptFallbacksAttempted": attempts,
         "youtube": {
             "videoId": video_id,
             "watchUrl": f"https://www.youtube.com/watch?v={video_id}",
@@ -319,6 +480,16 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--guest-image")
     parser.add_argument("--linkedin-url")
     parser.add_argument("--og-image")
+    parser.add_argument(
+        "--whisper-fallback",
+        action="store_true",
+        help="If captions fail, download audio and transcribe locally with faster-whisper",
+    )
+    parser.add_argument(
+        "--whisper-model",
+        default="small",
+        help="faster-whisper model used only with --whisper-fallback (default: small)",
+    )
     return parser
 
 
@@ -344,6 +515,8 @@ def main(argv: list[str] | None = None) -> int:
                 guest_image=args.guest_image,
                 linkedin_url=args.linkedin_url,
                 og_image=args.og_image,
+                whisper_fallback=args.whisper_fallback,
+                whisper_model=args.whisper_model,
             )
         else:
             manifest = ingest_markdown(

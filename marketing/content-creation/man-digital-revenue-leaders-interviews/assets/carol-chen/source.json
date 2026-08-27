@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "sourceType": "youtube",
+  "sourceLocator": "https://www.youtube.com/watch?v=H7mPWTA6WU4",
+  "sourceTitle": "What Is RevOps and When to Start It | Carol Chen, VP RevOps at Flywire",
+  "sourceAuthor": "MAN DIGITAL",
+  "sourcePublishedDate": "20240626",
+  "sourceDescription": "Carol Chen has run RevOps for 10 years on teams up to 60. Her first hire is always a CRM admin: clean data, or garbage in, garbage out.\n\nMAN Digital (\"Technical Architects of Revenue\") is a RevOps-first AI GTM partner and Elite HubSpot Partner (top 1% of HubSpot's global partner ecosystem), building AI-powered go-to-market workflows around HubSpot for European B2B SaaS scaleups.\n\nRomeo Mann talks with Carol Chen, VP of Revenue Operations at Flywire and a 10-year RevOps leader (previously at WeWork), about how to start and scale a RevOps function. Carol runs five functions under RevOps: go-to-market operations, insights and analytics, tools, sales enablement, and sales compensation.\n\nThe conversation is practical and specific. Carol explains when to start RevOps (the moment you have a few reps and a CRM instance to manage), who to hire first (a Salesforce admin, then an analytics person), and how forecasting differs between a data-backed RevOps view and a sales leader's hand-picked deals. She gives a clear internal-versus-agency rule: an agency fits a sub-100-million-revenue company that needs only a few hours a week, or a one-time overhaul like a Salesforce rebuild or a CPQ rollout, and otherwise an internal hire wins because external turnover keeps reopening knowledge gaps. The discussion also covers pre-IPO versus post-IPO process (flexible rules giving way to clean, defendable, auditable numbers), the shift from growth at all costs to retention and the right side of the bowtie, tool consolidation with ROI over productivity, and how RevOps sits at the center of RevOps and ABM alignment.\n\nThis is the territory MAN Digital engineers. We build the revenue operations layer (CRM architecture, GTM engineering, the reporting and forecasting, the right side of the bowtie) and bring the project capacity for one-time overhauls an internal team cannot absorb on its own.\n\n0:00 Intro: meet Carol Chen\n1:38 From finance to RevOps\n4:22 How sales ops became RevOps (CSO to CRO)\n6:41 Where RevOps reports in the org\n7:17 When to start a RevOps function\n10:22 What to build first: enablement or analytics?\n12:32 Forecasting for resource decisions: RevOps vs sales\n16:49 Is there a RevOps blueprint?\n19:33 Internal RevOps vs agency\n23:01 Pre-IPO vs post-IPO dynamics\n25:52 Growth at all costs to retention\n27:39 The right side of the bowtie\n29:59 Tools: consolidating the stack and proving ROI\n33:58 What RevOps is missing: invest in people\n35:28 Why RevOps and ABM need each other\n37:53 Squads per vertical: supporting ABM\n39:40 Breaking down silos with one shared metric\n42:18 Where to find Carol and her sources\n\nFAQ\n\nWhen should a company start a RevOps function?\nStart when you have a few sales reps and a CRM instance to manage. The reasoning is data quality: without someone owning the CRM early, the inputs degrade and you lose the ability to see win rates, ideal customer profile, and why deals are won or lost. Most leaders who ask this question are already at the right time, and the common regret is starting too late rather than too early.\n\nShould you hire RevOps internally or use an agency?\nAn agency fits a smaller company (roughly under 100 million in revenue) that needs only a few hours a week, and it fits one-time overhauls like a CRM rebuild or a CPQ rollout that need concentrated manpower for a fixed period. For an ongoing function, an internal hire usually wins, because external turnover keeps reopening the same knowledge gaps and the retraining time adds up. A hybrid works well: internal ownership, with a partner for the project spikes.\n\nWhat should the first RevOps hire be?\nMake the first hire a CRM administrator (a Salesforce or HubSpot admin) to keep the data clean and the instance usable, then add an analytics person to answer the headcount, pacing, and run-rate questions leadership keeps asking. Younger orgs are scrappier, so one strong generalist can sometimes cover both before the function is formally carved out.\n\nDeciding when to start RevOps or how to scale it? Get a systems and architecture audit: https://youtube.man.digital/contact\n\nRelated videos:\nRevenue Operations Fundamentals: https://www.youtube.com/watch?v=wo5TX0ZdNfA\nFrom Tactical to Strategic RevOps (with Jeppe Wienziers Stenbæk, Pleo): https://www.youtube.com/watch?v=SXKA5BijcqY\nOptimizing Go-to-Market Efficiency (with Thomas Hansen, President at Amplitude): https://www.youtube.com/watch?v=ANYdyytoeOg\n\n\nMAN Digital was founded by Romeo Mann in 2016 and is headquartered in Kraków, Poland.\nhttps://www.linkedin.com/company/man-digital\nhttps://www.man.digital\nhttps://youtube.man.digital/contact",
+  "contentKind": "automatic-captions",
+  "contentLanguage": "en",
+  "transcriptProvider": "youtube-transcript-api",
+  "transcriptIsGenerated": true,
+  "transcriptSegmentCount": 925,
+  "transcriptFallbacksAttempted": [
+    {
+      "provider": "youtube-transcript-api",
+      "result": "success"
+    }
+  ],
+  "youtube": {
+    "videoId": "H7mPWTA6WU4",
+    "watchUrl": "https://www.youtube.com/watch?v=H7mPWTA6WU4",
+    "embedUrl": "https://www.youtube-nocookie.com/embed/H7mPWTA6WU4",
+    "thumbnailUrl": "https://i.ytimg.com/vi/H7mPWTA6WU4/maxresdefault.jpg"
+  },
+  "embedVideo": true,
+  "openGraphCandidate": {
+    "image": "https://1969772.fs1.hubspotusercontent-na1.net/hubfs/1969772/revenue-leaders-interviews/carol-chen/carol-chen-title-card.jpg",
+    "imageSource": "prompt"
+  },
+  "provided": {
+    "guestImage": "https://1969772.fs1.hubspotusercontent-na1.net/hubfs/1969772/revenue-leaders-interviews/carol-chen/carol-chen.png",
+    "linkedinProfile": "https://www.linkedin.com/in/carol-chen-0b30cb44/",
+    "openGraphImage": "https://1969772.fs1.hubspotusercontent-na1.net/hubfs/1969772/revenue-leaders-interviews/carol-chen/carol-chen-title-card.jpg"
+  },
+  "missingPromptInputs": [],
+  "contentFile": "source-content.md",
+  "contentSha256": "e6e40f0499ada09359eed040c0feb8e1f537653e4e5bda4a07171c1d38f5b4d3"
+}

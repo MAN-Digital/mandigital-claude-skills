@@ -43,14 +43,15 @@ To normalize a source before drafting:
 python3 scripts/ingest_interview_source.py SOURCE --output work/guest-name
 ```
 
-YouTube intake automatically captures captions, video metadata, a thumbnail/Open Graph candidate, and an optional embed. Granola and Markdown intake reports the guest image, LinkedIn URL, or Open Graph image that still needs to be supplied in the prompt.
+YouTube intake uses `youtube-transcript-api` first, `yt-dlp` captions second, and an opt-in local `faster-whisper` fallback. It captures captions, video metadata, a thumbnail/Open Graph candidate, provider history, and an optional privacy-enhanced embed. Granola and Markdown intake reports the guest image, LinkedIn URL, or Open Graph image that still needs to be supplied in the prompt.
 
 ## Prerequisites
 
 - `man-digital-design-system` for brand decisions
 - `man-digital-cms-pages` for HubSpot CMS source validation and uploads
 - Native Chrome access for final live preview checks when available
-- `yt-dlp` for public YouTube transcript and metadata intake
+- `uv`/`uvx`, or preinstalled `youtube-transcript-api` and `yt-dlp`, for public YouTube intake
+- CPU/disk capacity for the optional `--whisper-fallback`; it is never triggered silently
 - Explicit authorization before creating a replacement campaign, scheduling, or publishing
 
 Read `SKILL.md` for the complete workflow and hard gates.
