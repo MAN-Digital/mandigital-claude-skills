@@ -130,6 +130,7 @@
   width: 100%;
 }
 
+.rli-source-notice,
 .rli-sample-notice,
 .rli-approval-notice {
   background: #fff8e1;
@@ -142,6 +143,7 @@
   padding: 16px 18px;
 }
 
+.rli-source-notice strong,
 .rli-sample-notice strong,
 .rli-approval-notice strong {
   color: var(--rli-charcoal);
@@ -150,6 +152,21 @@
   font-size: 13px;
   letter-spacing: 1px;
   margin-bottom: 6px;
+}
+
+.rli-video {
+  aspect-ratio: 16 / 9;
+  background: #0a0a0a;
+  margin: 32px 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+.rli-video iframe {
+  border: 0;
+  display: block;
+  height: 100%;
+  width: 100%;
 }
 
 .rli-qa {

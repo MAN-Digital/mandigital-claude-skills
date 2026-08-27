@@ -18,7 +18,7 @@ marketing/
 | [`man-digital-blog-graphics/`](./content-creation/man-digital-blog-graphics/) | Creating branded blog, article, HubSpot, and LinkedIn graphics |
 | [`man-digital-lucid-charts/`](./content-creation/man-digital-lucid-charts/) | Building branded diagrams and process maps in Lucidchart |
 | [`man-digital-marketing-assets/`](./content-creation/man-digital-marketing-assets/) | Creating social images, banners, thumbnails, ads, and share graphics |
-| [`man-digital-revenue-leaders-interviews/`](./content-creation/man-digital-revenue-leaders-interviews/) | Creating and validating Revenue Leaders Interview HubSpot blog drafts |
+| [`man-digital-revenue-leaders-interviews/`](./content-creation/man-digital-revenue-leaders-interviews/) | Turning YouTube, Granola, or Markdown interviews into complete HubSpot blog drafts |
 | [`man-digital-youtube-scripts/`](./content-creation/man-digital-youtube-scripts/) | Writing MAN Digital YouTube scripts and visual cue sheets |
 | [`vibe-marketing-v2/`](./content-creation/vibe-marketing-v2/) | Brand voice, positioning, email, newsletter, creative, SEO, and repurposing workflows |
 

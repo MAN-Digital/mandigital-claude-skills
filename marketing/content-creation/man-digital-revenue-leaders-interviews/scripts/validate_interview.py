@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import sys
 import xml.etree.ElementTree as ET
@@ -29,6 +30,7 @@ class InterviewParser(HTMLParser):
         self.linkedin_links: list[dict[str, str | None]] = []
         self.linkedin_svg_count = 0
         self.image_sources: list[str] = []
+        self.iframes: list[dict[str, str | None]] = []
         self._in_question = False
         self._question_parts: list[str] = []
         self._in_linkedin = False
@@ -62,6 +64,8 @@ class InterviewParser(HTMLParser):
             self.linkedin_svg_count += 1
         if tag == "img" and values.get("src"):
             self.image_sources.append(values["src"] or "")
+        if tag == "iframe":
+            self.iframes.append(values)
 
     def handle_data(self, data: str) -> None:
         if self._in_question:
@@ -99,7 +103,7 @@ def validate(asset_dir: Path) -> list[str]:
         return [f"invalid metadata.example.json: {exc}"]
 
     required_metadata = {
-        "editorialState", "seoTitle", "metaDescription", "openGraphTitle",
+        "editorialState", "sourceType", "embedVideo", "seoTitle", "metaDescription", "openGraphTitle",
         "openGraphDescription", "openGraphImage", "tag", "campaign", "campaignId",
         "approvedQuestionSource", "approvedQuestions", "draft",
     }
@@ -111,7 +115,9 @@ def validate(asset_dir: Path) -> list[str]:
     question_count = len(parser.question_texts)
     answer_count = sum("rli-answer" in item for item in parser.classes)
     notice_count = sum("rli-sample-notice" in item for item in parser.classes)
+    source_notice_count = sum("rli-source-notice" in item for item in parser.classes)
     approval_notice_count = sum("rli-approval-notice" in item for item in parser.classes)
+    video_wrapper_count = sum("rli-video" in item for item in parser.classes)
     if question_count == 0 or len({qa_count, question_count, answer_count}) != 1:
         errors.append(f"Q/A structure mismatch: sections/questions/answers={qa_count}/{question_count}/{answer_count}")
     if len(parser.question_ids) != question_count or any(not value for value in parser.question_ids):
@@ -132,7 +138,10 @@ def validate(asset_dir: Path) -> list[str]:
         errors.append("approvedQuestionSource must be an HTTPS Figma node URL")
 
     editorial_state = metadata.get("editorialState")
-    allowed_states = {"draft-sample-answers", "draft-transcript-reviewed", "approved"}
+    allowed_states = {
+        "draft-source-derived", "draft-sample-answers",
+        "draft-transcript-reviewed", "approved",
+    }
     if editorial_state not in allowed_states:
         errors.append(f"editorialState must be one of {sorted(allowed_states)}")
     for root_class, states in parser.root_states.items():
@@ -140,6 +149,7 @@ def validate(asset_dir: Path) -> list[str]:
             errors.append(f"{root_class} must declare exactly the metadata editorialState")
 
     expected_answer_state = {
+        "draft-source-derived": "source-derived",
         "draft-sample-answers": "illustrative",
         "draft-transcript-reviewed": "transcript-reviewed",
         "approved": "approved",
@@ -150,23 +160,31 @@ def validate(asset_dir: Path) -> list[str]:
     ):
         errors.append(f"every Q/A section must use data-answer-state={expected_answer_state}")
 
-    if editorial_state == "draft-sample-answers":
+    if editorial_state == "draft-source-derived":
+        if source_notice_count != 1:
+            errors.append("source-derived drafts require exactly one visible rli-source-notice")
+        if notice_count or approval_notice_count:
+            errors.append("source-derived drafts must not include sample or approval notices")
+    elif editorial_state == "draft-sample-answers":
+        if source_notice_count:
+            errors.append("sample drafts must not include rli-source-notice")
         if notice_count != 1:
             errors.append("sample drafts require exactly one visible rli-sample-notice")
         if approval_notice_count:
             errors.append("sample drafts must not include rli-approval-notice")
     elif editorial_state == "draft-transcript-reviewed":
-        if notice_count:
-            errors.append("transcript-reviewed drafts must not include rli-sample-notice")
+        if source_notice_count or notice_count:
+            errors.append("transcript-reviewed drafts must not include source or sample notices")
         if approval_notice_count != 1:
             errors.append("transcript-reviewed drafts require exactly one visible rli-approval-notice")
     elif editorial_state == "approved":
-        if notice_count or approval_notice_count:
+        if source_notice_count or notice_count or approval_notice_count:
             errors.append("approved content must not include draft notices")
         if parser.draft_placeholder_count:
             errors.append("approved content must not include draft placeholders")
 
     expected_quote_state = {
+        "draft-source-derived": "source-derived",
         "draft-sample-answers": "illustrative",
         "draft-transcript-reviewed": "transcript-reviewed",
         "approved": "approved",
@@ -202,6 +220,106 @@ def validate(asset_dir: Path) -> list[str]:
         errors.append("campaignId must reference the canonical Revenue Leaders Interviews campaign")
     if metadata.get("draft") is not True:
         errors.append("the bundled example must remain a draft")
+
+    source_type = metadata.get("sourceType")
+    allowed_source_types = {"sample", "youtube", "markdown", "granola"}
+    if source_type not in allowed_source_types:
+        errors.append(f"sourceType must be one of {sorted(allowed_source_types)}")
+    if source_type == "sample" and editorial_state != "draft-sample-answers":
+        errors.append("sample sourceType is only valid for draft-sample-answers")
+    if source_type in {"youtube", "markdown", "granola"} and editorial_state == "draft-sample-answers":
+        errors.append("transcript-backed sourceType cannot use draft-sample-answers")
+    embed_video = metadata.get("embedVideo")
+    if not isinstance(embed_video, bool):
+        errors.append("embedVideo must be a boolean")
+    if source_type != "youtube" and embed_video is True:
+        errors.append("only YouTube sources may enable embedVideo")
+
+    if source_type in {"youtube", "markdown", "granola"}:
+        source_path = asset_dir / "source.json"
+        evidence_path = asset_dir / "evidence-map.json"
+        source_content_hash: str | None = None
+        if not source_path.is_file():
+            errors.append("transcript-backed assets require source.json")
+        else:
+            try:
+                source_manifest = json.loads(source_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError) as exc:
+                errors.append(f"invalid source.json: {exc}")
+                source_manifest = {}
+            if source_manifest.get("sourceType") != source_type:
+                errors.append("source.json sourceType must match metadata sourceType")
+            if source_manifest.get("embedVideo") is not embed_video:
+                errors.append("source.json embedVideo must match metadata embedVideo")
+            missing_inputs = source_manifest.get("missingPromptInputs")
+            if not isinstance(missing_inputs, list):
+                errors.append("source.json missingPromptInputs must be a list")
+            elif missing_inputs:
+                errors.append("resolve every source.json missingPromptInputs item before validation")
+            content_file = source_manifest.get("contentFile")
+            content_path = asset_dir / str(content_file or "")
+            if not content_file or not content_path.is_file():
+                errors.append("source.json must reference an existing contentFile")
+            else:
+                content_hash = hashlib.sha256(content_path.read_bytes()).hexdigest()
+                source_content_hash = content_hash
+                if source_manifest.get("contentSha256") != content_hash:
+                    errors.append("source.json contentSha256 must match contentFile")
+
+            youtube = source_manifest.get("youtube")
+            if source_type == "youtube":
+                if not isinstance(youtube, dict):
+                    errors.append("YouTube source.json requires a youtube object")
+                    embed_url = ""
+                else:
+                    embed_url = str(youtube.get("embedUrl") or "")
+                    parsed_embed = urlparse(embed_url)
+                    if parsed_embed.scheme != "https" or parsed_embed.netloc != "www.youtube-nocookie.com":
+                        errors.append("YouTube embedUrl must use https://www.youtube-nocookie.com")
+                if embed_video is True:
+                    if video_wrapper_count != 1 or len(parser.iframes) != 1:
+                        errors.append("enabled YouTube embeds require exactly one rli-video wrapper and iframe")
+                    elif parser.iframes[0].get("src") != embed_url:
+                        errors.append("rendered YouTube iframe must match source.json embedUrl")
+                    elif not parser.iframes[0].get("title"):
+                        errors.append("YouTube iframe requires an accessible title")
+                elif video_wrapper_count or parser.iframes:
+                    errors.append("disabled YouTube embeds must not render rli-video or iframe")
+            elif youtube is not None:
+                errors.append("non-YouTube source.json must set youtube to null")
+            if source_type != "youtube" and (video_wrapper_count or parser.iframes):
+                errors.append("Markdown and Granola sources must not render a YouTube embed")
+
+        if not evidence_path.is_file():
+            errors.append("transcript-backed assets require evidence-map.json")
+        else:
+            try:
+                evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError) as exc:
+                errors.append(f"invalid evidence-map.json: {exc}")
+                evidence = {}
+            evidence_questions = evidence.get("questions")
+            if source_content_hash and evidence.get("sourceSha256") != source_content_hash:
+                errors.append("evidence-map sourceSha256 must match source content")
+            if not isinstance(evidence_questions, list):
+                errors.append("evidence-map.json questions must be a list")
+            else:
+                mapped_questions = [item.get("question") for item in evidence_questions if isinstance(item, dict)]
+                if mapped_questions != approved_questions:
+                    errors.append("evidence-map questions must exactly match approvedQuestions")
+                for item in evidence_questions:
+                    if not isinstance(item, dict):
+                        errors.append("each evidence-map question must be an object")
+                        continue
+                    if item.get("coverage") not in {"direct", "partial", "missing"}:
+                        errors.append("evidence-map coverage must be direct, partial, or missing")
+                    if item.get("coverage") != "missing" and not item.get("evidence"):
+                        errors.append("direct/partial evidence-map entries require evidence")
+                    if item.get("coverage") != "missing" and not item.get("sourceRefs"):
+                        errors.append("direct/partial evidence-map entries require sourceRefs")
+
+    elif video_wrapper_count or parser.iframes:
+        errors.append("sample assets must not render a YouTube embed")
     seo_title = metadata.get("seoTitle", "")
     description = metadata.get("metaDescription", "")
     if not 30 <= len(seo_title) <= 60:
@@ -225,7 +343,8 @@ def validate(asset_dir: Path) -> list[str]:
     css = (asset_dir / "interview-post.css").read_text(encoding="utf-8")
     for selector in (
         ".rli-intro", ".rli-article", ".rli-question", ".rli-answer",
-        ".rli-linkedin", ".rli-sample-notice", ".rli-approval-notice",
+        ".rli-linkedin", ".rli-source-notice", ".rli-sample-notice",
+        ".rli-approval-notice", ".rli-video",
     ):
         if selector not in css:
             errors.append(f"CSS is missing required selector {selector}")

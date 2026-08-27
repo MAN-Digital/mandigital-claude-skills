@@ -52,7 +52,7 @@ class DoctorTests(unittest.TestCase):
 
         self.assertTrue(report.ok, report.render())
         self.assertEqual(report.skill_count, 28)
-        self.assertEqual(report.python_count, 22)
+        self.assertEqual(report.python_count, 24)
         self.assertEqual(report.shell_count, 6)
 
 

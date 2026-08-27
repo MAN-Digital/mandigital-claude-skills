@@ -38,7 +38,9 @@ Mobile (`max-width: 767px`):
 
 - `.rli-intro`: guest portrait, name/role, visible LinkedIn icon/link, short editorial introduction.
 - `.rli-sample-notice`: mandatory visible warning for `draft-sample-answers` content.
+- `.rli-source-notice`: mandatory visible warning for `draft-source-derived` content created from automatic captions, Markdown, or Granola input.
 - `.rli-approval-notice`: mandatory visible warning for transcript-reviewed content that still awaits guest/editorial approval.
+- `.rli-video`: optional responsive 16:9 YouTube wrapper. Use only the `youtube-nocookie.com` embed recorded in the source manifest; never autoplay.
 - `.rli-qa`: exactly one `.rli-question` and one `.rli-answer`; stable unique question ID for TOC/deep linking.
 - `.rli-pull-quote`: image, quote, attribution, and an editorial state. Unverified quotes remain visibly draft-only.
 - `.rli-takeaways`: concise synthesis; do not introduce facts not present in approved answers.
@@ -54,5 +56,6 @@ Check at least one desktop, tablet, and mobile viewport in the actual HubSpot pr
 - answer copy does not collide with the Q marker;
 - the table of contents is readable and links resolve;
 - portraits and title card load without distortion;
+- the optional YouTube embed is responsive, titled, privacy-enhanced, and matches the source manifest;
 - both LinkedIn actions show the SVG and open the verified profile;
 - no horizontal overflow, clipped text, broken images, or template CSS leakage.

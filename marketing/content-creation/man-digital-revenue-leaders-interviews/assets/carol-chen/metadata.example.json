@@ -1,5 +1,7 @@
 {
   "editorialState": "draft-sample-answers",
+  "sourceType": "sample",
+  "embedVideo": false,
   "seoTitle": "What Is RevOps and When to Start It | Carol Chen",
   "metaDescription": "Carol Chen explains when companies should hire RevOps, what the function should own first, and how it creates trusted forecasting and alignment.",
   "openGraphTitle": "What Is RevOps and When to Start It | Carol Chen",

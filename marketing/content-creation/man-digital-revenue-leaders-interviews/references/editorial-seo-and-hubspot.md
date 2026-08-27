@@ -4,11 +4,12 @@
 
 Use one explicit state throughout a draft:
 
+- `draft-source-derived`: the first complete article was generated from automatic captions, an unreviewed transcript, Markdown, or Granola content. Every answer and pull quote is `source-derived`; one visible `.rli-source-notice` states that the post awaits transcript/editorial review. It is never publishable.
 - `draft-sample-answers`: layout demonstration only. Every answer and pull quote is `illustrative`; one visible `.rli-sample-notice` states that the copy is not the guest's words.
 - `draft-transcript-reviewed`: copy was checked against a reliable recording/transcript but still awaits final editorial/guest approval. Every answer and pull quote is `transcript-reviewed`; one visible `.rli-approval-notice` states that publication approval is still pending.
 - `approved`: questions, answers, pull quotes, bio, company facts, and links are approved. Every answer and pull quote is `approved`; no draft notice or draft placeholder may remain.
 
-Automatic captions and first-person sample copy are not quote-safe. Do not remove the warning or advance the state based only on an automatic transcript.
+Automatic captions, Granola summaries, and first-person sample copy are not quote-safe. Direct quotation marks in a source-derived draft require exact source wording; otherwise treat the passage as an unapproved paraphrase. Do not remove the warning or advance the state based only on automatic processing.
 
 ## Series metadata
 
@@ -17,7 +18,7 @@ Use the same series vocabulary everywhere:
 - HubSpot tag: `Revenue Leaders Interviews`
 - HubSpot campaign: `Revenue Leaders Interviews`
 - Canonical MAN Digital portal campaign ID: `38b1a8b6-07c6-48e4-84de-16de94802392`
-- Open Graph image: the approved 16:9 interview title card hosted on HubSpot Files.
+- Open Graph image: preferably the approved 16:9 interview title card hosted on HubSpot Files. A YouTube thumbnail may be used as a visibly reviewed draft candidate when the source is YouTube; Markdown and Granola sources require a user-provided image.
 
 Resolve the canonical campaign ID first and verify its exact name. Search by exact name only as a diagnostic fallback. Reuse the canonical record; never create punctuation, singular/plural, or capitalization variants. If the canonical ID no longer resolves, request explicit authorization before creating a replacement and update this reference plus the example metadata with the new ID.
 
@@ -28,7 +29,7 @@ Write for search clarity, not keyword stuffing:
 - SEO title target: about 30–60 characters. Pattern: `<topic/result> | <guest name>`.
 - Meta description target: about 120–160 characters. State who the guest is and the useful decisions covered.
 - Open Graph title and description normally match the approved SEO title and meta description. HubSpot may derive the rendered `og:title` and `og:description` from those two fields instead of exposing separate inputs; verify the rendered preview tags rather than inventing unavailable controls. Diverge only when a supported field exists and the user requests a reviewed social-specific message.
-- Open Graph image must be HTTPS, publicly loadable, and use the approved title card rather than a random inline image.
+- Open Graph image must be HTTPS and publicly loadable. Use the approved title card when supplied; otherwise a YouTube source may provide its own thumbnail as the documented draft candidate. Never select a random inline image or invent an image for Markdown/Granola input.
 - Keep the URL slug concise and stable. Do not change a live slug without explicit redirect/migration authorization.
 
 Before saving, check title/description lengths, spelling of the guest/company, image URL, tag, and campaign. After saving, reopen settings or inspect the preview metadata so the save is evidenced rather than assumed.
@@ -51,6 +52,7 @@ Report exact values and evidence for:
 
 - post ID and editor URL;
 - editorial state and whether any sample/unapproved copy remains;
+- source type, source completeness, evidence-map coverage, and whether automatic captions or notes were used;
 - SEO title and meta description;
 - Open Graph title, description, and image;
 - exact tag and campaign association;

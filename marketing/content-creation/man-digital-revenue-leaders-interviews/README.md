@@ -1,6 +1,6 @@
 # MAN Digital Revenue Leaders Interviews
 
-Creates and validates MAN Digital Revenue Leaders Interview posts as HubSpot blog drafts. The skill preserves the approved Figma question structure, uses scoped post-level styling, enforces editorial approval states, and verifies the required SEO, Open Graph, tag, and campaign metadata.
+Creates and validates complete MAN Digital Revenue Leaders Interview posts as HubSpot blog drafts. It can start from a public YouTube video, copied Granola call, Markdown transcript, or reviewed copy while preserving the approved Figma structure and editorial safeguards.
 
 ## When to use it
 
@@ -9,7 +9,7 @@ Use this skill when creating, updating, or QA-checking a post in the `Revenue Le
 ## Inputs
 
 - Approved desktop and mobile Figma frames
-- Reviewed interview answers or a clearly identified draft editorial state
+- YouTube URL, Granola transcript/notes export, Markdown transcript, or reviewed answers
 - Verified guest details, portrait, company information, and LinkedIn URL
 - HubSpot access for saving and reviewing the draft
 - The canonical `Revenue Leaders Interviews` campaign and tag
@@ -17,6 +17,8 @@ Use this skill when creating, updating, or QA-checking a post in the `Revenue Le
 ## Outputs
 
 - Scoped intro, article HTML, and post-specific CSS
+- Normalized source manifest and question-by-question evidence map
+- Optional responsive privacy-enhanced YouTube embed
 - A complete HubSpot draft with SEO and Open Graph metadata
 - Automatic association with the canonical `Revenue Leaders Interviews` campaign
 - Static validation results and responsive HubSpot preview QA
@@ -30,15 +32,25 @@ Use this skill when creating, updating, or QA-checking a post in the `Revenue Le
 From this skill directory, run:
 
 ```bash
+python3 scripts/test_ingest_interview_source.py
 python3 scripts/test_validate_interview.py
 python3 scripts/validate_interview.py assets/carol-chen
 ```
+
+To normalize a source before drafting:
+
+```bash
+python3 scripts/ingest_interview_source.py SOURCE --output work/guest-name
+```
+
+YouTube intake automatically captures captions, video metadata, a thumbnail/Open Graph candidate, and an optional embed. Granola and Markdown intake reports the guest image, LinkedIn URL, or Open Graph image that still needs to be supplied in the prompt.
 
 ## Prerequisites
 
 - `man-digital-design-system` for brand decisions
 - `man-digital-cms-pages` for HubSpot CMS source validation and uploads
 - Native Chrome access for final live preview checks when available
+- `yt-dlp` for public YouTube transcript and metadata intake
 - Explicit authorization before creating a replacement campaign, scheduling, or publishing
 
 Read `SKILL.md` for the complete workflow and hard gates.
