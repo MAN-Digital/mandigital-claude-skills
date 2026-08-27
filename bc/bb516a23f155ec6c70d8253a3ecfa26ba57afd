@@ -1,0 +1,56 @@
+marketing/content-creation/README.md
+  s_b2b9d5301fd010::t_b61c6ef12da1d7 13
+marketing/README.md
+  s_b2b9d5301fd010::t_b61c6ef12da1d7 21,44
+marketing/content-creation/man-digital-revenue-leaders-interviews/README.md
+  s_b2b9d5301fd010::t_b61c6ef12da1d7 1-44
+tests/maintenance/test_doctor.py
+  s_b2b9d5301fd010::t_af0a61eebec731 55
+  s_b2b9d5301fd010::t_dfba12fe874858 54
+marketing/content-creation/man-digital-revenue-leaders-interviews/SKILL.md
+  s_9828a14f8d6675::t_f2cb6c40231fbb 1-47
+marketing/content-creation/man-digital-revenue-leaders-interviews/agents/openai.yaml
+  s_b2b9d5301fd010::t_86c8d50c2e9736 1-4
+marketing/content-creation/man-digital-revenue-leaders-interviews/references/editorial-seo-and-hubspot.md
+  s_9828a14f8d6675::t_b90e06bb3cde45 1-58
+marketing/content-creation/man-digital-revenue-leaders-interviews/assets/carol-chen/interview-body.html
+  s_b2b9d5301fd010::t_bff59799d3369c 1-125
+marketing/content-creation/man-digital-revenue-leaders-interviews/assets/carol-chen/interview-intro.html
+  s_b2b9d5301fd010::t_75fe22c4623877 1-12
+marketing/content-creation/man-digital-revenue-leaders-interviews/assets/carol-chen/interview-post.css
+  s_b2b9d5301fd010::t_a506e2247fffe9 1-492
+marketing/content-creation/man-digital-revenue-leaders-interviews/assets/carol-chen/linkedin-icon.svg
+  s_b2b9d5301fd010::t_8e6d997525d305 1-3
+marketing/content-creation/man-digital-revenue-leaders-interviews/assets/carol-chen/metadata.example.json
+  s_b2b9d5301fd010::t_1c1113b765545d 1-22
+marketing/content-creation/man-digital-revenue-leaders-interviews/references/figma-and-design-contract.md
+  s_b2b9d5301fd010::t_1d7893cf387348 1-58
+marketing/content-creation/man-digital-revenue-leaders-interviews/scripts/test_validate_interview.py
+  s_b2b9d5301fd010::t_d5a384f4492c88 1-113
+marketing/content-creation/man-digital-revenue-leaders-interviews/scripts/validate_interview.py
+  s_b2b9d5301fd010::t_1a3e6ab7c26c45 1-253
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "bcbb516a23f155ec6c70d8253a3ecfa26ba57afd",
+  "prompts": {},
+  "sessions": {
+    "s_9828a14f8d6675": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a03f82-7741-76d1-a466-196740152419",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "romeoman <romeo@man.digital>"
+    },
+    "s_b2b9d5301fd010": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a03ee0-3cea-7201-ac17-6c5dc9b18b83",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "romeoman <romeo@man.digital>"
+    }
+  }
+}
