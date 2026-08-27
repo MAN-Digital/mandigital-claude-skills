@@ -1,92 +1,57 @@
 # Marketing Skills
 
-All Claude skills for producing MAN Digital marketing content.
+MAN Digital's marketing skills are grouped by the work they support.
 
-## What's Here
-
-### [`blog-production/`](./blog-production/) — The Blog Pipeline
-
-A sequential 7-step pipeline that turns a topic into a publish-ready blog post with graphics. Each step is its own skill — you can run the full pipeline or use individual steps.
-
-```
-01 SEO Content Brief → 02 Blog Post Brief → 03 SEO Research →
-04 Content Research → 05 Fact Check → 06 Write → 07 Graphics → Publish
+```text
+marketing/
+├── content-creation/   # Writing, editing, social, video, diagrams, and graphics
+└── web-development/    # Figma website design, HubSpot CMS, and web performance
 ```
 
-See [`blog-production/README.md`](./blog-production/README.md) for the full flow.
+## Content Creation
 
-### [`editing-checklist/`](./editing-checklist/) — Editorial Quality Framework
+| Skill | Use it for |
+| --- | --- |
+| [`blog-production/`](./content-creation/blog-production/) | Running the full seven-step blog pipeline from brief through graphics |
+| [`editing-checklist/`](./content-creation/editing-checklist/) | Editing and polishing any written content |
+| [`linkedin-post-creation/`](./content-creation/linkedin-post-creation/) | Writing research-driven, platform-native LinkedIn posts |
+| [`man-digital-blog-graphics/`](./content-creation/man-digital-blog-graphics/) | Creating branded blog, article, HubSpot, and LinkedIn graphics |
+| [`man-digital-lucid-charts/`](./content-creation/man-digital-lucid-charts/) | Building branded diagrams and process maps in Lucidchart |
+| [`man-digital-marketing-assets/`](./content-creation/man-digital-marketing-assets/) | Creating social images, banners, thumbnails, ads, and share graphics |
+| [`man-digital-youtube-scripts/`](./content-creation/man-digital-youtube-scripts/) | Writing MAN Digital YouTube scripts and visual cue sheets |
+| [`video-production/`](./content-creation/video-production/) | Running the 11-skill Adobe Premiere Pro video pipeline, multilingual subtitle delivery, and Shorts repurposing |
+| [`vibe-marketing-v2/`](./content-creation/vibe-marketing-v2/) | Brand voice, positioning, email, newsletter, creative, SEO, and repurposing workflows |
 
-The editorial bible. Standalone — use it on _any_ piece of writing (blog, email, landing page, LinkedIn). Eight reference docs covering brevity, clichés, readability, paragraph structure, defensive writing, and more.
+See the [content-creation index](./content-creation/) for category details.
 
-Not a pipeline step — a quality gate you can apply anywhere.
+## Web Development
 
-### [`vibe-marketing-v2/`](./vibe-marketing-v2/) — Vibe Marketing v2.0
+| Skill | Use it for |
+| --- | --- |
+| [`man-digital-figma-website-design/`](./web-development/man-digital-figma-website-design/) | Designing implementation-ready desktop and mobile website pages in Figma |
+| [`man-digital-cms-pages/`](./web-development/man-digital-cms-pages/) | Maintaining and validating the MAN Digital HubSpot CMS theme and pages |
+| [`auditing-web-vitals/`](./web-development/auditing-web-vitals/) | Auditing PSI, Lighthouse, Core Web Vitals, SEO, accessibility, and AEO |
 
-An 11-skill marketing suite for founders and small teams. Includes:
+See the [web-development index](./web-development/) for category details.
 
-| Category     | Skills                                                                             |
-| ------------ | ---------------------------------------------------------------------------------- |
-| Foundation   | `start-here`, `brand-voice`, `positioning-angles`                                  |
-| Strategy     | `keyword-research`, `lead-magnet`                                                  |
-| Execution    | `direct-response-copy`, `seo-content`, `email-sequences`, `newsletter`, `creative` |
-| Distribution | `content-atomizer`                                                                 |
+## Quick Routing
 
-Run `/start-here` to bootstrap your brand context. See [`vibe-marketing-v2/README.md`](./vibe-marketing-v2/README.md).
+| You want to... | Use |
+| --- | --- |
+| Write a long-form blog post | `content-creation/blog-production/` |
+| Edit or polish writing | `content-creation/editing-checklist/` |
+| Write a LinkedIn post | `content-creation/linkedin-post-creation/` |
+| Create a branded visual | `content-creation/man-digital-blog-graphics/` or `content-creation/man-digital-marketing-assets/` |
+| Write a YouTube script | `content-creation/man-digital-youtube-scripts/` |
+| Produce, subtitle, or repurpose a video | `content-creation/video-production/` |
+| Design a website page in Figma | `web-development/man-digital-figma-website-design/` |
+| Maintain the HubSpot website | `web-development/man-digital-cms-pages/` |
+| Audit PSI, Web Vitals, SEO, or AEO | `web-development/auditing-web-vitals/` |
 
-### [`linkedin-post-creation/`](./linkedin-post-creation/) — LinkedIn Posts
+## Installing a Skill
 
-Focused skill for writing LinkedIn posts in MAN Digital's voice with platform-native formatting.
+Copy the individual skill folder into the relevant local skills directory. The category folders are for repository organization and are not part of the installed skill name.
 
-### [`man-digital-youtube-scripts/`](./man-digital-youtube-scripts/) — YouTube Scripts
-
-Writes YouTube video scripts (tutorial, promotional, or case study; shorts or long-form) in
-Romeo's voice and MAN Digital's positioning. Also handles "brain-dump" mode: paste another
-video's transcript and it transforms the same screen-share content into MAN Digital's own
-narration instead of translating it line-by-line.
-
-### [`man-digital-marketing-assets/`](./man-digital-marketing-assets/) — Branded Marketing Graphics
-
-Builds branded MAN Digital social/marketing assets (LinkedIn, Facebook, Instagram, YouTube
-thumbnails, OG images) in Pencil from user-supplied copy, at exact platform sizes with safe
-zones.
-
-### [`man-digital-blog-graphics/`](./man-digital-blog-graphics/) — Blog & HubSpot Graphics
-
-Builds branded MAN Digital blog/article in-body graphics and diagrams in Pencil.
-
-### [`man-digital-lucid-charts/`](./man-digital-lucid-charts/) — Lucidchart Diagrams
-
-Builds on-brand MAN Digital diagrams (flowcharts, org charts, RevOps/CRM architecture, mind
-maps, sequence diagrams) in Lucidchart via the `@lucid` MCP connector.
-
-### [`video-production/`](./video-production/) — The Video Pipeline
-
-An 11-skill suite that runs video post-production end to end by driving Adobe Premiere Pro
-via MCP: ingest and two-camera sync → transcript-based cut decisions → safe cut execution →
-pause tightening → pitch-preserved speed-up → motion graphics and placement → caption QA —
-plus post-approval YouTube subtitle delivery (7 languages) and Shorts repurposing.
-`video-00-pipeline` conducts the stages and stops at the human decision gates. See
-[`video-production/README.md`](./video-production/README.md).
-
----
-
-## When to Use What
-
-| You want to...                          | Use                                      |
-| --------------------------------------- | ---------------------------------------- |
-| Write a long-form blog post             | `blog-production/`                       |
-| Edit/polish any writing                 | `editing-checklist/`                     |
-| Bootstrap brand voice for a new project | `vibe-marketing-v2/start-here`           |
-| Build a landing page or sales copy      | `vibe-marketing-v2/direct-response-copy` |
-| Write an email sequence                 | `vibe-marketing-v2/email-sequences`      |
-| Generate ad creative or product photos  | `vibe-marketing-v2/creative`             |
-| Post on LinkedIn                        | `linkedin-post-creation/`                |
-| Repurpose one piece into 8 platforms    | `vibe-marketing-v2/content-atomizer`     |
-| Write a YouTube script                  | `man-digital-youtube-scripts/`           |
-| Build a branded social/marketing image  | `man-digital-marketing-assets/`          |
-| Build a blog in-body graphic            | `man-digital-blog-graphics/`             |
-| Draw an on-brand diagram                | `man-digital-lucid-charts/`              |
-| Edit a video from footage to delivery   | `video-production/`                      |
-| Subtitle an approved video (7 langs)    | `video-production/video-09-youtube-delivery/` |
-| Cut Shorts from a long-form video       | `video-production/video-10-shorts-repurposing/` |
+```bash
+cp -R marketing/web-development/auditing-web-vitals ~/.codex/skills/
+```

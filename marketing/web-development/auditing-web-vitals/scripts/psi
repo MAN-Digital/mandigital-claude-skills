@@ -1,0 +1,434 @@
+#!/usr/bin/env python3
+"""
+psi - PageSpeed Insights CLI for repeatable, honest web quality audits.
+
+Wraps the PageSpeed Insights v5 API. Built around one hard-won lesson:
+PSI scores swing wildly run to run (observed +/-13 points on the same URL),
+so every score command defaults to a median of several runs. Single-run
+numbers are not evidence and this tool tries hard not to hand you any.
+
+Commands:
+  score     Category scores, median of N runs, mobile and/or desktop
+  audit     Every failing audit, with the offending elements
+  diagnose  Performance deep dive: LCP element, render-blocking, JS cost
+  sweep     Many URLs at once, one table
+  budget    Check against thresholds; exits non-zero when under (CI-friendly)
+
+The API key is read from PSI_API_KEY in the environment or from a .env file
+(--env, else ./.env, else ~/.psi.env). It is never printed.
+"""
+
+import argparse
+import concurrent.futures as futures
+import json
+import os
+import statistics
+import sys
+import urllib.parse
+import urllib.request
+import urllib.error
+
+API = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed"
+
+CATEGORIES = ["performance", "accessibility", "best-practices", "seo", "agentic-browsing"]
+SHORT = {
+    "performance": "perf",
+    "accessibility": "a11y",
+    "best-practices": "best",
+    "seo": "seo",
+    "agentic-browsing": "agent",
+}
+
+# Metrics worth showing next to a performance score.
+METRICS = [
+    ("first-contentful-paint", "FCP", 1000, "s"),
+    ("largest-contentful-paint", "LCP", 1000, "s"),
+    ("total-blocking-time", "TBT", 1, "ms"),
+    ("cumulative-layout-shift", "CLS", 1, ""),
+    ("speed-index", "SI", 1000, "s"),
+]
+
+# Audits whose failure is usually outside your control on a hosted CMS.
+# Reported but flagged, so nobody burns a day trying to fix the unfixable.
+PLATFORM_AUDITS = {
+    "third-party-cookies": "set by the platform's own analytics/consent scripts",
+    "uses-long-cache-ttl": "cache headers are set by the host CDN",
+    "unused-javascript": "usually dominated by platform bundles you cannot tree-shake",
+    "legacy-javascript": "shipped by platform bundles",
+}
+
+
+def die(msg, code=1):
+    print(f"psi: {msg}", file=sys.stderr)
+    sys.exit(code)
+
+
+def load_key(env_path=None):
+    key = os.environ.get("PSI_API_KEY")
+    if key:
+        return key.strip()
+    candidates = [env_path] if env_path else []
+    candidates += [os.path.join(os.getcwd(), ".env"), os.path.expanduser("~/.psi.env")]
+    for path in candidates:
+        if path and os.path.isfile(path):
+            for line in open(path, encoding="utf-8"):
+                line = line.strip()
+                if line.startswith("PSI_API_KEY="):
+                    return line.split("=", 1)[1].strip().strip('"').strip("'")
+    die(
+        "no API key. Set PSI_API_KEY, or put PSI_API_KEY=... in ./.env or ~/.psi.env\n"
+        "     Get one free at https://console.cloud.google.com -> enable "
+        "'PageSpeed Insights API' -> Credentials -> API key"
+    )
+
+
+def fetch(url, strategy, categories, key, timeout=240):
+    """One PSI run. Returns parsed JSON, or {'__error__': msg}."""
+    params = [("url", url), ("strategy", strategy), ("key", key)]
+    params += [("category", c) for c in categories]
+    q = urllib.parse.urlencode(params)
+    try:
+        with urllib.request.urlopen(f"{API}?{q}", timeout=timeout) as r:
+            return json.loads(r.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        body = e.read().decode("utf-8", "replace")
+        try:
+            msg = json.loads(body)["error"]["message"]
+        except Exception:
+            msg = body[:200]
+        # Make the single most common failure obvious and actionable.
+        if e.code == 429:
+            msg = ("quota exceeded. Without a key you share a tiny public pool; "
+                   "with a key you get 25k/day. Check PSI_API_KEY is actually being used. "
+                   + msg[:120])
+        return {"__error__": f"HTTP {e.code}: {msg}"}
+    except Exception as e:  # timeouts, DNS, TLS
+        return {"__error__": str(e)[:200]}
+
+
+def scores_of(doc):
+    cats = doc.get("lighthouseResult", {}).get("categories", {})
+    out = {}
+    for c in CATEGORIES:
+        s = cats.get(c, {}).get("score")
+        out[c] = round(s * 100) if isinstance(s, (int, float)) else None
+    return out
+
+
+def metrics_of(doc):
+    a = doc.get("lighthouseResult", {}).get("audits", {})
+    out = {}
+    for key, _label, _div, _unit in METRICS:
+        v = a.get(key, {}).get("numericValue")
+        out[key] = v if isinstance(v, (int, float)) else None
+    return out
+
+
+def run_many(url, strategy, categories, key, runs, workers=3):
+    """PSI caches ~30s, so parallel identical calls return the same result.
+    Run them sequentially to get genuinely independent samples."""
+    docs = []
+    for _ in range(runs):
+        docs.append(fetch(url, strategy, categories, key))
+    return [d for d in docs if "__error__" not in d], [
+        d["__error__"] for d in docs if "__error__" in d
+    ]
+
+
+def median_or_none(vals):
+    vals = [v for v in vals if v is not None]
+    return statistics.median(vals) if vals else None
+
+
+def fmt_metric(key, label, div, unit, value):
+    if value is None:
+        return f"{label} --"
+    if unit == "":
+        return f"{label} {value:.3f}"
+    if unit == "ms":
+        return f"{label} {value:.0f}ms"
+    return f"{label} {value / div:.1f}s"
+
+
+def short(url):
+    p = urllib.parse.urlsplit(url)
+    return (p.path or "/") + (("?" + p.query) if p.query else "") or "/"
+
+
+# --------------------------------------------------------------------------- score
+
+def cmd_score(args, key):
+    strategies = ["mobile", "desktop"] if args.strategy == "both" else [args.strategy]
+    cats = args.category or CATEGORIES
+    header = f"{'page':<34}{'form':<9}" + "".join(f"{SHORT[c]:>7}" for c in cats)
+    print(header)
+    print("-" * len(header))
+    worst = 100
+    for url in args.url:
+        for st in strategies:
+            docs, errs = run_many(url, st, cats, key, args.runs)
+            if not docs:
+                print(f"{short(url)[:33]:<34}{st:<9}ERROR: {errs[0][:60] if errs else 'no data'}")
+                continue
+            all_scores = [scores_of(d) for d in docs]
+            row = f"{short(url)[:33]:<34}{st:<9}"
+            for c in cats:
+                vals = [s[c] for s in all_scores]
+                m = median_or_none(vals)
+                row += f"{('--' if m is None else int(m)):>7}"
+                if m is not None:
+                    worst = min(worst, int(m))
+            spread = ""
+            if args.runs > 1:
+                perf = sorted(v for v in (s["performance"] for s in all_scores) if v is not None)
+                if perf and perf[-1] - perf[0] >= 8:
+                    spread = f"   (perf spread {perf[0]}-{perf[-1]} over {len(perf)} runs)"
+            print(row + spread)
+            if args.metrics and "performance" in cats:
+                mm = [metrics_of(d) for d in docs]
+                parts = []
+                for k, label, div, unit in METRICS:
+                    parts.append(fmt_metric(k, label, div, unit, median_or_none([x[k] for x in mm])))
+                print(f"{'':<43}" + "  ".join(parts))
+    if args.runs == 1:
+        print("\nnote: single run. PSI varies by up to ~13 points; use --runs 3 before "
+              "drawing any conclusion.", file=sys.stderr)
+    return worst
+
+
+# --------------------------------------------------------------------------- audit
+
+def cmd_audit(args, key):
+    cats = args.category or ["accessibility", "best-practices", "seo", "agentic-browsing"]
+    strategies = ["mobile", "desktop"] if args.strategy == "both" else [args.strategy]
+    for url in args.url:
+        for st in strategies:
+            doc = fetch(url, st, cats, key)
+            if "__error__" in doc:
+                print(f"{short(url)} [{st}] ERROR: {doc['__error__']}")
+                continue
+            lr = doc["lighthouseResult"]
+            A = lr["audits"]
+            print(f"\n=== {short(url)}  [{st}] ===")
+            for cat in cats:
+                c = lr["categories"].get(cat)
+                if not c:
+                    continue
+                sc = round((c.get("score") or 0) * 100)
+                print(f"\n  {cat.upper()}  {sc}")
+                failing = []
+                for ref in c.get("auditRefs", []):
+                    a = A.get(ref["id"], {})
+                    s = a.get("score")
+                    mode = a.get("scoreDisplayMode")
+                    if s is None or s >= 1 or mode in ("notApplicable", "informative", "manual"):
+                        continue
+                    failing.append((ref["id"], a))
+                if not failing:
+                    print("    (nothing failing)")
+                for aid, a in failing:
+                    items = (a.get("details") or {}).get("items") or []
+                    tag = ""
+                    if aid in PLATFORM_AUDITS:
+                        tag = f"  [platform: {PLATFORM_AUDITS[aid]}]"
+                    print(f"    - {a.get('title','')[:72]}  ({len(items)} items){tag}")
+                    if args.elements:
+                        for it in items[: args.elements]:
+                            node = it.get("node") or {}
+                            snippet = (node.get("snippet") or it.get("url") or "")[:96]
+                            sel = (node.get("selector") or "")[:80]
+                            if snippet:
+                                print(f"        {snippet}")
+                            if sel:
+                                print(f"          @ {sel}")
+    return 0
+
+
+# ------------------------------------------------------------------------ diagnose
+
+def cmd_diagnose(args, key):
+    for url in args.url:
+        doc = fetch(url, args.strategy if args.strategy != "both" else "mobile",
+                    ["performance"], key)
+        if "__error__" in doc:
+            print(f"{short(url)} ERROR: {doc['__error__']}")
+            continue
+        lr = doc["lighthouseResult"]
+        A = lr["audits"]
+        print(f"\n=== {short(url)}  performance {round((lr['categories']['performance'].get('score') or 0)*100)} ===")
+
+        obs = (A.get("metrics", {}).get("details", {}).get("items") or [{}])[0]
+        sim_fcp = A.get("first-contentful-paint", {}).get("numericValue")
+        obs_fcp = obs.get("observedFirstContentfulPaint")
+        if sim_fcp and obs_fcp:
+            print(f"\n  FCP simulated {sim_fcp/1000:.1f}s vs observed {obs_fcp/1000:.1f}s "
+                  f"({sim_fcp/max(obs_fcp,1):.1f}x throttling multiplier)")
+            print("  -> the score is a Slow-4G + 4x-CPU projection, not what your visitors feel.")
+
+        print("\n  --- LCP element ---")
+        found = False
+        for it in A.get("largest-contentful-paint-element", {}).get("details", {}).get("items", []):
+            for s in it.get("items", []):
+                n = s.get("node") or {}
+                if n:
+                    found = True
+                    print(f"    {(n.get('snippet') or '')[:110]}")
+                if "phase" in s:
+                    print(f"      {s['phase']:<22}{s.get('timing',0):7.0f} ms  {s.get('percent','')}")
+        if not found:
+            print("    (not reported this run - LCP element detail is flaky; re-run)")
+
+        print("\n  --- render-blocking ---")
+        rb = A.get("render-blocking-resources", {}).get("details", {}).get("items", [])
+        for it in rb[:6]:
+            print(f"    {it.get('wastedMs',0):6.0f} ms  {(it.get('totalBytes') or 0)/1024:7.1f} KB  "
+                  f"{it.get('url','')[-64:]}")
+        if not rb:
+            print("    (none)")
+
+        print("\n  --- JS execution (top) ---")
+        for it in sorted(A.get("bootup-time", {}).get("details", {}).get("items", []),
+                         key=lambda x: -(x.get("total") or 0))[:6]:
+            print(f"    {it.get('total',0):6.0f} ms  {it.get('url','')[-64:]}")
+
+        print("\n  --- headline diagnostics ---")
+        for k in ("mainthread-work-breakdown", "bootup-time", "total-byte-weight",
+                  "server-response-time"):
+            if k in A:
+                print(f"    {k:28} {A[k].get('displayValue','-')}")
+    return 0
+
+
+# --------------------------------------------------------------------------- sweep
+
+def read_urls(spec):
+    if os.path.isfile(spec):
+        return [l.strip() for l in open(spec, encoding="utf-8")
+                if l.strip() and not l.strip().startswith("#")]
+    return [spec]
+
+
+def cmd_sweep(args, key):
+    urls = []
+    for s in args.url:
+        urls += read_urls(s)
+    cats = args.category or CATEGORIES
+    strategies = ["mobile", "desktop"] if args.strategy == "both" else [args.strategy]
+    header = f"{'page':<40}{'form':<9}" + "".join(f"{SHORT[c]:>7}" for c in cats)
+    print(header)
+    print("-" * len(header))
+    rows = []
+
+    def job(u, st):
+        return u, st, fetch(u, st, cats, key)
+
+    with futures.ThreadPoolExecutor(max_workers=args.workers) as ex:
+        for u, st, doc in ex.map(lambda a: job(*a), [(u, st) for u in urls for st in strategies]):
+            if "__error__" in doc:
+                rows.append((u, st, None, doc["__error__"]))
+            else:
+                rows.append((u, st, scores_of(doc), None))
+
+    order = {u: i for i, u in enumerate(urls)}
+    rows.sort(key=lambda r: (order.get(r[0], 0), r[1]))
+    worst = 100
+    for u, st, sc, err in rows:
+        if err:
+            print(f"{short(u)[:39]:<40}{st:<9}ERROR {err[:40]}")
+            continue
+        line = f"{short(u)[:39]:<40}{st:<9}"
+        for c in cats:
+            v = sc.get(c)
+            line += f"{('--' if v is None else v):>7}"
+            if v is not None:
+                worst = min(worst, v)
+        print(line)
+    return worst
+
+
+# -------------------------------------------------------------------------- budget
+
+def cmd_budget(args, key):
+    cats = args.category or CATEGORIES
+    strategies = ["mobile", "desktop"] if args.strategy == "both" else [args.strategy]
+    thresholds = {}
+    for pair in args.threshold or []:
+        if "=" not in pair:
+            die(f"bad --threshold '{pair}', expected name=NN")
+        k, v = pair.split("=", 1)
+        thresholds[k] = int(v)
+    default = args.min
+    failures = []
+    for url in args.url:
+        for st in strategies:
+            docs, errs = run_many(url, st, cats, key, args.runs)
+            if not docs:
+                failures.append((short(url), st, "api", 0, 0, errs[0] if errs else "no data"))
+                continue
+            all_scores = [scores_of(d) for d in docs]
+            for c in cats:
+                m = median_or_none([s[c] for s in all_scores])
+                if m is None:
+                    continue
+                want = thresholds.get(c, default)
+                status = "PASS" if m >= want else "FAIL"
+                print(f"  {status}  {short(url)[:34]:<36}{st:<9}{SHORT[c]:<7}{int(m):>4}  (need {want})")
+                if m < want:
+                    failures.append((short(url), st, c, int(m), want, ""))
+    sys.stdout.flush()
+    if failures:
+        print(f"\n{len(failures)} threshold failure(s)", file=sys.stderr)
+        return 1
+    print("\nall thresholds met")
+    return 0
+
+
+# ----------------------------------------------------------------------------- cli
+
+def main():
+    p = argparse.ArgumentParser(
+        prog="psi", description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    p.add_argument("--env", help="path to a .env file holding PSI_API_KEY")
+    sub = p.add_subparsers(dest="cmd", required=True)
+
+    def common(sp, runs_default=1):
+        sp.add_argument("url", nargs="+", help="URL(s), or a file with one URL per line")
+        sp.add_argument("-s", "--strategy", choices=["mobile", "desktop", "both"],
+                        default="mobile")
+        sp.add_argument("-c", "--category", action="append", choices=CATEGORIES,
+                        help="repeatable; default is all five")
+        return sp
+
+    sp = common(sub.add_parser("score", help="category scores (median of N runs)"))
+    sp.add_argument("-n", "--runs", type=int, default=3,
+                    help="runs to median over (default 3; PSI varies ~13 points)")
+    sp.add_argument("-m", "--metrics", action="store_true", help="also show FCP/LCP/TBT/CLS/SI")
+
+    sp = common(sub.add_parser("audit", help="failing audits with offending elements"))
+    sp.add_argument("-e", "--elements", type=int, default=3,
+                    help="show up to N offending elements per audit (0 to hide)")
+
+    sp = common(sub.add_parser("diagnose", help="performance deep dive"))
+
+    sp = common(sub.add_parser("sweep", help="many URLs, one table"))
+    sp.add_argument("-w", "--workers", type=int, default=4)
+
+    sp = common(sub.add_parser("budget", help="check thresholds; non-zero exit on failure"))
+    sp.add_argument("-n", "--runs", type=int, default=3)
+    sp.add_argument("--min", type=int, default=90, help="default threshold (default 90)")
+    sp.add_argument("-t", "--threshold", action="append",
+                    help="per-category override, e.g. -t performance=70")
+
+    args = p.parse_args()
+    key = load_key(args.env)
+    fn = {"score": cmd_score, "audit": cmd_audit, "diagnose": cmd_diagnose,
+          "sweep": cmd_sweep, "budget": cmd_budget}[args.cmd]
+    rc = fn(args, key)
+    if args.cmd == "budget":
+        sys.exit(rc)
+    sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()

@@ -2,9 +2,10 @@
 
 ## Adding a New Skill
 
-1. **Decide where it goes.** Two folders, no exceptions:
-   - `marketing/` — content, SEO, copy, social, ads
-   - `development/` — engineering, code review, devops, AI tooling
+1. **Decide where it goes.** Use one of these destinations:
+   - `marketing/content-creation/` — writing, editing, SEO content, social, video, diagrams, and graphics
+   - `marketing/web-development/` — website design, CMS implementation, web performance, and website QA
+   - `development/` — engineering, code review, devops, and AI tooling
 
 2. **Folder structure.** Every skill needs at minimum:
 
@@ -49,13 +50,13 @@
 
 If you find another skill repo worth adopting at MAN Digital:
 
-1. Add a folder under `development/` (or `marketing/` if applicable) with the repo name in kebab-case
+1. Add a folder under `development/` or the relevant `marketing/` category with the repo name in kebab-case
 2. Inside, a single `README.md` explaining: what it is, when to use, install steps, link to source
 3. Update the top-level `README.md`'s "External Repos We Use" table
 
 ## What Not to Do
 
-- Don't create new top-level folders. Two is the rule.
+- Don't create new top-level folders or add skills directly under `marketing/`.
 - Don't commit zip files. Always extract first.
 - Don't commit secrets, API keys, or `.env` files.
 - Don't add a skill without a README — others on the team need to know when to use it.
