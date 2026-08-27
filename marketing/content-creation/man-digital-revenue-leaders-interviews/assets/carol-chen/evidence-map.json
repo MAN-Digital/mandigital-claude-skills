@@ -1,0 +1,53 @@
+{
+  "sourceSha256": "e6e40f0499ada09359eed040c0feb8e1f537653e4e5bda4a07171c1d38f5b4d3",
+  "questions": [
+    {
+      "question": "How do you define revenue operations to someone who has not had it before?",
+      "sourceRefs": ["00:05:17-00:06:15", "00:29:16-00:29:30"],
+      "evidence": ["Carol describes Revenue Operations as supporting the end-to-end revenue cycle, from before an opportunity through client health and retention."],
+      "coverage": "direct"
+    },
+    {
+      "question": "At what point should a company hire its first RevOps person?",
+      "sourceRefs": ["00:08:14-00:10:16"],
+      "evidence": ["Carol says a few sales representatives plus a Salesforce or other CRM instance to manage is an early trigger."],
+      "coverage": "direct"
+    },
+    {
+      "question": "Which capabilities should an early RevOps team build first?",
+      "sourceRefs": ["00:10:21-00:12:25", "00:13:51-00:15:18"],
+      "evidence": ["Carol recommends a Salesforce administrator as the first hire, followed by analytics; later gaps determine whether enablement or another capability is next."],
+      "coverage": "partial"
+    },
+    {
+      "question": "What does a trustworthy revenue forecast combine?",
+      "sourceRefs": ["00:11:10-00:11:34", "00:13:51-00:16:47"],
+      "evidence": ["Carol contrasts formula-driven Revenue Operations forecasting using CRM conversion data with the sales leader's direct deal knowledge, and ties planning to quota, headcount and run rate."],
+      "coverage": "direct"
+    },
+    {
+      "question": "When should a company build RevOps internally, and when should it use an agency?",
+      "sourceRefs": ["00:19:33-00:22:56"],
+      "evidence": ["Carol recommends agencies for small teams needing only a few hours of support or one-time overhauls, and internal ownership for the ongoing function because external turnover creates repeated knowledge gaps."],
+      "coverage": "direct"
+    },
+    {
+      "question": "How does the RevOps mandate change as a company approaches an IPO?",
+      "sourceRefs": ["00:23:02-00:24:47"],
+      "evidence": ["Carol describes flexible pre-IPO practices giving way to validations, approval controls, and clean, defensible, auditable numbers as the company prepares to go public."],
+      "coverage": "direct"
+    },
+    {
+      "question": "Why has retention become a bigger part of the RevOps agenda?",
+      "sourceRefs": ["00:25:51-00:27:37", "00:27:52-00:29:30"],
+      "evidence": ["Carol says existing business is less costly to retain than new business is to acquire and explains the shift from reactive account management to proactive customer success across the full revenue cycle."],
+      "coverage": "direct"
+    },
+    {
+      "question": "How should RevOps decide which tools deserve a place in the stack?",
+      "sourceRefs": ["00:29:59-00:33:47"],
+      "evidence": ["Carol evaluates tools by adoption, fit to the original problem, ROI, and the operational load created by security, legal, implementation, training, and oversight; she favours consolidation when one tool can do more."],
+      "coverage": "direct"
+    }
+  ]
+}

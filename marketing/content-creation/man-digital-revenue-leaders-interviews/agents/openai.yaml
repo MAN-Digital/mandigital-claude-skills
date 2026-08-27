@@ -1,0 +1,4 @@
+interface:
+  display_name: "MAN Digital Revenue Leaders Interviews"
+  short_description: "Turn interview sources into safe HubSpot drafts"
+  default_prompt: "Use $man-digital-revenue-leaders-interviews to turn a YouTube, Granola, or Markdown interview source into a complete, validated HubSpot blog draft."

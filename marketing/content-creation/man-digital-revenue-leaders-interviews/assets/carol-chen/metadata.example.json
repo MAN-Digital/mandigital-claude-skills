@@ -1,0 +1,66 @@
+{
+  "editorialState": "draft-source-derived",
+  "sourceType": "youtube",
+  "embedVideo": true,
+  "leadMediaMode": "video",
+  "articleTitle": "What Is RevOps and When to Start It | Carol Chen",
+  "seoTitle": "What Is RevOps and When to Start It | Carol Chen",
+  "metaDescription": "Carol Chen explains when to start RevOps, how to build the first team, and how agencies, IPO readiness, retention and tool ROI shape scale.",
+  "openGraphTitle": "What Is RevOps and When to Start It | Carol Chen",
+  "openGraphDescription": "Carol Chen explains when to start RevOps, how to build the first team, and how agencies, IPO readiness, retention and tool ROI shape scale.",
+  "openGraphImage": "https://1969772.fs1.hubspotusercontent-na1.net/hubfs/1969772/revenue-leaders-interviews/carol-chen/carol-chen-title-card.jpg",
+  "openGraphImageSource": "youtube-thumbnail",
+  "tags": [
+    "Revenue Leaders Interviews"
+  ],
+  "tagPolicy": "replace-singleton",
+  "campaign": "Revenue Leaders Interviews",
+  "campaignId": "38b1a8b6-07c6-48e4-84de-16de94802392",
+  "questionSelectionMethod": "source-adapted",
+  "designReference": "https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40001574-2376&m=dev",
+  "guest": {
+    "name": "Carol Chen",
+    "jobTitle": "VP Revenue Operations",
+    "company": "Flywire",
+    "image": "https://1969772.fs1.hubspotusercontent-na1.net/hubfs/1969772/revenue-leaders-interviews/carol-chen/carol-chen.png"
+  },
+  "schema": {
+    "enabled": true,
+    "mode": "managed-graph",
+    "pageUrlSource": "hubspot-draft",
+    "author": {
+      "name": "Romeo Mann",
+      "url": "https://www.man.digital/authors/romeo-mann",
+      "sameAs": [
+        "https://www.linkedin.com/in/romeomann"
+      ]
+    }
+  },
+  "linkedinVerification": {
+    "status": "verified",
+    "provider": "exa",
+    "verifiedAt": "2026-08-27",
+    "profileUrl": "https://www.linkedin.com/in/carolchenrevops",
+    "matchedSignals": [
+      "Exact full name: Carol Chen",
+      "Role at recording: VP, Revenue Operations at Flywire",
+      "Career history: VP, Head of Global Sales Operations at WeWork"
+    ],
+    "evidenceUrls": [
+      "https://www.linkedin.com/in/carolchenrevops",
+      "https://www.listennotes.com/podcasts/the-revops-abm/understanding-revenue-x0ZQElCiNYk/",
+      "https://www.revenueoperationsalliance.com/author/carol/"
+    ]
+  },
+  "questions": [
+    "How do you define revenue operations to someone who has not had it before?",
+    "At what point should a company hire its first RevOps person?",
+    "Which capabilities should an early RevOps team build first?",
+    "What does a trustworthy revenue forecast combine?",
+    "When should a company build RevOps internally, and when should it use an agency?",
+    "How does the RevOps mandate change as a company approaches an IPO?",
+    "Why has retention become a bigger part of the RevOps agenda?",
+    "How should RevOps decide which tools deserve a place in the stack?"
+  ],
+  "draft": true
+}

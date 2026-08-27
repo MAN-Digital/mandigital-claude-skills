@@ -18,6 +18,7 @@ marketing/
 | [`man-digital-blog-graphics/`](./content-creation/man-digital-blog-graphics/) | Creating branded blog, article, HubSpot, and LinkedIn graphics |
 | [`man-digital-lucid-charts/`](./content-creation/man-digital-lucid-charts/) | Building branded diagrams and process maps in Lucidchart |
 | [`man-digital-marketing-assets/`](./content-creation/man-digital-marketing-assets/) | Creating social images, banners, thumbnails, ads, and share graphics |
+| [`man-digital-revenue-leaders-interviews/`](./content-creation/man-digital-revenue-leaders-interviews/) | Turning YouTube, Granola, or Markdown interviews into complete HubSpot blog drafts |
 | [`man-digital-youtube-scripts/`](./content-creation/man-digital-youtube-scripts/) | Writing MAN Digital YouTube scripts and visual cue sheets |
 | [`video-production/`](./content-creation/video-production/) | Running the 11-skill Adobe Premiere Pro video pipeline, multilingual subtitle delivery, and Shorts repurposing |
 | [`vibe-marketing-v2/`](./content-creation/vibe-marketing-v2/) | Brand voice, positioning, email, newsletter, creative, SEO, and repurposing workflows |
@@ -41,6 +42,7 @@ See the [web-development index](./web-development/) for category details.
 | Write a long-form blog post | `content-creation/blog-production/` |
 | Edit or polish writing | `content-creation/editing-checklist/` |
 | Write a LinkedIn post | `content-creation/linkedin-post-creation/` |
+| Create a Revenue Leaders Interview post | `content-creation/man-digital-revenue-leaders-interviews/` |
 | Create a branded visual | `content-creation/man-digital-blog-graphics/` or `content-creation/man-digital-marketing-assets/` |
 | Write a YouTube script | `content-creation/man-digital-youtube-scripts/` |
 | Produce, subtitle, or repurpose a video | `content-creation/video-production/` |

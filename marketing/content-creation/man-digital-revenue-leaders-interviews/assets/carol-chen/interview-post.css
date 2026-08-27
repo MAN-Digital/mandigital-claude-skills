@@ -1,0 +1,518 @@
+/* RLI_BLOG_DRAFT_PREVIEW_CSS_START
+ * Carol Chen reference. Scope every rule to the interview wrappers before
+ * placing this CSS in an individual HubSpot blog post's Head HTML.
+ */
+.rli-intro,
+.rli-article {
+  --rli-blue: #000fc4;
+  --rli-charcoal: #222222;
+  --rli-body: #434343;
+  --rli-muted: #6b6b6b;
+  --rli-border: #e4e6f9;
+  --rli-tint: #f7f7ff;
+  --rli-white: #ffffff;
+  --rli-black: #0a0a0a;
+  --rli-warning: #8a5a00;
+  --rli-heading: "Montserrat", Arial, sans-serif;
+  --rli-body-font: "Lato", Arial, sans-serif;
+}
+
+.rli-intro *,
+.rli-intro *::before,
+.rli-intro *::after,
+.rli-article *,
+.rli-article *::before,
+.rli-article *::after {
+  box-sizing: border-box;
+}
+
+.rli-intro {
+  align-items: stretch;
+  background: var(--rli-white);
+  border: 0;
+  border-bottom: 1px solid var(--rli-border);
+  color: var(--rli-body);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--rli-body-font);
+  font-size: 20px;
+  gap: 20px;
+  line-height: 1.5;
+  margin: 32px 0;
+  padding: 0 0 20px;
+}
+
+.rli-intro p {
+  color: inherit !important;
+  font: inherit !important;
+  margin: 0;
+}
+
+.rli-intro__guest {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  width: 100%;
+}
+
+.rli-intro__guest img {
+  border-radius: 50%;
+  flex: 0 0 72px;
+  height: 72px;
+  object-fit: cover;
+  width: 72px;
+}
+
+.rli-intro__guest p {
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+}
+
+.rli-intro__guest strong {
+  color: var(--rli-charcoal);
+  font-family: var(--rli-heading);
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+.rli-linkedin {
+  align-items: center;
+  color: var(--rli-blue) !important;
+  display: inline-flex;
+  font-family: var(--rli-body-font) !important;
+  font-size: 14px !important;
+  font-weight: 700;
+  gap: 8px;
+  line-height: 20px !important;
+  text-decoration: none;
+}
+
+.rli-intro__linkedin {
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+.rli-linkedin svg {
+  display: block;
+  flex: 0 0 24px;
+  height: 24px;
+  width: 24px;
+}
+
+.rli-linkedin:hover,
+.rli-linkedin:focus-visible {
+  text-decoration: underline;
+}
+
+.rli-article {
+  color: var(--rli-body);
+  font-family: var(--rli-body-font);
+  font-size: 18px;
+  line-height: 1.67;
+}
+
+.rli-article p,
+.rli-article li {
+  color: inherit !important;
+  font-family: var(--rli-body-font) !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+.rli-article__lead {
+  margin: 0 0 40px;
+}
+
+.rli-article__lead img {
+  border-radius: 12px;
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.rli-sample-notice,
+.rli-approval-notice {
+  background: #fff8e1;
+  border: 2px dashed var(--rli-warning);
+  border-radius: 4px;
+  color: var(--rli-muted) !important;
+  font-size: 14px !important;
+  line-height: 1.55 !important;
+  margin: 32px 0;
+  padding: 16px 18px;
+}
+
+.rli-sample-notice strong,
+.rli-approval-notice strong {
+  color: var(--rli-charcoal);
+  display: block;
+  font-family: var(--rli-heading);
+  font-size: 13px;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+.rli-video {
+  aspect-ratio: 16 / 9;
+  background: transparent;
+  margin: 32px 0;
+  max-width: none;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.rli-article .rli-video > .mce-preview-object {
+  display: block !important;
+  height: 100% !important;
+  inset: 0 !important;
+  max-height: none !important;
+  max-width: none !important;
+  min-height: 100% !important;
+  min-width: 100% !important;
+  position: absolute !important;
+  width: 100% !important;
+}
+
+.rli-article .rli-video iframe {
+  background: transparent;
+  border: 0 !important;
+  display: block;
+  height: 100% !important;
+  inset: 0;
+  max-height: none !important;
+  max-width: none !important;
+  min-height: 100% !important;
+  min-width: 100% !important;
+  position: absolute;
+  width: 100% !important;
+}
+
+.rli-qa {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 56px 0;
+}
+
+.rli-article .rli-question {
+  align-items: flex-start;
+  color: var(--rli-charcoal) !important;
+  display: flex;
+  font-family: var(--rli-heading) !important;
+  font-size: 32px !important;
+  font-weight: 700 !important;
+  gap: 16px;
+  letter-spacing: -0.5px !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+}
+
+.rli-article .rli-question::before {
+  align-items: center;
+  background: var(--rli-blue);
+  border-radius: 4px;
+  color: var(--rli-white);
+  content: "Q";
+  display: inline-flex;
+  flex: 0 0 40px;
+  font-family: var(--rli-heading);
+  font-size: 18px;
+  font-weight: 700;
+  height: 40px;
+  justify-content: center;
+  line-height: 22px;
+  width: 40px;
+}
+
+.rli-answer {
+  color: var(--rli-black);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--rli-body-font);
+  font-size: 24px;
+  gap: 16px;
+  line-height: 1.5;
+  padding-left: 52px;
+}
+
+.rli-answer p {
+  margin: 0;
+}
+
+:root:has(.rli-article) .TableofContentsBox {
+  border-radius: 4px;
+  padding: 32px 24px;
+}
+
+:root:has(.rli-article) .TableofContentsBox .TableofContentTitle {
+  color: #ffffff !important;
+  font-family: Lato, Arial, sans-serif !important;
+  font-size: 18px !important;
+  line-height: 27px !important;
+  margin: 0;
+}
+
+:root:has(.rli-article) .TableofContentsBox ol {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+
+:root:has(.rli-article) .TableofContentsBox li,
+:root:has(.rli-article) .TableofContentsBox li a {
+  color: #ffffff !important;
+  font-family: Lato, Arial, sans-serif !important;
+  font-size: 22px !important;
+  font-weight: 400 !important;
+  line-height: 33px !important;
+  margin: 0;
+  text-decoration: none;
+}
+
+.rli-authority,
+.rli-company,
+.rli-takeaways,
+.rli-guest-card,
+.rli-callout {
+  border: 1px solid var(--rli-border);
+  border-radius: 4px;
+  margin: 48px 0;
+  padding: 32px;
+}
+
+.rli-authority,
+.rli-company,
+.rli-takeaways,
+.rli-callout,
+.rli-guest-card {
+  background: var(--rli-tint);
+}
+
+.rli-article .rli-eyebrow {
+  color: var(--rli-blue) !important;
+  font-family: var(--rli-heading) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  letter-spacing: 2px !important;
+  line-height: 1.4 !important;
+  margin-bottom: 12px;
+  text-transform: uppercase !important;
+}
+
+.rli-authority h3,
+.rli-company h3,
+.rli-guest-card h3,
+.rli-callout h3 {
+  color: var(--rli-charcoal);
+  font-family: var(--rli-heading);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0 0 16px;
+}
+
+.rli-callout {
+  border-left: 5px solid var(--rli-blue);
+}
+
+.rli-callout__label {
+  color: var(--rli-blue) !important;
+  font-family: var(--rli-heading) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px;
+  margin: 0 0 10px;
+  text-transform: uppercase;
+}
+
+.rli-pull-quote {
+  align-items: center;
+  background: var(--rli-tint);
+  border-left: 3px solid var(--rli-blue);
+  border-radius: 4px;
+  color: var(--rli-charcoal);
+  display: flex;
+  gap: 24px;
+  margin: 56px 0;
+  padding: 32px;
+}
+
+.rli-pull-quote img {
+  border: 3px solid var(--rli-white);
+  border-radius: 50%;
+  height: 88px;
+  object-fit: cover;
+  width: 88px;
+}
+
+.rli-pull-quote__copy {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.rli-pull-quote p {
+  color: var(--rli-charcoal) !important;
+  font-family: var(--rli-heading) !important;
+  font-size: 26px !important;
+  font-weight: 700 !important;
+  line-height: 1.38 !important;
+  margin: 0;
+}
+
+.rli-pull-quote .rli-pull-quote__attribution {
+  color: #767676 !important;
+  font-family: var(--rli-body-font) !important;
+  font-size: 14px !important;
+  line-height: 20px !important;
+}
+
+.rli-guest-card {
+  align-items: center;
+  display: flex;
+  gap: 24px;
+}
+
+.rli-guest-card > img {
+  border: 2px solid var(--rli-border);
+  border-radius: 50%;
+  flex: 0 0 96px;
+  height: 96px;
+  object-fit: cover;
+  width: 96px;
+}
+
+.rli-guest-card__copy {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.rli-guest-card__copy p {
+  margin: 0;
+}
+
+.rli-guest-card__role {
+  color: var(--rli-blue) !important;
+  font-weight: 700;
+}
+
+.rli-takeaways {
+  background: var(--rli-blue);
+  border: 0;
+  color: var(--rli-white);
+}
+
+.rli-takeaways .rli-eyebrow {
+  color: var(--rli-border) !important;
+}
+
+.rli-takeaways p:not(.rli-eyebrow) {
+  color: var(--rli-white) !important;
+  font-size: 16px !important;
+  line-height: 1.625 !important;
+  margin: 0 0 10px;
+}
+
+@media (max-width: 767px) {
+  .rli-intro {
+    font-size: 16px;
+    gap: 18px;
+    padding-bottom: 16px;
+  }
+
+  .rli-intro__guest img {
+    flex-basis: 56px;
+    height: 56px;
+    width: 56px;
+  }
+
+  .rli-article {
+    font-size: 16px;
+    line-height: 1.625;
+  }
+
+  .rli-qa {
+    gap: 12px;
+    margin: 40px 0;
+  }
+
+  .rli-article .rli-question {
+    font-size: 28px !important;
+    gap: 12px;
+    letter-spacing: -0.3px !important;
+    line-height: 1.21 !important;
+  }
+
+  .rli-article .rli-question::before {
+    flex-basis: 32px;
+    font-size: 15px;
+    height: 32px;
+    line-height: 18px;
+    width: 32px;
+  }
+
+  .rli-answer {
+    font-size: 22px;
+    gap: 12px;
+    line-height: 1.5;
+    padding-left: 0;
+  }
+
+  :root:has(.rli-article) .TableofContentsBox {
+    padding: 24px 20px;
+  }
+
+  :root:has(.rli-article) .TableofContentsBox li,
+  :root:has(.rli-article) .TableofContentsBox li a {
+    font-size: 18px !important;
+    line-height: 27px !important;
+  }
+
+  .rli-authority,
+  .rli-company,
+  .rli-takeaways,
+  .rli-guest-card,
+  .rli-callout {
+    margin: 36px 0;
+    padding: 24px 20px;
+  }
+
+  .rli-pull-quote {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+    margin: 40px 0;
+    padding: 24px 20px;
+  }
+
+  .rli-pull-quote img {
+    height: 64px;
+    width: 64px;
+  }
+
+  .rli-pull-quote p {
+    font-size: 20px !important;
+    line-height: 1.4 !important;
+  }
+
+  .rli-guest-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .rli-guest-card > img {
+    flex-basis: 72px;
+    height: 72px;
+    width: 72px;
+  }
+}
+/* RLI_BLOG_DRAFT_PREVIEW_CSS_END */
