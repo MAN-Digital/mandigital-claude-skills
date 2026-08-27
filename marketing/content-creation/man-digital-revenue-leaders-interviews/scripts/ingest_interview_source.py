@@ -165,14 +165,18 @@ def validate_optional_url(name: str, value: str | None) -> None:
 
 
 def prompt_inputs(
-    *, guest_image: str | None, linkedin_url: str | None, og_image: str | None
+    *, guest_image: str | None, linkedin_url: str | None, og_image: str | None,
+    require_open_graph: bool = True,
 ) -> dict[str, object]:
     provided = {
         "guestImage": guest_image,
         "linkedinProfile": linkedin_url,
         "openGraphImage": og_image,
     }
-    missing = [name for name, value in provided.items() if not value]
+    required = {"guestImage", "linkedinProfile"}
+    if require_open_graph:
+        required.add("openGraphImage")
+    missing = [name for name, value in provided.items() if name in required and not value]
     return {"provided": provided, "missingPromptInputs": missing}
 
 
@@ -395,6 +399,8 @@ def ingest_youtube(
 ) -> dict[str, object]:
     if not is_youtube_url(source_url):
         raise ValueError("YouTube source must be a youtube.com or youtu.be URL")
+    if og_image:
+        raise ValueError("YouTube sources use the YouTube thumbnail for Open Graph; omit --og-image")
     metadata = fetch_youtube_metadata(source_url)
     video_id = str(metadata["id"])
     attempts: list[dict[str, str]] = []
@@ -421,7 +427,9 @@ def ingest_youtube(
             )
     attempts.append({"provider": provider, "result": "success"})
     generated = provider == "faster-whisper" or subtitle_kind(metadata, language_code) == "automatic-captions"
-    thumbnail = og_image or str(metadata.get("thumbnail") or "") or None
+    thumbnail = str(metadata.get("thumbnail") or "") or None
+    if not thumbnail:
+        raise ValueError("YouTube metadata did not provide a thumbnail for Open Graph")
     manifest: dict[str, object] = {
         "schemaVersion": 1,
         "sourceType": "youtube",
@@ -445,12 +453,13 @@ def ingest_youtube(
         "embedVideo": embed_video,
         "openGraphCandidate": {
             "image": thumbnail,
-            "imageSource": "prompt" if og_image else "youtube-thumbnail",
+            "imageSource": "youtube-thumbnail",
         },
         **prompt_inputs(
             guest_image=guest_image,
             linkedin_url=linkedin_url,
-            og_image=thumbnail,
+            og_image=None,
+            require_open_graph=False,
         ),
     }
     write_bundle(output_dir, content, manifest)

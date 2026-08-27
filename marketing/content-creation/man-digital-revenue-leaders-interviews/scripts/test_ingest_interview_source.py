@@ -108,6 +108,7 @@ shared definitions. Then the forecast becomes inspectable.
             "title": "Interview",
             "webpage_url": "https://www.youtube.com/watch?v=abc123",
             "automatic_captions": {"en": [{}]},
+            "thumbnail": "https://i.ytimg.com/vi/abc123/maxresdefault.jpg",
         }
         transcript_mock.return_value = ("[00:00:00.000] Hello\n", "en", 1)
         with tempfile.TemporaryDirectory(prefix="rli-youtube-test-") as temp_dir:
@@ -123,6 +124,8 @@ shared definitions. Then the forecast becomes inspectable.
         self.assertEqual(manifest["transcriptProvider"], "youtube-transcript-api")
         self.assertTrue(manifest["transcriptIsGenerated"])
         self.assertEqual(manifest["transcriptSegmentCount"], 1)
+        self.assertEqual(manifest["openGraphCandidate"]["imageSource"], "youtube-thumbnail")
+        self.assertNotIn("openGraphImage", manifest["missingPromptInputs"])
 
     @mock.patch.object(INGEST, "run_yt_dlp_captions")
     @mock.patch.object(INGEST, "run_transcript_api", side_effect=ValueError("blocked"))
@@ -134,6 +137,7 @@ shared definitions. Then the forecast becomes inspectable.
             "id": "abc123",
             "title": "Interview",
             "subtitles": {"en": [{}]},
+            "thumbnail": "https://i.ytimg.com/vi/abc123/maxresdefault.jpg",
         }
         captions_mock.return_value = ("[00:00:00.000] Hello\n", "en", 1)
         with tempfile.TemporaryDirectory(prefix="rli-youtube-test-") as temp_dir:
@@ -157,7 +161,11 @@ shared definitions. Then the forecast becomes inspectable.
     def test_whisper_is_only_used_when_explicitly_enabled(
         self, metadata_mock, _transcript_mock, _captions_mock, whisper_mock
     ) -> None:
-        metadata_mock.return_value = {"id": "abc123", "title": "Interview"}
+        metadata_mock.return_value = {
+            "id": "abc123",
+            "title": "Interview",
+            "thumbnail": "https://i.ytimg.com/vi/abc123/maxresdefault.jpg",
+        }
         with tempfile.TemporaryDirectory(prefix="rli-youtube-test-") as temp_dir:
             with self.assertRaisesRegex(ValueError, "--whisper-fallback"):
                 INGEST.ingest_youtube(

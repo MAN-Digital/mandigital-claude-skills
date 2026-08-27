@@ -37,9 +37,10 @@ Mobile (`max-width: 767px`):
 ## Component contract
 
 - `.rli-intro`: guest portrait, name/role, visible LinkedIn icon/link, short editorial introduction.
+- `.rli-article__lead`: exactly one approved user-provided image only when the article has no embedded video. Do not render it for an embedded YouTube interview.
 - `.rli-sample-notice`: mandatory visible warning for `draft-sample-answers` content.
 - `.rli-approval-notice`: mandatory visible warning for transcript-reviewed content that still awaits guest/editorial approval.
-- `.rli-video`: optional responsive 16:9 YouTube wrapper that spans the full blog-body width with a transparent wrapper and an iframe that fills it. Use only the `youtube-nocookie.com` embed recorded in the source manifest; never autoplay.
+- `.rli-video`: optional responsive 16:9 YouTube wrapper that spans the full blog-body width with a transparent wrapper and an iframe that fills it. Use only the `youtube-nocookie.com` embed recorded in the source manifest; never autoplay. When present, it is the article's only lead media, so no thumbnail/title-card image may appear above it.
 - `.rli-qa`: exactly one `.rli-question` and one `.rli-answer`; stable unique question ID for TOC/deep linking.
 - `.rli-pull-quote`: image, quote, attribution, and an editorial state. Unverified quotes remain visibly draft-only.
 - `.rli-takeaways`: concise synthesis; do not introduce facts not present in approved answers.
@@ -56,5 +57,6 @@ Check at least one desktop, tablet, and mobile viewport in the actual HubSpot pr
 - the table of contents is readable and links resolve;
 - portraits and title card load without distortion;
 - the optional YouTube embed is responsive, full-width within the blog body, transparent around the iframe, titled, privacy-enhanced, and matches the source manifest;
+- lead media is not duplicated: video posts have no `.rli-article__lead`, while non-video posts show one user-provided lead image;
 - both LinkedIn actions show the SVG and open the verified profile;
 - no horizontal overflow, clipped text, broken images, or template CSS leakage.

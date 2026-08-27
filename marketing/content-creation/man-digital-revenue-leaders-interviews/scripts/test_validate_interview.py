@@ -158,6 +158,26 @@ class ValidatorTests(unittest.TestCase):
             ("interview-post.css", "background: transparent;", "background: #0a0a0a;"),
         )
 
+    def test_video_and_lead_image_cannot_be_rendered_together(self) -> None:
+        self.assert_rejected(
+            "must not render a separate lead image",
+            (
+                "interview-body.html",
+                '<div class="rli-video">',
+                '<figure class="rli-article__lead"><img src="https://example.com/duplicate.jpg" alt="Duplicate"></figure>\n\n  <div class="rli-video">',
+            ),
+        )
+
+    def test_youtube_open_graph_provenance_is_enforced(self) -> None:
+        self.assert_rejected(
+            "openGraphImageSource must be youtube-thumbnail",
+            (
+                "metadata.example.json",
+                '"openGraphImageSource": "youtube-thumbnail"',
+                '"openGraphImageSource": "user-provided-image"',
+            ),
+        )
+
     def test_hubspot_preview_wrapper_must_expand(self) -> None:
         self.assert_rejected(
             "must expand HubSpot's iframe preview wrapper",

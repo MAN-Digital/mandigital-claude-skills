@@ -74,9 +74,9 @@ Read `missingPromptInputs` from `source.json`. Ask for only the unresolved items
 
 - `guestImage`: approved HTTPS portrait or HubSpot Files URL;
 - `linkedinProfile`: verified guest profile URL;
-- `openGraphImage`: approved 16:9 title card or image URL.
+- `openGraphImage`: approved 16:9 article/OG image URL for Markdown, Granola, or another non-video source. This is the user-provided lead image when no video is embedded.
 
-For YouTube, the highest-quality available thumbnail is recorded as a draft Open Graph candidate. It may be used for a draft when the user has not supplied a title card, but it must be identified as a YouTube thumbnail and visually checked. Markdown and Granola sources have no automatic image candidate.
+For YouTube, always use the highest-quality available YouTube thumbnail as the Open Graph candidate and record `openGraphImageSource: "youtube-thumbnail"`; do not ask for or substitute a separate title card. The thumbnail may be copied to HubSpot Files, but it must not also be rendered above the embedded player. Markdown and Granola sources have no automatic image candidate, so the user must provide the image in the prompt before handoff.
 
 ## Build the evidence map before writing
 
@@ -108,7 +108,7 @@ Select 7 or 8 questions from the source's strongest answerable themes. Every sel
 
 ## YouTube embed
 
-When `embedVideo` is true, place one responsive `.rli-video` block after the lead image and before the opening body paragraph:
+When `embedVideo` is true, place one responsive `.rli-video` block as the first media in the article body and before the opening body paragraph. Omit `.rli-article__lead` entirely so the YouTube thumbnail is not duplicated above the player:
 
 ```html
 <div class="rli-video">
@@ -122,7 +122,7 @@ When `embedVideo` is true, place one responsive `.rli-video` block after the lea
 </div>
 ```
 
-Do not autoplay. When `--no-embed-video` is chosen, omit the block and record `embedVideo: false` in metadata. Markdown and Granola modes never fabricate a video embed.
+Do not autoplay. When there is no embedded video, omit the block, record `embedVideo: false`, and render exactly one `.rli-article__lead` using the approved image supplied by the user. Markdown and Granola modes never fabricate a video embed or a lead image.
 
 The wrapper must span `100%` of the available blog-body width, use a transparent background, and preserve `aspect-ratio: 16 / 9`. The iframe must fill the wrapper with no border or extra padding. HubSpot's editor may wrap an iframe in `.mce-preview-object`; expand that wrapper to `100%` width and height as part of the scoped video CSS. Do not add a black background behind the player.
 
@@ -130,7 +130,7 @@ The wrapper must span `100%` of the available blog-body width, use a transparent
 
 - Generate the SEO title and meta description from the completed article, then use the same reviewed values for Open Graph title and description.
 - Set `sourceType` to `youtube`, `markdown`, or `granola` and `embedVideo` to the actual rendered choice.
-- For YouTube, transfer the chosen thumbnail or user-supplied title card to HubSpot Files when required by the CMS workflow; verify the final public HTTPS `og:image` in preview.
-- For Markdown/Granola, stop before HubSpot handoff if the requested Open Graph image or guest assets remain unresolved.
+- For YouTube, transfer the YouTube thumbnail to HubSpot Files when required by the CMS workflow; verify the final public HTTPS `og:image` in preview and confirm that the same image is absent from the article body.
+- For Markdown/Granola, stop before HubSpot handoff if the user-provided lead/Open Graph image or guest assets remain unresolved.
 
 Official behavior references: [youtube-transcript-api](https://github.com/jdepoix/youtube-transcript-api), [yt-dlp metadata and subtitle options](https://github.com/yt-dlp/yt-dlp/blob/master/README.md), [faster-whisper](https://github.com/SYSTRAN/faster-whisper), [Granola transcript copying](https://docs.granola.ai/help-center/taking-notes/transcription), and [Granola note sharing/export behavior](https://docs.granola.ai/help-center/sharing/sharing-notes).

@@ -18,7 +18,7 @@ Use the same series vocabulary everywhere:
 - HubSpot tag: `Revenue Leaders Interviews`
 - HubSpot campaign: `Revenue Leaders Interviews`
 - Canonical MAN Digital portal campaign ID: `38b1a8b6-07c6-48e4-84de-16de94802392`
-- Open Graph image: preferably the approved 16:9 interview title card hosted on HubSpot Files. A YouTube thumbnail may be used as a visibly reviewed draft candidate when the source is YouTube; Markdown and Granola sources require a user-provided image.
+- Open Graph image: for YouTube sources, use the YouTube thumbnail (optionally copied to HubSpot Files) and do not render it in the article body above the player. For Markdown, Granola, and other non-video sources, require a user-provided image and use it as the article lead and Open Graph image unless a separate approved OG image is supplied.
 
 Resolve the canonical campaign ID first and verify its exact name. Search by exact name only as a diagnostic fallback. Reuse the canonical record; never create punctuation, singular/plural, or capitalization variants. If the canonical ID no longer resolves, request explicit authorization before creating a replacement and update this reference plus the example metadata with the new ID.
 
@@ -29,7 +29,7 @@ Write for search clarity, not keyword stuffing:
 - SEO title target: about 30–60 characters. Pattern: `<topic/result> | <guest name>`.
 - Meta description target: about 120–160 characters. State who the guest is and the useful decisions covered.
 - Open Graph title and description normally match the approved SEO title and meta description. HubSpot may derive the rendered `og:title` and `og:description` from those two fields instead of exposing separate inputs; verify the rendered preview tags rather than inventing unavailable controls. Diverge only when a supported field exists and the user requests a reviewed social-specific message.
-- Open Graph image must be HTTPS and publicly loadable. Use the approved title card when supplied; otherwise a YouTube source may provide its own thumbnail as the documented draft candidate. Never select a random inline image or invent an image for Markdown/Granola input.
+- Open Graph image must be HTTPS and publicly loadable. A YouTube source uses its own thumbnail and records `openGraphImageSource: "youtube-thumbnail"`. A non-video source records `openGraphImageSource: "user-provided-image"`. Never select a random inline image or invent an image.
 - Keep the URL slug concise and stable. Do not change a live slug without explicit redirect/migration authorization.
 
 Before saving, check title/description lengths, spelling of the guest/company, image URL, tag, and campaign. After saving, reopen settings or inspect the preview metadata so the save is evidenced rather than assumed.

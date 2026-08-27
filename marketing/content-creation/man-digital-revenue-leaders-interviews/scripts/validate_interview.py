@@ -103,8 +103,8 @@ def validate(asset_dir: Path) -> list[str]:
         return [f"invalid metadata.example.json: {exc}"]
 
     required_metadata = {
-        "editorialState", "sourceType", "embedVideo", "seoTitle", "metaDescription", "openGraphTitle",
-        "openGraphDescription", "openGraphImage", "tag", "campaign", "campaignId",
+        "editorialState", "sourceType", "embedVideo", "leadMediaMode", "seoTitle", "metaDescription", "openGraphTitle",
+        "openGraphDescription", "openGraphImage", "openGraphImageSource", "tag", "campaign", "campaignId",
         "questionSelectionMethod", "designReference", "questions", "draft",
     }
     absent = sorted(required_metadata - metadata.keys())
@@ -118,6 +118,7 @@ def validate(asset_dir: Path) -> list[str]:
     source_notice_count = sum("rli-source-notice" in item for item in parser.classes)
     approval_notice_count = sum("rli-approval-notice" in item for item in parser.classes)
     video_wrapper_count = sum("rli-video" in item for item in parser.classes)
+    lead_image_count = sum("rli-article__lead" in item for item in parser.classes)
     if question_count == 0 or len({qa_count, question_count, answer_count}) != 1:
         errors.append(f"Q/A structure mismatch: sections/questions/answers={qa_count}/{question_count}/{answer_count}")
     if not 7 <= question_count <= 8:
@@ -238,6 +239,17 @@ def validate(asset_dir: Path) -> list[str]:
         errors.append("embedVideo must be a boolean")
     if source_type != "youtube" and embed_video is True:
         errors.append("only YouTube sources may enable embedVideo")
+    lead_media_mode = metadata.get("leadMediaMode")
+    if embed_video is True:
+        if lead_media_mode != "video":
+            errors.append("embedded video posts must use leadMediaMode=video")
+        if lead_image_count:
+            errors.append("embedded video posts must not render a separate lead image above the player")
+    elif embed_video is False:
+        if lead_media_mode != "image":
+            errors.append("posts without an embedded video must use leadMediaMode=image")
+        if lead_image_count != 1:
+            errors.append("posts without an embedded video require exactly one user-provided rli-article__lead image")
 
     if source_type in {"youtube", "markdown", "granola"}:
         source_path = asset_dir / "source.json"
@@ -280,6 +292,17 @@ def validate(asset_dir: Path) -> list[str]:
                     parsed_embed = urlparse(embed_url)
                     if parsed_embed.scheme != "https" or parsed_embed.netloc != "www.youtube-nocookie.com":
                         errors.append("YouTube embedUrl must use https://www.youtube-nocookie.com")
+                    thumbnail_url = str(youtube.get("thumbnailUrl") or "")
+                    if urlparse(thumbnail_url).scheme != "https":
+                        errors.append("YouTube thumbnailUrl must use HTTPS")
+                open_graph_candidate = source_manifest.get("openGraphCandidate")
+                if not isinstance(open_graph_candidate, dict):
+                    errors.append("YouTube source.json requires an openGraphCandidate")
+                else:
+                    if open_graph_candidate.get("imageSource") != "youtube-thumbnail":
+                        errors.append("YouTube Open Graph image must be identified as youtube-thumbnail")
+                    if open_graph_candidate.get("image") != metadata.get("openGraphImage"):
+                        errors.append("YouTube Open Graph image must match the source candidate")
                 if embed_video is True:
                     if video_wrapper_count != 1 or len(parser.iframes) != 1:
                         errors.append("enabled YouTube embeds require exactly one rli-video wrapper and iframe")
@@ -336,6 +359,9 @@ def validate(asset_dir: Path) -> list[str]:
         errors.append("Open Graph description must match meta description in the series template")
     if urlparse(metadata.get("openGraphImage", "")).scheme != "https":
         errors.append("Open Graph image must use HTTPS")
+    expected_og_source = "youtube-thumbnail" if source_type == "youtube" else "user-provided-image"
+    if metadata.get("openGraphImageSource") != expected_og_source:
+        errors.append(f"openGraphImageSource must be {expected_og_source}")
 
     try:
         svg_root = ET.fromstring((asset_dir / "linkedin-icon.svg").read_text(encoding="utf-8"))

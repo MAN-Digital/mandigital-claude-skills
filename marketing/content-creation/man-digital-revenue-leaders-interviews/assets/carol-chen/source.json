@@ -26,12 +26,12 @@
   "embedVideo": true,
   "openGraphCandidate": {
     "image": "https://1969772.fs1.hubspotusercontent-na1.net/hubfs/1969772/revenue-leaders-interviews/carol-chen/carol-chen-title-card.jpg",
-    "imageSource": "prompt"
+    "imageSource": "youtube-thumbnail"
   },
   "provided": {
     "guestImage": "https://1969772.fs1.hubspotusercontent-na1.net/hubfs/1969772/revenue-leaders-interviews/carol-chen/carol-chen.png",
     "linkedinProfile": "https://www.linkedin.com/in/carol-chen-0b30cb44/",
-    "openGraphImage": "https://1969772.fs1.hubspotusercontent-na1.net/hubfs/1969772/revenue-leaders-interviews/carol-chen/carol-chen-title-card.jpg"
+    "openGraphImage": null
   },
   "missingPromptInputs": [],
   "contentFile": "source-content.md",
