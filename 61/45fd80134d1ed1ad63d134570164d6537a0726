@@ -1,0 +1,53 @@
+marketing/content-creation/man-digital-revenue-leaders-interviews/README.md
+  s_b2b9d5301fd010::t_7318d025a4b3b6 46,53-54
+marketing/content-creation/man-digital-revenue-leaders-interviews/scripts/local_whisper_transcribe.py
+  s_b2b9d5301fd010::t_d95e248847e8b6 1-33
+marketing/content-creation/man-digital-revenue-leaders-interviews/assets/carol-chen/interview-intro.html
+  s_b2b9d5301fd010::t_c0e1b67f7a39a1 1,9
+marketing/content-creation/man-digital-revenue-leaders-interviews/scripts/test_ingest_interview_source.py
+  s_b2b9d5301fd010::t_d95e248847e8b6 11,96-185
+  s_b2b9d5301fd010::t_d76a3149f971fc 186
+marketing/content-creation/man-digital-revenue-leaders-interviews/SKILL.md
+  s_b2b9d5301fd010::t_7318d025a4b3b6 20,49-51,54
+marketing/content-creation/man-digital-revenue-leaders-interviews/scripts/ingest_interview_source.py
+  s_b2b9d5301fd010::t_d95e248847e8b6 25-27,105-153,254-255,257-258,270,272-299,303-304,327-381,393-394,398,400-423,435-438,483-492,518-519
+marketing/content-creation/man-digital-revenue-leaders-interviews/references/source-ingestion-and-drafting.md
+  s_b2b9d5301fd010::t_7318d025a4b3b6 16,18-33,134
+marketing/content-creation/man-digital-revenue-leaders-interviews/assets/carol-chen/metadata.example.json
+  s_b2b9d5301fd010::t_c0e1b67f7a39a1 2-4,6,8
+marketing/content-creation/man-digital-revenue-leaders-interviews/assets/carol-chen/source.json
+  s_b2b9d5301fd010::t_57f9d85f146ebd 1-39
+marketing/content-creation/man-digital-revenue-leaders-interviews/assets/carol-chen/evidence-map.json
+  s_b2b9d5301fd010::t_c0e1b67f7a39a1 1-47
+marketing/content-creation/man-digital-revenue-leaders-interviews/assets/carol-chen/interview-body.html
+  s_b2b9d5301fd010::t_c0e1b67f7a39a1 1,6-12,15,21-22,28,33-34,37,40,44,47-48,52,55-56,60,63-64,68,71-72,76,79-80,84,87-88,92,95-97,103-107,116
+marketing/content-creation/man-digital-revenue-leaders-interviews/assets/carol-chen/source-content.md
+  s_b2b9d5301fd010::t_319b38d146242c 1-1849
+marketing/content-creation/man-digital-revenue-leaders-interviews/scripts/test_validate_interview.py
+  s_b2b9d5301fd010::t_7f2bfc22f75694 45-52,69,79,84,89,94,96-97,115-116,125,128-131
+  s_9828a14f8d6675::t_00cc0d635ed3ae 132
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "6145fd80134d1ed1ad63d134570164d6537a0726",
+  "prompts": {},
+  "sessions": {
+    "s_9828a14f8d6675": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a03f82-7741-76d1-a466-196740152419",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "romeoman <romeo@man.digital>"
+    },
+    "s_b2b9d5301fd010": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a03ee0-3cea-7201-ac17-6c5dc9b18b83",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "romeoman <romeo@man.digital>"
+    }
+  }
+}
