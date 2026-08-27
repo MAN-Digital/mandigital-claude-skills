@@ -1,0 +1,45 @@
+marketing/content-creation/man-digital-revenue-leaders-interviews/README.md
+  s_b2b9d5301fd010::t_39093fde6cdc9b 3,12,20-21,35,40-47,53
+marketing/content-creation/README.md
+  s_b2b9d5301fd010::t_39093fde6cdc9b 13
+tests/maintenance/test_doctor.py
+  s_b2b9d5301fd010::t_39093fde6cdc9b 55
+marketing/README.md
+  s_b2b9d5301fd010::t_39093fde6cdc9b 21
+marketing/content-creation/man-digital-revenue-leaders-interviews/SKILL.md
+  s_b2b9d5301fd010::t_0076ec8d8ba86c 3,13,20-27,31-32,39
+marketing/content-creation/man-digital-revenue-leaders-interviews/agents/openai.yaml
+  s_b2b9d5301fd010::t_6488e4c0de70e3 3-4
+marketing/content-creation/man-digital-revenue-leaders-interviews/assets/carol-chen/interview-post.css
+  s_b2b9d5301fd010::t_632b5fa821857f 133,146,157-171
+marketing/content-creation/man-digital-revenue-leaders-interviews/assets/carol-chen/metadata.example.json
+  s_b2b9d5301fd010::t_24e33612c96482 3-4
+marketing/content-creation/man-digital-revenue-leaders-interviews/references/editorial-seo-and-hubspot.md
+  s_b2b9d5301fd010::t_b5441c8a68bc11 7,12,21,32,55
+marketing/content-creation/man-digital-revenue-leaders-interviews/references/figma-and-design-contract.md
+  s_b2b9d5301fd010::t_e2397fd1c1415b 41,43,59
+marketing/content-creation/man-digital-revenue-leaders-interviews/references/source-ingestion-and-drafting.md
+  s_b2b9d5301fd010::t_aafe308693df88 1-119
+marketing/content-creation/man-digital-revenue-leaders-interviews/scripts/ingest_interview_source.py
+  s_b2b9d5301fd010::t_4027fb462c02c2 1-370
+marketing/content-creation/man-digital-revenue-leaders-interviews/scripts/test_ingest_interview_source.py
+  s_b2b9d5301fd010::t_2f61a8f3032fc5 1-97
+marketing/content-creation/man-digital-revenue-leaders-interviews/scripts/test_validate_interview.py
+  s_b2b9d5301fd010::t_1ba3523e8369ad 7-8,45-122,179-198
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "f229bd6d9f572c3b2cd117a6000d0512391db2be",
+  "prompts": {},
+  "sessions": {
+    "s_b2b9d5301fd010": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a03ee0-3cea-7201-ac17-6c5dc9b18b83",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "romeoman <romeo@man.digital>"
+    }
+  }
+}
