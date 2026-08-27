@@ -88,7 +88,7 @@ The `egabQ` regression is a hard warning pattern: do not invent unregistered pal
 
 Use assets from:
 
-`/Users/romeoman/Documents/Marketing/Design/MAN Digital Design System/assets/`
+`/Users/diogosa/Documents/!MAN DIGITAL/Design/MAN Digital Design System/assets/`
 
 Prefer:
 

@@ -22,7 +22,7 @@ share images. The user provides the copy.
 | ---------------- | -------------------------------------------- | ------------------------------------------------------- |
 | Output           | blog/article graphics, OG, HubSpot placement | standalone social/marketing assets                      |
 | Sizing authority | blog/OG defaults                             | `references/asset-specs.md` (exact 2026 platform specs) |
-| Output folder    | `Pencil/Skill Tests/`                        | `Pencil/Marketing Assets/`                              |
+| Output folder    | `Pencil/Skill Tests/`                        | **asked every time** — the project's own folder (shared `Pencil/Marketing Assets/` is only the fallback) |
 | Imagery          | screenshots/placeholders                     | photo/product placeholders + "add this here" briefs     |
 
 ## Key files
@@ -31,6 +31,9 @@ share images. The user provides the copy.
 - `references/asset-specs.md` — **the spec authority**: canvas size, ratio, safe zones, file caps per asset.
 - `references/brand-rules.md`, `pencil-workflow.md`, `editable-pencil-source.md`,
   `image-placeholders.md`, `component-index.md`, `references/components/` — shared design-system doctrine.
+- `assets/playground/Playground.pen` — the saved Pencil component library the skill clones from;
+  `assets/previews/playground/` — PNG previews of the library components. Binary payloads the
+  skill uses at runtime — deliberate extras beyond the standard skill template.
 
 ## Build doctrine (inherited, unchanged)
 

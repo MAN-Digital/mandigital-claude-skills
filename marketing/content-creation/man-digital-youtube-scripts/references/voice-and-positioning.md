@@ -24,6 +24,35 @@ Secondary: Marketing, Sales, and CS leaders, plus CEOs at smaller companies. MAN
 **not** a HubSpot feature vendor — process first, tool second. HubSpot is the enabler, not
 the hero of the story.
 
+When the audience is described on camera, say **"mid-market and enterprise B2B
+companies"** — never mid-market alone. Romeo corrected this on set (2026-07-30): "It's not
+just mid-market, it's enterprises also."
+
+## Don't sell on every video
+
+Romeo, on set: "We don't need to sell on every video. That's not the idea."
+
+- **No company-introduction block.** Never open with "Welcome back. We are MAN Digital, an
+  Elite HubSpot partner…" — the golden-sample scripts drop it entirely and go straight from
+  the cold-open scenario to the roadmap.
+- **Tutorials teach.** Credibility comes from the quality of the walkthrough, not from
+  stating credentials mid-video.
+- **One soft CTA at the end, maximum.** The validated pattern: "If your HubSpot pricing is
+  difficult to control, send us the setup. We will show you where it breaks." Not "Send us
+  your portal — the link is in the description."
+
+## The cold open — a scenario, not the feature
+
+The title and thumbnail already announce the feature. Opening the script by announcing it
+again wastes the hook. Open instead with a two-line concrete scenario the ICP recognizes,
+with real numbers in it, anchored in their world (B2B, SaaS, their region):
+
+> "Two sales reps sell the same service. One quotes five thousand euros. The other quotes
+> four thousand. The customer may be happy. Finance will not be."
+
+Then name the fix and give a first-person roadmap: "This is the problem price books solve…
+I will explain price books. Then we will build and test one."
+
 ## The sequencing principle — use this as the throughline for any "how" or "why" video
 
 Visibility first, operating model second, AI third:
@@ -50,7 +79,16 @@ hedging.
 > whether the operating model can scale."
 
 Every sentence names a role and a specific consequence for that role. None of them hedge,
-qualify, or ask a question. Write scripts the same way.
+qualify, or ask a question. Write scripts the same way — with one caveat: those sentences
+are Romeo's *written* campaign voice. For *spoken* scripts, the calibration standard is his
+own v2 golden-sample scripts (see [golden-samples.md](golden-samples.md)): the same
+directness, but in plain complete sentences, not clipped aphorisms, and with an inline
+concrete example after every abstract term. On the prompter, the staccato aphorism style
+reads as "robotic" and "professor talking" — his words.
+
+Insider vocabulary from the written strategy (bow tie, NRR, GTM shorthand) does not carry
+into scripts unexplained — see the jargon rule in
+[non-native-readability.md](non-native-readability.md).
 
 ## Founder vs. company register
 

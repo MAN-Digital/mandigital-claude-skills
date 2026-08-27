@@ -51,8 +51,8 @@ class DoctorTests(unittest.TestCase):
         report = validate_repository(REPO_ROOT, quick=True)
 
         self.assertTrue(report.ok, report.render())
-        self.assertEqual(report.skill_count, 27)
-        self.assertEqual(report.python_count, 20)
+        self.assertEqual(report.skill_count, 38)
+        self.assertEqual(report.python_count, 35)
         self.assertEqual(report.shell_count, 6)
 
 

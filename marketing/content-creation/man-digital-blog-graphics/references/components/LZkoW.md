@@ -1,6 +1,6 @@
 # LZkoW - Outreach To HubSpot Sync Model
 
-Source: `/Users/romeoman/Documents/Marketing/Design/Pencil/Playground.pen`
+Source: `/Users/diogosa/Documents/!MAN DIGITAL/Design/Pencil/Playground.pen`
 
 Observed frame: `Prospecting Agent vs Outbound-04`, 1190 x 1684.
 

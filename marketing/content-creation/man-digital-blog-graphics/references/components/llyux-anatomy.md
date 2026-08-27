@@ -1,6 +1,6 @@
 # llyux Anatomy - HubSpot Signal Engine Blueprint
 
-Source: `/Users/romeoman/Documents/Marketing/Design/Pencil/Playground.pen`
+Source: `/Users/diogosa/Documents/!MAN DIGITAL/Design/Pencil/Playground.pen`
 
 Top node: `llyux`, 1190 x 1684.
 

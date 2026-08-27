@@ -57,7 +57,7 @@ Rebuild as editable Pencil nodes. Do not paste the Figma screenshot into Pencil.
 
 The canonical Pencil version of this Figma-derived pattern already lives in the Playground library:
 
-- File: `/Users/romeoman/Documents/Marketing/Design/Pencil/Playground.pen`
+- File: `/Users/diogosa/Documents/!MAN DIGITAL/Design/Pencil/Playground.pen`
 - Node: `LZkoW`
 - Frame name: `Prospecting Agent vs Outbound-04`
 - Component reference: `components/LZkoW.md`

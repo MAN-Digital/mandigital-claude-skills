@@ -9,7 +9,7 @@ How MAN Digital carousels are made, and the **CTA-link conventions** (the part t
   topic + slide plan to `/carousel`. This `man-digital-marketing-assets` skill provides the brand
   system and the **channel + link conventions below**.
 - Carousels build in their **own new `.pen` file** under
-  `/Users/romeoman/Documents/Marketing/Design/Pencil/Carousels/` — **Playground.pen is read-only
+  `/Users/diogosa/Documents/!MAN DIGITAL/Design/Pencil/Carousels/` — **Playground.pen is read-only
   reference only, never the build canvas.** The file must contain ONLY the slides (no copied
   library); recreate component anatomy in the output file (cross-file copy is unsupported).
 
@@ -23,7 +23,7 @@ How MAN Digital carousels are made, and the **CTA-link conventions** (the part t
 
 ## Export folder (deliverables)
 
-Carousel exports go to **`/Users/romeoman/Documents/Marketing/Design/Assets/Carousels/`**, in a
+Carousel exports go to **`/Users/diogosa/Documents/!MAN DIGITAL/Design/Assets/Carousels/`**, in a
 **per-carousel subfolder** named for the topic:
 
 ```
@@ -55,7 +55,7 @@ Every carousel ends on a CTA slide with a CTA pill (e.g. node **`I5IJUu`** "CTA 
 
 ## Build / file gotchas (learned)
 
-- Use **absolute asset paths** for logos (e.g. `/Users/romeoman/Documents/Marketing/Design/Pencil/image-7.png`
+- Use **absolute asset paths** for logos (e.g. `/Users/diogosa/Documents/!MAN DIGITAL/Design/Pencil/image-7.png`
   or the design-system `assets/logo-*.png`). Relative filenames break when the `.pen` is in a
   subfolder, rendering the logo as a dotted placeholder.
 - Slide frames: 1080×1350, `clip:true`, and **no outer drop-shadow on the slide frame itself**
