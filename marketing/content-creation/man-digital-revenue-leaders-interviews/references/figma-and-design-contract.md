@@ -2,7 +2,7 @@
 
 ## Approved interview article frames
 
-- Sample-answer warning: [node 40001584:2386](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40001584-2386&m=dev)
+- Sample-answer layout reference: [node 40001584:2386](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40001584-2386&m=dev)
 - Desktop article: [node 40001574:2376](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40001574-2376&m=dev)
 - Mobile article: [node 40001577:2386](https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40001577-2386&m=dev)
 
@@ -38,24 +38,23 @@ Mobile (`max-width: 767px`):
 
 - `.rli-intro`: guest portrait, name/role, visible LinkedIn icon/link, short editorial introduction.
 - `.rli-sample-notice`: mandatory visible warning for `draft-sample-answers` content.
-- `.rli-source-notice`: mandatory visible warning for `draft-source-derived` content created from automatic captions, Markdown, or Granola input.
 - `.rli-approval-notice`: mandatory visible warning for transcript-reviewed content that still awaits guest/editorial approval.
-- `.rli-video`: optional responsive 16:9 YouTube wrapper. Use only the `youtube-nocookie.com` embed recorded in the source manifest; never autoplay.
+- `.rli-video`: optional responsive 16:9 YouTube wrapper that spans the full blog-body width with a transparent wrapper and an iframe that fills it. Use only the `youtube-nocookie.com` embed recorded in the source manifest; never autoplay.
 - `.rli-qa`: exactly one `.rli-question` and one `.rli-answer`; stable unique question ID for TOC/deep linking.
 - `.rli-pull-quote`: image, quote, attribution, and an editorial state. Unverified quotes remain visibly draft-only.
 - `.rli-takeaways`: concise synthesis; do not introduce facts not present in approved answers.
 - `.rli-guest-card`: verified portrait, name, role/company, approved bio, and LinkedIn action.
 
-Store the approved Figma frame URL as `approvedQuestionSource` and the exact ordered strings as `approvedQuestions` in the interview metadata. The rendered `.rli-question` text and order must match that list exactly.
+Figma defines the visual treatment, not a reusable question script. Select 7 or 8 questions from the strongest answerable themes in the source. Store `questionSelectionMethod: "source-adapted"`, the Figma frame as `designReference`, and the exact ordered strings as `questions` in interview metadata. The rendered `.rli-question` text and order must match that list exactly.
 
 ## Responsive QA
 
 Check at least one desktop, tablet, and mobile viewport in the actual HubSpot preview. Confirm:
 
-- question wording, order, and count match Figma;
+- question wording and order match the selected metadata and the count is 7 or 8;
 - answer copy does not collide with the Q marker;
 - the table of contents is readable and links resolve;
 - portraits and title card load without distortion;
-- the optional YouTube embed is responsive, titled, privacy-enhanced, and matches the source manifest;
+- the optional YouTube embed is responsive, full-width within the blog body, transparent around the iframe, titled, privacy-enhanced, and matches the source manifest;
 - both LinkedIn actions show the SVG and open the verified profile;
 - no horizontal overflow, clipped text, broken images, or template CSS leakage.

@@ -105,7 +105,7 @@ def validate(asset_dir: Path) -> list[str]:
     required_metadata = {
         "editorialState", "sourceType", "embedVideo", "seoTitle", "metaDescription", "openGraphTitle",
         "openGraphDescription", "openGraphImage", "tag", "campaign", "campaignId",
-        "approvedQuestionSource", "approvedQuestions", "draft",
+        "questionSelectionMethod", "designReference", "questions", "draft",
     }
     absent = sorted(required_metadata - metadata.keys())
     if absent:
@@ -120,22 +120,28 @@ def validate(asset_dir: Path) -> list[str]:
     video_wrapper_count = sum("rli-video" in item for item in parser.classes)
     if question_count == 0 or len({qa_count, question_count, answer_count}) != 1:
         errors.append(f"Q/A structure mismatch: sections/questions/answers={qa_count}/{question_count}/{answer_count}")
+    if not 7 <= question_count <= 8:
+        errors.append(f"interviews require 7-8 complete questions; got {question_count}")
     if len(parser.question_ids) != question_count or any(not value for value in parser.question_ids):
         errors.append("every question requires a stable non-empty ID")
     if len(parser.ids) != len(set(parser.ids)):
         errors.append("HTML IDs must be unique across intro and body")
 
-    approved_questions = metadata.get("approvedQuestions")
-    if not isinstance(approved_questions, list) or not approved_questions or not all(
-        isinstance(item, str) and item.strip() for item in approved_questions
+    selected_questions = metadata.get("questions")
+    if not isinstance(selected_questions, list) or not selected_questions or not all(
+        isinstance(item, str) and item.strip() for item in selected_questions
     ):
-        errors.append("approvedQuestions must be a non-empty list of exact question strings")
-    elif parser.question_texts != approved_questions:
-        errors.append("rendered question wording/order must exactly match approvedQuestions")
-    question_source = metadata.get("approvedQuestionSource", "")
-    parsed_source = urlparse(question_source) if isinstance(question_source, str) else urlparse("")
+        errors.append("questions must be a non-empty list of exact source-adapted question strings")
+    elif not 7 <= len(selected_questions) <= 8:
+        errors.append(f"metadata questions require 7-8 items; got {len(selected_questions)}")
+    elif parser.question_texts != selected_questions:
+        errors.append("rendered question wording/order must exactly match metadata questions")
+    if metadata.get("questionSelectionMethod") != "source-adapted":
+        errors.append("questionSelectionMethod must be source-adapted")
+    design_reference = metadata.get("designReference", "")
+    parsed_source = urlparse(design_reference) if isinstance(design_reference, str) else urlparse("")
     if parsed_source.scheme != "https" or parsed_source.netloc != "www.figma.com" or "node-id=" not in parsed_source.query:
-        errors.append("approvedQuestionSource must be an HTTPS Figma node URL")
+        errors.append("designReference must be an HTTPS Figma node URL")
 
     editorial_state = metadata.get("editorialState")
     allowed_states = {
@@ -161,10 +167,8 @@ def validate(asset_dir: Path) -> list[str]:
         errors.append(f"every Q/A section must use data-answer-state={expected_answer_state}")
 
     if editorial_state == "draft-source-derived":
-        if source_notice_count != 1:
-            errors.append("source-derived drafts require exactly one visible rli-source-notice")
-        if notice_count or approval_notice_count:
-            errors.append("source-derived drafts must not include sample or approval notices")
+        if source_notice_count or notice_count or approval_notice_count:
+            errors.append("source-derived drafts must not include reader-facing draft notices")
     elif editorial_state == "draft-sample-answers":
         if source_notice_count:
             errors.append("sample drafts must not include rli-source-notice")
@@ -180,8 +184,8 @@ def validate(asset_dir: Path) -> list[str]:
     elif editorial_state == "approved":
         if source_notice_count or notice_count or approval_notice_count:
             errors.append("approved content must not include draft notices")
-        if parser.draft_placeholder_count:
-            errors.append("approved content must not include draft placeholders")
+    if parser.draft_placeholder_count:
+        errors.append("interview content must not include draft placeholders")
 
     expected_quote_state = {
         "draft-source-derived": "source-derived",
@@ -305,18 +309,18 @@ def validate(asset_dir: Path) -> list[str]:
                 errors.append("evidence-map.json questions must be a list")
             else:
                 mapped_questions = [item.get("question") for item in evidence_questions if isinstance(item, dict)]
-                if mapped_questions != approved_questions:
-                    errors.append("evidence-map questions must exactly match approvedQuestions")
+                if mapped_questions != selected_questions:
+                    errors.append("evidence-map questions must exactly match metadata questions")
                 for item in evidence_questions:
                     if not isinstance(item, dict):
                         errors.append("each evidence-map question must be an object")
                         continue
-                    if item.get("coverage") not in {"direct", "partial", "missing"}:
-                        errors.append("evidence-map coverage must be direct, partial, or missing")
-                    if item.get("coverage") != "missing" and not item.get("evidence"):
-                        errors.append("direct/partial evidence-map entries require evidence")
-                    if item.get("coverage") != "missing" and not item.get("sourceRefs"):
-                        errors.append("direct/partial evidence-map entries require sourceRefs")
+                    if item.get("coverage") not in {"direct", "partial"}:
+                        errors.append("evidence-map coverage must be direct or partial; missing questions are not allowed")
+                    if not item.get("evidence"):
+                        errors.append("every evidence-map entry requires evidence")
+                    if not item.get("sourceRefs"):
+                        errors.append("every evidence-map entry requires sourceRefs")
 
     elif video_wrapper_count or parser.iframes:
         errors.append("sample assets must not render a YouTube embed")
@@ -343,13 +347,20 @@ def validate(asset_dir: Path) -> list[str]:
     css = (asset_dir / "interview-post.css").read_text(encoding="utf-8")
     for selector in (
         ".rli-intro", ".rli-article", ".rli-question", ".rli-answer",
-        ".rli-linkedin", ".rli-source-notice", ".rli-sample-notice",
+        ".rli-linkedin", ".rli-sample-notice",
         ".rli-approval-notice", ".rli-video",
     ):
         if selector not in css:
             errors.append(f"CSS is missing required selector {selector}")
     if "RLI_BLOG_DRAFT_PREVIEW_CSS_START" not in css or "RLI_BLOG_DRAFT_PREVIEW_CSS_END" not in css:
         errors.append("CSS requires stable start/end replacement markers")
+    compact_css = "".join(css.lower().split())
+    if ".rli-video{" not in compact_css or "width:100%" not in compact_css:
+        errors.append("rli-video must span 100% of the blog body width")
+    if ".mce-preview-object" not in compact_css:
+        errors.append("rli-video CSS must expand HubSpot's iframe preview wrapper")
+    if "background:#0a0a0a" in compact_css or "background:black" in compact_css:
+        errors.append("rli-video must not add a black background around the player")
     return errors
 
 

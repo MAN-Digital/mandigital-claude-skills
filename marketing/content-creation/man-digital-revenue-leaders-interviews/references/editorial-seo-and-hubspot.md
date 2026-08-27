@@ -4,12 +4,12 @@
 
 Use one explicit state throughout a draft:
 
-- `draft-source-derived`: the first complete article was generated from automatic captions, an unreviewed transcript, Markdown, or Granola content. Every answer and pull quote is `source-derived`; one visible `.rli-source-notice` states that the post awaits transcript/editorial review. It is never publishable.
+- `draft-source-derived`: the first complete article was generated from automatic captions, an unreviewed transcript, Markdown, or Granola content. Every answer and pull quote is `source-derived`. Keep this state internal in metadata and evidence records; do not add a reader-facing generation disclaimer. It is never publishable.
 - `draft-sample-answers`: layout demonstration only. Every answer and pull quote is `illustrative`; one visible `.rli-sample-notice` states that the copy is not the guest's words.
 - `draft-transcript-reviewed`: copy was checked against a reliable recording/transcript but still awaits final editorial/guest approval. Every answer and pull quote is `transcript-reviewed`; one visible `.rli-approval-notice` states that publication approval is still pending.
 - `approved`: questions, answers, pull quotes, bio, company facts, and links are approved. Every answer and pull quote is `approved`; no draft notice or draft placeholder may remain.
 
-Automatic captions, Granola summaries, and first-person sample copy are not quote-safe. Direct quotation marks in a source-derived draft require exact source wording; otherwise treat the passage as an unapproved paraphrase. Do not remove the warning or advance the state based only on automatic processing.
+Automatic captions, Granola summaries, and first-person sample copy are not quote-safe. Direct quotation marks in a source-derived draft require exact source wording; otherwise treat the passage as an unapproved paraphrase. Do not advance the internal editorial state based only on automatic processing.
 
 ## Series metadata
 
@@ -51,7 +51,7 @@ Connector or API writes must follow their own confirmation requirements. If conn
 Report exact values and evidence for:
 
 - post ID and editor URL;
-- editorial state and whether any sample/unapproved copy remains;
+- editorial state and whether any sample/unapproved copy remains (report this in the handoff, not inside the reader-facing article);
 - source type, source completeness, evidence-map coverage, and whether automatic captions or notes were used;
 - SEO title and meta description;
 - Open Graph title, description, and image;

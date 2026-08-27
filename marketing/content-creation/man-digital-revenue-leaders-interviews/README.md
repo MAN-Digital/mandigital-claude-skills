@@ -1,6 +1,6 @@
 # MAN Digital Revenue Leaders Interviews
 
-Creates and validates complete MAN Digital Revenue Leaders Interview posts as HubSpot blog drafts. It can start from a public YouTube video, copied Granola call, Markdown transcript, or reviewed copy while preserving the approved Figma structure and editorial safeguards.
+Creates and validates complete MAN Digital Revenue Leaders Interview posts as HubSpot blog drafts. It can start from a public YouTube video, copied Granola call, Markdown transcript, or reviewed copy while preserving the approved Figma structure and selecting 7–8 questions that fit the source.
 
 ## When to use it
 
@@ -25,7 +25,7 @@ Use this skill when creating, updating, or QA-checking a post in the `Revenue Le
 
 ## Included example
 
-`assets/carol-chen/` contains the tested Carol Chen draft example, including the intro, article body, CSS, LinkedIn SVG, and metadata contract. Its answers and unverified guest facts are visibly marked as draft placeholders and must not be published as quotations.
+`assets/carol-chen/` contains the tested Carol Chen draft example, including the intro, article body, CSS, LinkedIn SVG, metadata contract, and evidence map. It demonstrates eight complete source-adapted questions, a clean full-width video embed, and internal draft-state tracking without reader-facing generation notices.
 
 ## Validation
 

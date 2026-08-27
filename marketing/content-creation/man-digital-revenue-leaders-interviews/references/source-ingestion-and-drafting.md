@@ -87,7 +87,7 @@ Create `evidence-map.json` in the working asset directory. It is an internal QA 
   "sourceSha256": "...",
   "questions": [
     {
-      "question": "Exact approved Figma question",
+      "question": "Source-adapted question supported by this interview",
       "sourceRefs": ["00:12:31-00:14:08"],
       "evidence": ["Short source passage or faithful note"],
       "coverage": "direct"
@@ -96,11 +96,11 @@ Create `evidence-map.json` in the working asset directory. It is an internal QA 
 }
 ```
 
-Every approved question needs `direct`, `partial`, or `missing` coverage. Keep the exact Figma wording in the rendered question even when the interviewer phrased it differently. For `partial` or `missing`, write a transparent placeholder rather than filling the gap from general knowledge.
+Select 7 or 8 questions from the source's strongest answerable themes. Every selected question needs `direct` or `partial` coverage, evidence, and source references. Adapt question wording for clarity without changing the speaker's subject or intent. Never select a question with missing coverage and never render a placeholder; if fewer than 7 complete answers are supportable, request more source material.
 
 ## Drafting rules
 
-- Use `draft-source-derived` for the first generated post. Every Q/A uses `data-answer-state="source-derived"`, every pull quote uses `data-editorial-state="source-derived"`, and one visible `.rli-source-notice` states that the copy was generated from source material and awaits transcript/editorial review.
+- Use `draft-source-derived` for the first generated post. Every Q/A uses `data-answer-state="source-derived"` and every pull quote uses `data-editorial-state="source-derived"`. Track the source and review status in metadata and the evidence map; do not add a reader-facing automatic-caption or generation disclaimer.
 - Preserve the guest's meaning. Remove verbal filler and repetition, but do not add claims, causal explanations, metrics, or certainty not supported by the evidence map.
 - Direct quotation marks require exact source wording. Otherwise use an unquoted draft answer or clearly labelled paraphrase.
 - Generate the intro, authority section, company section, learning callout, answers, takeaways, and SEO/social copy from supported evidence plus verified prompt details.
@@ -108,7 +108,7 @@ Every approved question needs `direct`, `partial`, or `missing` coverage. Keep t
 
 ## YouTube embed
 
-When `embedVideo` is true, place one responsive `.rli-video` block after the lead image and before the editorial notice:
+When `embedVideo` is true, place one responsive `.rli-video` block after the lead image and before the opening body paragraph:
 
 ```html
 <div class="rli-video">
@@ -123,6 +123,8 @@ When `embedVideo` is true, place one responsive `.rli-video` block after the lea
 ```
 
 Do not autoplay. When `--no-embed-video` is chosen, omit the block and record `embedVideo: false` in metadata. Markdown and Granola modes never fabricate a video embed.
+
+The wrapper must span `100%` of the available blog-body width, use a transparent background, and preserve `aspect-ratio: 16 / 9`. The iframe must fill the wrapper with no border or extra padding. HubSpot's editor may wrap an iframe in `.mce-preview-object`; expand that wrapper to `100%` width and height as part of the scoped video CSS. Do not add a black background behind the player.
 
 ## Metadata assembly
 

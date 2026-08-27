@@ -3,22 +3,24 @@
   "sourceType": "youtube",
   "embedVideo": true,
   "seoTitle": "What Is RevOps and When to Start It | Carol Chen",
-  "metaDescription": "Carol Chen explains when to start RevOps, what the first hire should own, and how data supports forecasting, alignment and scale.",
+  "metaDescription": "Carol Chen explains when to start RevOps, how to build the first team, and how agencies, IPO readiness, retention and tool ROI shape scale.",
   "openGraphTitle": "What Is RevOps and When to Start It | Carol Chen",
-  "openGraphDescription": "Carol Chen explains when to start RevOps, what the first hire should own, and how data supports forecasting, alignment and scale.",
+  "openGraphDescription": "Carol Chen explains when to start RevOps, how to build the first team, and how agencies, IPO readiness, retention and tool ROI shape scale.",
   "openGraphImage": "https://1969772.fs1.hubspotusercontent-na1.net/hubfs/1969772/revenue-leaders-interviews/carol-chen/carol-chen-title-card.jpg",
   "tag": "Revenue Leaders Interviews",
   "campaign": "Revenue Leaders Interviews",
   "campaignId": "38b1a8b6-07c6-48e4-84de-16de94802392",
-  "approvedQuestionSource": "https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40001574-2376&m=dev",
-  "approvedQuestions": [
+  "questionSelectionMethod": "source-adapted",
+  "designReference": "https://www.figma.com/design/IOhToZi5UBH5vNFV741HP3/MD-Website?node-id=40001574-2376&m=dev",
+  "questions": [
     "How do you define revenue operations to someone who has not had it before?",
     "At what point should a company hire its first RevOps person?",
-    "What does the first RevOps hire actually own in month one?",
-    "Where do marketing, sales and customer success most often disagree about the same account?",
-    "What breaks first when a company scales without RevOps?",
-    "How do you build a forecast leadership actually trusts?",
-    "What would you tell a CRO inheriting a CRM they did not build?"
+    "Which capabilities should an early RevOps team build first?",
+    "What does a trustworthy revenue forecast combine?",
+    "When should a company build RevOps internally, and when should it use an agency?",
+    "How does the RevOps mandate change as a company approaches an IPO?",
+    "Why has retention become a bigger part of the RevOps agenda?",
+    "How should RevOps decide which tools deserve a place in the stack?"
   ],
   "draft": true
 }

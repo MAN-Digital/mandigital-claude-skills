@@ -53,7 +53,7 @@ class ValidatorTests(unittest.TestCase):
 
     def test_changed_question_wording_is_rejected(self) -> None:
         self.assert_rejected(
-            "question wording/order",
+            "metadata questions",
             (
                 "interview-body.html",
                 "How do you define revenue operations to someone who has not had it before?",
@@ -91,10 +91,77 @@ class ValidatorTests(unittest.TestCase):
             ),
         )
 
-    def test_missing_source_notice_is_rejected(self) -> None:
+    def test_reader_facing_source_notice_is_rejected(self) -> None:
         self.assert_rejected(
-            "exactly one visible rli-source-notice",
-            ("interview-body.html", 'class="rli-source-notice"', 'class="removed-notice"'),
+            "must not include reader-facing draft notices",
+            (
+                "interview-body.html",
+                "<p>MAN Digital invited",
+                '<p class="rli-source-notice">Generated from automatic captions.</p>\n\n  <p>MAN Digital invited',
+            ),
+        )
+
+    def test_fewer_than_seven_questions_is_rejected(self) -> None:
+        self.assert_rejected(
+            "require 7-8 complete questions; got 6",
+            (
+                "interview-body.html",
+                '<h2 class="rli-question" id="retention-focus">Why has retention become a bigger part of the RevOps agenda?</h2>',
+                '<h3 id="removed-question">Why retention matters</h3>',
+            ),
+            (
+                "interview-body.html",
+                '<h2 class="rli-question" id="tool-roi">How should RevOps decide which tools deserve a place in the stack?</h2>',
+                '<h3 id="removed-question-two">How tools earn a place</h3>',
+            ),
+        )
+
+    def test_more_than_eight_questions_is_rejected(self) -> None:
+        self.assert_rejected(
+            "require 7-8 complete questions; got 9",
+            (
+                "interview-body.html",
+                '<div class="rli-article" data-rli-editorial-state="draft-source-derived">',
+                '<div class="rli-article" data-rli-editorial-state="draft-source-derived"><h2 class="rli-question" id="extra-question">Extra supported question</h2>',
+            ),
+        )
+
+    def test_missing_evidence_coverage_is_rejected(self) -> None:
+        self.assert_rejected(
+            "missing questions are not allowed",
+            ("evidence-map.json", '"coverage": "direct"', '"coverage": "missing"'),
+        )
+
+    def test_placeholder_is_rejected_in_any_state(self) -> None:
+        self.assert_rejected(
+            "must not include draft placeholders",
+            (
+                "interview-body.html",
+                '<div class="rli-answer">',
+                '<div class="rli-answer"><div class="rli-draft-placeholder">Unsupported</div>',
+            ),
+        )
+
+    def test_question_selection_must_be_source_adapted(self) -> None:
+        self.assert_rejected(
+            "questionSelectionMethod must be source-adapted",
+            (
+                "metadata.example.json",
+                '"questionSelectionMethod": "source-adapted"',
+                '"questionSelectionMethod": "fixed-template"',
+            ),
+        )
+
+    def test_video_wrapper_cannot_add_black_background(self) -> None:
+        self.assert_rejected(
+            "must not add a black background",
+            ("interview-post.css", "background: transparent;", "background: #0a0a0a;"),
+        )
+
+    def test_hubspot_preview_wrapper_must_expand(self) -> None:
+        self.assert_rejected(
+            "must expand HubSpot's iframe preview wrapper",
+            ("interview-post.css", ".mce-preview-object", ".removed-preview-object"),
         )
 
     def test_wrong_campaign_id_is_rejected(self) -> None:
