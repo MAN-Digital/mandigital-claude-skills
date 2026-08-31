@@ -14,15 +14,17 @@ The repository keeps two top-level areas. Marketing skills are split by the kind
 mandigital-claude-skills/
 ├── marketing/
 │   ├── content-creation/   ← Writing, editing, social, video, and visual content
+│   ├── outreach/           ← Outbound campaign coordination, cadences, copy, and QA
 │   └── web-development/    ← Website design, CMS implementation, and performance
 └── development/            ← Engineering and AI-development workflows
 ```
 
-| Area | What belongs there |
-| --- | --- |
-| [`marketing/content-creation/`](./marketing/content-creation/) | Blog production, editing, LinkedIn, YouTube, diagrams, graphics, marketing assets, and campaign skills |
-| [`marketing/web-development/`](./marketing/web-development/) | Figma website design, HubSpot CMS development, and PSI/Web Vitals auditing |
-| [`development/`](./development/) | Engineering, code review, agent workflows, and external development toolkits |
+| Area                                                           | What belongs there                                                                                            |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| [`marketing/content-creation/`](./marketing/content-creation/) | Blog production, editing, LinkedIn, YouTube, diagrams, graphics, marketing assets, and campaign skills        |
+| [`marketing/outreach/`](./marketing/outreach/)                 | Outbound campaign coordination: the outreach-strategist skill with its cadence, copywriting, and QA subskills |
+| [`marketing/web-development/`](./marketing/web-development/)   | Figma website design, HubSpot CMS development, and PSI/Web Vitals auditing                                    |
+| [`development/`](./development/)                               | Engineering, code review, agent workflows, and external development toolkits                                  |
 
 See the [marketing index](./marketing/) for the complete skill inventory.
 
@@ -32,11 +34,11 @@ See the [marketing index](./marketing/) for the complete skill inventory.
 
 Three skill packages we don't own but depend on. Each has a README inside `development/` that explains what it is, when to use it, and how to install it.
 
-| Repo | Purpose |
-| --- | --- |
-| [coleam00/claude-memory-compiler](https://github.com/coleam00/claude-memory-compiler) | Persistent memory across Claude sessions. **Set up once per project.** |
-| [garrytan/gstack](https://github.com/garrytan/gstack) | Brainstorming + dev workflow toolkit. `/office-hours`, `/qa`, `/ship`, `/review`, `/design-consultation`. |
-| [obra/superpowers](https://github.com/obra/superpowers) | The skill system itself—the framework that makes `SKILL.md` files work. |
+| Repo                                                                                  | Purpose                                                                                                   |
+| ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| [coleam00/claude-memory-compiler](https://github.com/coleam00/claude-memory-compiler) | Persistent memory across Claude sessions. **Set up once per project.**                                    |
+| [garrytan/gstack](https://github.com/garrytan/gstack)                                 | Brainstorming + dev workflow toolkit. `/office-hours`, `/qa`, `/ship`, `/review`, `/design-consultation`. |
+| [obra/superpowers](https://github.com/obra/superpowers)                               | The skill system itself—the framework that makes `SKILL.md` files work.                                   |
 
 ---
 
