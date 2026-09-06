@@ -9,7 +9,11 @@ from urllib.parse import unquote
 from .common import load_manifest, run_command
 
 
-ALLOWED_FRONTMATTER_KEYS = {"allowed-tools", "description", "license", "metadata", "name"}
+# Claude Code invocation control is supported by the shared local skill tree.
+# https://code.claude.com/docs/en/skills#frontmatter-reference
+ALLOWED_FRONTMATTER_KEYS = {
+    "allowed-tools", "description", "license", "metadata", "name", "user-invocable"
+}
 SKILL_NAME_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 MARKDOWN_LINK_PATTERN = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 LOCAL_LINK_DOCS = (
@@ -94,6 +98,8 @@ def _frontmatter(text: str) -> tuple[dict[str, str], list[str]]:
             errors.append(f"invalid frontmatter line: {line}")
             continue
         key, raw_value = match.group(1), (match.group(2) or "").strip()
+        if key == "user-invocable" and raw_value not in {"true", "false", "True", "False", "TRUE", "FALSE"}:
+            errors.append("user-invocable must be a boolean (true or false)")
         if raw_value in {">", ">-", "|", "|-"}:
             current_key = key
             continue
