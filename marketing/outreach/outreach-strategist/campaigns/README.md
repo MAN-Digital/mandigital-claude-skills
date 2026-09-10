@@ -3,6 +3,12 @@
 One folder per campaign. The `outreach-strategist` skill is generic; these
 folders are the ONLY place campaign-specific context lives.
 
+Start by copying `campaigns/_template/`—including `intake.yaml`. A campaign is
+configuration, never a new skill or Python runner. The intake identifies the
+minimum human decisions; `provider_capabilities` then chooses installed tools
+by what they can do rather than assuming Exa, Trigify, Graph.one, Linkup, or any
+other vendor exists.
+
 ## Schema — `campaign.yaml`
 
 ```yaml
@@ -48,10 +54,27 @@ channels:
 
 signals: # which sources feed timing for this campaign
   - trigify
-  - graphone
+  - graph_one
   - exa
-  - linkup
+  - linkup_search
+  - linkup_social
   - albacross
+
+provider_capabilities:
+  research.web_search:
+    required: false
+    providers: [exa, linkup_search, crawl4ai]
+    on_unavailable: skip_with_evidence
+  linkedin.relationship.read:
+    required: true
+    providers: [snapshot_routes, linkup_social, openclaw_browser]
+    on_unavailable: hold
+
+execution:
+  default_mode: plan
+  compile_flag: --compile
+  staging: mission_control_build_approval
+  activation_allowed: false
 
 mention_policy: >
   Which file is the name-drop allowlist, and the rule for using it.

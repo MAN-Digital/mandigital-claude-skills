@@ -54,13 +54,17 @@ Rules:
    identifiable, list `campaigns/` and ask which one.
 2. **"List campaigns"** = enumerate `campaigns/*/campaign.yaml` (slug, name,
    status, one-line objective).
-3. **Starting a new campaign** = create a new `campaigns/<slug>/` folder from
-   the schema in `campaigns/README.md`, fill it from the user's brief, confirm
-   the yaml back to the user before any list/pipeline work. A brief can be one
-   sentence ("I'm at SaaStr London in October, let's meet people there") — turn
-   it into a filled campaign.yaml and ASK about anything you had to guess
-   rather than inventing it. Copy `research-protocol.md` and `routing.md` from
-   an existing campaign unless the new one needs different rules.
+3. **Starting a new campaign** = copy the entire `campaigns/_template/` folder
+   to `campaigns/<slug>/`; never create a campaign-specific skill or Python
+   runner. Read `intake.yaml`, ask only unanswered required questions, record
+   every optional assumption, and show the completed intake before any list or
+   provider work. Fill `campaign.yaml`, confirm it to the user, and create one
+   Mission Control definition from that project's
+   `config/outreach/campaign-template.json`.
+   Providers are selected by capability in preference order: a missing optional
+   provider degrades with evidence; a missing required provider holds before
+   external I/O. A brief can be one sentence, but nothing launch-blocking may
+   be guessed. Copy `research-protocol.md` and `routing.md` only when needed.
 4. **Time-boxed campaigns** (events, conferences, launches, seasonal pushes)
    fill the `time_box` block. Enforce it: never build or stage a cohort whose
    touches would land after `hard_stop`, and when the event has passed, stop —
@@ -74,12 +78,19 @@ Rules:
    not just a technical one.
 5. Never blend context across campaigns. Facts, allowlists, and targets from
    one campaign must not leak into another's copy or research.
+6. `Linkup Search` (`linkup.so`) and `Linkup social` (`linkupapi.com`) are
+   different provider ids and API families. Never share their adapter schema.
+7. The generic Mission Control preparer defaults to a read-free plan;
+   `--compile` permits provider reads and a private artifact. It has no direct
+   staging mode: DRAFT/prospect writes remain behind Mission Control's
+   authenticated build-approval gate. Activation is a separate capability the
+   engine does not expose.
 
 ## Delegation map
 
 | Job                                       | Delegate to                                                                                                                                                                                                                                                                                                                                                                                                  |
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Build/refresh HubSpot lists               | `hubspot-api` skill (Lists v3 API)                                                                                                                                                                                                                                                                                                                                                                           |
+| Build/refresh HubSpot lists               | `hubspot-api` skill (current Lists 2026-03 API)                                                                                                                                                                                                                                                                                                                                                              |
 | Person/company enrichment                 | `apollo-api`, `harvestapi`, `icypeas`, `emailable`                                                                                                                                                                                                                                                                                                                                                           |
 | Research a contact/company/topic          | `exa-api`, `linkup`                                                                                                                                                                                                                                                                                                                                                                                          |
 | Prospect / company social intelligence    | `trigify` skill. Trigify's **Social-Signals buying-intent feed does not exist on this account** (every `/v1/social-signals/*` call now returns HTTP 404, not the previously-documented 403 — the path itself is gone on this plan, not a credits or entitlement gate); what is wired is prospect activity, company intel and an account-engagement PROXY in the knowledge spine. See `docs/trigify-setup.md` |

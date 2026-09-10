@@ -1,0 +1,99 @@
+schema_version: 1
+purpose: >
+  The strategist asks only unanswered required questions, records optional
+  assumptions explicitly, and shows the completed intake before list or
+  provider work. A provider name is never required when a capability and a
+  fallback policy are enough.
+
+defaults:
+  autonomy_tier: tier1
+  activation_allowed: false
+  default_mode: plan
+  unknown_relationship: hold
+  inmail_fallback: false
+  paid_calls_authorized: false
+  audience_source_mutable: false
+
+questions:
+  - id: objective
+    required: true
+    ask_when_missing: true
+    prompt: What concrete outcome is this campaign for, and what is it not?
+  - id: success_metric
+    required: true
+    ask_when_missing: true
+    prompt: What number and deadline define success?
+  - id: audience
+    required: true
+    ask_when_missing: true
+    prompt: Which roles, seniority, company traits, and buying situation are in scope?
+  - id: exclusions
+    required: true
+    ask_when_missing: true
+    prompt: Which customers, opportunities, partners, competitors, regions, or people must never enter?
+  - id: audience_source
+    required: true
+    ask_when_missing: true
+    prompt: Which read-only CRM list, CSV, or query is the source, and what is its stable identifier?
+  - id: regions
+    required: true
+    ask_when_missing: true
+    prompt: Which regions, languages, time zones, and legal jurisdictions apply?
+  - id: channels
+    required: true
+    ask_when_missing: true
+    prompt: Which channels are allowed—email, direct message, or connection request?
+  - id: sender_identity
+    required: true
+    ask_when_missing: true
+    prompt: Which mailboxes and LinkedIn account may be used?
+  - id: value_exchange
+    required: true
+    ask_when_missing: true
+    prompt: What genuine value does the recipient receive?
+  - id: cta
+    required: true
+    ask_when_missing: true
+    prompt: What single low-friction response should the sequence ask for?
+  - id: timing
+    required: true
+    ask_when_missing: true
+    prompt: Is this evergreen or time-boxed, and what is the hard stop?
+  - id: relationship_source
+    required: true
+    ask_when_missing: true
+    prompt: Which capability can prove first-degree, pending, second/third-degree, or unknown status?
+  - id: legal_basis
+    required: true
+    ask_when_missing: true
+    prompt: What documented legal basis and jurisdiction rule permits this outreach?
+  - id: unsubscribe_policy
+    required: true
+    ask_when_missing: true
+    prompt: Which visible opt-out, one-click header, suppression, and do-not-contact rules apply?
+  - id: provider_budget
+    required: true
+    ask_when_missing: true
+    prompt: What fixed maximum spend or credit ceiling is approved for each metered capability?
+  - id: approval_owner
+    required: true
+    ask_when_missing: true
+    prompt: Who may approve strategy, rendered build, DRAFT staging, and activation separately?
+  - id: notification_thread
+    required: true
+    ask_when_missing: true
+    prompt: Which Discord channel and thread should receive approvals, evidence, and failures?
+  - id: research_preferences
+    required: false
+    ask_when_missing: true
+    prompt: Which research providers are preferred or forbidden, and may the campaign skip research if none are available?
+  - id: warm_path_preferences
+    required: false
+    ask_when_missing: true
+    prompt: Should missing warm-path intelligence cold-route, hold, or require manual review?
+
+readiness:
+  required_answer_policy: non_empty_and_confirmed
+  optional_answer_policy: explicit_assumption_or_disabled
+  first_external_write: separately_approved_stage_draft
+  activation: unavailable_to_engine

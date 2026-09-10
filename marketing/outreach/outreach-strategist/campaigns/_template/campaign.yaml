@@ -5,6 +5,8 @@ status: setup
 objective: >
   <What this campaign achieves and what it is NOT.>
 
+intake: intake.yaml # complete required questions before list/provider work
+
 streams: [] # optional; add streams/<name>/stream.yaml per stream (see revenue-context)
 
 audience:
@@ -56,7 +58,71 @@ time_box:
   # ROOM not the product; event_coattend = reference their attendance from a
   # real public source and defer any pitch to the post-event follow-up.
 
-signals: [trigify, graphone, exa, linkup, albacross]
+signals: [trigify, graph_one, exa, linkup_search, linkup_social, albacross]
+
+# Ask for CAPABILITIES, then select whichever configured provider can supply
+# them. A missing optional provider is recorded and skipped. A missing required
+# provider holds before external access. Candidate order is preference order.
+provider_capabilities:
+  crm.audience.read:
+    required: true
+    providers: [hubspot]
+    on_unavailable: fail
+  outreach.sequence.read:
+    required: true
+    providers: [woodpecker_api]
+    on_unavailable: fail
+  outreach.campaign.draft:
+    required: true
+    providers: [woodpecker_api]
+    on_unavailable: fail
+  outreach.prospects.write:
+    required: true
+    providers: [woodpecker_api]
+    on_unavailable: fail
+  linkedin.relationship.read:
+    required: true
+    providers: [snapshot_routes, linkup_social, openclaw_browser]
+    on_unavailable: hold
+  outreach.sequence.condition:
+    required: true
+    providers: [openclaw_browser]
+    on_unavailable: hold
+    api_attempt: woodpecker_api
+    api_limitation: WCNF001_API_UNSUPPORTED_CAMPAIGN_FEATURES
+  research.web_search:
+    required: false
+    providers: [exa, linkup_search, crawl4ai]
+    on_unavailable: skip_with_evidence
+  signals.intent.read:
+    required: false
+    providers: [trigify]
+    on_unavailable: skip_with_evidence
+  relationships.warm_path.read:
+    required: false
+    providers: [graph_one, hubspot_activity]
+    on_unavailable: cold_route
+  notification.thread.write:
+    required: true
+    providers: [openclaw_discord]
+    on_unavailable: hold
+
+provider_notes:
+  # These are different companies/API families despite their similar names.
+  linkup_search:
+    api_family: linkup.so
+    env: LINKUP_SEARCH_API_KEY
+  linkup_social:
+    api_family: linkupapi.com
+    env: LINKUP_API_KEY+(LINKUP_ACCOUNT_ID|LINKUP_LOGIN_TOKEN)
+    metering: invitation-status costs 1 credit per profile; require an explicit ceiling
+
+execution:
+  compiler: mission-control:scripts/prepare_outreach_campaign.py
+  default_mode: plan # credential/runtime resolution only; zero provider reads/writes
+  compile_flag: --compile # provider reads + local private artifact; zero staging
+  staging: mission_control_build_approval # authenticated gate; never direct CLI
+  activation_allowed: false # activation is a distinct, unavailable capability
 
 autonomy_tiers: # keep the standard definitions unless Romeo changes them
   tier1: agent does all work; every send + reply approved in Discord
