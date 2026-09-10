@@ -22,7 +22,7 @@ Usage:
   kb.py edge --src "person:jane.doe@acme.com" --rel works_at --dst "company:Acme"
       (nodes are 'kind:key' strings; edges upsert; --rel must be a
        kb-config.yaml edge_relations value)
-  kb.py batch --ops-file <path-to-json>
+  kb.py batch --ops-file <path-to-json> [--atomic]
       (Task `kb-writer-batching`: one process/one transaction for MANY log/
        edge ops instead of one subprocess per op. The file holds a JSON
        array; each entry is {"verb": "log", ...same fields as `log` above}
@@ -36,7 +36,9 @@ Usage:
        {"ok": false, "error": "..."}. Exit 0 whenever the batch itself ran
        (per-op failures are in the array, not the exit code); exit 1 only
        for an invocation-level problem (--ops-file missing/unreadable/not a
-       JSON array).)
+       JSON array). ``--atomic`` is an opt-in all-or-nothing mode: the first
+       failed op rolls the transaction back and later ops are reported as
+       skipped.)
   kb.py contact <email-or-name>     # full history for a contact (joins edges)
   kb.py company <name>              # events + people for a company
   kb.py recent [--days 7] [--type reply] [--campaign slug]
@@ -250,7 +252,7 @@ def rows_out(rows, headers):
         print(" | ".join("" if v is None else str(v) for v in r))
 
 
-def _do_log(c, cfg, ns):
+def _do_log(c, cfg, ns, *, commit=True):
     """The ``log`` verb's actual work, shared by the single-op CLI path and
     the ``batch`` verb below (Task ``kb-writer-batching``) so both run the
     EXACT same validation + insert, never two implementations that could
@@ -295,11 +297,12 @@ def _do_log(c, cfg, ns):
         (ns.type, ns.campaign, getattr(ns, "stream", None), ns.contact, ns.company,
          ns.summary, ns.url, ns.data, getattr(ns, "tag", None)),
     )
-    c.commit()
+    if commit:
+        c.commit()
     return True, "logged", notice
 
 
-def _do_edge(c, cfg, ns):
+def _do_edge(c, cfg, ns, *, commit=True):
     """The ``edge`` verb's actual work, shared with ``batch`` exactly like
     :func:`_do_log`. ``ns`` needs ``.src .rel .dst .note``. Returns
     ``(ok, message)`` -- ``message`` is the error text on failure or the
@@ -312,7 +315,8 @@ def _do_edge(c, cfg, ns):
         "ON CONFLICT(src,rel,dst) DO UPDATE SET ts=strftime('%Y-%m-%dT%H:%M:%SZ','now'), note=excluded.note",
         (ns.src, ns.rel, ns.dst, ns.note),
     )
-    c.commit()
+    if commit:
+        c.commit()
     return True, "edge ok"
 
 
@@ -338,7 +342,7 @@ def _batch_op_namespace(op):
     return None
 
 
-def _run_batch_ops(c, cfg, ops):
+def _run_batch_ops(c, cfg, ops, *, atomic=False):
     """One result dict per input op, SAME order, never raises: a malformed
     op degrades to ``{"ok": False, "error": ...}`` in its own slot rather
     than aborting the rest of the batch -- matching what running each op as
@@ -357,9 +361,16 @@ def _run_batch_ops(c, cfg, ops):
     itself a batch-construction bug and fails that op closed rather than
     guessing."""
     results = []
+    failed = False
+    if atomic:
+        c.execute("BEGIN IMMEDIATE")
     for i, op in enumerate(ops):
+        if atomic and failed:
+            results.append({"ok": False, "error": "skipped: atomic batch already failed"})
+            continue
         if not isinstance(op, dict) or "verb" not in op:
             results.append({"ok": False, "error": f"op[{i}] missing 'verb'"})
+            failed = True
             continue
         verb = op.get("verb")
         if verb == "log":
@@ -367,11 +378,13 @@ def _run_batch_ops(c, cfg, ops):
                 results.append({"ok": False,
                                 "error": f"op[{i}] log missing required "
                                         f"type/summary/contact"})
+                failed = True
                 continue
             ns = _batch_op_namespace(op)
-            ok, msg, notice = _do_log(c, cfg, ns)
+            ok, msg, notice = _do_log(c, cfg, ns, commit=not atomic)
             results.append({"ok": ok, "message" if ok else "error": msg,
                             "notice": notice})
+            failed = failed or not ok
         elif verb == "edge":
             requires = op.get("requires")
             if requires is not None:
@@ -381,22 +394,37 @@ def _run_batch_ops(c, cfg, ops):
                                     "error": f"op[{i}] 'requires' index "
                                             f"{requires!r} does not reference "
                                             f"an earlier op in this batch"})
+                    failed = True
                     continue
                 if not results[requires].get("ok"):
                     results.append({"ok": False,
                                     "error": f"skipped: required op[{requires}] "
                                             f"failed, so its edge is not written"})
+                    failed = True
                     continue
             if not op.get("src") or not op.get("rel") or not op.get("dst"):
                 results.append({"ok": False,
                                 "error": f"op[{i}] edge missing required "
                                         f"src/rel/dst"})
+                failed = True
                 continue
             ns = _batch_op_namespace(op)
-            ok, msg = _do_edge(c, cfg, ns)
+            ok, msg = _do_edge(c, cfg, ns, commit=not atomic)
             results.append({"ok": ok, "message" if ok else "error": msg})
+            failed = failed or not ok
         else:
             results.append({"ok": False, "error": f"op[{i}] unknown verb {verb!r}"})
+            failed = True
+    if atomic:
+        if failed:
+            c.rollback()
+            results = [
+                ({"ok": False, "error": "rolled back: atomic batch failed"}
+                 if result.get("ok") is True else result)
+                for result in results
+            ]
+        else:
+            c.commit()
     return results
 
 
@@ -440,6 +468,7 @@ def main():
     ep.add_argument("--dst", required=True); ep.add_argument("--note", default=None)
     bp = sub.add_parser("batch")
     bp.add_argument("--ops-file", required=True)
+    bp.add_argument("--atomic", action="store_true")
     cp = sub.add_parser("contact"); cp.add_argument("key")
     op = sub.add_parser("company"); op.add_argument("key")
     rp = sub.add_parser("recent")
@@ -489,7 +518,7 @@ def main():
         if not isinstance(ops, list):
             print("error: --ops-file must contain a JSON array of ops", file=sys.stderr)
             sys.exit(1)
-        print(json.dumps(_run_batch_ops(c, cfg, ops)))
+        print(json.dumps(_run_batch_ops(c, cfg, ops, atomic=a.atomic)))
     elif a.cmd == "contact":
         k = f"%{a.key}%"
         rows_out(c.execute(
