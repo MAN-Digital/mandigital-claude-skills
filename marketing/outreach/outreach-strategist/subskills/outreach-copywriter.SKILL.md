@@ -873,25 +873,36 @@ rate)"`). If you can't point at the proof, don't write the claim. The
    `references/worked-examples.md` BAD-1/BAD-2.
 5. **Style rules** — config-driven: when `settings_json.copy_rules` is present
    it overrides these defaults; otherwise:
-   - Email body 50–125 words. One idea. Subject ≤ 3 words, all lowercase, no
-     digits, no first name.
-   - LinkedIn connection note ≤ 300 chars, no pitch, no links.
-   - LinkedIn message: 1–3 short sentences, led by their post/context, no link
-     dump (offer to send as a statement).
-   - **Questions are allowed and often BETTER.** Interest-based question
-     CTAs beat direct asks by 44% on reply rate at the cold stage (Gong Labs,
-     304,174 emails — see the practice bank, guard §15). Use a short, specific,
-     low-commitment question ("Would you be open to sharing your perspective?"
-     / "Is this on your radar this quarter?") or an equivalent statement CTA —
-     whichever reads more naturally. What is BANNED is the vague, ad-style
-     question: hype multipliers ("Ready to 3x your pipeline?"), bare
-     superlatives, and generic pain-bait ("Struggling with visibility?") —
-     the linter hard-fails those. No hedge words (`just`, `quick`,
-     `I wanted to`, `hope this finds you`, `reaching out`). Never "close the loop".
+   - Email body 50–125 words, floor 50 (under-50 underperforms the band — 3M
+     study). One idea. Subject ≤ 3 words, all lowercase, no digits, no first
+     name — and on invite angles the subject NAMES the invitation
+     (`december interview invite`).
+   - LinkedIn connection note 90–180 chars (hard cap 300), no pitch, no links.
+   - LinkedIn message: under 400 chars, led by their post/context or the email
+     already sent, no link dump (offer to send).
+   - **CTA form (resolved 2026-09-10 — see `references/voice-rules.md`).**
+     Default is the unsure-tone STATEMENT with an easy out. ONE specific,
+     low-friction interest question is permitted as the alternative
+     ("Would you be open to sharing your perspective?") — four 2025–2026
+     datasets show interest questions beating meeting statements (Gong +44%,
+     RevenueFlow 5–9% vs 3–6%, Growtoro 9.4% vs 5.2%). What is BANNED is the
+     vague, ad-style question: hype multipliers ("Ready to 3x your
+     pipeline?"), bare superlatives, and generic pain-bait ("Struggling with
+     visibility?") — the linter hard-fails those — plus ANY question in the
+     subject. No hedge words (`just`, `quick`, `I wanted to`,
+     `hope this finds you`, `reaching out`). Never "close the loop".
    - **Booking link (`settings_json.campaign.booking_link`) only on touch 3 or
      later — never touch 1.** One link max per email; none in LinkedIn DMs.
+   - **Non-sell angles:** read `references/invitation-playbook.md` FIRST for
+     `interview` / `event_webinar` / `event_physical` / `event_coattend` —
+     it carries the invitation subject patterns, the seat/geo verification
+     rule, and the follow-up value stack.
+   - **Seat/geo honesty (hard):** histogram the cohort's titles before
+     writing; seat-neutral framing + `{{TITLE}}` merge on mixed lists —
+     never frame for a title the list doesn't verify, never assume geography
+     the segment doesn't guarantee (2026-09-10 incident).
    - Voice details: `references/voice-rules.md`, `references/email-playbook.md`,
-     `references/linkedin-playbook.md`.
+     `references/linkedin-playbook.md`, `references/invitation-playbook.md`.
 6. **Re-engagement**: a contact with prior-contact history in the envelope is
    never written as cold.
 
