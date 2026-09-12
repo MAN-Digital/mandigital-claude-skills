@@ -623,14 +623,25 @@ do not support a cold touch, keep the contact monitor-only or ask for a stronger
 signal. In sent copy, compress the frame into one relevant opener and one clear
 next step; do not print the review-only reasoning slots verbatim.
 
-**Email 1 (the signal opener) stays clean — signal-only.** One signal, one
-relevant line, one soft reply CTA. Do NOT stack social proof, credentials, or a
-content link onto the opener — the signal IS the personalization; stacking dilutes
-it and drops replies.
+**Email 1 stays relevant: one idea, one supported reason, one soft reply CTA.**
+The current versioned campaign policy governs authority/proof placement. When
+that policy calls for early authority, ONE relevant verified credential or named
+public interview example may appear early in the email. Connect it to the
+recipient's context and the actual offer; do not open with a generic sender
+biography or self-introduction. The no-self-intro rule still applies. Do not stack
+proofs, invent outcomes, or describe interviewees as clients or endorsers.
+Public source evidence must support the exact relationship and credential.
 
-**Follow-up emails (2..N) are where proof + content belong.** A follow-up MAY
-weave AT MOST ONE of the following, only when it connects to THIS contact's
-signal/context:
+A signal-dependent framework still needs its verified observation; early authority
+does not replace required research or relax fit gates. If the campaign policy is
+silent, keep the opener focused on the supported reason for contact and put
+optional proof in a follow-up. Current copy_rules govern links and channel limits.
+Policy conflicts return to strategy review; the writer does not change the live
+skeleton or reinterpret a required framework to force a pass.
+
+**Proof and content across the sequence.** Each touch may use AT MOST ONE relevant
+proof or content item when permitted by current campaign policy and connected to
+THIS contact's context:
 
 - **Category social proof, not named clients.** "We do this specifically for
   RevOps teams at software houses" is credible and safe. **NEVER name a specific
@@ -642,8 +653,9 @@ signal/context:
   library), matched to the signal's topic. **NEVER invent or guess a URL** — if no
   library asset matches the topic, DON'T offer content (fall back to a plain reply
   ask). Links are reply-only (a link is not put in touch 1's body).
-- **A light credential line**, never the lead: "HubSpot Elite Solutions Partner,
-  three accreditations, Quote-to-Cash capability" — one line, in a follow-up only.
+- **ONE verified credential or public interview example**, in the placement
+  permitted by current campaign policy. State only the supported credential or
+  interview relationship; no inferred client relationship or performance claim.
 
 **Confidentiality (HARD FAIL).** NEVER surface HubSpot CRM data — deal values,
 pipeline stage, private notes, internal properties, or any contact PII beyond the
