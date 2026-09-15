@@ -47,12 +47,42 @@ class DoctorTests(unittest.TestCase):
                 )
             )
 
+    def test_user_invocable_accepts_boolean_literals(self) -> None:
+        for value in ("true", "false", "True", "False", "TRUE", "FALSE"):
+            with self.subTest(value=value), tempfile.TemporaryDirectory() as directory:
+                repo = Path(directory)
+                skill = repo / "marketing" / "example"
+                skill.mkdir(parents=True)
+                (skill / "SKILL.md").write_text(
+                    "---\nname: example\ndescription: Example skill.\n"
+                    f"user-invocable: {value}\n---\n", encoding="utf-8"
+                )
+                report = validate_repository(repo, quick=True)
+                self.assertTrue(report.ok, report.render())
+
+    def test_user_invocable_rejects_non_boolean_values(self) -> None:
+        for value in ('"false"', "'true'", "yes", "tRuE", "fAlSe", "0", "null", "", "[]", "{}", ">\n  false"):
+            with self.subTest(value=value), tempfile.TemporaryDirectory() as directory:
+                repo = Path(directory)
+                skill = repo / "marketing" / "example"
+                skill.mkdir(parents=True)
+                (skill / "SKILL.md").write_text(
+                    "---\nname: example\ndescription: Example skill.\n"
+                    f"user-invocable: {value}\n---\n", encoding="utf-8"
+                )
+                report = validate_repository(repo, quick=True)
+                self.assertFalse(report.ok)
+                self.assertTrue(any(
+                    "user-invocable must be a boolean" in issue.message
+                    for issue in report.issues
+                ), report.render())
+
     def test_current_repository_passes_quick_validation(self) -> None:
         report = validate_repository(REPO_ROOT, quick=True)
 
         self.assertTrue(report.ok, report.render())
-        self.assertEqual(report.skill_count, 39)
-        self.assertEqual(report.python_count, 42)
+        self.assertEqual(report.skill_count, 40)
+        self.assertEqual(report.python_count, 43)
         self.assertEqual(report.shell_count, 6)
 
 
