@@ -1,0 +1,8 @@
+interface:
+  display_name: "Creative Campaign Director"
+  short_description: "Research and build original campaign platforms"
+  brand_color: "#0B57D0"
+  default_prompt: "Use $creative-campaign-director to research, develop, validate, and produce an original campaign platform from a config-driven brief."
+
+policy:
+  allow_implicit_invocation: true

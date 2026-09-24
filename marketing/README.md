@@ -11,6 +11,8 @@ marketing/
 
 ## Content Creation
 
+For original, multi-execution campaign platforms, use [Creative Campaign Director](./content-creation/creative-campaign-director/): research, creative territories, art direction, prototypes, and approval-gated production.
+
 | Skill                                                                                                   | Use it for                                                                                                     |
 | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
 | [`blog-production/`](./content-creation/blog-production/)                                               | Running the full seven-step blog pipeline from brief through graphics                                          |

@@ -5,6 +5,7 @@ Skills for writing, editing, repurposing, and producing MAN Digital content and 
 | Skill | Purpose |
 | --- | --- |
 | [`blog-production/`](./blog-production/) | Full blog pipeline from brief and research through writing and graphics |
+| [`creative-campaign-director/`](./creative-campaign-director/) | Research-led campaign strategy, creative territories, art direction, prototypes, and approved production |
 | [`editing-checklist/`](./editing-checklist/) | Editorial quality checks for any written content |
 | [`linkedin-post-creation/`](./linkedin-post-creation/) | Research-driven LinkedIn post creation |
 | [`man-digital-blog-graphics/`](./man-digital-blog-graphics/) | Branded blog, article, HubSpot, and LinkedIn graphics |

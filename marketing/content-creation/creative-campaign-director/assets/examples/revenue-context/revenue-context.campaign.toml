@@ -1,0 +1,124 @@
+[campaign]
+id = "revenue-context-2026-09-22"
+name = "Closed-Won Is Not Revenue Visibility"
+status = "production-ready"
+objective = "Make revenue leaders recognize the operational gap between a signed deal and reliable recurring-revenue visibility, then register for the webinar."
+offer = "Revenue Context webinar"
+audience = "EMEA revenue operations, finance, sales operations, and go-to-market leaders managing recurring-revenue reporting"
+desired_action = "Register for the 22 September webinar"
+market = "EMEA"
+launch_date = "2026-09-22"
+registration_or_destination = "Supply the approved registration URL before publishing"
+output_directory = "./revenue-context-output"
+
+[workflow]
+stage = "production"
+fact_lock = "approved"
+territory_approval = "approved"
+approved_territory = "The Human Revenue API"
+approved_territory_version = "1.0"
+prototype_approval = "approved"
+production_approval = "pending"
+
+[research]
+enabled = true
+provider = "exa"
+depth = "advanced"
+minimum_workstreams = 3
+source_quality_review = true
+practitioner_language = true
+creative_reference_research = true
+award_reference_research = true
+allow_provider_fallback = false
+workstreams = [
+  "practitioner language around contract truth, handoffs, recurring revenue, and manual reconciliation",
+  "category conventions in RevOps and B2B webinar advertising",
+  "award-caliber adjacent campaigns using human frustration, contextual office scenes, and direct flash photography",
+]
+
+[creative]
+ambition = "award-caliber"
+territories_min = 3
+territories_max = 5
+execution_examples_per_territory = 4
+tone = "observational, dry, intelligent, human, and slightly uncomfortable"
+desired_emotion = "recognition first, then relief that the problem has a name"
+risk_appetite = "bold but credible"
+humor = "situational, never slapstick"
+require_human_territory_selection = true
+reference_policy = "borrow principles such as contextual staging, human recognition, direct copy, and compositional variety; do not copy Intuit or any other protected execution"
+
+[audience_testing]
+enabled = true
+method = "synthetic"
+directional_only = true
+require_human_interpretation = true
+segments = [
+  "RevOps leader responsible for forecast and recurring-revenue reporting",
+  "finance leader reconciling contract terms with CRM records",
+  "sales operations leader managing post-signature handoffs",
+]
+questions = [
+  "What problem do you recognize before reading all the copy?",
+  "Does this feel like a true post-closed-won moment?",
+  "Is the humor credible or exaggerated?",
+  "What do you think Revenue Context will help you understand?",
+  "Is the webinar date and action immediately legible?",
+]
+
+[brand]
+source_of_truth = "MAN Digital design system and approved Revenue Context campaign materials"
+logo_paths = ["./man-digital-logo-white.png"]
+primary_colors = ["#0B57D0", "#FFFFFF"]
+supporting_colors = ["#FF6B2C", "#111111", "#1F7A45"]
+type_guidance = "Use large, high-contrast condensed display headlines with clear sans-serif supporting information; preserve screen and feed readability."
+tone_guidance = "Direct and expert, with a human observational edge; avoid generic growth language."
+mandatory_elements = ["MAN Digital logo", "22 SEP", "15:00 CEST", "clear registration action"]
+prohibited_elements = ["fake customer logos", "unverified performance claims", "tiny event copy", "unintended background posters", "generic SaaS gradients"]
+
+[character]
+strategy = "recurring-character"
+identity_reference = "./2026-09-22-revenue-context-raw-01-lounge-context-disappears-3x4.png"
+identity_invariants = [
+  "same adult woman and recognizable facial identity",
+  "dark curly hair worn in a loose messy bun",
+  "natural styling and believable office-worker presence",
+  "dry, exhausted, or quietly incredulous emotional range",
+  "black or dark neutral office clothing unless a scene requires a controlled variation",
+]
+allowed_variation = [
+  "office location",
+  "camera height and viewpoint",
+  "pose and task",
+  "problem props",
+  "headline and supporting copy",
+]
+
+[production]
+mode = "prototype-first"
+master_aspect_ratio = "3:4"
+variant_aspect_ratios = ["1:1"]
+master_dimensions = "1086x1448"
+variant_dimensions = ["1254x1254"]
+prototype_count = 4
+preserve_edit_invariants = true
+generate_one_scene_per_call = true
+naming_pattern = "{date}-{campaign}-{territory}-{sequence}-{scene}-{message}-{aspect}.{ext}"
+
+[deliverables]
+campaign_facts = true
+research_evidence = true
+tension_map = true
+creative_territories = true
+decision_log = true
+campaign_bible = true
+prototype_review = true
+production_manifest = true
+final_assets = true
+
+[guardrails]
+no_unverified_claims = true
+no_award_guarantee = true
+no_reference_copying = true
+no_external_publish_without_authorization = true
+label_synthetic_feedback = true

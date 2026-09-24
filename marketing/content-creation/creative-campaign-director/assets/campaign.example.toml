@@ -1,0 +1,109 @@
+[campaign]
+id = "replace-with-stable-id"
+name = "Campaign working title"
+status = "draft"
+objective = "What must change in the audience or business?"
+offer = "What is being promoted?"
+audience = "Primary audience in plain language"
+desired_action = "The one action the audience should take"
+market = "Primary geography or cultural context"
+launch_date = ""
+registration_or_destination = ""
+output_directory = "./campaign-output"
+
+[workflow]
+stage = "discovery"
+fact_lock = "pending"
+territory_approval = "pending"
+approved_territory = ""
+approved_territory_version = ""
+prototype_approval = "pending"
+production_approval = "pending"
+
+[research]
+enabled = true
+provider = "exa"
+depth = "advanced"
+minimum_workstreams = 3
+source_quality_review = true
+practitioner_language = true
+creative_reference_research = true
+award_reference_research = true
+allow_provider_fallback = false
+workstreams = [
+  "audience language and lived operational pain",
+  "category conventions, clichés, and competitor sameness",
+  "award-caliber and adjacent-category creative references",
+]
+
+[creative]
+ambition = "award-caliber"
+territories_min = 3
+territories_max = 5
+execution_examples_per_territory = 3
+tone = ""
+desired_emotion = ""
+risk_appetite = "considered"
+humor = "optional"
+require_human_territory_selection = true
+reference_policy = "extract principles; never copy protected executions"
+
+[audience_testing]
+enabled = true
+method = "synthetic"
+directional_only = true
+require_human_interpretation = true
+segments = []
+questions = [
+  "What do you think this campaign is about?",
+  "What feels specifically true?",
+  "What feels false, exaggerated, or confusing?",
+  "Does the brand appear to understand the problem?",
+  "Which idea is most memorable and why?",
+]
+
+[brand]
+source_of_truth = ""
+logo_paths = []
+primary_colors = []
+supporting_colors = []
+type_guidance = ""
+tone_guidance = ""
+mandatory_elements = []
+prohibited_elements = []
+
+[character]
+strategy = "decide-after-territory"
+identity_reference = ""
+identity_invariants = []
+allowed_variation = []
+
+[production]
+mode = "prototype-first"
+master_aspect_ratio = "3:4"
+variant_aspect_ratios = ["1:1"]
+master_dimensions = ""
+variant_dimensions = []
+prototype_count = 4
+preserve_edit_invariants = true
+generate_one_scene_per_call = true
+naming_pattern = "{date}-{campaign}-{territory}-{sequence}-{scene}-{message}-{aspect}.{ext}"
+
+[deliverables]
+campaign_facts = true
+research_evidence = true
+tension_map = true
+creative_territories = true
+decision_log = true
+campaign_bible = true
+prototype_review = true
+production_manifest = true
+final_assets = true
+
+[guardrails]
+no_unverified_claims = true
+no_award_guarantee = true
+no_reference_copying = true
+no_external_publish_without_authorization = true
+label_synthetic_feedback = true
+
