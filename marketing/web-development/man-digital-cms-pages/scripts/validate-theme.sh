@@ -28,14 +28,26 @@ out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1
 import json, re, sys
 from pathlib import Path
 theme = Path(sys.argv[1])
-deploy = json.loads((theme / "deploy.json").read_text(encoding="utf-8"))
+try:
+    deploy = json.loads((theme / "deploy.json").read_text(encoding="utf-8"))
+except json.JSONDecodeError:
+    print("deploy.json is not valid JSON"); sys.exit(1)
 entries = {p["templatePath"]: p for p in deploy["pages"]}
+counts = {}
+for p in deploy["pages"]:
+    counts[p["templatePath"]] = counts.get(p["templatePath"], 0) + 1
 homes = [p for p in deploy["pages"] if p.get("isHomepage")]
 if len(homes) != 1:
     print(f"want exactly one homepage, found {len(homes)}"); sys.exit(1)
 slugs = [p["slug"] for p in deploy["pages"]]
 if len(set(slugs)) != len(slugs):
     print("duplicate slugs in deploy.json"); sys.exit(1)
+for p in deploy["pages"]:
+    if not (theme / p["templatePath"]).is_file():
+        print(f"deploy.json points at missing file: {p['templatePath']}"); sys.exit(1)
+for b in ("templates/blog_listing.html", "templates/blog_post.html"):
+    if not (theme / b).is_file():
+        print(f"missing blog template: {b}"); sys.exit(1)
 for tpl in sorted((theme / "templates").glob("*.html")):
     rel = f"templates/{tpl.name}"
     head = tpl.read_text(encoding="utf-8")[:600]
@@ -45,8 +57,8 @@ for tpl in sorted((theme / "templates").glob("*.html")):
         continue  # assigned via blog provisioning, not deploy.json
     if rel not in entries:
         print(f"page template without deploy.json entry: {rel}"); sys.exit(1)
-    if not (theme / entries[rel]["templatePath"]).is_file():
-        print(f"deploy.json points at missing file: {rel}"); sys.exit(1)
+    if counts[rel] > 1:
+        print(f"duplicate deploy.json entry: {rel}"); sys.exit(1)
 for tpl in sorted((theme / "templates").glob("*.html")):
     text = tpl.read_text(encoding="utf-8")
     for ref in re.findall(r'path="(../modules/[^"]+)"', text):
@@ -59,10 +71,17 @@ PYEOF
 out=$(python3 - "$theme_dir" "$inventory" <<'PYEOF' 2>&1
 import json, re, sys
 from pathlib import Path
-theme, inv = Path(sys.argv[1]), json.loads(Path(sys.argv[2]).read_text(encoding="utf-8"))
+theme = Path(sys.argv[1])
+try:
+    inv = json.loads(Path(sys.argv[2]).read_text(encoding="utf-8"))
+except json.JSONDecodeError:
+    print(f"{Path(sys.argv[2]).name} is not valid JSON"); sys.exit(1)
 verbatim = set(inv.get("verbatim", []))
 for mod in sorted((theme / "modules").glob("*.module")):
-    fields = json.loads((mod / "fields.json").read_text(encoding="utf-8"))
+    try:
+        fields = json.loads((mod / "fields.json").read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        print(f"{mod.name}/fields.json is not valid JSON"); sys.exit(1)
     html = (mod / "module.html").read_text(encoding="utf-8")
     names = [(f["name"], None) for f in fields]
     for f in fields:
@@ -79,6 +98,8 @@ for mod in sorted((theme / "modules").glob("*.module")):
     stripped = re.sub(r"\{\{.*?\}\}", "", stripped, flags=re.S)
     stripped = re.sub(r"\{%.*?%\}", "", stripped, flags=re.S)
     stripped = re.sub(r"<[^>]+>", " ", stripped)
+    for phrase in verbatim:
+        stripped = stripped.replace(phrase, " ")
     for chunk in (c.strip() for c in stripped.split()):
         if chunk and chunk not in verbatim:
             print(f"hardcoded copy in {mod.name}/module.html: {chunk[:60]!r}"); sys.exit(1)
@@ -108,6 +129,11 @@ for tpl in sorted((Path(sys.argv[1]) / "templates").glob("*.html")):
             print(f"{tpl.name}: blog_post must use static modules, no dnd_area"); sys.exit(1)
     elif areas != 1:
         print(f"{tpl.name}: want exactly one dnd_area, found {areas}"); sys.exit(1)
+    else:
+        for open_pat, close_pat in ((r"\{%\s*dnd_section\b", r"\{%\s*end_dnd_section\b"),
+                                     (r"\{%\s*dnd_module\b", r"\{%\s*end_dnd_module\b")):
+            if len(re.findall(open_pat, text)) != len(re.findall(close_pat, text)):
+                print(f"{tpl.name}: unbalanced dnd tags"); sys.exit(1)
 PYEOF
 ) || fail 3 "$out"
 
@@ -116,8 +142,14 @@ out=$(python3 - "$theme_dir" "$inventory" <<'PYEOF' 2>&1
 import json, re, sys
 from pathlib import Path
 theme = Path(sys.argv[1])
-inv = json.loads(Path(sys.argv[2]).read_text(encoding="utf-8"))
-manifest = {f["dest"]: f["local"] for f in json.loads((theme / "assets.json").read_text(encoding="utf-8"))["files"]}
+try:
+    inv = json.loads(Path(sys.argv[2]).read_text(encoding="utf-8"))
+except json.JSONDecodeError:
+    print(f"{Path(sys.argv[2]).name} is not valid JSON"); sys.exit(1)
+try:
+    manifest = {f["dest"]: f["local"] for f in json.loads((theme / "assets.json").read_text(encoding="utf-8"))["files"]}
+except json.JSONDecodeError:
+    print("assets.json is not valid JSON"); sys.exit(1)
 for f in manifest.values():
     if not (theme / f).is_file():
         print(f"manifest local file missing: {f}"); sys.exit(1)
@@ -150,16 +182,20 @@ PYEOF
 ) || fail 4 "$out"
 
 # ---- Evidence ----
-python3 - "$theme_dir" "$inventory" <<'PYEOF'
+out=$(python3 - "$theme_dir" "$inventory" <<'PYEOF' 2>&1
 import datetime, json, sys
 from pathlib import Path
 theme = Path(sys.argv[1])
-inv = json.loads(Path(sys.argv[2]).read_text(encoding="utf-8"))
-label = json.loads((theme / "theme.json").read_text(encoding="utf-8"))["label"]
+try:
+    inv = json.loads(Path(sys.argv[2]).read_text(encoding="utf-8"))
+    label = json.loads((theme / "theme.json").read_text(encoding="utf-8"))["label"]
+except (json.JSONDecodeError, KeyError) as e:
+    print(f"cannot build evidence: {e}", file=sys.stderr); sys.exit(1)
 evidence = {"theme": label, "commit": inv.get("commit", "n/a"),
             "at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "gates": {"g1": "pass", "g2": "pass", "g3": "pass", "g4": "pass"},
             "staging": {"url": None, "at": None}}
 (theme / "QA-EVIDENCE.json").write_text(json.dumps(evidence, indent=2) + "\n", encoding="utf-8")
 PYEOF
+) || { echo "FAIL: evidence: $out" >&2; exit 1; }
 echo "PASS: all local gates (g1-g4) for $theme_dir"

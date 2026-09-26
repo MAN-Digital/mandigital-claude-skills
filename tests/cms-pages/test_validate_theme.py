@@ -63,6 +63,52 @@ class ValidateThemeTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("FAIL: g3", result.stderr)
 
+    def test_dangling_deploy_entry_fails_gate1(self) -> None:
+        deploy = self.theme / "deploy.json"
+        data = json.loads(deploy.read_text(encoding="utf-8"))
+        data["pages"].append({"slug": "ghost", "title": "Ghost", "templatePath": "templates/ghost.html", "menuOrder": 20})
+        deploy.write_text(json.dumps(data), encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g1", result.stderr)
+
+    def test_deleted_template_fails_gate1(self) -> None:
+        (self.theme / "templates" / "home.html").unlink()
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g1", result.stderr)
+
+    def test_missing_blog_template_fails_gate1(self) -> None:
+        (self.theme / "templates" / "blog_post.html").unlink()
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g1", result.stderr)
+
+    def test_unbalanced_dnd_tags_fails_gate3(self) -> None:
+        home = self.theme / "templates" / "home.html"
+        text = home.read_text(encoding="utf-8").replace("{% end_dnd_section %}", "", 1)
+        home.write_text(text, encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g3", result.stderr)
+
+    def test_verbatim_phrase_passes_gate2(self) -> None:
+        footer = self.theme / "modules" / "footer.module" / "module.html"
+        footer.write_text(footer.read_text(encoding="utf-8") + "<p>Buy now</p>\n", encoding="utf-8")
+        inv = json.loads(self.inventory.read_text(encoding="utf-8"))
+        inv["verbatim"] = ["Buy now"]
+        tmp_inv = self.tmp / "inventory.json"
+        tmp_inv.write_text(json.dumps(inv), encoding="utf-8")
+        result = run_validator(self.theme, tmp_inv)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_invalid_json_clean_message(self) -> None:
+        (self.theme / "deploy.json").write_text("{not valid json", encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g1", result.stderr)
+        self.assertNotIn("Traceback", result.stderr)
+
     def test_missing_inventory_flag_is_usage_error(self) -> None:
         env = dict(os.environ)
         env["HS_BIN"] = str(FIX / "fake-hs")
