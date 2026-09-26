@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+if [ "${FAKE_CURL_FAIL:-0}" = "1" ]; then echo '{"error":"bad-token"}' >&2; exit 22; fi
+echo fake-curl-ok
+exit 0

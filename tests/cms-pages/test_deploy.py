@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import json
 import os
 import shutil
 import subprocess
 import tempfile
+import time
 import unittest
 from pathlib import Path
 
@@ -41,10 +43,13 @@ class DeployTests(unittest.TestCase):
     def tearDown(self) -> None:
         shutil.rmtree(self.tmp, ignore_errors=True)
 
-    def run_deploy(self, *args: str) -> subprocess.CompletedProcess[str]:
+    def run_deploy(self, *args: str, env_extra: dict | None = None) -> subprocess.CompletedProcess[str]:
         env = dict(os.environ)
         env["HS_BIN"] = str(FIX / "fake-hs")
         env["HUBSPOT_BIN"] = str(FIX / "fake-hs")
+        env["CURL_BIN"] = str(FIX / "fake-curl")
+        if env_extra:
+            env.update(env_extra)
         return subprocess.run(
             [str(SKILL_SCRIPTS / "deploy.sh"), *args],
             text=True, capture_output=True, env=env, input="",
@@ -78,6 +83,64 @@ class DeployTests(unittest.TestCase):
         result = self.run_deploy("--portal", "nope", "--zip", str(self.zip), "--config", str(self.config),
                                 "--token", "pat-test-1234", "--dry-run", "--yes")
         self.assertEqual(result.returncode, 2)
+
+    def test_live_with_fakes_succeeds(self) -> None:
+        result = self.run_deploy("--portal", "staging", "--zip", str(self.zip), "--config", str(self.config),
+                                "--token", "pat-test-1234", "--yes")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("NOT automated", result.stdout)
+
+    def test_live_curl_failure_redacts_token(self) -> None:
+        result = self.run_deploy("--portal", "staging", "--zip", str(self.zip), "--config", str(self.config),
+                                "--token", "pat-test-1234", "--yes",
+                                env_extra={"FAKE_CURL_FAIL": "1"})
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertNotIn("pat-test-1234", result.stdout + result.stderr)
+        self.assertIn("failed (exit 22)", result.stderr)
+
+    def test_parse_missing_value_usage(self) -> None:
+        result = self.run_deploy("--portal")
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertNotIn("Traceback", result.stderr)
+
+    def test_malformed_config_clean_error(self) -> None:
+        bad = self.tmp / "bad-portals.yaml"
+        bad.write_text("{{{\nnot: [valid\n", encoding="utf-8")
+        result = self.run_deploy("--portal", "staging", "--zip", str(self.zip), "--config", str(bad),
+                                "--token", "pat-test-1234", "--dry-run", "--yes")
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertNotIn("Traceback", result.stderr)
+
+    def test_traversal_refused(self) -> None:
+        theme = self.tmp / "evil-theme"
+        shutil.copytree(FIX / "mini-theme", theme)
+        env = dict(os.environ)
+        env["HS_BIN"] = str(FIX / "fake-hs")
+        subprocess.run(
+            [str(SKILL_SCRIPTS / "validate-theme.sh"), str(theme), "--inventory", str(FIX / "mini-inventory.json")],
+            text=True, capture_output=True, env=env, check=True,
+        )
+        # Mutate AFTER validate: validator gate 4 rejects missing/unreferenced
+        # manifest locals, so the bad entry must be introduced post-validation.
+        assets_path = theme / "assets.json"
+        manifest = json.loads(assets_path.read_text(encoding="utf-8"))
+        manifest["files"].append({"local": "../../evil.txt", "dest": "/evil.txt"})
+        assets_path.write_text(json.dumps(manifest), encoding="utf-8")
+        # Backdate so the evidence-freshness check passes and the run reaches
+        # the traversal guard (zip/unzip preserve mtimes).
+        old = time.time() - 3600
+        os.utime(assets_path, (old, old))
+        out = self.tmp / "dist-evil"
+        out.mkdir(exist_ok=True)
+        packaged = subprocess.run(
+            [str(SKILL_SCRIPTS / "package-zip.sh"), str(theme), str(out), "--date", "20260926"],
+            text=True, capture_output=True, check=True,
+        )
+        evil_zip = Path(packaged.stdout.strip().removeprefix("PACKAGED: ").strip())
+        result = self.run_deploy("--portal", "staging", "--zip", str(evil_zip), "--config", str(self.config),
+                                "--token", "pat-test-1234", "--dry-run", "--yes")
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertIn("escapes theme dir", result.stderr)
 
 
 if __name__ == "__main__":
