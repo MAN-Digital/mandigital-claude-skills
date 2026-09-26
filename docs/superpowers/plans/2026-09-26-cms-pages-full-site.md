@@ -510,6 +510,8 @@ git commit -m "feat(cms-pages): add QA checklist"
 
 ### Task 8: fixtures + validate-theme.sh + tests (TDD)
 
+> **Recorded plan deviation (2026-09-26, commit `460a535`):** quality review rejected the as-planned script (C1 false-PASS on dangling/deleted templates). The committed `validate-theme.sh` + `test_validate_theme.py` (11 tests) supersede the Step 2/Step 4 blocks below in these respects: entry-driven deploy.json iteration + required blog templates + duplicate-templatePath check (g1), dnd tag-balance check (g3), verbatim phrase-substring removal (g2), clean JSON/error diagnostics incl. `FAIL: evidence:` (g1/g2/g4/evidence). Tracked follow-ups live in the commit body. Do not "revert to plan" — the commit is authoritative.
+
 **Files:**
 - Create: `tests/cms-pages/__init__.py`
 - Create: `tests/cms-pages/fixtures/mini-theme/` (19 files, Step 1)
@@ -1449,7 +1451,7 @@ For each FAIL: edit the specific skill file that allowed it (router rule, checkl
 - [ ] **Step 4: Verify nothing regressed**
 
 Run: `python3 -m unittest discover -s tests/cms-pages -v 2>&1 | tail -n 3`
-Expected: `OK` (11 tests: 5 validator + 2 packaging + 4 deploy).
+Expected: `OK` (17 tests: 11 validator + 2 packaging + 4 deploy).
 
 ### Task 13: CI wiring + full validation + commit
 
