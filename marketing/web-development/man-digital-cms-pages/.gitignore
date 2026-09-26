@@ -1,1 +1,6 @@
 references/source/
+portals.yaml
+portals.yml
+*.local.yaml
+.env
+dist/
