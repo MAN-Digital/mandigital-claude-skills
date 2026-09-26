@@ -806,6 +806,16 @@ Two hard rules:
 
 <!-- END OUTREACH-ENGINE GUARD -->
 
+## Explicit ads-mode routing
+
+When and only when the invocation explicitly specifies `mode=ads`, read
+`../man-digital-ad-creative/references/ads-mode.md` and use its separate ads
+artifact contract. Run through `../man-digital-ad-creative/scripts/ads_copy.py`.
+The outreach-only envelope, contact personalization, email/LinkedIn length and
+C3/C4 rules below apply to the default outreach mode, not this explicit ads
+branch. All no-fabrication and no-send rules continue to apply in both modes.
+Never infer ads mode from a campaign name or alter the outreach schemas.
+
 # Outreach copy QA
 
 ## Role
