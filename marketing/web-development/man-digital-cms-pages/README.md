@@ -33,3 +33,12 @@ scripts/validate-source.sh
 
 Prerequisites: Git, Python 3, and ripgrep. HubSpot CLI access is needed only for an
 explicitly authorized upload; local validation does not contact HubSpot.
+## Full-site generation
+
+Converts a React (Vite + Tailwind + shadcn) repo or a Figma handoff into a validated HubSpot theme ZIP: global header/footer, blog listing + post, DnD templates, `deploy.json` page manifest, `assets.json` image manifest.
+
+- Inputs: repo URL + branch (private repos via `gh` auth) or "here is figma" + handoff.
+- Outputs: QA-passed ZIP + per-gate evidence; deploy via `scripts/deploy.sh` with a gitignored `portals.yaml`.
+- Small edits ("small edit …") stay lightweight: touched files only, no forced rebuild.
+
+Prerequisites beyond Setup above: `hs` CLI v8+, `gh` CLI, Python 3 with PyYAML (`pip3 install --user pyyaml`), `zip`, `unzip`, `curl`. Gate 3 (`hs cms lint`) needs hs auth (PAK) + network + content scopes — local validation is NOT fully offline.

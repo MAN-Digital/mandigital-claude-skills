@@ -1,0 +1,2 @@
+[{"type": "text", "name": "cta_text", "label": "CTA", "default": "Contact"},
+ {"type": "image", "name": "logo", "label": "Logo", "default": {"src": "/brand/x.jpg", "alt": "x"}}]

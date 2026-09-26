@@ -7,6 +7,7 @@ on:
       - "automation/**"
       - "scripts/**"
       - "tests/maintenance/**"
+      - "tests/cms-pages/**"
       - ".githooks/**"
       - ".github/workflows/validate-skills.yml"
       - "MAINTENANCE.md"
@@ -33,6 +34,10 @@ jobs:
           python-version: "3.12"
       - name: Run maintenance tests
         run: python3 -m unittest discover -s tests/maintenance -v
+      - name: Install deploy-test dependency
+        run: pip3 install pyyaml
+      - name: Run CMS pages tests
+        run: python3 -m unittest discover -s tests/cms-pages -v
       - name: Validate repository
         run: scripts/skills-doctor --repo .
       - name: Validate private CMS source
@@ -52,3 +57,7 @@ jobs:
           python-version: "3.12"
       - name: Run macOS maintenance tests
         run: python3 -m unittest discover -s tests/maintenance -v
+      - name: Install deploy-test dependency (macOS)
+        run: pip3 install pyyaml
+      - name: Run CMS pages tests (macOS)
+        run: python3 -m unittest discover -s tests/cms-pages -v
