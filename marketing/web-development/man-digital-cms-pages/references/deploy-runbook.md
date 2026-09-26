@@ -40,20 +40,26 @@ Without `--portal`, deploy.sh lists entries and prompts. Without `--token`, it p
 ## 3. What deploy executes, in order
 
 1. Verify `<theme>/QA-EVIDENCE.json`: all local gates `pass`, evidence newer than every theme file.
-2. Upload images: each `assets.json` entry → File Manager destination (create folders first).
+2. Upload images: each `assets.json` entry → File Manager destination (`folderPath` folders are auto-created by the upload call).
 3. Upload theme: `hs cms upload <unzipped-theme> <theme> --account=<hsAccount>`.
-4. Create/update pages per `deploy.json` (`hubspot cms pages` or Pages API).
-5. Create/update menus per menu order (Menus API via `hubspot api`).
-6. Provision blog if `blogId` null, assign listing/post templates.
-7. Apply `forms` map to form modules; fail closed on unmapped form modules.
-8. Print per-item results. Any failure stops the run; already-done items are listed for resume.
+
+**Steps 4–7 are MANUAL in v1** (deploy.sh plans them in dry-run but does not execute them; its `[LIVE] done` message says so explicitly). Run each by hand with the private-app token (`Authorization: Bearer $HS_TOKEN`, base `https://api.hubapi.com`), using the verified paths from `references/api-playbook.md` §1:
+
+4. Create/update pages per `deploy.json`. Inventory first: `GET /cms/v3/pages/site-pages`; then per page: `POST /cms/v3/pages/site-pages` (new) or `PATCH /cms/v3/pages/site-pages/{objectId}` (existing, sparse update). Match `deploy.json` `templatePath`/`slug` to the page's template and slug fields.
+5. Create/update menus per menu order. Gap: the playbook §1 row is UNVERIFIED — no public menus REST API exists in the reference, so there is no curl step; build the menu order by hand in HubSpot (Settings → Website → Navigation, or the menu editor) following the `deploy.json` `menuOrder` values.
+6. Provision blog if `blogId` null, assign listing/post templates. Check first: `GET /cms/v3/blog-settings/settings/{blogId}`. Gap: the playbook §1 provision row is UNVERIFIED — no create-blog endpoint in the reference, so provision the blog by hand in HubSpot when `blogId` is null, assign the listing/post templates, and record the new `blogId` in `portals.yaml`.
+7. Apply `forms` map to form modules; fail closed on unmapped form modules. Inventory: `GET /marketing/v3/forms`; verify each mapped GUID: `GET /marketing/v3/forms/{formId}`. Any form module without a `portals.yaml` `forms` entry stops the deploy — add the mapping, never skip.
+8. Print per-item results. Any failure stops the run with a redacted error; fix the cause and re-run (theme upload + image upload both overwrite safely).
 
 ## 4. Gate-5 staging verification
 
 ```bash
 hs cms upload <theme-dir> <staging-theme> --account=<staging-hsAccount>
+hs cms theme marketplace-validate <staging-theme-path> --account=<staging-hsAccount>
 hs cms theme preview --src=<theme-dir> --account=<staging-hsAccount>
 ```
+
+`<staging-theme-path>` is the path to the theme within the Design Manager (positional, per `hs cms theme marketplace-validate --help`); it must point at the just-uploaded staging theme.
 
 Open the preview URL, confirm every module renders and edits without code, then proceed to package + prod deploy. Staging upload needs the same explicit authorization as prod.
 

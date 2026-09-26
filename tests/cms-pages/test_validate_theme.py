@@ -109,6 +109,24 @@ class ValidateThemeTests(unittest.TestCase):
         self.assertIn("FAIL: g1", result.stderr)
         self.assertNotIn("Traceback", result.stderr)
 
+    def test_missing_preview_path_fails_gate1(self) -> None:
+        theme_json = self.theme / "theme.json"
+        data = json.loads(theme_json.read_text(encoding="utf-8"))
+        del data["preview_path"]
+        theme_json.write_text(json.dumps(data), encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g1", result.stderr)
+
+    def test_meta_missing_content_types_fails_gate1(self) -> None:
+        meta = self.theme / "modules" / "header.module" / "meta.json"
+        data = json.loads(meta.read_text(encoding="utf-8"))
+        del data["content_types"]
+        meta.write_text(json.dumps(data), encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g1", result.stderr)
+
     def test_missing_inventory_flag_is_usage_error(self) -> None:
         env = dict(os.environ)
         env["HS_BIN"] = str(FIX / "fake-hs")

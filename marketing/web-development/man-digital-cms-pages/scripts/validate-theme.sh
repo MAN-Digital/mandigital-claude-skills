@@ -24,6 +24,31 @@ done
 [[ -d "$theme_dir/modules/footer.module" ]] || fail 1 "missing footer.module"
 [[ -d "$theme_dir/modules/blog_listing.module" ]] || fail 1 "missing blog_listing.module"
 [[ -d "$theme_dir/modules/blog_post.module" ]] || fail 1 "missing blog_post.module"
+[[ -d "$theme_dir/js" ]] || fail 1 "missing js/"
+[[ -d "$theme_dir/images" ]] || fail 1 "missing images/"
+out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1
+import json, sys
+from pathlib import Path
+theme = Path(sys.argv[1])
+try:
+    theme_json = json.loads((theme / "theme.json").read_text(encoding="utf-8"))
+except json.JSONDecodeError:
+    print("theme.json is not valid JSON"); sys.exit(1)
+if "preview_path" not in theme_json:
+    print("theme.json missing preview_path"); sys.exit(1)
+for mod in sorted((theme / "modules").glob("*.module")):
+    meta = mod / "meta.json"
+    if not meta.is_file():
+        print(f"{mod.name} missing meta.json"); sys.exit(1)
+    try:
+        data = json.loads(meta.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        print(f"{mod.name}/meta.json is not valid JSON"); sys.exit(1)
+    for key in ("host_template_types", "content_types"):
+        if key not in data:
+            print(f"{mod.name}/meta.json missing {key}"); sys.exit(1)
+PYEOF
+) || fail 1 "$out"
 out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1
 import json, re, sys
 from pathlib import Path
@@ -114,7 +139,6 @@ for raw in sys.stdin.buffer.read().split(b'\0'):
         json.load(open(raw.decode(), encoding='utf-8'))
 " || fail 3 "invalid JSON present"
 "$HS_BIN" cms lint "$theme_dir" || fail 3 "hs cms lint failed"
-"$HS_BIN" cms theme marketplace-validate --src="$theme_dir" || fail 3 "marketplace-validate failed"
 out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1
 import re, sys
 from pathlib import Path

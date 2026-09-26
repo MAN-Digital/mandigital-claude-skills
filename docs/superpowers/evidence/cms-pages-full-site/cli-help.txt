@@ -1,0 +1,90 @@
+hs cms
+
+Commands for managing CMS assets.
+
+Commands:
+  hs cms convert-fields                  Converts a specific JavaScript fields file of a module or theme to JSON.
+  hs cms get-react-module [name] [dest]  Get a specified default React module.
+  hs cms watch [src] [dest]              Watch a directory on your computer for changes and upload the changed files to the HubSpot CMS.
+  hs cms list [path]                     List remote contents of a directory in the HubSpot CMS.  [aliases: ls]
+  hs cms upload [src] [dest]             Upload a folder or file from your computer to the HubSpot CMS.
+  hs cms fetch <src> [dest]              Fetch a file, directory or module from HubSpot and write to a path on your computer.
+  hs cms delete <path>                   Delete a file or folder from the HubSpot CMS.
+  hs cms mv <srcPath> <destPath>         Move a remote file or folder in HubSpot. This feature is currently in beta and the CLI contract is subject to change.
+  hs cms function                        Commands for managing CMS serverless functions.  [aliases: functions]
+  hs cms theme                           Commands for managing themes.  [aliases: themes]
+  hs cms module                          Commands for working with modules, including marketplace validation with the marketplace-validate subcommand.
+  hs cms webpack                         Commands for managing webpack.
+  hs cms app                             Commands for managing CMS apps.  [aliases: apps]
+  hs cms template                        Commands for managing templates.
+
+Options:
+  -h, --help     Show help  [boolean]
+  -v, --version  Show version number  [boolean]
+=====HUBSPOT=====
+HubSpot CLI for agents
+
+Usage: hubspot [OPTIONS] [COMMAND]
+
+Commands:
+  objects        CRM objects — works with any standard or custom object type
+  pipelines      Pipelines and stages
+  properties     Object schema / custom fields
+  associations   Links between records
+  owners         HubSpot users (record owners)
+  workflows      Automation workflows (v4 flows API)
+  views          CRM index-page saved views — columns, filters, and sort
+  schemas        Custom object schemas — define and manage custom object types
+  activities     Activity history — calls, emails, notes, meetings, and tasks for a CRM record
+  conversations  Conversations — inboxes, channels, threads, messages, and visitor identification
+  auth           Authenticate with HubSpot
+  whoami         Show the authenticated user
+  upgrade        Download and install the latest CLI binary
+  segments       CRM segments (lists) — static and dynamic contact/object lists [aliases: lists]
+  sequences      Sales sequences — list sequences and read enrollment history (product API, not CRM objects)
+  reports        Reports — create, list, fetch, and delete HubSpot reports
+  imports        CRM bulk record imports — start, monitor, and cancel file-based imports
+  history        Local audit log of destructive operations
+  feedback       Send feedback about the CLI to HubSpot
+  help           Print this message or the help of the given subcommand(s)
+
+Options:
+      --verbose  Enable debug output
+  -h, --help     Print help
+  -V, --version  Print version
+
+stdout carries the data stream (JSONL by default); diagnostics, warnings, and debug output go to stderr.
+=====UPLOAD=====
+hs cms upload [src] [dest]
+
+Upload a folder or file from your computer to the HubSpot CMS.
+
+Positionals:
+  src   Path to the local file, relative to your current working directory.  [string]
+  dest  Path in HubSpot Design Tools, can be a net new path.  [string]
+
+Options:
+  -d, --debug             Set log level to debug  [boolean] [default: false]
+  -a, --account           HubSpot account id or name from config  [string]
+  -c, --config            Path to a config file  [string]
+      --use-env           Use environment variable config  [boolean]
+  -m, --cms-publish-mode  Write to <draft | publish>  [string]
+      --save-output       If true, saves all output from javascript fields files as 'fields.output.json'.  [boolean] [default: false]
+      --convert-fields    If true, converts any javascript fields files contained in module folder or project root.  [boolean] [default: false]
+      --clean             Will delete the destination directory and its contents before uploading. This will also clear the global content associated with any global partial templates and modules.  [boolean] [default: false]
+      --force             Skips confirmation prompts when doing a clean upload.  [boolean] [default: false]
+  -h, --help              Show help  [boolean]
+=====PREVIEW=====
+hs cms theme preview [--src] [--dest]
+
+Upload and watch a theme directory on your computer for changes and start a local development server to preview theme changes on a site.
+
+Options:
+  -d, --debug    Set log level to debug  [boolean] [default: false]
+  -a, --account  HubSpot account id or name from config  [string]
+  -c, --config   Path to a config file  [string]
+      --src      Path to the local directory your theme is in, relative to your current working directory  [string]
+      --dest     Path in HubSpot Design Tools. Can be a net new path. If you wish to preview a site page using your theme changes it must match the path of the theme used by the site.  [string]
+      --no-ssl   Disable HTTPS  [boolean]
+      --port     The port on which to start the local server  [number]
+  -h, --help     Show help  [boolean]

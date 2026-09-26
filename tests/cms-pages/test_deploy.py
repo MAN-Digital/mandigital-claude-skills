@@ -46,7 +46,6 @@ class DeployTests(unittest.TestCase):
     def run_deploy(self, *args: str, env_extra: dict | None = None) -> subprocess.CompletedProcess[str]:
         env = dict(os.environ)
         env["HS_BIN"] = str(FIX / "fake-hs")
-        env["HUBSPOT_BIN"] = str(FIX / "fake-hs")
         env["CURL_BIN"] = str(FIX / "fake-curl")
         if env_extra:
             env.update(env_extra)

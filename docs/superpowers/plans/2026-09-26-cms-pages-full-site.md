@@ -1455,7 +1455,7 @@ For each FAIL: edit the specific skill file that allowed it (router rule, checkl
 - [ ] **Step 4: Verify nothing regressed**
 
 Run: `python3 -m unittest discover -s tests/cms-pages -v 2>&1 | tail -n 3`
-Expected: `OK` (25 tests: 11 validator + 5 packaging + 9 deploy).
+Expected: `OK` (27 tests: 11 validator + 5 packaging + 9 deploy + 2 new M3 tests).
 
 ### Task 13: CI wiring + full validation + commit
 
@@ -1525,6 +1525,62 @@ Expected: 11 commits on top of `5567644` (Tasks 2–11 = 10, Task 13 = 1) plus a
 - **Spec coverage:** every spec section maps — inputs (T4/T5), theme builder (T6), QA+gates (T7/T8/T9), deploy+guided CLI+scopes (T2/T3/T10), small edits (T11), API bundle (T2), error handling (hard forbids in T11 + fail-closed scripts), testing/RED-GREEN-REFACTOR (T1/T12), audit prerequisites (done pre-plan except staging portal — user owes credentials).
 - **Placeholder scan:** no TBD/TODO; research outputs (scope strings, endpoint choices) are execution deliverables with exact capture commands + evidence files, not blanks.
 - **Consistency:** gate numbering, file names (`deploy.json`, `assets.json`, `QA-EVIDENCE.json`, `INVENTORY.json` with `external_urls` + `verbatim`), exit codes (0/1/2/3), and script interfaces match across tasks.
+
+## Post-implementation review (2026-09-26)
+
+Verdict history: final whole-branch review (`/tmp/cms-final-review.md`, findings
+C1/I1–I5/M1–M10) returned **Needs work — do not merge** → this fixup commit
+(`fix(cms-pages): close final-review merge blockers`) closes every merge
+blocker; re-review recommended before merge.
+
+Resolutions (all in the fixup commit):
+
+- C1: gate 3 no longer calls `marketplace-validate` (positional remote-path-only
+  per live `--help`; moved to gate-5 staging in checklist + runbook §4);
+  `fake-hs` now fails if ever invoked with it.
+- I1/I2: runbook §3 steps 4–7 rewritten as MANUAL curl steps on verified
+  playbook paths (menus/blog-provision gaps noted explicitly); step 8 resume
+  claim replaced with fail-stop + safe re-run truth.
+- I3/I4/M5: README prereqs drop `hubspot`, add `unzip` + `curl`, and state gate 3
+  needs hs auth (PAK) + network + content scopes.
+- I5: Files-upload form VERIFIED against the legacy v3 reference (`POST
+  /files/v3/files`, `file`/`fileName`/`folderPath`/`options` incl.
+  `PUBLIC_INDEXABLE` + `overwrite`); row added to playbook §1; runbook
+  "(create folders first)" removed (API auto-creates `folderPath`).
+- M-fixes: M1 full `package-zip.sh` form in SKILL.md; M2 `--account` placeholder
+  unified; M3 gate-1 key checks (`preview_path`, `host_template_types` +
+  `content_types`, `js/` + `images/`) + 2 tests; M4 checklist deploy-entry rule
+  widened to every non-blog template; M6 dead `HUBSPOT_BIN` removed; M7
+  re-capture extended (lint/marketplace-validate/filemanager/account-auth); M9
+  manual staging-URL record; M10 dry-run steps 4–7 marked "(manual in v1)".
+
+Consolidated follow-ups (still open):
+
+- R1: content automation gap — steps 4–7 unautomated in v1 (manual runbook only).
+- R2: zero live coverage pending staging creds (no staging portal creds; first
+  real deploy untested; gate-3 live-green likewise pending).
+- R3: packager staleness — no digest binding (recorded in `6455975` body + plan).
+- R4: deploy follow-ups — 429/5xx retry, partial-failure recovery docs,
+  `/proc` token visibility (recorded in `9960314` body only).
+- R5: validator follow-ups M1–M6 + I4-remainder (recorded in `460a535` body +
+  plan pointer).
+- Task 11 mode-select gaps (recovered here, was LOST — `acfe38c` body empty):
+  audit-mode utterance matches nothing; man.digital routing ambiguity;
+  small-edit enforcement convention-only; BOTH-modes tiebreak missing.
+- Task 12 live-lookup stretch risk + row-4 would-run note (was LOST — no Task 12
+  commit; `green.md` was `/tmp`-only by plan design).
+- Spec drift: spec §Deploy Tooling `hubspot` mandate (contradicted by live CLI —
+  runbook/playbook now say curl); unwired QA extras (CSS-split check,
+  internal-link resolution); portals.yaml write-back never specified.
+
+Evidence: `docs/superpowers/evidence/cms-pages-full-site/` (scenario-a/b/c.md,
+results.md, green.md, scope-findings.md, cli-help.txt, content-cmds.md,
+hs-gate3-verify.md — all secret-scanned before commit).
+
+Live verification: pending staging creds. Real-`hs` gate-3 run on the fixture
+fails at lint on token scopes (form accepted, usage OK) — recorded in
+`hs-gate3-verify.md`; full live-green awaits a staging portal with
+content/source-code-read scopes.
 
 
 

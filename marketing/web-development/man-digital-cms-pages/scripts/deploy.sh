@@ -127,10 +127,10 @@ def main():
             f"[{mode}] 1. verify evidence: {evidence['theme']} @ {evidence['commit']} — OK",
             f"[{mode}] 2. upload images: {len(images)} file(s) to File Manager",
             f"[{mode}] 3. upload theme: {HS_BIN} cms upload {theme_dir} {portal['theme']} --account={portal['hsAccount']}",
-            f"[{mode}] 4. pages: {len(pages)} page(s) per deploy.json",
-            f"[{mode}] 5. menus: create/update per menu order",
-            f"[{mode}] 6. blog: {'use blog ' + str(portal['blogId']) if portal.get('blogId') else 'provision blog'} + assign templates",
-            f"[{mode}] 7. forms: {len(portal.get('forms') or {})} mapped form(s)",
+            f"[{mode}] 4. pages: {len(pages)} page(s) per deploy.json (manual in v1)",
+            f"[{mode}] 5. menus: create/update per menu order (manual in v1)",
+            f"[{mode}] 6. blog: {'use blog ' + str(portal['blogId']) if portal.get('blogId') else 'provision blog'} + assign templates (manual in v1)",
+            f"[{mode}] 7. forms: {len(portal.get('forms') or {})} mapped form(s) (manual in v1)",
         ]
         print("\n".join(plan))
         if not opts["yes"]:

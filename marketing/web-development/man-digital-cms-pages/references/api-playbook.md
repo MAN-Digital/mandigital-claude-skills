@@ -8,7 +8,7 @@ Verified against live `--help` of `hs` 8.9.1 and `hubspot` 0.13.0. Re-capture
 with this exact command:
 
 ```
-{ hs cms --help; echo '=====HUBSPOT====='; hubspot --help; echo '=====UPLOAD====='; hs cms upload --help; echo '=====PREVIEW====='; hs cms theme preview --help; } > cli-help.txt 2>&1
+{ hs cms --help; echo '=====HUBSPOT====='; hubspot --help; echo '=====UPLOAD====='; hs cms upload --help; echo '=====PREVIEW====='; hs cms theme preview --help; echo '=====LINT====='; hs cms lint --help; echo '=====MARKETPLACE-VALIDATE====='; hs cms theme marketplace-validate --help; echo '=====FILEMANAGER====='; hs filemanager --help; echo '=====ACCOUNT-AUTH====='; hs account auth --help; } > cli-help.txt 2>&1
 ```
 
 - `hs` (developer CLI, PAK auth): `cms upload [src] [dest] --account=<name>`,
@@ -42,6 +42,7 @@ All paths verified against the method+path on the linked doc page.
 | Get blog details | `GET /cms/v3/blog-settings/settings/{blogId}` | Retrieve blog by ID | https://developers.hubspot.com/docs/api-reference/legacy/cms/blogs/blog-settings/get-blog |
 | Provision blog | UNVERIFIED — no create-blog endpoint in the reference | Create blog if missing | https://developers.hubspot.com/docs/api-reference/legacy/cms/blogs/blog-settings/guide |
 | List/create menus | UNVERIFIED — no public menus REST API in the reference | Navigation menu wiring | https://developers.hubspot.com/docs/cms/start-building/building-blocks/modules/menus-and-navigation |
+| Upload image | `POST /files/v3/files` | multipart `file` + `fileName` + `folderPath` (auto-created if missing) + `options={"access":"PUBLIC_INDEXABLE","overwrite":true}` | https://developers.hubspot.com/docs/api-reference/legacy/files/files/upload-file |
 
 ## 2. Scopes and credentials
 

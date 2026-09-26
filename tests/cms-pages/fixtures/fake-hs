@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+case " $* " in *"marketplace-validate"*) echo "fake-hs: marketplace-validate must not run locally" >&2; exit 1;; esac
 if [ "${FAKE_HS_FAIL:-0}" = "1" ]; then echo "fake-hs: lint error" >&2; exit 1; fi
 echo "fake-hs OK: $*"
 exit 0
