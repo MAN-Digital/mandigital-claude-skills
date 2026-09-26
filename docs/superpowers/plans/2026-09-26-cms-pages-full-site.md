@@ -1038,6 +1038,8 @@ git commit -m "feat(cms-pages): add theme ZIP packager"
 
 ### Task 10: deploy.sh guided deploy + refusal tests (TDD)
 
+> **Recorded plan deviations (2026-09-26, commits `8aa568c` + `9960314`):** (1) unzip-based extraction — `zipfile.extractall` never restores mtimes, breaking the freshness check; (2) content probes via curl against playbook-verified REST paths — live `hubspot` CLI has no `cms`/`api` subcommands (`HUBSPOT_BIN` removed, `CURL_BIN` seam added); (3) LIVE hardening: curl `-f`, redacted failures, `-K` auth config, images-first ordering per runbook §3, traversal guard, clean parse/config errors, tmp cleanup; 9 deploy tests total (4 planned + 5 regression). Known gap in commit bodies: runbook §3 steps 4–7 not automated in v1. Commits are authoritative.
+
 **Files:**
 - Create: `tests/cms-pages/fixtures/portals.yaml`
 - Create: `tests/cms-pages/test_deploy.py`
@@ -1453,7 +1455,7 @@ For each FAIL: edit the specific skill file that allowed it (router rule, checkl
 - [ ] **Step 4: Verify nothing regressed**
 
 Run: `python3 -m unittest discover -s tests/cms-pages -v 2>&1 | tail -n 3`
-Expected: `OK` (20 tests: 11 validator + 5 packaging + 4 deploy).
+Expected: `OK` (25 tests: 11 validator + 5 packaging + 9 deploy).
 
 ### Task 13: CI wiring + full validation + commit
 
