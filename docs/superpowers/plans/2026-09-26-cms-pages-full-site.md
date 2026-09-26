@@ -907,6 +907,8 @@ git commit -m "feat(cms-pages): add theme validator with gates g1-g4"
 
 ### Task 9: package-zip.sh + roundtrip test (TDD)
 
+> **Recorded plan deviation (2026-09-26, commit `6455975`):** quality review required hardening beyond the Step 3 block: stderr capture on the evidence check, theme-label sanitization, clean `--date`-without-value error, atomic zip write, `mkdir -p` out_dir, plus 3 regression tests (5 packaging tests total). Known limitation recorded in commit body: no staleness binding (deploy.sh freshness check covers it). The commit is authoritative.
+
 **Files:**
 - Create: `tests/cms-pages/test_packaging.py`
 - Create: `marketing/web-development/man-digital-cms-pages/scripts/package-zip.sh` (executable)
@@ -1451,7 +1453,7 @@ For each FAIL: edit the specific skill file that allowed it (router rule, checkl
 - [ ] **Step 4: Verify nothing regressed**
 
 Run: `python3 -m unittest discover -s tests/cms-pages -v 2>&1 | tail -n 3`
-Expected: `OK` (17 tests: 11 validator + 2 packaging + 4 deploy).
+Expected: `OK` (20 tests: 11 validator + 5 packaging + 4 deploy).
 
 ### Task 13: CI wiring + full validation + commit
 
