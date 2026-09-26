@@ -1,0 +1,10 @@
+<!--
+  templateType: blog_post
+  isAvailableForNewContent: true
+  label: Post
+-->
+<!doctype html>
+<html><head><title>{{ content.html_title }}</title>{{ standard_header_includes }}</head>
+<body>
+{% module "post_body" path="../modules/blog_post.module", label="Post" %}
+{{ standard_footer_includes }}</body></html>

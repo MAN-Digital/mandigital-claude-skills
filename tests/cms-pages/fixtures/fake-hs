@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+if [ "${FAKE_HS_FAIL:-0}" = "1" ]; then echo "fake-hs: lint error" >&2; exit 1; fi
+echo "fake-hs OK: $*"
+exit 0
