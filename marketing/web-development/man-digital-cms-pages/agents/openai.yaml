@@ -1,4 +1,4 @@
 interface:
   display_name: "MAN Digital CMS Pages"
-  short_description: "Maintain MAN Digital HubSpot CMS pages"
-  default_prompt: "Use $man-digital-cms-pages to inspect, update, or validate MAN Digital HubSpot CMS sources safely."
+  short_description: "Build and maintain HubSpot CMS themes and pages"
+  default_prompt: "Use $man-digital-cms-pages to build a HubSpot theme from a repo or Figma handoff, edit modules safely, or deploy a validated theme."
