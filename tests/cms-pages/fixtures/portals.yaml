@@ -1,0 +1,18 @@
+portals:
+  - id: staging
+    portalId: 11111111
+    hsAccount: test-staging
+    theme: mini-staging
+    staging: true
+    blogId: null
+    domain: null
+    forms: {}
+  - id: prod
+    portalId: 22222222
+    hsAccount: test-prod
+    theme: mini
+    staging: false
+    blogId: 123456789
+    domain: www.example.com
+    forms:
+      enquiry_form: "00000000-0000-0000-0000-000000000000"
