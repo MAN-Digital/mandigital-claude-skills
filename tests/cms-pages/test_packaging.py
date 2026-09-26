@@ -59,6 +59,52 @@ class PackagingTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("QA-EVIDENCE", result.stderr)
 
+    def test_failed_gates_refused_with_message(self) -> None:
+        import json
+
+        evidence_path = self.theme / "QA-EVIDENCE.json"
+        evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+        evidence["gates"]["g4"] = "fail"
+        evidence_path.write_text(json.dumps(evidence), encoding="utf-8")
+        result = subprocess.run(
+            [str(SKILL_SCRIPTS / "package-zip.sh"), str(self.theme), str(self.out), "--date", "20260926"],
+            text=True, capture_output=True,
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(list(self.out.glob("*.zip")), [])
+        self.assertIn("gates not all pass", result.stderr)
+
+    def test_date_flag_without_value_is_clean_error(self) -> None:
+        result = subprocess.run(
+            [str(SKILL_SCRIPTS / "package-zip.sh"), str(self.theme), str(self.out), "--date"],
+            text=True, capture_output=True,
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertNotIn("unbound variable", result.stderr)
+
+    def test_label_sanitized(self) -> None:
+        import json
+
+        theme_json = self.theme / "theme.json"
+        data = json.loads(theme_json.read_text(encoding="utf-8"))
+        data["label"] = "a/b c"
+        theme_json.write_text(json.dumps(data), encoding="utf-8")
+        env = dict(os.environ)
+        env["HS_BIN"] = str(FIX / "fake-hs")
+        validated = subprocess.run(
+            [str(SKILL_SCRIPTS / "validate-theme.sh"), str(self.theme), "--inventory", str(FIX / "mini-inventory.json")],
+            text=True, capture_output=True, env=env,
+        )
+        self.assertEqual(validated.returncode, 0, validated.stderr)
+        result = subprocess.run(
+            [str(SKILL_SCRIPTS / "package-zip.sh"), str(self.theme), str(self.out), "--date", "20260926"],
+            text=True, capture_output=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        zips = list(self.out.glob("*.zip"))
+        self.assertEqual(len(zips), 1)
+        self.assertTrue(re.fullmatch(r"a_b_c-20260926-[a-z0-9]+\.zip", zips[0].name), zips[0].name)
+
 
 if __name__ == "__main__":
     unittest.main()
