@@ -745,7 +745,7 @@ done
 [[ -d "$theme_dir/modules/footer.module" ]] || fail 1 "missing footer.module"
 [[ -d "$theme_dir/modules/blog_listing.module" ]] || fail 1 "missing blog_listing.module"
 [[ -d "$theme_dir/modules/blog_post.module" ]] || fail 1 "missing blog_post.module"
-out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1) || fail 1 "$out"
+out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1
 import json, re, sys
 from pathlib import Path
 theme = Path(sys.argv[1])
@@ -774,9 +774,10 @@ for tpl in sorted((theme / "templates").glob("*.html")):
         if not (tpl.parent / ref).is_dir():
             print(f"{tpl.name} references missing module: {ref}"); sys.exit(1)
 PYEOF
+) || fail 1 "$out"
 
 # ---- Gate 2: field wiring ----
-out=$(python3 - "$theme_dir" "$inventory" <<'PYEOF' 2>&1) || fail 2 "$out"
+out=$(python3 - "$theme_dir" "$inventory" <<'PYEOF' 2>&1
 import json, re, sys
 from pathlib import Path
 theme, inv = Path(sys.argv[1]), json.loads(Path(sys.argv[2]).read_text(encoding="utf-8"))
@@ -803,6 +804,7 @@ for mod in sorted((theme / "modules").glob("*.module")):
         if chunk and chunk not in verbatim:
             print(f"hardcoded copy in {mod.name}/module.html: {chunk[:60]!r}"); sys.exit(1)
 PYEOF
+) || fail 2 "$out"
 
 # ---- Gate 3: validity ----
 find "$theme_dir" -name '*.json' -print0 | python3 -c "
@@ -813,7 +815,7 @@ for raw in sys.stdin.buffer.read().split(b'\0'):
 " || fail 3 "invalid JSON present"
 "$HS_BIN" cms lint "$theme_dir" || fail 3 "hs cms lint failed"
 "$HS_BIN" cms theme marketplace-validate --src="$theme_dir" || fail 3 "marketplace-validate failed"
-out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1) || fail 3 "$out"
+out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1
 import re, sys
 from pathlib import Path
 for tpl in sorted((Path(sys.argv[1]) / "templates").glob("*.html")):
@@ -828,9 +830,10 @@ for tpl in sorted((Path(sys.argv[1]) / "templates").glob("*.html")):
     elif areas != 1:
         print(f"{tpl.name}: want exactly one dnd_area, found {areas}"); sys.exit(1)
 PYEOF
+) || fail 3 "$out"
 
 # ---- Gate 4: links + assets ----
-out=$(python3 - "$theme_dir" "$inventory" <<'PYEOF' 2>&1) || fail 4 "$out"
+out=$(python3 - "$theme_dir" "$inventory" <<'PYEOF' 2>&1
 import json, re, sys
 from pathlib import Path
 theme = Path(sys.argv[1])
@@ -865,6 +868,7 @@ for path in sorted(theme.rglob("*")):
         if url not in allowed:
             print(f"unallowlisted external URL {url} in {path.relative_to(theme)}"); sys.exit(1)
 PYEOF
+) || fail 4 "$out"
 
 # ---- Evidence ----
 python3 - "$theme_dir" "$inventory" <<'PYEOF'
