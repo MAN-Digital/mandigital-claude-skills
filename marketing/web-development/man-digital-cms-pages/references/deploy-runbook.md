@@ -69,6 +69,16 @@ Local gate-3 lint needs the same kind of account: an hs account with source-code
 
 Fetch `/`, one section page, blog listing, one post, contact page. Confirm 200, nav renders, one form submits to a test endpoint. Record results next to the QA evidence.
 
+## File Manager verification
+
+Local gate-4 proves every image default is manifested and every manifest file exists locally — it cannot prove the files exist in the portal's File Manager (a theme can pass g1–g4 with 10/10 images 404, as the 2026-09-27 portal audit found). Close that gap after upload, before go-live:
+
+```bash
+scripts/verify-fm.sh <theme-dir> --portal <id> --config portals.yaml
+```
+
+Read-only: fetch-probes each `assets.json` `dest` via `hs filemanager fetch <dest> <tmpfile> --account=<hsAccount>`, prints per-file `OK`/`MISSING`, exits 0 iff all exist. Record the run with the gate-5 evidence; any `MISSING` line blocks go-live — re-run the deploy.sh image-upload step, never ship broken images.
+
 ## Multilingual guidance
 
 Per-locale page values must be **text/textarea/richtext/choice** fields — the only `module_attribute`-overridable kinds used here. Grouped, link, and image content stays single-locale default plus an editor pass (this shapes field design: crumbs, language links, and CTAs use text hrefs rather than link/image pickers). Validated on the 2026-09-26 dry-run (see `docs/superpowers/evidence/cms-pages-full-site/2026-09-26-dryrun.md`, SB-9).

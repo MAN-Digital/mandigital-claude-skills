@@ -1,1 +1,1 @@
-<a href="/kontakt">{{ module.cta_text }}</a><img src="{{ module.logo.src }}" alt="{{ module.logo.alt }}">
+<a href="/kontakt">{{ module.cta_text }}</a>{% if module.logo.src %}<img src="{{ module.logo.src }}" alt="{{ module.logo.alt }}">{% endif %}

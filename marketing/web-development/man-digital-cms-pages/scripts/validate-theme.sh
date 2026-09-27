@@ -131,6 +131,61 @@ for mod in sorted((theme / "modules").glob("*.module")):
 PYEOF
 ) || fail 2 "$out"
 
+# S4 (gate-2: module wiring): a module whose fields.json contains a form-type
+# field MUST render it with a native {% form %} tag. Escape hatch: modules
+# that submit via custom JS declare it with data-hsforms-ignore — that passes
+# with a WARN (stderr) instead of failing. (2> >(cat >&2) lets the WARN bypass
+# the $() capture so it stays visible on passing runs; FAIL detail is captured.)
+out=$(python3 - "$theme_dir" 2> >(cat >&2) <<'PYEOF'
+import json, re, sys
+from pathlib import Path
+theme = Path(sys.argv[1])
+FORM_TAG = re.compile(r"\{%\s*form\b")
+for mod in sorted((theme / "modules").glob("*.module")):
+    try:
+        fields = json.loads((mod / "fields.json").read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        continue  # malformed JSON is reported by the main gate-2/3 checks
+    if not any(isinstance(f, dict) and f.get("type") == "form" for f in fields):
+        continue
+    html = (mod / "module.html").read_text(encoding="utf-8")
+    if FORM_TAG.search(html):
+        continue
+    if "data-hsforms-ignore" in html:
+        print(f"WARN: {mod.name} uses custom form submit (not native {{% form %}})",
+              file=sys.stderr)
+        continue
+    print(f"{mod.name}: form field without {{% form %}} tag"); sys.exit(1)
+PYEOF
+) || fail 2 "$out"
+
+# S8 (gate-2: module wiring): LINE-BASED HEURISTIC, not a parse. Every <img>
+# tag whose src attribute carries a {{ }} expression must sit inside an
+# {% if %} guard, else an empty src renders as <img src="">. Window = the 5
+# preceding lines plus the current line up to the <img (same-line
+# "{% if x %}<img ...>" counts — the dominant minified-module style).
+# Misreads multi-line <img> tags and guards further than 5 lines up; keep
+# guards adjacent to the img.
+out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1
+import re, sys
+from pathlib import Path
+theme = Path(sys.argv[1])
+IF_TAG = re.compile(r"\{%\s*if\b")
+DYN_SRC = re.compile(r"src\s*=\s*[\"'][^\"']*\{\{")
+for mod in sorted((theme / "modules").glob("*.module")):
+    lines = (mod / "module.html").read_text(encoding="utf-8").splitlines()
+    for i, line in enumerate(lines):
+        for m in re.finditer(r"<img\b", line):
+            tag = line[m.start():].split(">", 1)[0]
+            if not DYN_SRC.search(tag):
+                continue
+            window = "\n".join(lines[max(0, i - 5):i]) + "\n" + line[:m.start()]
+            if not IF_TAG.search(window):
+                print(f"unguarded img with dynamic src in {mod.name}/module.html:{i + 1}")
+                sys.exit(1)
+PYEOF
+) || fail 2 "$out"
+
 # ---- Gate 3: validity ----
 find "$theme_dir" -name '*.json' -print0 | python3 -c "
 import json, sys
@@ -189,7 +244,10 @@ for f in manifest.values():
 used = set()
 for fields_file in sorted((theme / "modules").glob("*.module/fields.json")):
     text = fields_file.read_text(encoding="utf-8")
-    for src in re.findall(r'"src":\s*"(/[^"]+)"', text):
+    # S1: HubSpot-emitted JSON has a space before the colon ("src" : "...");
+    # the strict '"src":' pattern missed those srcs entirely (false-pass on
+    # unmanifested srcs + false "dead manifest entry"). Tolerate the space.
+    for src in re.findall(r'"src"\s*:\s*"(/[^"]+)"', text):
         used.add(src)
         if src not in manifest:
             print(f"unmanifested image src {src} in {fields_file.parent.name}"); sys.exit(1)
@@ -213,6 +271,46 @@ for path in sorted(theme.rglob("*")):
         url = raw.rstrip("\\")
         if url not in allowed:
             print(f"unallowlisted external URL {url} in {path.relative_to(theme)}"); sys.exit(1)
+PYEOF
+) || fail 4 "$out"
+
+# S6 (gate-4: links + assets): no [...] placeholder text in fields.json
+# DEFAULT string values (they render to visitors). Parsed-JSON walk, not raw
+# text: structural brackets (arrays) never match — only string VALUES held in
+# a "default" key (top-level or group-children) are tested.
+out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1
+import json, re, sys
+from pathlib import Path
+theme = Path(sys.argv[1])
+PLACEHOLDER = re.compile(r"\[[^\[\]]{1,60}\]")
+def default_strings(node):
+    if isinstance(node, dict):
+        if "default" in node:
+            yield from value_strings(node["default"])
+        for key, val in node.items():
+            if key != "default":
+                yield from default_strings(val)
+    elif isinstance(node, list):
+        for val in node:
+            yield from default_strings(val)
+def value_strings(value):
+    if isinstance(value, str):
+        yield value
+    elif isinstance(value, dict):
+        for val in value.values():
+            yield from value_strings(val)
+    elif isinstance(value, list):
+        for val in value:
+            yield from value_strings(val)
+for fields_file in sorted((theme / "modules").glob("*.module/fields.json")):
+    try:
+        fields = json.loads(fields_file.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        continue  # malformed JSON is reported by the gate-3 check
+    for s in default_strings(fields):
+        if PLACEHOLDER.search(s):
+            print(f"placeholder '[...]' in default {s[:80]!r} ({fields_file.parent.name}/fields.json)")
+            sys.exit(1)
 PYEOF
 ) || fail 4 "$out"
 

@@ -26,9 +26,12 @@ Tokens (`fields.json` + `css/` + `theme.json`) → modules → blog modules → 
 
 - One folder per section. Every text, image, link, list a marketer might change is a field — zero code-only content.
 - Mandatory modules: global header (nav, language, CTA, mobile drawer) and footer.
-- `blog_listing` + `blog_post` read post data from `content`/`group`; only chrome (breadcrumb, labels) is editable.
+- `blog_listing` + `blog_post` read post data from `content`/`group`; only chrome (breadcrumb, labels) is editable. Listing cards MUST use the `post_list_summary_featured_image or featured_image` chain — summary-only renders imageless cards when the summary image is unset.
+- Listing data source: `contents` (auto-provided post sequence on listing templates — simplest, no editor step) vs `blog_recent_posts(blog_selection)` (editor picks the blog via a `blog`-type field; MUST ship manual fallback cards for the unconnected state). Prefer `contents`; use `blog_recent_posts` only when the listing must show a non-default blog.
+- Post tags: render `content.tag_list` — `content.topic_list` is a legacy alias for older implementations ([HubL variables](https://developers.hubspot.com/docs/cms/reference/hubl/variables), "Blog variables" note).
+- Header/footer SHOULD use `menu()` for nav with designed hardcoded fallback links when no menu is selected (marketers get the menu editor; visitors never see an empty nav).
 - Every module ships `meta.json` with `host_template_types` + `content_types` covering its placements.
-- Form-module marker: a module is a form module iff its `fields.json` contains a field with `"type": "form"`; `deploy.sh` refuses to run when any form module lacks a `portals.yaml` `forms:` entry.
+- Form-module marker: a module is a form module iff its `fields.json` contains a field with `"type": "form"`; `deploy.sh` refuses to run when any form module lacks a `portals.yaml` `forms:` entry. A form module MUST render via a native `{% form %}` tag; custom-JS submit is allowed only with an explicit `data-hsforms-ignore` declaration (validator warns).
 - Blog-post templates use static `{% module %}` tags, not `dnd_area`. Page/blog-listing templates use `dnd_area`.
 
 ## 4. deploy.json schema (skill-custom)

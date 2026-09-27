@@ -126,8 +126,10 @@ class DeployTests(unittest.TestCase):
             {"type": "form", "name": "hs_form", "label": "HubSpot form",
              "default": {"form_id": ""}},
         ]), encoding="utf-8")
+        # S4: form modules must render via a native {% form %} tag.
         (mod / "module.html").write_text(
-            '<section id="{{ module.section_id }}">{{ module.hs_form }}</section>\n',
+            f'<section id="{{{{ module.section_id }}}}">{{% form "{name}_instance" '
+            'form_to_use="{{ module.hs_form.form_id }}" %}</section>\n',
             encoding="utf-8")
         (mod / "module.css").write_text("/* form module */\n", encoding="utf-8")
         out = self.tmp / "dist-form"

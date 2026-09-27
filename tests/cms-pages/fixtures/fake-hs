@@ -13,5 +13,14 @@ if [ "${FAKE_HS_CLEAN:-0}" = "1" ]; then
   echo "0 issues found."
   exit 0
 fi
+if [ "${1:-}" = "filemanager" ] && [ "${2:-}" = "fetch" ]; then
+  if [ -n "${FAKE_FM_MISSING:-}" ]; then
+    case " $* " in
+      *" $FAKE_FM_MISSING "*) echo "fake-hs: no such file or folder at $FAKE_FM_MISSING" >&2; exit 1;;
+    esac
+  fi
+  echo "fake-hs fetch OK: $*"
+  exit 0
+fi
 echo "fake-hs OK: $*"
 exit 0

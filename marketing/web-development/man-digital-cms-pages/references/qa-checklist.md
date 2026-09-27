@@ -14,6 +14,10 @@ Run in order. Any failure → fix → restart at gate 1. Max 3 fix rounds, then 
 
 - For each module: every top-level `fields.json` name (plus one nested level for groups) appears as `module.<name>` (or `.<child>` inside its group loop) in `module.html`. No orphans.
 - No hardcoded marketer-editable copy: grep `module.html` for raw text outside HubL tags fails the gate unless the string is in the inventory's `verbatim` list (default empty).
+- Standard verbatim starter set for menu-fallback/nav punctuation: Hjem, Våre, kurs, Nyheter, Kontakt, Tilgjengelighetserklæring, ·, |, (, ), : — extend per project.
+- Header/footer may use `menu()` with designed hardcoded fallback links (approved pattern, see theme-contract §3); list the fallback strings in `verbatim`.
+- A module whose `fields.json` has a form-type field MUST contain a native `{% form %}` tag; custom-JS submit declares `data-hsforms-ignore` (passes with WARN, not fail).
+- Every `<img>` whose src carries a `{{ }}` expression must sit inside an `{% if %}` guard (line-based heuristic: guard within the 5 preceding lines or earlier on the same line).
 
 ## Gate 3 — Validity
 
@@ -23,7 +27,8 @@ Run in order. Any failure → fix → restart at gate 1. Max 3 fix rounds, then 
 
 ## Gate 4 — Links + assets
 
-- Every image `src` default in module `fields.json` files has an `assets.json` entry whose `local` file exists.
+- Every image `src` default in module `fields.json` files has an `assets.json` entry whose `local` file exists. `src` matching tolerates HubSpot-emitted spacing (`"src" : "..."`).
+- No `[...]`-bracket placeholder text in any `fields.json` default string value (parsed-value scan — structural JSON brackets never match).
 - Every `assets.json` entry is referenced by at least one default (no dead uploads).
 - No `localhost`, `127.0.0.1`, `placehold.`, `lorempixel`, `example.com` strings anywhere.
 - Every other external `http(s)` URL appears in `INVENTORY.json → external_urls` or the gate fails.
