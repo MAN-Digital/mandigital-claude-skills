@@ -1,21 +1,24 @@
-# Example portal config for man-digital-cms-pages deploy.sh
-# Copy to portals.yaml (same dir, gitignored) and edit values.
-# NEVER put tokens in this file — pass via --token "$HS_TOKEN".
+# Which portal to deploy to + how. deploy.sh reads this file live.
+# Copy this file to portals.yaml (same folder, gitignored) and edit values.
+# NEVER put tokens/keys in this file -- pass the token via --token "$HS_TOKEN".
 portals:
-  - id: staging
-    portalId: 146425426
-    hsAccount: man-digital-development
-    theme: dryrun-test
-    staging: true
-    blogId: null
-    domain: null
-    forms: {}
-  - id: prod
-    portalId: 22222222
-    hsAccount: prod
-    theme: my-theme
-    staging: false
-    blogId: 123456789
-    domain: www.example.com
-    forms:
-      enquiry_form: "00000000-0000-0000-0000-000000000000"
+  # --- staging entry (safe playground) ---
+  - id: staging            # short name YOU pick; used as: deploy.sh --portal staging
+    portalId: 146425426    # HubSpot portal ID (numbers only, no quotes needed)
+    hsAccount: man-digital-development  # name from `hs account list` (PAK auth, must exist first)
+    theme: dryrun-test     # destination theme FOLDER in Design Manager (created if missing)
+    staging: true          # exactly ONE entry must be true (gate-5 staging checks use it)
+    blogId: null           # HubSpot blog id, or null to auto-provision one
+    domain: null           # public domain, or null (informational only)
+    forms: {}              # module-name -> HubSpot form GUID map (empty = no forms yet)
+
+  # --- production entry (real site) ---
+  - id: prod                      # deploy.sh --portal prod
+    portalId: 22222222             # <-- REPLACE with your real portal ID
+    hsAccount: prod                # <-- REPLACE with your `hs account list` name for that portal
+    theme: my-theme                # <-- REPLACE with the theme folder to create/update
+    staging: false                 # must stay false here (only staging is true)
+    blogId: 123456789              # <-- REPLACE with real blog id, or null to provision
+    domain: www.example.com        # <-- REPLACE with real domain, or null
+    forms:                         # one line per form module in the theme:
+      enquiry_form: "00000000-0000-0000-0000-000000000000"  # <-- REPLACE with real form GUID
