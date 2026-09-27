@@ -282,7 +282,7 @@ out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1
 import json, re, sys
 from pathlib import Path
 theme = Path(sys.argv[1])
-PLACEHOLDER = re.compile(r"\[[^\[\]]{1,60}\]")
+PLACEHOLDER = re.compile(r"\[[^\[\]]+\]")
 def default_strings(node):
     if isinstance(node, dict):
         if "default" in node:

@@ -258,6 +258,16 @@ class ValidateThemeTests(unittest.TestCase):
         self.assertIn("footer.module/fields.json", result.stderr)
         self.assertIn("PDF, [size]", result.stderr)
 
+    def test_long_bracket_placeholder_default_fails_gate4(self) -> None:
+        long_token = ("[Plassholder – før opp kjente avvik, for eksempel PDF-dokumenter "
+                      "som ennå ikke er fullt tilgjengelige.]")
+        self.assertGreater(len(long_token), 60)
+        self._add_footer_text_field("note", "<p>" + long_token + "</p>")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g4", result.stderr)
+        self.assertIn("footer.module/fields.json", result.stderr)
+
     def test_clean_default_passes_gate4(self) -> None:
         self._add_footer_text_field("brochure", "PDF, 2 MB")
         result = run_validator(self.theme, self.inventory)
