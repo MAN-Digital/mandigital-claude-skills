@@ -1,18 +1,27 @@
 #!/usr/bin/env bash
 # Guided config-driven HubSpot deploy. ZIP-first, evidence-checked, explicit auth.
 # Usage: deploy.sh [--portal ID] --zip FILE --config portals.yaml [--token T] [--dry-run] [--yes]
-# Env: HS_BIN (default hs), CURL_BIN (default curl), HS_TOKEN (token fallback)
+# Env: HS_BIN (default hs), CURL_BIN (default curl), HS_TOKEN (token fallback),
+# CREATE_FORMS_BIN (default: create-forms.sh next to this script)
 # Exit codes: 0 ok, 1 failed check, 2 usage/unknown portal, 3 authorization required.
 # Step 4 note: live `hubspot` CLI has no cms/api subcommands (CRM-only CLI,
 # per references/api-playbook.md §1), so content probes use verified REST paths
 # via curl (see CONTENT_PROBES).
 set -euo pipefail
+export CMS_SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 exec python3 - "$@" <<'PYEOF'
 import getpass, json, os, shutil, subprocess, sys, tempfile
 from datetime import datetime, timezone
 
 HS_BIN = os.environ.get("HS_BIN", "hs")
 CURL_BIN = os.environ.get("CURL_BIN", "curl")
+def _default_create_forms():
+    here = os.environ.get("CMS_SCRIPTS_DIR")
+    if here:
+        return os.path.join(here, "create-forms.sh")
+    return "create-forms.sh"  # last resort: PATH lookup
+
+CREATE_FORMS_BIN = os.environ.get("CREATE_FORMS_BIN") or _default_create_forms()
 CONTENT_PROBES = [  # verified REST paths per references/api-playbook.md §1
     ("pages", "/cms/v3/pages/site-pages"),
     ("blog_posts", "/cms/v3/blogs/posts"),
@@ -71,6 +80,52 @@ def pick_portal(portals, wanted):
     if choice not in portals:
         die(f"unknown portal: {choice}", 2)
     return choice, portals[choice]
+
+def forms_provision(portal, config_dir):
+    """Validate the optional formsProvision block; {} when absent (back-compat).
+
+    Shape: {enabled: bool (default false), spec: path (required when enabled,
+    resolved relative to the config file), prefix: str}. Mirrors the same-named
+    helper in create-forms.sh (no shared lib by repo convention — keep in sync).
+    """
+    raw = portal.get("formsProvision")
+    if raw is None:
+        return {}
+    if not isinstance(raw, dict):
+        die("config formsProvision must be a mapping (enabled/spec/prefix)")
+    unknown = sorted(set(raw) - {"enabled", "spec", "prefix"})
+    if unknown:
+        die(f"config formsProvision has unknown key(s): {', '.join(unknown)}")
+    if "enabled" in raw and not isinstance(raw["enabled"], bool):
+        die("config formsProvision.enabled must be boolean")
+    out = {"enabled": bool(raw.get("enabled", False)),
+           "prefix": raw.get("prefix", "")}
+    if "prefix" in raw and (not isinstance(raw["prefix"], str) or not raw["prefix"].strip()):
+        die("config formsProvision.prefix must be a non-empty string")
+    if out["enabled"]:
+        spec = raw.get("spec")
+        if not isinstance(spec, str) or not spec.strip():
+            die("config formsProvision.spec is required when enabled")
+        out["spec"] = spec if os.path.isabs(spec) else os.path.join(config_dir, spec)
+    elif "spec" in raw:
+        out["spec"] = raw["spec"]
+    return out
+
+def spec_modules(spec_path):
+    """Module keys covered by a form-spec file (for the fail-closed pre-check).
+
+    Full spec validation happens inside create-forms.sh at execution time; here
+    only the module list is needed, and an unreadable spec fails the deploy.
+    """
+    try:
+        with open(spec_path, encoding="utf-8") as handle:
+            data = json.load(handle)
+        modules = {f["module"] for f in data["forms"]}
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        die(f"cannot read formsProvision.spec {spec_path}: {type(exc).__name__}")
+    if not modules or not all(isinstance(m, str) for m in modules):
+        die(f"formsProvision.spec {spec_path} has no usable form modules")
+    return modules
 
 def main():
     opts = parse(sys.argv[1:])
@@ -138,7 +193,11 @@ def main():
                     continue
                 if any(isinstance(f, dict) and f.get("type") == "form" for f in fields):
                     form_modules.add(entry[:-len(".module")])
-        unmapped = sorted(form_modules - set((portal.get("forms") or {}).keys()))
+        provision = forms_provision(portal, config_dir=os.path.dirname(os.path.abspath(opts["config"])))
+        provisioned_modules = set()
+        if provision.get("enabled"):
+            provisioned_modules = spec_modules(provision["spec"])
+        unmapped = sorted(form_modules - set((portal.get("forms") or {}).keys()) - provisioned_modules)
         if unmapped:
             die(f"unmapped form module(s) without portals.yaml forms entry: {', '.join(unmapped)}")
         mode = "DRY-RUN" if opts["dry_run"] else "LIVE"
@@ -146,12 +205,25 @@ def main():
             f"[{mode}] portal {pid} (portalId {portal['portalId']}, theme {portal['theme']})",
             f"[{mode}] 1. verify evidence: {evidence['theme']} @ {evidence['commit']} — OK",
             f"[{mode}] 2. upload images: {len(images)} file(s) to File Manager",
+        ]
+        if provision.get("enabled"):
+            plan.append(
+                f"[{mode}] 2b. provision forms: {len(provisioned_modules)} form(s) from "
+                f"{provision['spec']} via create-forms.sh"
+                + (f" (prefix \"{provision['prefix']}\")" if provision.get("prefix") else ""))
+        if provision.get("enabled"):
+            step7 = (f"[{mode}] 7. forms: {len(portal.get('forms') or {})} mapped + "
+                     f"{len(provisioned_modules)} provisioned form(s); "
+                     f"record FORM_GUIDs in portals.yaml")
+        else:
+            step7 = f"[{mode}] 7. forms: {len(portal.get('forms') or {})} mapped form(s) (manual in v1)"
+        plan.extend([
             f"[{mode}] 3. upload theme: {HS_BIN} cms upload {theme_dir} {portal['theme']} --account={portal['hsAccount']}",
             f"[{mode}] 4. pages: {len(pages)} page(s) per deploy.json (manual in v1)",
             f"[{mode}] 5. menus: create/update per menu order (manual in v1)",
             f"[{mode}] 6. blog: {'use blog ' + str(portal['blogId']) if portal.get('blogId') else 'provision blog'} + assign templates (manual in v1)",
-            f"[{mode}] 7. forms: {len(portal.get('forms') or {})} mapped form(s) (manual in v1)",
-        ]
+            step7,
+        ])
         print("\n".join(plan))
         if not opts["yes"]:
             print("AUTHORIZATION REQUIRED: re-run with --yes to execute.", file=sys.stdout)
@@ -159,7 +231,7 @@ def main():
         if opts["dry_run"]:
             print(f"[{mode}] content probes: " + ", ".join(f"{name} GET {path}" for name, path in CONTENT_PROBES))
             return
-        # LIVE execution (runbook §3 order: images step 2, theme step 3, then probes)
+        # LIVE execution (runbook §3 order: images 2, forms 2b when enabled, theme 3, then probes)
         env = dict(os.environ, HS_TOKEN=token)
 
         def run_live(argv, step):
@@ -190,10 +262,27 @@ def main():
                             "-F", f"file=@{local}", "-F", f"fileName={os.path.basename(item['dest'])}",
                             "-F", f"folderPath={folder}", "-F", 'options={"access":"PUBLIC_INDEXABLE","overwrite":true}'],
                            f"image upload {item['dest']}")
+        if provision.get("enabled"):
+            try:
+                forms_proc = run_live(
+                    [CREATE_FORMS_BIN, "--portal", pid, "--config", opts["config"]],
+                    "form provisioning")
+            except FileNotFoundError:
+                die(f"form provisioning failed: {CREATE_FORMS_BIN} not found "
+                    f"(override with CREATE_FORMS_BIN)")
+            for line in (forms_proc.stdout or "").splitlines():
+                if line.startswith("FORM_GUID "):
+                    print(f"[LIVE] {line}")
         run_live([HS_BIN, "cms", "upload", theme_dir, portal["theme"], f"--account={portal['hsAccount']}"], "theme upload")
         for name, probe_path in CONTENT_PROBES:
             curl_with_auth([f"https://api.hubapi.com{probe_path}?limit=1"], f"probe {name}")
-        print(f"[LIVE] done: theme + {len(images)} image(s) pushed; content probes OK; pages/menus/blog/forms NOT automated in v1 — follow runbook §3 steps 4-7 manually.")
+        if provision.get("enabled"):
+            print(f"[LIVE] done: theme + {len(images)} image(s) pushed; "
+                  f"{len(provisioned_modules)} form(s) provisioned; content probes OK; "
+                  f"pages/menus/blog NOT automated in v1 — follow runbook §3 steps 4-6 manually; "
+                  f"record the FORM_GUID lines above in portals.yaml forms:.")
+        else:
+            print(f"[LIVE] done: theme + {len(images)} image(s) pushed; content probes OK; pages/menus/blog/forms NOT automated in v1 — follow runbook §3 steps 4-7 manually.")
     finally:
         shutil.rmtree(work, ignore_errors=True)
 

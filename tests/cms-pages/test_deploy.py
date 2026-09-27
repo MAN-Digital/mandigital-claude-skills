@@ -146,7 +146,7 @@ class DeployTests(unittest.TestCase):
         )
         return Path(packaged.stdout.strip().removeprefix("PACKAGED: ").strip())
 
-    def _config_with_forms(self, forms: dict) -> Path:
+    def _config_with_forms(self, forms: dict, provision: dict | None = None) -> Path:
         cfg = self.tmp / "portals-forms.yaml"
         lines = ["portals:", "  - id: staging", "    portalId: 11111111",
                  "    hsAccount: test-staging", "    theme: mini-staging",
@@ -157,8 +157,23 @@ class DeployTests(unittest.TestCase):
                 lines.append(f'      {key}: "{guid}"')
         else:
             lines.append("    forms: {}")
+        if provision is not None:
+            lines.append("    formsProvision:")
+            for key, value in provision.items():
+                rendered = "true" if value is True else "false" if value is False else f'"{value}"'
+                lines.append(f"      {key}: {rendered}")
         cfg.write_text("\n".join(lines) + "\n", encoding="utf-8")
         return cfg
+
+    def _write_spec(self, modules: list[str]) -> Path:
+        spec = self.tmp / "forms-spec.json"
+        spec.write_text(json.dumps({"forms": [
+            {"module": module, "name": module.replace("_", " ").title(),
+             "fields": [{"name": "email", "label": "Email", "type": "email",
+                         "required": True}]}
+            for module in modules
+        ]}), encoding="utf-8")
+        return spec
 
     def test_unmapped_form_module_refuses_dry_run(self) -> None:
         zip_path = self._zip_with_form_module()
@@ -176,6 +191,63 @@ class DeployTests(unittest.TestCase):
                                 "--token", "pat-test-1234", "--dry-run", "--yes")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("DRY-RUN", result.stdout)
+
+    def test_provisioned_form_module_dry_run_ok(self) -> None:
+        zip_path = self._zip_with_form_module()
+        spec = self._write_spec(["contact_form"])
+        result = self.run_deploy("--portal", "staging", "--zip", str(zip_path),
+                                "--config", str(self._config_with_forms(
+                                    {}, {"enabled": True, "spec": str(spec)})),
+                                "--token", "pat-test-1234", "--dry-run", "--yes")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("2b. provision forms: 1 form(s)", result.stdout)
+        self.assertIn("1 provisioned form(s)", result.stdout)
+
+    def test_provision_live_surfaces_guids(self) -> None:
+        zip_path = self._zip_with_form_module()
+        spec = self._write_spec(["contact_form"])
+        result = self.run_deploy("--portal", "staging", "--zip", str(zip_path),
+                                "--config", str(self._config_with_forms(
+                                    {}, {"enabled": True, "spec": str(spec)})),
+                                "--token", "pat-test-1234", "--yes")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("FORM_GUID contact_form=11111111-1111-1111-1111-111111111111", result.stdout)
+        self.assertIn("1 form(s) provisioned", result.stdout)
+
+    def test_provision_disabled_keeps_fail_closed(self) -> None:
+        zip_path = self._zip_with_form_module()
+        spec = self._write_spec(["contact_form"])
+        result = self.run_deploy("--portal", "staging", "--zip", str(zip_path),
+                                "--config", str(self._config_with_forms(
+                                    {}, {"enabled": False, "spec": str(spec)})),
+                                "--token", "pat-test-1234", "--dry-run", "--yes")
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        self.assertIn("contact_form", result.stderr)
+        self.assertNotIn("2b. provision forms", result.stdout)
+
+    def test_provision_malformed_is_clean_error(self) -> None:
+        cfg = self.tmp / "bad-provision.yaml"
+        cfg.write_text("portals:\n  - id: staging\n    portalId: 11111111\n"
+                       "    hsAccount: test-staging\n    theme: mini-staging\n"
+                       "    staging: true\n    blogId: null\n    domain: null\n"
+                       "    forms: {}\n    formsProvision: [not, a, mapping]\n",
+                       encoding="utf-8")
+        result = self.run_deploy("--portal", "staging", "--zip", str(self.zip),
+                                "--config", str(cfg),
+                                "--token", "pat-test-1234", "--dry-run", "--yes")
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertIn("formsProvision must be a mapping", result.stderr)
+        self.assertNotIn("Traceback", result.stderr)
+
+    def test_provision_missing_spec_is_clean_error(self) -> None:
+        result = self.run_deploy("--portal", "staging", "--zip", str(self.zip),
+                                "--config", str(self._config_with_forms(
+                                    {}, {"enabled": True,
+                                         "spec": str(self.tmp / "no-such-spec.json")})),
+                                "--token", "pat-test-1234", "--dry-run", "--yes")
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertIn("cannot read formsProvision.spec", result.stderr)
+        self.assertNotIn("Traceback", result.stderr)
 
     def test_traversal_refused(self) -> None:
         theme = self.tmp / "evil-theme"

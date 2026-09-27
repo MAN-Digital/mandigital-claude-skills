@@ -11,6 +11,12 @@ portals:
     blogId: null           # HubSpot blog id, or null to auto-provision one
     domain: null           # public domain, or null (informational only)
     forms: {}              # module-name -> HubSpot form GUID map (empty = no forms yet)
+    # formsProvision: {}   # OPTIONAL (absent = manual forms, old behavior). When enabled,
+                           # deploy.sh runs create-forms.sh BEFORE the theme upload (plan step 2b):
+    # formsProvision:
+    #   enabled: true        # gate flag; false/absent = provisioning skipped entirely
+    #   spec: forms/staging.json  # form-spec JSON (relative to THIS file, or absolute)
+    #   prefix: "[staging] "     # optional HubSpot-side name prefix (lets staging/prod coexist)
 
   # --- production entry (real site) ---
   - id: prod                      # deploy.sh --portal prod

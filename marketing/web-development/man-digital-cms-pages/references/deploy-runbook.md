@@ -27,7 +27,7 @@ portals:
       enquiry_form: abcdef12-3456-7890-abcd-ef1234567890
 ```
 
-Fields: `id` (deploy.sh selector), `portalId`, `hsAccount` (`hs` account name, PAK-based, onboarded via `hs account auth`), `theme` (destination theme folder), `staging` (exactly one `true`), `blogId` (HubSpot blog id or null to provision), `domain`, `forms` (module-name → HubSpot form GUID map). The private-app token is NEVER in this file — pass `--token "$HS_TOKEN"`.
+Fields: `id` (deploy.sh selector), `portalId`, `hsAccount` (`hs` account name, PAK-based, onboarded via `hs account auth`), `theme` (destination theme folder), `staging` (exactly one `true`), `blogId` (HubSpot blog id or null to provision), `domain`, `forms` (module-name → HubSpot form GUID map), `formsProvision` (optional: `{enabled, spec, prefix}` — form auto-provisioning, see "Form provisioning" below; absent = manual forms, old behavior). The private-app token is NEVER in this file — pass `--token "$HS_TOKEN"`.
 
 ## 2. Guided deploy (default)
 
@@ -41,6 +41,7 @@ Without `--portal`, deploy.sh lists entries and prompts. Without `--token`, it p
 
 1. Verify `<theme>/QA-EVIDENCE.json`: all local gates `pass`, evidence newer than every theme file.
 2. Upload images: each `assets.json` entry → File Manager destination (`folderPath` folders are auto-created by the upload call).
+2b. Provision forms — ONLY when the portal entry sets `formsProvision.enabled: true`: run `scripts/create-forms.sh --portal <id> --config portals.yaml` (spec + prefix come from the portal entry), which creates each form-spec form via `POST /marketing/v3/forms`, skipping names that already exist. The fail-closed unmapped-module check counts spec-covered modules as satisfied. Without the flag this step does not exist and step 7 stays fully manual.
 3. Upload theme: `hs cms upload <unzipped-theme> <theme> --account=<hsAccount>`.
 
 **Steps 4–7 are MANUAL in v1** (deploy.sh plans them in dry-run but does not execute them; its `[LIVE] done` message says so explicitly). Run each by hand with the private-app token (`Authorization: Bearer $HS_TOKEN`, base `https://api.hubapi.com`), using the verified paths from `references/api-playbook.md` §1:
@@ -50,6 +51,58 @@ Without `--portal`, deploy.sh lists entries and prompts. Without `--token`, it p
 6. Provision blog if `blogId` null, assign listing/post templates. Check first: `GET /cms/v3/blog-settings/settings/{blogId}`. Gap: the playbook §1 provision row is UNVERIFIED — no create-blog endpoint in the reference, so provision the blog by hand in HubSpot when `blogId` is null, assign the listing/post templates, and record the new `blogId` in `portals.yaml`.
 7. Apply `forms` map to form modules; fail closed on unmapped form modules. Inventory: `GET /marketing/v3/forms`; verify each mapped GUID: `GET /marketing/v3/forms/{formId}`. Any form module without a `portals.yaml` `forms` entry stops the deploy — add the mapping, never skip.
 8. Print per-item results. Any failure stops the run with a redacted error; fix the cause and re-run (theme upload + image upload both overwrite safely).
+
+## Form provisioning
+
+When the theme has form modules and the portal entry enables `formsProvision`, forms are created by API instead of by hand. Standalone use (same flags deploy.sh uses, plus overrides):
+
+```bash
+scripts/create-forms.sh --portal staging --config portals.yaml --token "$HS_TOKEN" \
+  [--spec forms/staging.json] [--prefix "[staging] "] [--update] [--dry-run] [--out guids.json]
+```
+
+`--spec`/`--prefix` default to the portal entry's `formsProvision` values. Idempotent by HubSpot form name (prefix + spec name): lookup via `GET /marketing/v3/forms` first, `SKIP` existing names, `CREATED`/`UPDATED` (`--update` replaces via `PUT /marketing/v3/forms/{formId}`) otherwise. Every form prints a `FORM_GUID <module>=<guid>` line — paste those lines into the portal entry's `forms:` map so later deploys (and the fail-closed check) resolve without the spec. `--dry-run` validates the spec locally and prints the plan; it never touches the network. `--out` writes the module→GUID map as JSON for theme wiring.
+
+### Form-spec format
+
+JSON, `{"forms": [...]}`. One entry per form module:
+
+```json
+{
+  "forms": [
+    {
+      "module": "contact_form",
+      "name": "Contact",
+      "fields": [
+        {"name": "firstname", "label": "First name", "type": "text", "required": true},
+        {"name": "email", "label": "Business email", "type": "email", "required": true,
+         "blockFreeEmail": true},
+        {"name": "phone", "label": "Phone", "type": "phone", "required": false},
+        {"name": "message", "label": "Message", "type": "textarea", "required": true},
+        {"name": "company_size", "label": "Company size", "type": "select",
+         "options": [{"label": "1-10", "value": "1-10"}]},
+        {"name": "newsletter_opt_in", "label": "Email me news", "type": "consent",
+         "subscriptionTypeId": 12345}
+      ],
+      "consent": {"mode": "implicit", "privacyText": "We process your data per our privacy policy."},
+      "submitText": "Send",
+      "redirectUrl": "/thank-you",
+      "recaptcha": true,
+      "language": "en"
+    }
+  ]
+}
+```
+
+Rules: `module` (theme module dir minus `.module`) and `name` (HubSpot display name, idempotency key after prefix) are required. Field `name` is the contact-property internal name (`firstname`, `email`, `phone`, …), `label` the visible label, `type` one of `text`/`email`/`phone`/`textarea`/`select`/`checkbox`/`consent`. `select` requires `options` (`[{label, value}]`, HubSpot option values); `consent` requires `subscriptionTypeId` (the portal's subscription-type id — look it up in the portal, it differs per portal) and a form-level `consent` object with API-required `privacyText`. Consent `mode`: `none` (default without consent fields), `implicit`, or `explicit` (GDPR variants; both need `privacyText`, explicit additionally accepts `consentToProcessText`/`consentToProcessCheckboxLabel`/`consentToProcessFooterText`). Only one of `redirectUrl`/`thankYouText`. Script display defaults (button color, theme, phone digit bounds) are cosmetic fallbacks — adjust in the form editor when the design demands it.
+
+### Mapping from design fields
+
+Translate each Figma/design input row in order: single-line inputs → `text` (use the matching contact property: `firstname`, `lastname`, `company`, `jobtitle`); email inputs → `email` (+ `blockFreeEmail` when the design says business-email-only); phone/tel inputs → `phone`; multi-line/message inputs → `textarea`; dropdowns/radios → `select` with the design's option list verbatim as `{label, value}` pairs; standalone tick boxes (non-legal, e.g. "book a callback") → `checkbox`; legal/GDPR tick boxes → `consent` (+ `subscriptionTypeId`, + form-level `consent` object). The design's submit-button copy → `submitText`; the post-submit destination → `redirectUrl` (or `thankYouText` for an inline message). Anything the API cannot express (custom inline error copy, per BUILD-NOTES precedent) stays a form-editor pass — never invent API fields for it.
+
+### Manual fallback (when API create fails)
+
+If `create-forms.sh` fails (auth, validation, or HubSpot-side error), the deploy stops before the theme upload — nothing half-provisions. Fall back by hand: create each form in HubSpot (Marketing → Forms) from the same spec values, copy each new form's GUID into the portal entry's `forms:` map (`<module>: "<guid>"`), then re-run deploy.sh. The fail-closed check passes on the pasted GUIDs with provisioning disabled or enabled.
 
 ## 4. Gate-5 staging verification
 
