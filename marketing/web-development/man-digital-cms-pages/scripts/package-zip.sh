@@ -7,7 +7,7 @@ command -v zip >/dev/null 2>&1 || { echo "FAIL: 'zip' command not found" >&2; ex
 [[ $# -ge 2 ]] || { echo "usage: package-zip.sh <theme-dir> <out-dir> [--date YYYYMMDD]" >&2; exit 2; }
 theme_dir=$(cd "$1" && pwd)
 mkdir -p "$2" 2>/dev/null; out_dir=$(cd "$2" && pwd)
-stamp=""; if [[ "${3:-}" == "--date" ]]; then stamp="${4:-}"; else stamp=$(date +%Y%m%d); fi
+stamp=""; if [[ "${3:-}" == "--date" ]]; then stamp="${4:-}"; else stamp=$(date -u +%Y%m%d); fi
 [[ "$stamp" =~ ^[0-9]{8}$ ]] || { echo "FAIL: bad date stamp: $stamp" >&2; exit 1; }
 
 evidence="$theme_dir/QA-EVIDENCE.json"

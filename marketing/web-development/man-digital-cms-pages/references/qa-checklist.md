@@ -18,7 +18,7 @@ Run in order. Any failure → fix → restart at gate 1. Max 3 fix rounds, then 
 ## Gate 3 — Validity
 
 - Every `*.json` parses.
-- `HS_BIN cms lint <theme-dir>` exits 0 (`HS_BIN` defaults to `hs`).
+- `HS_BIN cms lint <theme-dir>` exits 0 with no reported issues (`HS_BIN` defaults to `hs`; the gate fails on error output even when the exit code is 0). Lint needs an hs account with source-code-read or content-editor-access; set `HS_ACCOUNT=<hsAccount>` (staging, never prod for routine runs).
 - Exactly one `dnd_area` per DnD template; sections well-formed.
 
 ## Gate 4 — Links + assets

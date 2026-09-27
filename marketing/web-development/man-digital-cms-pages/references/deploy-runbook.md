@@ -63,6 +63,16 @@ hs cms theme preview --src=<theme-dir> --account=<staging-hsAccount>
 
 Open the preview URL, confirm every module renders and edits without code, then proceed to package + prod deploy. Staging upload needs the same explicit authorization as prod.
 
+Local gate-3 lint needs the same kind of account: an hs account with source-code-read or content-editor-access. Set `HS_ACCOUNT=<hsAccount>` (staging, never prod for routine runs) and `validate-theme.sh` passes it as `--account` to `hs cms lint`.
+
 ## 5. Smoke test (recommended for new portals)
 
 Fetch `/`, one section page, blog listing, one post, contact page. Confirm 200, nav renders, one form submits to a test endpoint. Record results next to the QA evidence.
+
+## Multilingual guidance
+
+Per-locale page values must be **text/textarea/richtext/choice** fields — the only `module_attribute`-overridable kinds used here. Grouped, link, and image content stays single-locale default plus an editor pass (this shapes field design: crumbs, language links, and CTAs use text hrefs rather than link/image pickers). Validated on the 2026-09-26 dry-run (see `docs/superpowers/evidence/cms-pages-full-site/2026-09-26-dryrun.md`, SB-9).
+
+## Forms per locale (limitation)
+
+v1 maps ONE form GUID per module (`portals.yaml` `forms:` is module-name → GUID). Bilingual themes reuse one form across locales or re-map per deployment — there is no per-locale dimension in the schema. A locale dimension is a tracked follow-up, not implemented here (see dry-run evidence, SB-4).

@@ -28,6 +28,7 @@ Tokens (`fields.json` + `css/` + `theme.json`) → modules → blog modules → 
 - Mandatory modules: global header (nav, language, CTA, mobile drawer) and footer.
 - `blog_listing` + `blog_post` read post data from `content`/`group`; only chrome (breadcrumb, labels) is editable.
 - Every module ships `meta.json` with `host_template_types` + `content_types` covering its placements.
+- Form-module marker: a module is a form module iff its `fields.json` contains a field with `"type": "form"`; `deploy.sh` refuses to run when any form module lacks a `portals.yaml` `forms:` entry.
 - Blog-post templates use static `{% module %}` tags, not `dnd_area`. Page/blog-listing templates use `dnd_area`.
 
 ## 4. deploy.json schema (skill-custom)

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Local QA gates 1-4 for a HubSpot theme dir. Gate 5 (staging) is manual per runbook.
 # Usage: validate-theme.sh <theme-dir> --inventory <inventory.json>
-# Env: HS_BIN (default: hs)
+# Env: HS_BIN (default: hs), HS_ACCOUNT (optional: passed as --account to hs cms lint)
 set -euo pipefail
 
 HS_BIN="${HS_BIN:-hs}"
@@ -138,7 +138,16 @@ for raw in sys.stdin.buffer.read().split(b'\0'):
     if raw:
         json.load(open(raw.decode(), encoding='utf-8'))
 " || fail 3 "invalid JSON present"
-"$HS_BIN" cms lint "$theme_dir" || fail 3 "hs cms lint failed"
+lint_args=("$theme_dir")
+[[ -n "${HS_ACCOUNT:-}" ]] && lint_args+=("--account=$HS_ACCOUNT")
+lint_out=""
+lint_rc=0
+lint_out=$("$HS_BIN" cms lint "${lint_args[@]}" 2>&1) || lint_rc=$?
+printf '%s\n' "$lint_out"
+[[ "$lint_rc" -ne 0 ]] && fail 3 "hs cms lint failed"
+# hs exits 0 even with errors (SB-2): fail on any nonzero issue count or
+# error marker. "0 issues found" must keep passing, hence [1-9] lead digit.
+echo "$lint_out" | grep -Eq '([1-9][0-9]* issues? found|✖|ERROR)' && fail 3 "hs cms lint reported issues"
 out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1
 import re, sys
 from pathlib import Path
@@ -199,7 +208,9 @@ for path in sorted(theme.rglob("*")):
     for bad in BANNED:
         if bad in text:
             print(f"banned string {bad!r} in {path.relative_to(theme)}"); sys.exit(1)
-    for url in set(re.findall(r"https?://[^\s\"'<>]+", text)):
+    for raw in set(re.findall(r"https?://[^\s\"'<>]+", text)):
+        # JSON \" escapes leak a trailing backslash into the raw-text match (SB-1).
+        url = raw.rstrip("\\")
         if url not in allowed:
             print(f"unallowlisted external URL {url} in {path.relative_to(theme)}"); sys.exit(1)
 PYEOF

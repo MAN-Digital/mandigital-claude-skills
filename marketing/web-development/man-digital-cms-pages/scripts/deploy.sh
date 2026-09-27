@@ -121,6 +121,26 @@ def main():
                 die(f"assets.json escapes theme dir: {item['local']}")
         with open(os.path.join(theme_dir, "deploy.json"), encoding="utf-8") as handle:
             pages = json.load(handle)["pages"]
+        # Fail closed on unmapped form modules (runbook §3 step 7; SB-7). Marker rule:
+        # a module is a form module iff any entry in its fields.json has "type": "form"
+        # (HubSpot form picker; default carries form_id). Map keys are module dir names
+        # minus the ".module" suffix. Enforced on dry-run too — refusal is the point.
+        form_modules = set()
+        modules_dir = os.path.join(theme_dir, "modules")
+        if os.path.isdir(modules_dir):
+            for entry in sorted(os.listdir(modules_dir)):
+                if not entry.endswith(".module"):
+                    continue
+                try:
+                    with open(os.path.join(modules_dir, entry, "fields.json"), encoding="utf-8") as handle:
+                        fields = json.load(handle)
+                except (OSError, ValueError):
+                    continue
+                if any(isinstance(f, dict) and f.get("type") == "form" for f in fields):
+                    form_modules.add(entry[:-len(".module")])
+        unmapped = sorted(form_modules - set((portal.get("forms") or {}).keys()))
+        if unmapped:
+            die(f"unmapped form module(s) without portals.yaml forms entry: {', '.join(unmapped)}")
         mode = "DRY-RUN" if opts["dry_run"] else "LIVE"
         plan = [
             f"[{mode}] portal {pid} (portalId {portal['portalId']}, theme {portal['theme']})",

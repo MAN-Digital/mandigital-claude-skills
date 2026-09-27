@@ -127,6 +127,51 @@ class ValidateThemeTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("FAIL: g1", result.stderr)
 
+    def _inject_richtext_link(self, url: str) -> None:
+        # SB-1: an https link inside a JSON field default is stored with \"
+        # escapes, so the raw-text URL regex used to swallow a trailing "\\".
+        fields = self.theme / "modules" / "footer.module" / "fields.json"
+        data = json.loads(fields.read_text(encoding="utf-8"))
+        data.append({"type": "richtext", "name": "body_copy", "label": "Body",
+                     "default": f'<a href="{url}">y</a>'})
+        fields.write_text(json.dumps(data), encoding="utf-8")
+        footer = self.theme / "modules" / "footer.module" / "module.html"
+        footer.write_text(footer.read_text(encoding="utf-8") + "{{ module.body_copy }}\n",
+                          encoding="utf-8")
+
+    def test_json_escaped_allowlisted_url_passes_gate4(self) -> None:
+        # NOTE: host must avoid the gate-4 BANNED list ("example.com" is banned),
+        # so .net stands in for the dry-run's real-world .no URL.
+        url = "https://allowed.example.net/x"
+        self._inject_richtext_link(url)
+        inv = json.loads(self.inventory.read_text(encoding="utf-8"))
+        inv["external_urls"] = [url]
+        tmp_inv = self.tmp / "inventory.json"
+        tmp_inv.write_text(json.dumps(inv), encoding="utf-8")
+        result = run_validator(self.theme, tmp_inv)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue((self.theme / "QA-EVIDENCE.json").is_file())
+
+    def test_json_escaped_url_control_names_clean_url(self) -> None:
+        url = "https://allowed.example.net/x"
+        self._inject_richtext_link(url)
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g4", result.stderr)
+        self.assertIn(f"unallowlisted external URL {url} in", result.stderr)
+        self.assertNotIn(url + "\\", result.stderr)
+
+    def test_lint_output_errors_fail_gate3_despite_exit_zero(self) -> None:
+        result = run_validator(self.theme, self.inventory, {"FAKE_HS_ERRORS": "1"})
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g3", result.stderr)
+
+    def test_hs_account_passthrough_passes_clean(self) -> None:
+        result = run_validator(self.theme, self.inventory, {"HS_ACCOUNT": "foo"})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("--account=foo", result.stdout)
+        self.assertTrue((self.theme / "QA-EVIDENCE.json").is_file())
+
     def test_missing_inventory_flag_is_usage_error(self) -> None:
         env = dict(os.environ)
         env["HS_BIN"] = str(FIX / "fake-hs")

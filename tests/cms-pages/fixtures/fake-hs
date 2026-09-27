@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 case " $* " in *"marketplace-validate"*) echo "fake-hs: marketplace-validate must not run locally" >&2; exit 1;; esac
 if [ "${FAKE_HS_FAIL:-0}" = "1" ]; then echo "fake-hs: lint error" >&2; exit 1; fi
+if [ "${FAKE_HS_ERRORS:-0}" = "1" ]; then
+  echo "Linting fixture-theme"
+  echo "  ✖ ERROR [4, 1]: Syntax error in foo"
+  echo "  ✖ ERROR [5, 1]: Syntax error in bar"
+  echo "2 issues found."
+  exit 0
+fi
 echo "fake-hs OK: $*"
 exit 0
