@@ -205,6 +205,26 @@ class ValidateThemeTests(unittest.TestCase):
         self.assertIn("FAIL: g4", result.stderr)
         self.assertIn("unmanifested image src /brand/none.jpg", result.stderr)
 
+    # S12: absolute hubfs srcs normalize to the manifest dest (no allowlist needed).
+    def test_hubfs_src_with_manifest_passes(self) -> None:
+        fields = self.theme / "modules" / "header.module" / "fields.json"
+        url = "https://1.fs1.hubspotusercontent-na1.net/hubfs/1/brand/x.jpg"
+        text = fields.read_text(encoding="utf-8").replace('"/brand/x.jpg"', f'"{url}"')
+        self.assertIn(url, text)
+        fields.write_text(text, encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_hubfs_src_without_manifest_fails_gate4(self) -> None:
+        fields = self.theme / "modules" / "header.module" / "fields.json"
+        url = "https://1.fs1.hubspotusercontent-na1.net/hubfs/1/brand/none.jpg"
+        text = fields.read_text(encoding="utf-8").replace('"/brand/x.jpg"', f'"{url}"')
+        fields.write_text(text, encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g4", result.stderr)
+        self.assertIn("unmanifested image src /brand/none.jpg", result.stderr)
+
     # S4 (gate-2): form-type field requires a native {% form %} tag.
     def _add_form_module(self, name: str, html: str) -> None:
         mod = self.theme / "modules" / f"{name}.module"

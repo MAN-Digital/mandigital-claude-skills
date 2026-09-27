@@ -346,7 +346,17 @@ for fields_file in sorted((theme / "modules").glob("*.module/fields.json")):
     # S1: HubSpot-emitted JSON has a space before the colon ("src" : "...");
     # the strict '"src":' pattern missed those srcs entirely (false-pass on
     # unmanifested srcs + false "dead manifest entry"). Tolerate the space.
-    for src in re.findall(r'"src"\s*:\s*"(/[^"]+)"', text):
+    # S12: live themes reference File Manager files by absolute hubfs URL
+    # (site-relative /extek/... 404s — verified live 2026-09-27). Normalize
+    # hubfs URLs back to the manifest dest before the membership checks.
+    for src in re.findall(r'"src"\s*:\s*"([^"]+)"', text):
+        if src.startswith(("http://", "https://")):
+            m = re.search(r"/hubfs/\d+/.+?(?:[?#]|$)", src)
+            if not m:
+                continue  # non-FM absolute URL: external-URL check below governs it
+            src = "/" + m.group(0).split("/hubfs/", 1)[1].split("/", 1)[1].rstrip("?#")
+        elif not src.startswith("/"):
+            continue  # relative/empty src: other checks govern
         used.add(src)
         if src not in manifest:
             print(f"unmanifested image src {src} in {fields_file.parent.name}"); sys.exit(1)
@@ -368,6 +378,10 @@ for path in sorted(theme.rglob("*")):
     for raw in set(re.findall(r"https?://[^\s\"'<>]+", text)):
         # JSON \" escapes leak a trailing backslash into the raw-text match (SB-1).
         url = raw.rstrip("\\")
+        # S12: hubfs URLs of manifested files are first-party, not external.
+        m = re.search(r"https://[A-Za-z0-9.\\-]*hubspotusercontent[^/]*/hubfs/\d+/.+?(?:[?#]|$)", url)
+        if m and ("/" + m.group(0).split("/hubfs/", 1)[1].split("/", 1)[1].rstrip("?#")) in manifest:
+            continue
         if url not in allowed:
             print(f"unallowlisted external URL {url} in {path.relative_to(theme)}"); sys.exit(1)
 PYEOF
