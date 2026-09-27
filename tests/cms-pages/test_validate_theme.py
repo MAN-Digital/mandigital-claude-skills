@@ -294,6 +294,62 @@ class ValidateThemeTests(unittest.TestCase):
         self.assertIn("FAIL: g2", result.stderr)
         self.assertIn("header.module/module.html:1", result.stderr)
 
+    # S9 (gate-2): HubSpot-reserved field names fail before upload.
+    def test_reserved_field_name_fails_gate2(self) -> None:
+        self._add_footer_text_field("body", "hello")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g2", result.stderr)
+        self.assertIn("reserved field name footer.module/body", result.stderr)
+
+    def test_reserved_child_name_fails_gate2(self) -> None:
+        fields = self.theme / "modules" / "footer.module" / "fields.json"
+        data = json.loads(fields.read_text(encoding="utf-8"))
+        data.append({"type": "group", "name": "columns", "label": "columns",
+                     "children": [{"type": "text", "name": "label", "label": "label"}]})
+        fields.write_text(json.dumps(data), encoding="utf-8")
+        footer = self.theme / "modules" / "footer.module" / "module.html"
+        footer.write_text(footer.read_text(encoding="utf-8")
+                          + "{{ module.columns }}{{ x.label }}\n",
+                          encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g2", result.stderr)
+        self.assertIn("reserved field name footer.module/label", result.stderr)
+
+    # S10 (gate-2): group default row keys must match child names.
+    def test_stale_default_row_key_fails_gate2(self) -> None:
+        fields = self.theme / "modules" / "footer.module" / "fields.json"
+        data = json.loads(fields.read_text(encoding="utf-8"))
+        data.append({"type": "group", "name": "columns", "label": "columns",
+                     "children": [{"type": "text", "name": "heading", "label": "heading"}],
+                     "default": [{"headline": "hi"}]})
+        fields.write_text(json.dumps(data), encoding="utf-8")
+        footer = self.theme / "modules" / "footer.module" / "module.html"
+        footer.write_text(footer.read_text(encoding="utf-8")
+                          + "{{ module.columns }}{{ x.heading }}\n",
+                          encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g2", result.stderr)
+        self.assertIn("default row key 'headline' matches no child of 'columns'",
+                      result.stderr)
+
+    # S11 (gate-2): unknown field types fail before upload.
+    def test_textarea_type_fails_gate2(self) -> None:
+        fields = self.theme / "modules" / "footer.module" / "fields.json"
+        data = json.loads(fields.read_text(encoding="utf-8"))
+        data.append({"type": "textarea", "name": "blurb", "label": "blurb",
+                     "default": "hi"})
+        fields.write_text(json.dumps(data), encoding="utf-8")
+        footer = self.theme / "modules" / "footer.module" / "module.html"
+        footer.write_text(footer.read_text(encoding="utf-8") + "{{ module.blurb }}\n",
+                          encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g2", result.stderr)
+        self.assertIn("invalid field type 'textarea' on 'blurb'", result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()

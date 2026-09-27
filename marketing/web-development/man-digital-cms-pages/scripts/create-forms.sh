@@ -244,7 +244,9 @@ def build_field(field):
         out["useCountryCodeSelect"] = bool(field.get("useCountryCodeSelect", False))
         out["validation"] = {"minAllowedDigits": 7, "maxAllowedDigits": 20}
     elif ftype == "select":
-        out["options"] = [{"label": o["label"], "value": o["value"]} for o in field["options"]]
+        # displayOrder is required on v3 options (verified live 2026-09-27).
+        out["options"] = [{"label": o["label"], "value": o["value"], "displayOrder": n}
+                          for n, o in enumerate(field["options"])]
         out["defaultValues"] = []
     return out
 
@@ -307,12 +309,14 @@ def build_payload(form, full_name):
                 "submitSize": "15px",
             },
             "submitButtonText": form.get("submitText", "Submit"),
-            "theme": "default",
+            "theme": "default_style",  # v3 enum: default is rejected (verified live 2026-09-27)
         },
-        "fieldGroups": [{"fields": api_fields,
+        # v3 caps a group at 3 fields (verified live 2026-09-27); chunk it.
+        # Shape mirrors a live GET: no richText key on the group.
+        "fieldGroups": [{"fields": api_fields[i:i + 3],
                          "groupType": "default_group",
-                         "richText": "",
-                         "richTextType": "text"}],
+                         "richTextType": "text"}
+                        for i in range(0, max(len(api_fields), 1), 3)],
         "formType": "hubspot",
         "legalConsentOptions": build_consent(form, consent_fields),
         "name": full_name,

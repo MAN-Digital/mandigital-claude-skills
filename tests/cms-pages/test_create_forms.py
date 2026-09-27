@@ -244,6 +244,29 @@ class CreateFormsTests(unittest.TestCase):
         self.assertIn("manual fallback", result.stderr)
         self.assertNotIn("pat-test-1234", result.stdout + result.stderr)
 
+    def test_payload_matches_live_v3_shape(self) -> None:
+        # theme default_style (not "default"), groups chunked <=3 fields,
+        # displayOrder on select options — all verified live 2026-09-27.
+        form = dict(CONTACT_FORM, fields=[
+            {"name": "firstname", "label": "First", "type": "text", "required": True},
+            {"name": "email", "label": "Email", "type": "email", "required": True},
+            {"name": "phone", "label": "Phone", "type": "phone", "required": False},
+            {"name": "course", "label": "Course", "type": "select", "required": True,
+             "options": [{"label": "A", "value": "a"}, {"label": "B", "value": "b"}]},
+        ])
+        log = self.tmp / "curl.log"
+        result = run_forms("--spec", str(write_spec(self.tmp, [form])),
+                           "--portal", "staging", "--config", str(self.config),
+                           "--token", "pat-test-1234",
+                           env_extra={"FAKE_CURL_LOG": str(log)})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        calls = log.read_text(encoding="utf-8")
+        self.assertIn('"theme": "default_style"', calls)
+        self.assertEqual(calls.count('"groupType": "default_group"'), 2)
+        self.assertIn('"displayOrder": 0', calls)
+        self.assertIn('"displayOrder": 1', calls)
+        self.assertNotIn('"richText": ""', calls)
+
     def test_token_env_resolves_named_var(self) -> None:
         cfg = write_config(self.tmp, None, extra={"tokenEnv": "HS_TOKEN_MINI_TEST"})
         result = run_forms("--spec", str(write_spec(self.tmp, [CONTACT_FORM])),

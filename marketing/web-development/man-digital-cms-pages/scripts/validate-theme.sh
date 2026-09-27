@@ -186,6 +186,105 @@ for mod in sorted((theme / "modules").glob("*.module")):
 PYEOF
 ) || fail 2 "$out"
 
+# S9 (gate-2: module wiring): HubSpot rejects these as field names at upload
+# ("field name cannot be '<name>'"), top-level or group children alike. List
+# verified live 2026-09-27 (upload error) + community reports; re-check on any
+# new "field name cannot be" failure and extend RESERVED.
+out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1
+import json, sys
+from pathlib import Path
+theme = Path(sys.argv[1])
+RESERVED = {"body", "label", "type", "name", "id", "class", "style",
+            "children", "default", "parent", "module"}
+def names(node):
+    if isinstance(node, dict):
+        if isinstance(node.get("name"), str):
+            yield node["name"]
+        for val in node.values():
+            yield from names(val)
+    elif isinstance(node, list):
+        for val in node:
+            yield from names(val)
+for mod in sorted((theme / "modules").glob("*.module")):
+    try:
+        fields = json.loads((mod / "fields.json").read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        continue  # malformed JSON is reported by the main gate-2/3 checks
+    for name in names(fields):
+        if name in RESERVED:
+            print(f"reserved field name {mod.name}/{name} (HubSpot rejects it at upload)")
+            sys.exit(1)
+PYEOF
+) || fail 2 "$out"
+
+# S10 (gate-2: module wiring): group/repeater `default` rows are keyed by child
+# field NAME — a row key with no matching child uploads as "Field <group>.null
+# is missing a label" (verified live 2026-09-27 after a rename fixed the
+# definitions but not the defaults). Every row-dict key must be a child name.
+out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1
+import json, sys
+from pathlib import Path
+theme = Path(sys.argv[1])
+def check(fields, where):
+    if isinstance(fields, dict):
+        fields = [fields]
+    for f in fields:
+        if not isinstance(f, dict):
+            continue
+        children = [c for c in (f.get("children") or []) if isinstance(c, dict)]
+        if children and isinstance(f.get("default"), list):
+            names = {c.get("name") for c in children}
+            for row in f["default"]:
+                if not isinstance(row, dict):
+                    continue
+                for key in row:
+                    if key not in names:
+                        print(f"{where}: default row key '{key}' matches no child "
+                              f"of '{f.get('name')}' (HubSpot uploads it as null)")
+                        sys.exit(1)
+        check(children, where)
+for mod in sorted((theme / "modules").glob("*.module")):
+    try:
+        fields = json.loads((mod / "fields.json").read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        continue  # malformed JSON is reported by the main gate-2/3 checks
+    check(fields, f"{mod.name}/fields.json")
+PYEOF
+) || fail 2 "$out"
+
+# S11 (gate-2: module wiring): field `type` must be HubSpot-valid — an unknown
+# type uploads as "'unknown' is not a valid field type" (verified live
+# 2026-09-27: "textarea" is NOT valid; use richtext for body copy).
+# Allowlist = types proven by the live portal backup + wet-test uploads. It is
+# deliberately closed: on a new legitimate type, verify by upload, then extend.
+out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1
+import json, sys
+from pathlib import Path
+theme = Path(sys.argv[1])
+VALID_TYPES = {"text", "richtext", "number", "boolean", "choice", "image",
+               "url", "link", "color", "font", "menu", "form", "group",
+               "blog"}
+def check(fields, where):
+    if isinstance(fields, dict):
+        fields = [fields]
+    for f in fields:
+        if not isinstance(f, dict):
+            continue
+        ftype = f.get("type")
+        if isinstance(ftype, str) and ftype not in VALID_TYPES:
+            print(f"{where}: invalid field type '{ftype}' on '{f.get('name')}' "
+                  f"(HubSpot uploads it as unknown)")
+            sys.exit(1)
+        check(f.get("children") or [], where)
+for mod in sorted((theme / "modules").glob("*.module")):
+    try:
+        fields = json.loads((mod / "fields.json").read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        continue  # malformed JSON is reported by the main gate-2/3 checks
+    check(fields, f"{mod.name}/fields.json")
+PYEOF
+) || fail 2 "$out"
+
 # ---- Gate 3: validity ----
 find "$theme_dir" -name '*.json' -print0 | python3 -c "
 import json, sys
