@@ -8,5 +8,10 @@ if [ "${FAKE_HS_ERRORS:-0}" = "1" ]; then
   echo "2 issues found."
   exit 0
 fi
+if [ "${FAKE_HS_CLEAN:-0}" = "1" ]; then
+  echo "Linting fixture-theme"
+  echo "0 issues found."
+  exit 0
+fi
 echo "fake-hs OK: $*"
 exit 0

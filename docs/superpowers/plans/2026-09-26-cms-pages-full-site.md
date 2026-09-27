@@ -1572,6 +1572,10 @@ Consolidated follow-ups (still open):
 - Spec drift: spec §Deploy Tooling `hubspot` mandate (contradicted by live CLI —
   runbook/playbook now say curl); unwired QA extras (CSS-split check,
   internal-link resolution); portals.yaml write-back never specified.
+- M-1: SB-2 bare-ERROR alternative false-positives on all-caps ERROR in
+  hs-echoed paths (fail-closed); tighten to ✖.*ERROR co-occurrence.
+- M-2: deploy.sh SB-7 scan treats unreadable/corrupt fields.json as non-form
+  (fail-open); fail loudly on ValueError.
 
 Evidence: `docs/superpowers/evidence/cms-pages-full-site/` (scenario-a/b/c.md,
 results.md, green.md, scope-findings.md, cli-help.txt, content-cmds.md,

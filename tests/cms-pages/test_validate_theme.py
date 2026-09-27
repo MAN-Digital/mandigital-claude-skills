@@ -166,6 +166,15 @@ class ValidateThemeTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("FAIL: g3", result.stderr)
 
+    def test_clean_lint_output_passes_gate3(self) -> None:
+        # SB-2 guard: a clean "0 issues found." lint summary must NOT trip the
+        # gate-3 NZ-issues detector — the lead-digit class must stay [1-9], so
+        # a future simplification to [0-9]+ fails loudly here, not in prod.
+        result = run_validator(self.theme, self.inventory, {"FAKE_HS_CLEAN": "1"})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        evidence = json.loads((self.theme / "QA-EVIDENCE.json").read_text(encoding="utf-8"))
+        self.assertEqual(evidence["gates"], {"g1": "pass", "g2": "pass", "g3": "pass", "g4": "pass"})
+
     def test_hs_account_passthrough_passes_clean(self) -> None:
         result = run_validator(self.theme, self.inventory, {"HS_ACCOUNT": "foo"})
         self.assertEqual(result.returncode, 0, result.stderr)
