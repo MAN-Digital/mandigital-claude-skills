@@ -30,12 +30,14 @@ def write_spec(tmp: Path, forms: list) -> Path:
     return spec
 
 
-def write_config(tmp: Path, provision: dict | None) -> Path:
+def write_config(tmp: Path, provision: dict | None, extra: dict | None = None) -> Path:
     cfg = tmp / "portals-forms.yaml"
     lines = ["portals:", "  - id: staging", "    portalId: 11111111",
              "    hsAccount: test-staging", "    theme: mini-staging",
              "    staging: true", "    blogId: null", "    domain: null",
              "    forms: {}"]
+    for key, value in (extra or {}).items():
+        lines.append(f"    {key}: {value}")
     if provision is not None:
         lines.append("    formsProvision:")
         for key, value in provision.items():
@@ -241,6 +243,26 @@ class CreateFormsTests(unittest.TestCase):
         self.assertEqual(result.returncode, 1, result.stdout)
         self.assertIn("manual fallback", result.stderr)
         self.assertNotIn("pat-test-1234", result.stdout + result.stderr)
+
+    def test_token_env_resolves_named_var(self) -> None:
+        cfg = write_config(self.tmp, None, extra={"tokenEnv": "HS_TOKEN_MINI_TEST"})
+        result = run_forms("--spec", str(write_spec(self.tmp, [CONTACT_FORM])),
+                           "--portal", "staging", "--config", str(cfg),
+                           env_extra={"HS_TOKEN_MINI_TEST": "pat-test-1234"})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("FORM_GUID contact_form=", result.stdout)
+
+    def test_token_env_unset_fails_closed(self) -> None:
+        cfg = write_config(self.tmp, None, extra={"tokenEnv": "HS_TOKEN_MINI_TEST"})
+        log = self.tmp / "curl.log"
+        result = run_forms("--spec", str(write_spec(self.tmp, [CONTACT_FORM])),
+                           "--portal", "staging", "--config", str(cfg),
+                           env_extra={"HS_TOKEN_MINI_TEST": "",
+                                      "FAKE_CURL_LOG": str(log)})
+        self.assertEqual(result.returncode, 1, result.stdout)
+        self.assertIn("HS_TOKEN_MINI_TEST", result.stderr)
+        self.assertIn("unset or empty", result.stderr)
+        self.assertFalse(log.exists(), "token failure must precede any network call")
 
 
 if __name__ == "__main__":

@@ -2,7 +2,8 @@
 # Guided config-driven HubSpot deploy. ZIP-first, evidence-checked, explicit auth.
 # Usage: deploy.sh [--portal ID] --zip FILE --config portals.yaml [--token T] [--dry-run] [--yes]
 # Env: HS_BIN (default hs), CURL_BIN (default curl), HS_TOKEN (token fallback),
-# CREATE_FORMS_BIN (default: create-forms.sh next to this script)
+# CREATE_FORMS_BIN (default: create-forms.sh next to this script),
+# plus the per-portal var named by the entry's tokenEnv key (runbook §1)
 # Exit codes: 0 ok, 1 failed check, 2 usage/unknown portal, 3 authorization required.
 # Step 4 note: live `hubspot` CLI has no cms/api subcommands (CRM-only CLI,
 # per references/api-playbook.md §1), so content probes use verified REST paths
@@ -33,7 +34,7 @@ def die(msg, code=1):
 
 def parse(argv):
     opts = {"portal": None, "zip": None, "config": None, "token": os.environ.get("HS_TOKEN"),
-            "dry_run": False, "yes": False}
+            "token_flag": False, "dry_run": False, "yes": False}
     valued = {"--portal": "portal", "--zip": "zip", "--config": "config", "--token": "token"}
     i = 0
     while i < len(argv):
@@ -41,7 +42,10 @@ def parse(argv):
         if a in valued:
             if i + 1 >= len(argv):
                 die(f"missing value for {a}", 2)
-            opts[valued[a]] = argv[i + 1]; i += 2
+            opts[valued[a]] = argv[i + 1]
+            if a == "--token":
+                opts["token_flag"] = True
+            i += 2
         elif a == "--dry-run": opts["dry_run"] = True; i += 1
         elif a == "--yes": opts["yes"] = True; i += 1
         else: die(f"unknown flag: {a}", 2)
@@ -80,6 +84,39 @@ def pick_portal(portals, wanted):
     if choice not in portals:
         die(f"unknown portal: {choice}", 2)
     return choice, portals[choice]
+
+def resolve_token(opts, portal):
+    """Token precedence: --token flag > portal tokenEnv var > HS_TOKEN > prompt.
+
+    tokenEnv names the env var holding THIS portal's private-app token, so each
+    portal entry points at its own secret when working across portals. Fail
+    closed: a configured-but-unset tokenEnv dies instead of silently falling
+    back to another portal's HS_TOKEN. Dry-run never needs a token, so the
+    fail-closed check is skipped there. Mirrors the same-named helper in
+    create-forms.sh (no shared lib by repo convention — keep in sync).
+    """
+    if opts["token_flag"]:
+        return opts["token"]
+    tenv = portal.get("tokenEnv")
+    if tenv is not None:
+        if not isinstance(tenv, str) or not tenv.strip():
+            die("config tokenEnv must be a non-empty string")
+        val = os.environ.get(tenv.strip())
+        if val:
+            return val
+        if not opts["dry_run"]:
+            die(f"token for portal missing: env var {tenv.strip()} (tokenEnv) is unset or empty")
+    if opts["token"]:
+        return opts["token"]
+    if opts["dry_run"]:
+        return "DRY-RUN-TOKEN"
+    try:
+        token = getpass.getpass("Private-app token (hidden, never stored): ").strip()
+    except EOFError:
+        die("no token supplied", 2)
+    if not token:
+        die("no token supplied", 2)
+    return token
 
 def forms_provision(portal, config_dir):
     """Validate the optional formsProvision block; {} when absent (back-compat).
@@ -131,14 +168,7 @@ def main():
     opts = parse(sys.argv[1:])
     portals = load_config(opts["config"])
     pid, portal = pick_portal(portals, opts["portal"])
-    token = opts["token"]
-    if not token and not opts["dry_run"]:
-        try:
-            token = getpass.getpass("Private-app token (hidden, never stored): ").strip()
-        except EOFError:
-            die("no token supplied", 2)
-    if not token:
-        token = "DRY-RUN-TOKEN"
+    token = resolve_token(opts, portal)
     work = tempfile.mkdtemp(prefix="cms-deploy-")
     try:
         try:

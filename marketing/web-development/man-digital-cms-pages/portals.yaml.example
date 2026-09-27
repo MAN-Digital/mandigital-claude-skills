@@ -1,6 +1,10 @@
 # Which portal to deploy to + how. deploy.sh reads this file live.
 # Copy this file to portals.yaml (same folder, gitignored) and edit values.
-# NEVER put tokens/keys in this file -- pass the token via --token "$HS_TOKEN".
+# NEVER put tokens/keys in this file -- each entry names its token's env var
+# (tokenEnv); the secret itself lives in your shell env, e.g.:
+#   export HS_TOKEN_STAGING='pat-...'   # staging portal's private-app token
+#   export HS_TOKEN_PROD='pat-...'      # prod portal's private-app token
+# Precedence per deploy: --token flag > tokenEnv var > HS_TOKEN > hidden prompt.
 portals:
   # --- staging entry (safe playground) ---
   - id: staging            # short name YOU pick; used as: deploy.sh --portal staging
@@ -11,6 +15,7 @@ portals:
     blogId: null           # HubSpot blog id, or null to auto-provision one
     domain: null           # public domain, or null (informational only)
     forms: {}              # module-name -> HubSpot form GUID map (empty = no forms yet)
+    tokenEnv: HS_TOKEN_STAGING  # env var holding THIS portal's token (unset = use HS_TOKEN/prompt)
     # formsProvision: {}   # OPTIONAL (absent = manual forms, old behavior). When enabled,
                            # deploy.sh runs create-forms.sh BEFORE the theme upload (plan step 2b):
     # formsProvision:
@@ -28,3 +33,4 @@ portals:
     domain: www.example.com        # <-- REPLACE with real domain, or null
     forms:                         # one line per form module in the theme:
       enquiry_form: "00000000-0000-0000-0000-000000000000"  # <-- REPLACE with real form GUID
+    tokenEnv: HS_TOKEN_PROD      # <-- env var holding THIS portal's token

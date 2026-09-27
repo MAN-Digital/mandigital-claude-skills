@@ -146,11 +146,14 @@ class DeployTests(unittest.TestCase):
         )
         return Path(packaged.stdout.strip().removeprefix("PACKAGED: ").strip())
 
-    def _config_with_forms(self, forms: dict, provision: dict | None = None) -> Path:
+    def _config_with_forms(self, forms: dict, provision: dict | None = None,
+                             extra: dict | None = None) -> Path:
         cfg = self.tmp / "portals-forms.yaml"
         lines = ["portals:", "  - id: staging", "    portalId: 11111111",
                  "    hsAccount: test-staging", "    theme: mini-staging",
                  "    staging: true", "    blogId: null", "    domain: null"]
+        for key, value in (extra or {}).items():
+            lines.append(f"    {key}: {value}")
         if forms:
             lines.append("    forms:")
             for key, guid in forms.items():
@@ -279,6 +282,34 @@ class DeployTests(unittest.TestCase):
                                 "--token", "pat-test-1234", "--dry-run", "--yes")
         self.assertEqual(result.returncode, 1, result.stderr)
         self.assertIn("escapes theme dir", result.stderr)
+
+    def test_token_env_resolves_named_var_live(self) -> None:
+        result = self.run_deploy("--portal", "staging", "--zip", str(self.zip),
+                                "--config", str(self._config_with_forms(
+                                    {}, extra={"tokenEnv": "HS_TOKEN_MINI_TEST"})),
+                                "--yes",
+                                env_extra={"HS_TOKEN_MINI_TEST": "pat-test-1234"})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("[LIVE] done", result.stdout)
+
+    def test_token_env_unset_fails_closed_live(self) -> None:
+        result = self.run_deploy("--portal", "staging", "--zip", str(self.zip),
+                                "--config", str(self._config_with_forms(
+                                    {}, extra={"tokenEnv": "HS_TOKEN_MINI_TEST"})),
+                                "--yes",
+                                env_extra={"HS_TOKEN_MINI_TEST": ""})
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertIn("HS_TOKEN_MINI_TEST", result.stderr)
+        self.assertIn("unset or empty", result.stderr)
+
+    def test_token_flag_overrides_token_env(self) -> None:
+        result = self.run_deploy("--portal", "staging", "--zip", str(self.zip),
+                                "--config", str(self._config_with_forms(
+                                    {}, extra={"tokenEnv": "HS_TOKEN_MINI_TEST"})),
+                                "--token", "pat-test-1234", "--yes",
+                                env_extra={"HS_TOKEN_MINI_TEST": ""})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("[LIVE] done", result.stdout)
 
 
 if __name__ == "__main__":

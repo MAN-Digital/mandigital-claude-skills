@@ -3,7 +3,8 @@
 # Idempotent by form name: look up first, skip existing (or --update to replace).
 # Usage: create-forms.sh [--spec SPEC.json] --portal ID --config portals.yaml [--token T]
 #                        [--prefix P] [--update] [--dry-run] [--out MAP.json]
-# Env: CURL_BIN (default curl), HS_TOKEN (token fallback)
+# Env: CURL_BIN (default curl), HS_TOKEN (token fallback),
+# plus the per-portal var named by the entry's tokenEnv key (runbook §1)
 # Exit codes: 0 ok, 1 API/network failure, 2 usage/config/spec error.
 # Spec format + design-field mapping: references/deploy-runbook.md §"Form provisioning".
 # API shapes mirror the verified OpenAPI on the create/update-form doc pages
@@ -33,8 +34,8 @@ def die(msg, code=1):
 
 def parse(argv):
     opts = {"spec": None, "portal": None, "config": None,
-            "token": os.environ.get("HS_TOKEN"), "prefix": None,
-            "update": False, "dry_run": False, "out": None}
+            "token": os.environ.get("HS_TOKEN"), "token_flag": False,
+            "prefix": None, "update": False, "dry_run": False, "out": None}
     valued = {"--spec": "spec", "--portal": "portal", "--config": "config",
               "--token": "token", "--prefix": "prefix", "--out": "out"}
     i = 0
@@ -43,7 +44,10 @@ def parse(argv):
         if a in valued:
             if i + 1 >= len(argv):
                 die(f"missing value for {a}", 2)
-            opts[valued[a]] = argv[i + 1]; i += 2
+            opts[valued[a]] = argv[i + 1]
+            if a == "--token":
+                opts["token_flag"] = True
+            i += 2
         elif a == "--update": opts["update"] = True; i += 1
         elif a == "--dry-run": opts["dry_run"] = True; i += 1
         else: die(f"unknown flag: {a}", 2)
@@ -83,6 +87,38 @@ def forms_provision(portal):
     if unknown:
         die(f"config formsProvision has unknown key(s): {', '.join(unknown)}", 2)
     return raw
+
+def resolve_token(opts, portal):
+    """Token precedence: --token flag > portal tokenEnv var > HS_TOKEN > prompt.
+
+    tokenEnv names the env var holding THIS portal's private-app token, so each
+    portal entry points at its own secret when working across portals. Fail
+    closed: a configured-but-unset tokenEnv dies instead of silently falling
+    back to another portal's HS_TOKEN. Mirrors the same-named helper in
+    deploy.sh (no shared lib by repo convention — keep in sync).
+    """
+    if opts["token_flag"]:
+        return opts["token"]
+    tenv = portal.get("tokenEnv")
+    if tenv is not None:
+        if not isinstance(tenv, str) or not tenv.strip():
+            die("config tokenEnv must be a non-empty string")
+        val = os.environ.get(tenv.strip())
+        if val:
+            return val
+        if not opts["dry_run"]:
+            die(f"token for portal missing: env var {tenv.strip()} (tokenEnv) is unset or empty")
+    if opts["token"]:
+        return opts["token"]
+    if opts["dry_run"]:
+        return "DRY-RUN-TOKEN"
+    try:
+        token = getpass.getpass("Private-app token (hidden, never stored): ").strip()
+    except EOFError:
+        die("no token supplied", 2)
+    if not token:
+        die("no token supplied", 2)
+    return token
 
 def spec_error(where, msg):
     die(f"spec error ({where}): {msg}", 2)
@@ -302,14 +338,7 @@ def main():
             print(f"[DRY-RUN] {f['module']}: \"{full_names[f['module']]}\" "
                   f"({len(f['fields'])} field(s): {kinds})")
         return
-    token = opts["token"]
-    if not token:
-        try:
-            token = getpass.getpass("Private-app token (hidden, never stored): ").strip()
-        except EOFError:
-            die("no token supplied", 2)
-    if not token:
-        die("no token supplied", 2)
+    token = resolve_token(opts, portal)
 
     hdr_fd, hdr_path = tempfile.mkstemp(prefix="cms-forms-hdr-")  # 0600: token off ps argv
     try:

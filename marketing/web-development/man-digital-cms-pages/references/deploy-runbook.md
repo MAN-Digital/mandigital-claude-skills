@@ -27,7 +27,9 @@ portals:
       enquiry_form: abcdef12-3456-7890-abcd-ef1234567890
 ```
 
-Fields: `id` (deploy.sh selector), `portalId`, `hsAccount` (`hs` account name, PAK-based, onboarded via `hs account auth`), `theme` (destination theme folder), `staging` (exactly one `true`), `blogId` (HubSpot blog id or null to provision), `domain`, `forms` (module-name → HubSpot form GUID map), `formsProvision` (optional: `{enabled, spec, prefix}` — form auto-provisioning, see "Form provisioning" below; absent = manual forms, old behavior). The private-app token is NEVER in this file — pass `--token "$HS_TOKEN"`.
+Fields: `id` (deploy.sh selector), `portalId`, `hsAccount` (`hs` account name, PAK-based, onboarded via `hs account auth`), `theme` (destination theme folder), `staging` (exactly one `true`), `blogId` (HubSpot blog id or null to provision), `domain`, `forms` (module-name → HubSpot form GUID map), `tokenEnv` (optional: name of the env var holding THIS portal's private-app token — e.g. `HS_TOKEN_EXTEK`; absent = shared `HS_TOKEN`/prompt, old behavior), `formsProvision` (optional: `{enabled, spec, prefix}` — form auto-provisioning, see "Form provisioning" below; absent = manual forms, old behavior). The private-app token is NEVER in this file — the entry only names its env var.
+
+Token precedence per run: `--token` flag → `tokenEnv` var → `HS_TOKEN` → hidden prompt (live) / placeholder (dry-run). When switching portals, give each entry its own `tokenEnv` var (`HS_TOKEN_EXTEK`, `HS_TOKEN_ACME`, …) and export each secret in your shell (`export HS_TOKEN_EXTEK='pat-…'` — add to `~/.zshrc` to persist). Fail-closed: a configured-but-unset `tokenEnv` stops the run instead of silently using another portal's token.
 
 ## 2. Guided deploy (default)
 
