@@ -1,0 +1,21 @@
+# Example portal config for man-digital-cms-pages deploy.sh
+# Copy to portals.yaml (same dir, gitignored) and edit values.
+# NEVER put tokens in this file — pass via --token "$HS_TOKEN".
+portals:
+  - id: staging
+    portalId: 146425426
+    hsAccount: man-digital-development
+    theme: dryrun-test
+    staging: true
+    blogId: null
+    domain: null
+    forms: {}
+  - id: prod
+    portalId: 22222222
+    hsAccount: prod
+    theme: my-theme
+    staging: false
+    blogId: 123456789
+    domain: www.example.com
+    forms:
+      enquiry_form: "00000000-0000-0000-0000-000000000000"
