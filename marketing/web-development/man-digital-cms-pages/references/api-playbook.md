@@ -43,6 +43,7 @@ All paths verified against the method+path on the linked doc page.
 | Replace form | `PUT /marketing/v3/forms/{formId}` | Replace ALL fields of a form definition; scope `forms` (create-forms.sh `--update`) | https://developers.hubspot.com/docs/api-reference/legacy/marketing/forms/update-form |
 | Get blog details | `GET /cms/v3/blog-settings/settings/{blogId}` | Retrieve blog by ID | https://developers.hubspot.com/docs/api-reference/legacy/cms/blogs/blog-settings/get-blog |
 | Provision blog | UNVERIFIED — no create-blog endpoint in the reference | Create blog if missing | https://developers.hubspot.com/docs/api-reference/legacy/cms/blogs/blog-settings/guide |
+| Assign blog templates | UI-ONLY — PUT/PATCH on blog-settings return 405 (verified 2026-09-28) | Blog → Settings → Templates; verify-blog.sh reports/confirms | https://developers.hubspot.com/docs/api-reference/legacy/cms/blogs/blog-settings/get-blog |
 | List/create menus | UNVERIFIED — no public menus REST API in the reference | Navigation menu wiring | https://developers.hubspot.com/docs/cms/start-building/building-blocks/modules/menus-and-navigation |
 | Upload image | `POST /files/v3/files` | multipart `file` + `fileName` + `folderPath` (auto-created if missing) + `options={"access":"PUBLIC_INDEXABLE","overwrite":true}` | https://developers.hubspot.com/docs/api-reference/legacy/files/files/upload-file |
 
