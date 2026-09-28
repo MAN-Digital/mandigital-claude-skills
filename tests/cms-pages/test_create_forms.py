@@ -346,6 +346,21 @@ class CreateFormsTests(unittest.TestCase):
         self.assertIn("no token supplied", result.stderr)
         self.assertFalse(log.exists(), "token failure must precede any network call")
 
+    def test_whitespace_token_flag_falls_through_to_env(self) -> None:
+        log = self.tmp / "curl.log"
+        result = run_forms("--spec", str(write_spec(self.tmp, [CONTACT_FORM])),
+                           "--portal", "staging", "--config", str(self.config),
+                           "--token", "   ",
+                           env_extra={"HS_TOKEN": "pat-test-1234",
+                                      "FAKE_CURL_LOG": str(log),
+                                      "FAKE_CURL_ECHO_AUTH": "1"})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        auths = [line for line in log.read_text(encoding="utf-8").splitlines()
+                 if line.startswith("AUTH ")]
+        self.assertTrue(auths, "expected AUTH lines in curl log")
+        for line in auths:
+            self.assertEqual(line, "AUTH pat-test-1234")
+
 
 if __name__ == "__main__":
     unittest.main()

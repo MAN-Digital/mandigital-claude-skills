@@ -237,6 +237,18 @@ class ValidateThemeTests(unittest.TestCase):
         # the dead-manifest check runs first.
         self.assertIn("dead manifest entry (unreferenced): /brand/x.jpg", result.stderr)
 
+    def test_lookalike_hubfs_url_outside_fields_rejected(self) -> None:
+        # Pins the exemption call site directly: manifest stays satisfied via
+        # the normal src, so only the external-URL check can reject this.
+        header = self.theme / "modules" / "header.module" / "module.html"
+        url = "https://hubspotusercontent.attacker.invalid/hubfs/1/brand/x.jpg"
+        header.write_text(header.read_text(encoding="utf-8") + f"<!-- {url} -->\n",
+                          encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g4", result.stderr)
+        self.assertIn(f"unallowlisted external URL {url} in", result.stderr)
+
     # S4 (gate-2): form-type field requires a native {% form %} tag.
     def _add_form_module(self, name: str, html: str) -> None:
         mod = self.theme / "modules" / f"{name}.module"
