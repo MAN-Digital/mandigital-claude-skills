@@ -311,6 +311,15 @@ def main():
             for line in (forms_proc.stdout or "").splitlines():
                 if line.startswith("FORM_GUID "):
                     print(f"[LIVE] {line}")
+        # Strip build-only artifacts from staging before upload: manifests and
+        # image sources are consumed above and must not ship as theme files
+        # (verified 2026-09-27: they were uploaded into Design Manager).
+        for junk in ("QA-EVIDENCE.json", "assets.json", "deploy.json", "INVENTORY.json"):
+            try:
+                os.remove(os.path.join(theme_dir, junk))
+            except OSError:
+                pass
+        shutil.rmtree(os.path.join(theme_dir, "images"), ignore_errors=True)
         run_live([HS_BIN, "cms", "upload", theme_dir, portal["theme"], f"--account={portal['hsAccount']}"], "theme upload")
         for name, probe_path in CONTENT_PROBES:
             curl_with_auth([f"https://api.hubapi.com{probe_path}?limit=1"], f"probe {name}")

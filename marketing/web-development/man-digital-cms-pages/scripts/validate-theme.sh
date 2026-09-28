@@ -407,6 +407,29 @@ for path in sorted(theme.rglob("*")):
 PYEOF
 ) || fail 4 "$out"
 
+# S13 (gate-4: links + assets): no vendor watermarks. Past agency branding
+# ("transjt", any case) must never ship in theme files — it leaked once via a
+# leftover helper (js/tj-forms.js carried a "transjt" header comment, found
+# live 2026-09-27). Extend WATERMARKS if another vendor string appears.
+out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1
+import sys
+from pathlib import Path
+theme = Path(sys.argv[1])
+WATERMARKS = ("transjt",)
+for path in sorted(theme.rglob("*")):
+    if not path.is_file() or path.suffix in (".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg", ".ico"):
+        continue
+    try:
+        text = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        continue
+    lowered = text.lower()
+    for mark in WATERMARKS:
+        if mark in lowered:
+            print(f"banned vendor string {mark!r} in {path.relative_to(theme)}"); sys.exit(1)
+PYEOF
+) || fail 4 "$out"
+
 # S6 (gate-4: links + assets): no [...] placeholder text in fields.json
 # DEFAULT string values (they render to visitors). Parsed-JSON walk, not raw
 # text: structural brackets (arrays) never match — only string VALUES held in

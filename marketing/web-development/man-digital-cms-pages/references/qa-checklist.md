@@ -35,6 +35,7 @@ Run in order. Any failure → fix → restart at gate 1. Max 3 fix rounds, then 
 - No `[...]`-bracket placeholder text in any `fields.json` default string value (parsed-value scan — structural JSON brackets never match).
 - Every `assets.json` entry is referenced by at least one default (no dead uploads).
 - No `localhost`, `127.0.0.1`, `placehold.`, `lorempixel`, `example.com` strings anywhere.
+- No vendor watermarks (S13): `transjt` in any case fails the gate — past agency branding must never ship.
 - Every other external `http(s)` URL appears in `INVENTORY.json → external_urls` or the gate fails. Manifested-file hubfs URLs are first-party and need no allowlisting.
 
 ## Gate 5 — Editor compatibility (staging-verified)

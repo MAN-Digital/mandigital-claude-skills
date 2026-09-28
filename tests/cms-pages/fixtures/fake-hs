@@ -22,5 +22,10 @@ if [ "${1:-}" = "filemanager" ] && [ "${2:-}" = "fetch" ]; then
   echo "fake-hs fetch OK: $*"
   exit 0
 fi
+# FAKE_HS_LOG=<file>: on `cms upload <src>`, record the uploaded tree so
+# tests can prove build artifacts were stripped from staging.
+if [ "${1:-}" = "cms" ] && [ "${2:-}" = "upload" ] && [ -n "${FAKE_HS_LOG:-}" ]; then
+  (cd "${3:-.}" && find . | sort) >> "$FAKE_HS_LOG" 2>/dev/null
+fi
 echo "fake-hs OK: $*"
 exit 0
