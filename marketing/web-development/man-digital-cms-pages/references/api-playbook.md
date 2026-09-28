@@ -39,6 +39,8 @@ All paths verified against the method+path on the linked doc page.
 | Create blog post | `POST /cms/v3/blogs/posts` | Create post with content body | https://developers.hubspot.com/docs/api-reference/legacy/cms/blogs/posts/create-post |
 | List forms | `GET /marketing/v3/forms` | Form inventory for mapping | https://developers.hubspot.com/docs/api-reference/legacy/marketing/forms/get-forms |
 | Read form | `GET /marketing/v3/forms/{formId}` | Get form definition by ID | https://developers.hubspot.com/docs/api-reference/legacy/marketing/forms/get-form |
+| Create form | `POST /marketing/v3/forms` | Create form; 201 + `id` on success; scope `forms`; create-forms.sh sends the full `HubSpotFormDefinitionCreateRequest` (archived, configuration, createdAt/updatedAt, displayOptions, fieldGroups, formType `hubspot`, legalConsentOptions, name) | https://developers.hubspot.com/docs/api-reference/legacy/marketing/forms/create-form |
+| Replace form | `PUT /marketing/v3/forms/{formId}` | Replace ALL fields of a form definition; scope `forms` (create-forms.sh `--update`) | https://developers.hubspot.com/docs/api-reference/legacy/marketing/forms/update-form |
 | Get blog details | `GET /cms/v3/blog-settings/settings/{blogId}` | Retrieve blog by ID | https://developers.hubspot.com/docs/api-reference/legacy/cms/blogs/blog-settings/get-blog |
 | Provision blog | UNVERIFIED — no create-blog endpoint in the reference | Create blog if missing | https://developers.hubspot.com/docs/api-reference/legacy/cms/blogs/blog-settings/guide |
 | List/create menus | UNVERIFIED — no public menus REST API in the reference | Navigation menu wiring | https://developers.hubspot.com/docs/cms/start-building/building-blocks/modules/menus-and-navigation |
@@ -50,7 +52,7 @@ All paths verified against the method+path on the linked doc page.
 |---|---|---|---|
 | CMS pages/blog read+write+publish | `content` (sites, landing pages, email, blog, campaigns; needs CMS/Marketing Hub Pro/Enterprise) | PAK for `hs` file ops; private-app token for REST (pages/blog APIs) | https://developers.hubspot.com/docs/apps/legacy-apps/authentication/scopes |
 | File Manager upload | `files` (`files.ui_hidden.read` also accepted) | PAK (`hs filemanager upload`) or token (Files API) | https://developers.hubspot.com/docs/api-reference/latest/files/guide |
-| Forms read/map | `forms` | Private-app token (REST; `hs`/`hubspot` have no forms surface) | https://developers.hubspot.com/docs/apps/legacy-apps/authentication/scopes |
+| Forms read/create/map | `forms` | Private-app token (REST; `hs`/`hubspot` have no forms surface) | https://developers.hubspot.com/docs/apps/legacy-apps/authentication/scopes |
 | Account info read | None for primary paths: `hs account info` (PAK, verified live) or `POST /oauth/v2/private-apps/get/access-token-info` (token self-describes, no scope needed); raw `GET /account-info/2026-09/details` needs `oauth` — docs only note `oauth` is "added by default to all public apps" and don't confirm private-app token coverage, so it may 403 | PAK + token | https://developers.hubspot.com/docs/api-reference/latest/account/account-information/guide |
 
 Onboarding: obtain the PAK from `app.hubspot.com/l/personal-access-key` first,

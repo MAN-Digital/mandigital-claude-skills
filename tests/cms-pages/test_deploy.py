@@ -43,12 +43,15 @@ class DeployTests(unittest.TestCase):
     def tearDown(self) -> None:
         shutil.rmtree(self.tmp, ignore_errors=True)
 
-    def run_deploy(self, *args: str, env_extra: dict | None = None) -> subprocess.CompletedProcess[str]:
+    def run_deploy(self, *args: str, env_extra: dict | None = None,
+                   env_drop: list[str] | None = None) -> subprocess.CompletedProcess[str]:
         env = dict(os.environ)
         env["HS_BIN"] = str(FIX / "fake-hs")
         env["CURL_BIN"] = str(FIX / "fake-curl")
         if env_extra:
             env.update(env_extra)
+        for key in env_drop or []:
+            env.pop(key, None)
         return subprocess.run(
             [str(SKILL_SCRIPTS / "deploy.sh"), *args],
             text=True, capture_output=True, env=env, input="",
@@ -107,7 +110,7 @@ class DeployTests(unittest.TestCase):
         bad.write_text("{{{\nnot: [valid\n", encoding="utf-8")
         result = self.run_deploy("--portal", "staging", "--zip", str(self.zip), "--config", str(bad),
                                 "--token", "pat-test-1234", "--dry-run", "--yes")
-        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertEqual(result.returncode, 2, result.stderr)
         self.assertNotIn("Traceback", result.stderr)
 
     def _zip_with_form_module(self, name: str = "contact_form") -> Path:
@@ -126,8 +129,10 @@ class DeployTests(unittest.TestCase):
             {"type": "form", "name": "hs_form", "label": "HubSpot form",
              "default": {"form_id": ""}},
         ]), encoding="utf-8")
+        # S4: form modules must render via a native {% form %} tag.
         (mod / "module.html").write_text(
-            '<section id="{{ module.section_id }}">{{ module.hs_form }}</section>\n',
+            f'<section id="{{{{ module.section_id }}}}">{{% form "{name}_instance" '
+            'form_to_use="{{ module.hs_form.form_id }}" %}</section>\n',
             encoding="utf-8")
         (mod / "module.css").write_text("/* form module */\n", encoding="utf-8")
         out = self.tmp / "dist-form"
@@ -144,19 +149,37 @@ class DeployTests(unittest.TestCase):
         )
         return Path(packaged.stdout.strip().removeprefix("PACKAGED: ").strip())
 
-    def _config_with_forms(self, forms: dict) -> Path:
+    def _config_with_forms(self, forms: dict, provision: dict | None = None,
+                             extra: dict | None = None) -> Path:
         cfg = self.tmp / "portals-forms.yaml"
         lines = ["portals:", "  - id: staging", "    portalId: 11111111",
                  "    hsAccount: test-staging", "    theme: mini-staging",
                  "    staging: true", "    blogId: null", "    domain: null"]
+        for key, value in (extra or {}).items():
+            lines.append(f"    {key}: {value}")
         if forms:
             lines.append("    forms:")
             for key, guid in forms.items():
                 lines.append(f'      {key}: "{guid}"')
         else:
             lines.append("    forms: {}")
+        if provision is not None:
+            lines.append("    formsProvision:")
+            for key, value in provision.items():
+                rendered = "true" if value is True else "false" if value is False else f'"{value}"'
+                lines.append(f"      {key}: {rendered}")
         cfg.write_text("\n".join(lines) + "\n", encoding="utf-8")
         return cfg
+
+    def _write_spec(self, modules: list[str]) -> Path:
+        spec = self.tmp / "forms-spec.json"
+        spec.write_text(json.dumps({"forms": [
+            {"module": module, "name": module.replace("_", " ").title(),
+             "fields": [{"name": "email", "label": "Email", "type": "email",
+                         "required": True}]}
+            for module in modules
+        ]}), encoding="utf-8")
+        return spec
 
     def test_unmapped_form_module_refuses_dry_run(self) -> None:
         zip_path = self._zip_with_form_module()
@@ -174,6 +197,63 @@ class DeployTests(unittest.TestCase):
                                 "--token", "pat-test-1234", "--dry-run", "--yes")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("DRY-RUN", result.stdout)
+
+    def test_provisioned_form_module_dry_run_ok(self) -> None:
+        zip_path = self._zip_with_form_module()
+        spec = self._write_spec(["contact_form"])
+        result = self.run_deploy("--portal", "staging", "--zip", str(zip_path),
+                                "--config", str(self._config_with_forms(
+                                    {}, {"enabled": True, "spec": str(spec)})),
+                                "--token", "pat-test-1234", "--dry-run", "--yes")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("2b. provision forms: 1 form(s)", result.stdout)
+        self.assertIn("1 provisioned form(s)", result.stdout)
+
+    def test_provision_live_surfaces_guids(self) -> None:
+        zip_path = self._zip_with_form_module()
+        spec = self._write_spec(["contact_form"])
+        result = self.run_deploy("--portal", "staging", "--zip", str(zip_path),
+                                "--config", str(self._config_with_forms(
+                                    {}, {"enabled": True, "spec": str(spec)})),
+                                "--token", "pat-test-1234", "--yes")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("FORM_GUID contact_form=11111111-1111-1111-1111-111111111111", result.stdout)
+        self.assertIn("1 form(s) provisioned", result.stdout)
+
+    def test_provision_disabled_keeps_fail_closed(self) -> None:
+        zip_path = self._zip_with_form_module()
+        spec = self._write_spec(["contact_form"])
+        result = self.run_deploy("--portal", "staging", "--zip", str(zip_path),
+                                "--config", str(self._config_with_forms(
+                                    {}, {"enabled": False, "spec": str(spec)})),
+                                "--token", "pat-test-1234", "--dry-run", "--yes")
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        self.assertIn("contact_form", result.stderr)
+        self.assertNotIn("2b. provision forms", result.stdout)
+
+    def test_provision_malformed_is_clean_error(self) -> None:
+        cfg = self.tmp / "bad-provision.yaml"
+        cfg.write_text("portals:\n  - id: staging\n    portalId: 11111111\n"
+                       "    hsAccount: test-staging\n    theme: mini-staging\n"
+                       "    staging: true\n    blogId: null\n    domain: null\n"
+                       "    forms: {}\n    formsProvision: [not, a, mapping]\n",
+                       encoding="utf-8")
+        result = self.run_deploy("--portal", "staging", "--zip", str(self.zip),
+                                "--config", str(cfg),
+                                "--token", "pat-test-1234", "--dry-run", "--yes")
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertIn("formsProvision must be a mapping", result.stderr)
+        self.assertNotIn("Traceback", result.stderr)
+
+    def test_provision_missing_spec_is_clean_error(self) -> None:
+        result = self.run_deploy("--portal", "staging", "--zip", str(self.zip),
+                                "--config", str(self._config_with_forms(
+                                    {}, {"enabled": True,
+                                         "spec": str(self.tmp / "no-such-spec.json")})),
+                                "--token", "pat-test-1234", "--dry-run", "--yes")
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertIn("cannot read formsProvision.spec", result.stderr)
+        self.assertNotIn("Traceback", result.stderr)
 
     def test_traversal_refused(self) -> None:
         theme = self.tmp / "evil-theme"
@@ -205,6 +285,98 @@ class DeployTests(unittest.TestCase):
                                 "--token", "pat-test-1234", "--dry-run", "--yes")
         self.assertEqual(result.returncode, 1, result.stderr)
         self.assertIn("escapes theme dir", result.stderr)
+
+    def test_token_env_resolves_named_var_live(self) -> None:
+        result = self.run_deploy("--portal", "staging", "--zip", str(self.zip),
+                                "--config", str(self._config_with_forms(
+                                    {}, extra={"tokenEnv": "HS_TOKEN_MINI_TEST"})),
+                                "--yes",
+                                env_extra={"HS_TOKEN_MINI_TEST": "pat-test-1234"})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("[LIVE] done", result.stdout)
+
+    def test_token_env_unset_fails_closed_live(self) -> None:
+        result = self.run_deploy("--portal", "staging", "--zip", str(self.zip),
+                                "--config", str(self._config_with_forms(
+                                    {}, extra={"tokenEnv": "HS_TOKEN_MINI_TEST"})),
+                                "--yes",
+                                env_extra={"HS_TOKEN_MINI_TEST": ""})
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertIn("HS_TOKEN_MINI_TEST", result.stderr)
+        self.assertIn("unset or empty", result.stderr)
+
+    def test_token_flag_overrides_token_env(self) -> None:
+        result = self.run_deploy("--portal", "staging", "--zip", str(self.zip),
+                                "--config", str(self._config_with_forms(
+                                    {}, extra={"tokenEnv": "HS_TOKEN_MINI_TEST"})),
+                                "--token", "pat-test-1234", "--yes",
+                                env_extra={"HS_TOKEN_MINI_TEST": ""})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("[LIVE] done", result.stdout)
+
+    def test_flag_token_reaches_provisioning_child(self) -> None:
+        # Split-brain guard: with conflicting credentials, parent AND child
+        # must both present the --token flag value, never tokenEnv's.
+        zip_path = self._zip_with_form_module()
+        spec = self._write_spec(["contact_form"])
+        log = self.tmp / "curl.log"
+        result = self.run_deploy("--portal", "staging", "--zip", str(zip_path),
+                                "--config", str(self._config_with_forms(
+                                    {}, {"enabled": True, "spec": str(spec)},
+                                    extra={"tokenEnv": "HS_TOKEN_MINI_TEST"})),
+                                "--token", "pat-right-portal", "--yes",
+                                env_extra={"HS_TOKEN_MINI_TEST": "pat-wrong-portal",
+                                           "FAKE_CURL_LOG": str(log),
+                                           "FAKE_CURL_ECHO_AUTH": "1"})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("FORM_GUID contact_form=", result.stdout)
+        calls = log.read_text(encoding="utf-8")
+        auths = [line for line in calls.splitlines() if line.startswith("AUTH ")]
+        self.assertTrue(auths, "expected AUTH lines in curl log")
+        for line in auths:
+            self.assertEqual(line, "AUTH pat-right-portal")
+        self.assertNotIn("pat-wrong-portal", calls)
+
+    def test_empty_token_flag_falls_through_to_env(self) -> None:
+        log = self.tmp / "curl.log"
+        result = self.run_deploy("--portal", "staging", "--zip", str(self.zip),
+                                "--config", str(self.config),
+                                "--token", "", "--yes",
+                                env_extra={"HS_TOKEN": "pat-test-1234",
+                                           "FAKE_CURL_LOG": str(log),
+                                           "FAKE_CURL_ECHO_AUTH": "1"})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        auths = [line for line in log.read_text(encoding="utf-8").splitlines()
+                 if line.startswith("AUTH ")]
+        self.assertTrue(auths, "expected AUTH lines in curl log")
+        for line in auths:
+            self.assertEqual(line, "AUTH pat-test-1234")
+
+    def test_empty_token_flag_with_nothing_dies_before_network(self) -> None:
+        log = self.tmp / "curl.log"
+        result = self.run_deploy("--portal", "staging", "--zip", str(self.zip),
+                                "--config", str(self.config),
+                                "--token", "", "--yes",
+                                env_extra={"FAKE_CURL_LOG": str(log)},
+                                env_drop=["HS_TOKEN"])
+        self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+        self.assertIn("no token supplied", result.stderr)
+        self.assertFalse(log.exists(), "token failure must precede any network call")
+
+    def test_whitespace_token_flag_falls_through_to_env(self) -> None:
+        log = self.tmp / "curl.log"
+        result = self.run_deploy("--portal", "staging", "--zip", str(self.zip),
+                                "--config", str(self.config),
+                                "--token", "   ", "--yes",
+                                env_extra={"HS_TOKEN": "pat-test-1234",
+                                           "FAKE_CURL_LOG": str(log),
+                                           "FAKE_CURL_ECHO_AUTH": "1"})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        auths = [line for line in log.read_text(encoding="utf-8").splitlines()
+                 if line.startswith("AUTH ")]
+        self.assertTrue(auths, "expected AUTH lines in curl log")
+        for line in auths:
+            self.assertEqual(line, "AUTH pat-test-1234")
 
 
 if __name__ == "__main__":

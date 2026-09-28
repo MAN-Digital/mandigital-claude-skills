@@ -131,6 +131,160 @@ for mod in sorted((theme / "modules").glob("*.module")):
 PYEOF
 ) || fail 2 "$out"
 
+# S4 (gate-2: module wiring): a module whose fields.json contains a form-type
+# field MUST render it with a native {% form %} tag. Escape hatch: modules
+# that submit via custom JS declare it with data-hsforms-ignore — that passes
+# with a WARN (stderr) instead of failing. (2> >(cat >&2) lets the WARN bypass
+# the $() capture so it stays visible on passing runs; FAIL detail is captured.)
+out=$(python3 - "$theme_dir" 2> >(cat >&2) <<'PYEOF'
+import json, re, sys
+from pathlib import Path
+theme = Path(sys.argv[1])
+FORM_TAG = re.compile(r"\{%\s*form\b")
+for mod in sorted((theme / "modules").glob("*.module")):
+    try:
+        fields = json.loads((mod / "fields.json").read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        continue  # malformed JSON is reported by the main gate-2/3 checks
+    if not any(isinstance(f, dict) and f.get("type") == "form" for f in fields):
+        continue
+    html = (mod / "module.html").read_text(encoding="utf-8")
+    if FORM_TAG.search(html):
+        continue
+    if "data-hsforms-ignore" in html:
+        print(f"WARN: {mod.name} uses custom form submit (not native {{% form %}})",
+              file=sys.stderr)
+        continue
+    print(f"{mod.name}: form field without {{% form %}} tag"); sys.exit(1)
+PYEOF
+) || fail 2 "$out"
+
+# S8 (gate-2: module wiring): LINE-BASED HEURISTIC, not a parse. Every <img>
+# tag whose src attribute carries a {{ }} expression must sit inside an
+# {% if %} guard, else an empty src renders as <img src="">. Window = the 5
+# preceding lines plus the current line up to the <img (same-line
+# "{% if x %}<img ...>" counts — the dominant minified-module style).
+# Misreads multi-line <img> tags and guards further than 5 lines up; keep
+# guards adjacent to the img.
+out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1
+import re, sys
+from pathlib import Path
+theme = Path(sys.argv[1])
+IF_TAG = re.compile(r"\{%\s*if\b")
+DYN_SRC = re.compile(r"src\s*=\s*[\"'][^\"']*\{\{")
+for mod in sorted((theme / "modules").glob("*.module")):
+    lines = (mod / "module.html").read_text(encoding="utf-8").splitlines()
+    for i, line in enumerate(lines):
+        for m in re.finditer(r"<img\b", line):
+            tag = line[m.start():].split(">", 1)[0]
+            if not DYN_SRC.search(tag):
+                continue
+            window = "\n".join(lines[max(0, i - 5):i]) + "\n" + line[:m.start()]
+            if not IF_TAG.search(window):
+                print(f"unguarded img with dynamic src in {mod.name}/module.html:{i + 1}")
+                sys.exit(1)
+PYEOF
+) || fail 2 "$out"
+
+# S9 (gate-2: module wiring): HubSpot rejects these as field names at upload
+# ("field name cannot be '<name>'"), top-level or group children alike. List
+# verified live 2026-09-27 (upload error) + community reports; re-check on any
+# new "field name cannot be" failure and extend RESERVED.
+out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1
+import json, sys
+from pathlib import Path
+theme = Path(sys.argv[1])
+RESERVED = {"body", "label", "type", "name", "id", "class", "style",
+            "children", "default", "parent", "module"}
+def names(node):
+    if isinstance(node, dict):
+        if isinstance(node.get("name"), str):
+            yield node["name"]
+        for val in node.values():
+            yield from names(val)
+    elif isinstance(node, list):
+        for val in node:
+            yield from names(val)
+for mod in sorted((theme / "modules").glob("*.module")):
+    try:
+        fields = json.loads((mod / "fields.json").read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        continue  # malformed JSON is reported by the main gate-2/3 checks
+    for name in names(fields):
+        if name in RESERVED:
+            print(f"reserved field name {mod.name}/{name} (HubSpot rejects it at upload)")
+            sys.exit(1)
+PYEOF
+) || fail 2 "$out"
+
+# S10 (gate-2: module wiring): group/repeater `default` rows are keyed by child
+# field NAME — a row key with no matching child uploads as "Field <group>.null
+# is missing a label" (verified live 2026-09-27 after a rename fixed the
+# definitions but not the defaults). Every row-dict key must be a child name.
+out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1
+import json, sys
+from pathlib import Path
+theme = Path(sys.argv[1])
+def check(fields, where):
+    if isinstance(fields, dict):
+        fields = [fields]
+    for f in fields:
+        if not isinstance(f, dict):
+            continue
+        children = [c for c in (f.get("children") or []) if isinstance(c, dict)]
+        if children and isinstance(f.get("default"), list):
+            names = {c.get("name") for c in children}
+            for row in f["default"]:
+                if not isinstance(row, dict):
+                    continue
+                for key in row:
+                    if key not in names:
+                        print(f"{where}: default row key '{key}' matches no child "
+                              f"of '{f.get('name')}' (HubSpot uploads it as null)")
+                        sys.exit(1)
+        check(children, where)
+for mod in sorted((theme / "modules").glob("*.module")):
+    try:
+        fields = json.loads((mod / "fields.json").read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        continue  # malformed JSON is reported by the main gate-2/3 checks
+    check(fields, f"{mod.name}/fields.json")
+PYEOF
+) || fail 2 "$out"
+
+# S11 (gate-2: module wiring): field `type` must be HubSpot-valid — an unknown
+# type uploads as "'unknown' is not a valid field type" (verified live
+# 2026-09-27: "textarea" is NOT valid; use richtext for body copy).
+# Allowlist = types proven by the live portal backup + wet-test uploads. It is
+# deliberately closed: on a new legitimate type, verify by upload, then extend.
+out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1
+import json, sys
+from pathlib import Path
+theme = Path(sys.argv[1])
+VALID_TYPES = {"text", "richtext", "number", "boolean", "choice", "image",
+               "url", "link", "color", "font", "menu", "form", "group",
+               "blog"}
+def check(fields, where):
+    if isinstance(fields, dict):
+        fields = [fields]
+    for f in fields:
+        if not isinstance(f, dict):
+            continue
+        ftype = f.get("type")
+        if isinstance(ftype, str) and ftype not in VALID_TYPES:
+            print(f"{where}: invalid field type '{ftype}' on '{f.get('name')}' "
+                  f"(HubSpot uploads it as unknown)")
+            sys.exit(1)
+        check(f.get("children") or [], where)
+for mod in sorted((theme / "modules").glob("*.module")):
+    try:
+        fields = json.loads((mod / "fields.json").read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        continue  # malformed JSON is reported by the main gate-2/3 checks
+    check(fields, f"{mod.name}/fields.json")
+PYEOF
+) || fail 2 "$out"
+
 # ---- Gate 3: validity ----
 find "$theme_dir" -name '*.json' -print0 | python3 -c "
 import json, sys
@@ -174,7 +328,26 @@ PYEOF
 out=$(python3 - "$theme_dir" "$inventory" <<'PYEOF' 2>&1
 import json, re, sys
 from pathlib import Path
+from urllib.parse import urlparse
 theme = Path(sys.argv[1])
+def hubfs_dest(url):
+    """Manifest dest for a trusted File Manager URL, else None.
+
+    S12: both the hostname AND the /hubfs/<portal>/<dest> path are validated.
+    A substring match on "hubspotusercontent" is not enough — lookalike hosts
+    (hubspotusercontent.attacker.invalid) must not earn the exemption.
+    Trusted host shape verified live 2026-09-27 (<portal>.fs1.
+    hubspotusercontent-na1.net); extend the region class on new failures.
+    """
+    try:
+        host = (urlparse(url).hostname or "").lower()
+        path = urlparse(url).path
+    except ValueError:
+        return None
+    if not re.fullmatch(r"[a-z0-9.-]+\.hubspotusercontent-[a-z]{2}[0-9]\.net", host):
+        return None
+    m = re.fullmatch(r"/hubfs/\d+/(.+)", path)
+    return ("/" + m.group(1)) if m else None
 try:
     inv = json.loads(Path(sys.argv[2]).read_text(encoding="utf-8"))
 except json.JSONDecodeError:
@@ -189,7 +362,21 @@ for f in manifest.values():
 used = set()
 for fields_file in sorted((theme / "modules").glob("*.module/fields.json")):
     text = fields_file.read_text(encoding="utf-8")
-    for src in re.findall(r'"src":\s*"(/[^"]+)"', text):
+    # S1: HubSpot-emitted JSON has a space before the colon ("src" : "...");
+    # the strict '"src":' pattern missed those srcs entirely (false-pass on
+    # unmanifested srcs + false "dead manifest entry"). Tolerate the space.
+    # S12: live themes reference File Manager files by absolute hubfs URL
+    # (site-relative /extek/... 404s — verified live 2026-09-27). Normalize
+    # trusted hubfs URLs back to the manifest dest before the membership
+    # checks; anything else absolute is governed by the external-URL check.
+    for src in re.findall(r'"src"\s*:\s*"([^"]+)"', text):
+        if src.startswith(("http://", "https://")):
+            dest = hubfs_dest(src)
+            if dest is None:
+                continue
+            src = dest
+        elif not src.startswith("/"):
+            continue  # relative/empty src: other checks govern
         used.add(src)
         if src not in manifest:
             print(f"unmanifested image src {src} in {fields_file.parent.name}"); sys.exit(1)
@@ -211,8 +398,52 @@ for path in sorted(theme.rglob("*")):
     for raw in set(re.findall(r"https?://[^\s\"'<>]+", text)):
         # JSON \" escapes leak a trailing backslash into the raw-text match (SB-1).
         url = raw.rstrip("\\")
+        # S12: hubfs URLs of manifested files are first-party, not external.
+        dest = hubfs_dest(url)
+        if dest is not None and dest in manifest:
+            continue
         if url not in allowed:
             print(f"unallowlisted external URL {url} in {path.relative_to(theme)}"); sys.exit(1)
+PYEOF
+) || fail 4 "$out"
+
+# S6 (gate-4: links + assets): no [...] placeholder text in fields.json
+# DEFAULT string values (they render to visitors). Parsed-JSON walk, not raw
+# text: structural brackets (arrays) never match — only string VALUES held in
+# a "default" key (top-level or group-children) are tested.
+out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1
+import json, re, sys
+from pathlib import Path
+theme = Path(sys.argv[1])
+PLACEHOLDER = re.compile(r"\[[^\[\]]+\]")
+def default_strings(node):
+    if isinstance(node, dict):
+        if "default" in node:
+            yield from value_strings(node["default"])
+        for key, val in node.items():
+            if key != "default":
+                yield from default_strings(val)
+    elif isinstance(node, list):
+        for val in node:
+            yield from default_strings(val)
+def value_strings(value):
+    if isinstance(value, str):
+        yield value
+    elif isinstance(value, dict):
+        for val in value.values():
+            yield from value_strings(val)
+    elif isinstance(value, list):
+        for val in value:
+            yield from value_strings(val)
+for fields_file in sorted((theme / "modules").glob("*.module/fields.json")):
+    try:
+        fields = json.loads(fields_file.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        continue  # malformed JSON is reported by the gate-3 check
+    for s in default_strings(fields):
+        if PLACEHOLDER.search(s):
+            print(f"placeholder '[...]' in default {s[:80]!r} ({fields_file.parent.name}/fields.json)")
+            sys.exit(1)
 PYEOF
 ) || fail 4 "$out"
 

@@ -187,6 +187,213 @@ class ValidateThemeTests(unittest.TestCase):
         result = subprocess.run([str(SCRIPT), str(self.theme)], text=True, capture_output=True, env=env)
         self.assertEqual(result.returncode, 2)
 
+    # S1: HubSpot-emitted "src" : "..." (space before colon) must match.
+    def test_spaced_src_with_manifest_passes(self) -> None:
+        fields = self.theme / "modules" / "header.module" / "fields.json"
+        text = fields.read_text(encoding="utf-8").replace('"src": "/brand/x.jpg"', '"src" : "/brand/x.jpg"')
+        self.assertIn('"src" : ', text)
+        fields.write_text(text, encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_spaced_src_without_manifest_fails_gate4(self) -> None:
+        fields = self.theme / "modules" / "header.module" / "fields.json"
+        text = fields.read_text(encoding="utf-8").replace('"src": "/brand/x.jpg"', '"src" : "/brand/none.jpg"')
+        fields.write_text(text, encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g4", result.stderr)
+        self.assertIn("unmanifested image src /brand/none.jpg", result.stderr)
+
+    # S12: absolute hubfs srcs normalize to the manifest dest (no allowlist needed).
+    def test_hubfs_src_with_manifest_passes(self) -> None:
+        fields = self.theme / "modules" / "header.module" / "fields.json"
+        url = "https://1.fs1.hubspotusercontent-na1.net/hubfs/1/brand/x.jpg"
+        text = fields.read_text(encoding="utf-8").replace('"/brand/x.jpg"', f'"{url}"')
+        self.assertIn(url, text)
+        fields.write_text(text, encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_hubfs_src_without_manifest_fails_gate4(self) -> None:
+        fields = self.theme / "modules" / "header.module" / "fields.json"
+        url = "https://1.fs1.hubspotusercontent-na1.net/hubfs/1/brand/none.jpg"
+        text = fields.read_text(encoding="utf-8").replace('"/brand/x.jpg"', f'"{url}"')
+        fields.write_text(text, encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g4", result.stderr)
+        self.assertIn("unmanifested image src /brand/none.jpg", result.stderr)
+
+    def test_lookalike_hubfs_host_earns_no_exemption(self) -> None:
+        fields = self.theme / "modules" / "header.module" / "fields.json"
+        url = "https://hubspotusercontent.attacker.invalid/hubfs/1/brand/x.jpg"
+        text = fields.read_text(encoding="utf-8").replace('"/brand/x.jpg"', f'"{url}"')
+        fields.write_text(text, encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g4", result.stderr)
+        # Skipped by normalization (dead manifest) AND rejected as unallowlisted;
+        # the dead-manifest check runs first.
+        self.assertIn("dead manifest entry (unreferenced): /brand/x.jpg", result.stderr)
+
+    def test_lookalike_hubfs_url_outside_fields_rejected(self) -> None:
+        # Pins the exemption call site directly: manifest stays satisfied via
+        # the normal src, so only the external-URL check can reject this.
+        header = self.theme / "modules" / "header.module" / "module.html"
+        url = "https://hubspotusercontent.attacker.invalid/hubfs/1/brand/x.jpg"
+        header.write_text(header.read_text(encoding="utf-8") + f"<!-- {url} -->\n",
+                          encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g4", result.stderr)
+        self.assertIn(f"unallowlisted external URL {url} in", result.stderr)
+
+    # S4 (gate-2): form-type field requires a native {% form %} tag.
+    def _add_form_module(self, name: str, html: str) -> None:
+        mod = self.theme / "modules" / f"{name}.module"
+        mod.mkdir()
+        (mod / "fields.json").write_text(
+            json.dumps([{"type": "form", "name": "hs_form", "label": "Form",
+                         "default": {"form_id": "abc"}}]), encoding="utf-8")
+        (mod / "meta.json").write_text(
+            json.dumps({"host_template_types": ["PAGE"], "content_types": ["ANY"]}),
+            encoding="utf-8")
+        (mod / "module.html").write_text(html, encoding="utf-8")
+
+    def test_form_field_with_native_tag_passes(self) -> None:
+        self._add_form_module(
+            "enquiry_form",
+            '{% form "enquiry_form_instance" form_to_use="{{ module.hs_form.form_id }}" %}\n')
+        result = run_validator(self.theme, self.inventory)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_form_field_without_tag_fails_gate2(self) -> None:
+        self._add_form_module("enquiry_form", "<div>{{ module.hs_form }}</div>\n")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g2", result.stderr)
+        self.assertIn("enquiry_form.module", result.stderr)
+        self.assertIn("form field without {% form %} tag", result.stderr)
+
+    def test_form_field_custom_submit_warns_not_fails(self) -> None:
+        self._add_form_module(
+            "enquiry_form",
+            '<form data-hsforms-ignore="true">{{ module.hs_form }}</form>\n')
+        result = run_validator(self.theme, self.inventory)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("WARN: enquiry_form.module uses custom form submit", result.stderr)
+
+    # S6 (gate-4): [...] placeholders in defaults fail; clean defaults pass.
+    def _add_footer_text_field(self, name: str, default: object) -> None:
+        fields = self.theme / "modules" / "footer.module" / "fields.json"
+        data = json.loads(fields.read_text(encoding="utf-8"))
+        data.append({"type": "text", "name": name, "label": name, "default": default})
+        fields.write_text(json.dumps(data), encoding="utf-8")
+        footer = self.theme / "modules" / "footer.module" / "module.html"
+        footer.write_text(footer.read_text(encoding="utf-8") + "{{ module." + name + " }}\n",
+                          encoding="utf-8")
+
+    def test_bracket_placeholder_default_fails_gate4(self) -> None:
+        self._add_footer_text_field("brochure", "PDF, [size]")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g4", result.stderr)
+        self.assertIn("footer.module/fields.json", result.stderr)
+        self.assertIn("PDF, [size]", result.stderr)
+
+    def test_long_bracket_placeholder_default_fails_gate4(self) -> None:
+        long_token = ("[Plassholder – før opp kjente avvik, for eksempel PDF-dokumenter "
+                      "som ennå ikke er fullt tilgjengelige.]")
+        self.assertGreater(len(long_token), 60)
+        self._add_footer_text_field("note", "<p>" + long_token + "</p>")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g4", result.stderr)
+        self.assertIn("footer.module/fields.json", result.stderr)
+
+    def test_clean_default_passes_gate4(self) -> None:
+        self._add_footer_text_field("brochure", "PDF, 2 MB")
+        result = run_validator(self.theme, self.inventory)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    # S8 (gate-2): <img> with {{ }} src needs an {% if %} guard.
+    def test_guarded_img_passes_gate2(self) -> None:
+        header = self.theme / "modules" / "header.module" / "module.html"
+        header.write_text(
+            '<a href="/kontakt">{{ module.cta_text }}</a>\n'
+            "{% if module.logo.src %}\n"
+            '<img src="{{ module.logo.src }}" alt="{{ module.logo.alt }}">\n'
+            "{% endif %}\n", encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_unguarded_img_fails_gate2(self) -> None:
+        header = self.theme / "modules" / "header.module" / "module.html"
+        header.write_text(
+            '<a href="/kontakt">{{ module.cta_text }}</a><img src="{{ module.logo.src }}" alt="">\n',
+            encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g2", result.stderr)
+        self.assertIn("header.module/module.html:1", result.stderr)
+
+    # S9 (gate-2): HubSpot-reserved field names fail before upload.
+    def test_reserved_field_name_fails_gate2(self) -> None:
+        self._add_footer_text_field("body", "hello")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g2", result.stderr)
+        self.assertIn("reserved field name footer.module/body", result.stderr)
+
+    def test_reserved_child_name_fails_gate2(self) -> None:
+        fields = self.theme / "modules" / "footer.module" / "fields.json"
+        data = json.loads(fields.read_text(encoding="utf-8"))
+        data.append({"type": "group", "name": "columns", "label": "columns",
+                     "children": [{"type": "text", "name": "label", "label": "label"}]})
+        fields.write_text(json.dumps(data), encoding="utf-8")
+        footer = self.theme / "modules" / "footer.module" / "module.html"
+        footer.write_text(footer.read_text(encoding="utf-8")
+                          + "{{ module.columns }}{{ x.label }}\n",
+                          encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g2", result.stderr)
+        self.assertIn("reserved field name footer.module/label", result.stderr)
+
+    # S10 (gate-2): group default row keys must match child names.
+    def test_stale_default_row_key_fails_gate2(self) -> None:
+        fields = self.theme / "modules" / "footer.module" / "fields.json"
+        data = json.loads(fields.read_text(encoding="utf-8"))
+        data.append({"type": "group", "name": "columns", "label": "columns",
+                     "children": [{"type": "text", "name": "heading", "label": "heading"}],
+                     "default": [{"headline": "hi"}]})
+        fields.write_text(json.dumps(data), encoding="utf-8")
+        footer = self.theme / "modules" / "footer.module" / "module.html"
+        footer.write_text(footer.read_text(encoding="utf-8")
+                          + "{{ module.columns }}{{ x.heading }}\n",
+                          encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g2", result.stderr)
+        self.assertIn("default row key 'headline' matches no child of 'columns'",
+                      result.stderr)
+
+    # S11 (gate-2): unknown field types fail before upload.
+    def test_textarea_type_fails_gate2(self) -> None:
+        fields = self.theme / "modules" / "footer.module" / "fields.json"
+        data = json.loads(fields.read_text(encoding="utf-8"))
+        data.append({"type": "textarea", "name": "blurb", "label": "blurb",
+                     "default": "hi"})
+        fields.write_text(json.dumps(data), encoding="utf-8")
+        footer = self.theme / "modules" / "footer.module" / "module.html"
+        footer.write_text(footer.read_text(encoding="utf-8") + "{{ module.blurb }}\n",
+                          encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g2", result.stderr)
+        self.assertIn("invalid field type 'textarea' on 'blurb'", result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()

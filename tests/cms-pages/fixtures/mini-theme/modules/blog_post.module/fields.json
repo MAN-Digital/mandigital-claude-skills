@@ -1,1 +1,1 @@
-[{"type": "text", "name": "label", "label": "Label", "default": "blog_post"}]
+[{"type": "text", "name": "label_text", "label": "Label", "default": "blog_post"}]
