@@ -481,6 +481,13 @@ Required dimension ids: `signal_present`, `framework_honored`,
 `hard_failures` non-empty => that touch's `disposition: "blocked"`. Never soften
 a real failure to make the campaign pass.
 
+Research depth is not a copy-QA dimension. Do not add `research_eligibility`
+or any equivalent gate: a contact in `no_signal` whose touch is an honest cold
+fallback (`cold_fallback: true`, `signal_used: null`, no signal claim of any
+kind, role + segment opener) is compliant and passes (Romeo, 2026-09-28). Judge
+that honesty under `signal_present` and `personalization_specific`; a fallback
+that implies a signal it does not have still fails there.
+
 `personalization_specific` is calibrated per touch position: touch 1 (and any
 touch whose `signal_ref` names a signal) must visibly reference THIS contact's
 captured signal and fail the swap-test if it reads generic. Later touches
