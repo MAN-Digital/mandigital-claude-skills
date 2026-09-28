@@ -412,8 +412,9 @@ PYEOF
 # carried a "transjt" header comment, found live 2026-09-27) and once as the
 # theme folder name itself (transjt_projects/tj-extek, live 2026-09-27,
 # renamed to extek-theme 2026-09-28). Both file CONTENTS and relative PATHS
-# are scanned (names included, so watermarked folders fail even when their
-# contents are clean). Substring hits: "transjt", "tjextek". Regex hits
+# are scanned (names included, so any file inside a watermarked folder fails
+# even when its contents are clean; empty dirs don't ship and aren't scanned).
+# Substring hits: "transjt", "tjextek". Regex hits
 # (word-boundary): "tj" + separator (tj-foo, tj_foo, tj/foo) and standalone
 # "tj". Deliberately NOT matched: "tj" inside longer words (Norwegian
 # "nettjeneste" must keep passing) — extend the patterns if a new form appears.

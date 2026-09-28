@@ -285,6 +285,41 @@ class ValidateThemeTests(unittest.TestCase):
         self.assertIn("banned vendor string 'tj-' in", result.stderr)
         self.assertIn("tj-forms.js", result.stderr)
 
+    def test_watermarked_directory_fails_gate4(self) -> None:
+        subdir = self.theme / "js" / "tj-lib"
+        subdir.mkdir(parents=True)
+        (subdir / "clean.js").write_text("// clean helper\n", encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g4", result.stderr)
+        self.assertIn("banned vendor string 'tj-' in", result.stderr)
+        self.assertIn("tj-lib", result.stderr)
+
+    def test_tj_underscore_variant_fails_gate4(self) -> None:
+        header = self.theme / "modules" / "header.module" / "module.html"
+        header.write_text(header.read_text(encoding="utf-8") + "<!-- tj_forms helper -->\n",
+                          encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("banned vendor string 'tj_' in", result.stderr)
+
+    def test_tj_slash_path_variant_fails_gate4(self) -> None:
+        subdir = self.theme / "tj"
+        subdir.mkdir()
+        (subdir / "x.js").write_text("// clean helper\n", encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("banned vendor string 'tj/' in", result.stderr)
+
+    def test_watermarked_binary_filename_fails_gate4(self) -> None:
+        # Binary CONTENTS are skipped, but the path scan still catches a
+        # watermarked file name.
+        (self.theme / "images" / "tj-logo.png").write_bytes(b"\x89PNG\r\n\x1a\n")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("banned vendor string 'tj-' in", result.stderr)
+        self.assertIn("tj-logo.png", result.stderr)
+
     def test_nettjeneste_passes_gate4(self) -> None:
         # Deliberate carve-out: "tj" inside longer words (Norwegian
         # "nettjeneste") must NOT trip the standalone-tj pattern.

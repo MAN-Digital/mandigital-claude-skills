@@ -11,10 +11,11 @@
 # private-app token (--token > portal tokenEnv > HS_TOKEN), because hs CLI keys
 # often lack the `content` scope blog-settings needs. When both fail the state
 # is reported as unknown (NOTE) rather than failing the run.
-# Exit codes: 0 all checks pass, 1 check failure, 2 usage/unknown portal.
+# Exit codes: 0 all checks pass (unknown assignment state is a NOTE, not a
+# failure), 1 check failure, 2 usage/config error.
 set -euo pipefail
 exec python3 - "$@" <<'PYEOF'
-import json, os, subprocess, sys
+import json, os, re, subprocess, sys
 from pathlib import Path
 
 HS_BIN = os.environ.get("HS_BIN", "hs")
@@ -56,11 +57,17 @@ def load_portal(path, wanted):
     try:
         with open(path, encoding="utf-8") as handle:
             portals = {p["id"]: p for p in yaml.safe_load(handle).get("portals", [])}
+    except OSError as exc:
+        die(f"cannot read config {path}: {exc.strerror or exc}", 2)
     except (yaml.YAMLError, AttributeError, KeyError, TypeError) as exc:
-        die(f"invalid config: {type(exc).__name__}")
+        die(f"invalid config: {type(exc).__name__}", 2)
     if wanted not in portals:
         die(f"unknown portal: {wanted} (have: {', '.join(sorted(portals))})", 2)
-    return portals[wanted]
+    portal = portals[wanted]
+    for key in ("theme", "hsAccount"):
+        if not portal.get(key):
+            die(f"invalid config: portal {wanted} lacks required key {key!r}", 2)
+    return portal
 
 def header_fields(path):
     """Template annotation block: {key: value} from the leading <!-- -->."""
@@ -98,9 +105,21 @@ def read_blog_settings(account, portal, blog_id, cli_token):
     else:
         hs_err = (got.stderr or got.stdout).strip().splitlines()
         hs_err = hs_err[0][:100] if hs_err else f"exit {got.returncode}"
-    token = cli_token or None
-    if not token and portal.get("tokenEnv"):
-        token = os.environ.get(portal["tokenEnv"]) or None
+    # Token precedence mirrors resolve_token in create-forms.sh/deploy.sh
+    # (no shared lib by repo convention — keep in sync): --token flag >
+    # portal tokenEnv var > HS_TOKEN. Fail closed: a configured-but-unset
+    # tokenEnv dies instead of silently reading another portal's settings.
+    # An empty/whitespace --token is treated as unset (falls through).
+    token = cli_token.strip() if cli_token and cli_token.strip() else None
+    tenv = portal.get("tokenEnv")
+    if not token and tenv is not None:
+        if not isinstance(tenv, str) or not tenv.strip():
+            die("config tokenEnv must be a non-empty string", 2)
+        val = os.environ.get(tenv.strip())
+        if val and val.strip():
+            token = val
+        else:
+            die(f"token for portal missing: env var {tenv.strip()} (tokenEnv) is unset or empty", 2)
     if not token:
         token = os.environ.get("HS_TOKEN") or None
     if not token:
@@ -165,7 +184,11 @@ def main():
         text=True, capture_output=True)
     if listed.returncode != 0:
         die(f"hs cms list failed: {(listed.stderr or listed.stdout).strip()}")
-    remote = {line.strip() for line in listed.stdout.splitlines() if line.strip()}
+    # Strip ANSI: `hs cms list` colorizes through chalk, which honors
+    # FORCE_COLOR even when piped — escape codes would break exact matching.
+    ansi = re.compile(r"\x1b\[[0-9;]*m")
+    remote = {ansi.sub("", line).strip() for line in listed.stdout.splitlines()
+              if ansi.sub("", line).strip()}
     for name in EXPECTED:
         if name in remote:
             print(f"OK remote {theme}/templates/{name}")

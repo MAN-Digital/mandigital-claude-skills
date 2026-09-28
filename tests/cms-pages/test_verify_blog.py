@@ -118,6 +118,74 @@ class VerifyBlogTests(unittest.TestCase):
         self.assertEqual(result.returncode, 2)
         self.assertIn("--portal and --config must be given together", result.stderr)
 
+    def test_config_without_portal_is_usage_error(self) -> None:
+        result = run_verify(self.theme, "--config", str(self.config))
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("--portal and --config must be given together", result.stderr)
+
+    def test_missing_config_is_clean_error_not_traceback(self) -> None:
+        result = run_verify(self.theme, "--portal", "staging",
+                            "--config", str(self.tmp / "nope.yaml"))
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("cannot read config", result.stderr)
+        self.assertNotIn("Traceback", result.stderr)
+
+    def test_invalid_config_exits_two(self) -> None:
+        bad = self.tmp / "bad.yaml"
+        bad.write_text("[unclosed", encoding="utf-8")
+        result = run_verify(self.theme, "--portal", "staging", "--config", str(bad))
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("invalid config", result.stderr)
+
+    def test_portal_missing_keys_exits_two(self) -> None:
+        cfg = self.tmp / "nokeys.yaml"
+        cfg.write_text("portals:\n  - id: thin\n    portalId: 1\n", encoding="utf-8")
+        result = run_verify(self.theme, "--portal", "thin", "--config", str(cfg))
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("lacks required key", result.stderr)
+
+    def test_cms_list_failure_exits_one(self) -> None:
+        result = run_verify(self.theme, "--portal", "staging", "--config", str(self.config),
+                            env_extra={"FAKE_HS_FAIL": "1"})
+        self.assertEqual(result.returncode, 1, result.stdout)
+        self.assertIn("hs cms list failed", result.stderr)
+
+    def test_mismatch_reported(self) -> None:
+        settings = json.dumps({
+            "listingPageTemplatePath": "other-theme/templates/blog_listing.html",
+            "postTemplatePath": "mini/templates/blog_post.html",
+        })
+        result = run_verify(self.theme, "--portal", "prod", "--config", str(self.config),
+                            env_extra={"FAKE_BLOG_SETTINGS": settings})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("MISMATCH blog_listing.html: blog uses other-theme/templates/blog_listing.html",
+                      result.stdout)
+        self.assertIn("ASSIGNED blog_post.html", result.stdout)
+
+    def test_unavailable_for_new_content_fails(self) -> None:
+        listing = self.theme / "templates" / "blog_listing.html"
+        listing.write_text(listing.read_text(encoding="utf-8").replace(
+            "isAvailableForNewContent: true", "isAvailableForNewContent: false"),
+            encoding="utf-8")
+        result = run_verify(self.theme)
+        self.assertEqual(result.returncode, 1, result.stdout)
+        self.assertIn("isAvailableForNewContent is not true", result.stderr)
+
+    def test_tokenenv_unset_fails_closed(self) -> None:
+        # Mirrors resolve_token in create-forms.sh: a configured-but-unset
+        # tokenEnv dies instead of falling back to HS_TOKEN. Whitespace
+        # --token falls through (does not rescue the run).
+        cfg = self.tmp / "tenv.yaml"
+        cfg.write_text(
+            "portals:\n  - id: walled\n    portalId: 1\n    hsAccount: test-walled\n"
+            "    theme: mini\n    staging: false\n    blogId: 123\n"
+            "    tokenEnv: VERIFY_BLOG_TEST_UNSET_XYZ\n", encoding="utf-8")
+        result = run_verify(self.theme, "--portal", "walled", "--config", str(cfg),
+                            "--token", "   ",
+                            env_extra={"FAKE_API_FAIL": "1", "HS_TOKEN": "wrong-portal-token"})
+        self.assertEqual(result.returncode, 2, result.stdout)
+        self.assertIn("VERIFY_BLOG_TEST_UNSET_XYZ (tokenEnv) is unset or empty", result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()
