@@ -54,6 +54,18 @@ Without `--portal`, deploy.sh lists entries and prompts. Without `--token` and n
 7. Apply `forms` map to form modules; fail closed on unmapped form modules. Inventory: `GET /marketing/v3/forms`; verify each mapped GUID: `GET /marketing/v3/forms/{formId}`. Any form module without a `portals.yaml` `forms` entry stops the deploy — add the mapping, never skip.
 8. Print per-item results. Any failure stops the run with a redacted error; fix the cause and re-run (theme upload + image upload both overwrite safely).
 
+## Renaming a live theme folder
+
+When the Design Manager path itself is wrong (wrong brand, past-agency watermark — extek went `transjt_projects/tj-extek` → `extek-theme` 2026-09-28):
+
+1. Upload the QA-passed theme to the NEW path: `hs cms upload <theme-dir> <new-theme> --account=<hsAccount>`.
+2. Prove parity: `hs cms list <old>/templates` vs `hs cms list <new>/templates` must diff empty (same for `modules/` on big renames). Delete anything the raw upload carried that deploy.sh staging would have stripped (e.g. `QA-EVIDENCE.json`).
+3. Re-inventory pages: `GET /cms/v3/pages/site-pages`. Never trust cached page IDs — the list is the truth (see playbook §1).
+4. Per page: `PATCH /cms/v3/pages/site-pages/{id}` `{"templatePath": "<new>/templates/<tpl>"}`. The PATCH applies immediately — live pages stay `PUBLISHED`; a following push-live 404s with nothing staged, which is success, not an error.
+5. Curl every live URL: 200 + content renders. Confirm form embeds (GUIDs) survived.
+6. Delete the old folder (`hs cms delete <old> --account=...`) plus any emptied watermarked parents. Leave DRAFT pages pointing at the old path for the user to delete or rewire — never delete user content unasked.
+7. Update the portal entry's `theme:` in `portals.yaml`; re-run `verify-blog.sh --portal` (blog assignment paths changed → re-assign both templates in UI per step 6).
+
 ## Form provisioning
 
 When the theme has form modules and the portal entry enables `formsProvision`, forms are created by API instead of by hand. Standalone use (same flags deploy.sh uses, plus overrides):

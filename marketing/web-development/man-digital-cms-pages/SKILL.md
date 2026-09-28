@@ -15,7 +15,7 @@ description: Use when converting a React repo or Figma handoff into a HubSpot CM
 
 1. **Intake.** GitHub → `references/inputs-github.md`; Figma → `references/inputs-figma.md`. Write `INVENTORY.json`. Missing signals or handoff pieces → stop and report. Never guess, never invent copy/tokens/URLs.
 2. **Build** per `references/theme-contract.md`: tokens → modules → blog → templates + `deploy.json` → assets + `assets.json`. Never contact HubSpot here.
-3. **QA** per `references/qa-checklist.md`: `scripts/validate-theme.sh <theme-dir> --inventory INVENTORY.json` (gates g1–g4) → fix loop, max 3 rounds → gate 5 staging verify per `references/deploy-runbook.md` §4 (needs explicit authorization) → `scripts/package-zip.sh <theme-dir> <out-dir>`.
+3. **QA** per `references/qa-checklist.md`: `scripts/validate-theme.sh <theme-dir> --inventory INVENTORY.json` (gates g1–g4) → fix loop, max 3 rounds → `scripts/verify-blog.sh <theme-dir> [--portal ID --config portals.yaml]` for the blog templates (local + upload + assignment state) → gate 5 staging verify per `references/deploy-runbook.md` §4 (needs explicit authorization) → `scripts/package-zip.sh <theme-dir> <out-dir>`.
 4. **Deploy** only from the QA-passed ZIP per `references/deploy-runbook.md`, only with explicit authorization: `scripts/deploy.sh [--portal ID] --zip <file> --config portals.yaml [--token "$HS_TOKEN"] [--dry-run] [--yes]`.
 5. API/CLI facts come from `references/api-playbook.md`. Live lookup only when stuck or on failure.
 

@@ -32,9 +32,10 @@ All paths verified against the method+path on the linked doc page.
 
 | Op | Method + path | Purpose | Doc |
 |---|---|---|---|
-| List site pages | `GET /cms/v3/pages/site-pages` | Page inventory before deploy | https://developers.hubspot.com/docs/api-reference/legacy/cms/pages/website-pages/get-website-pages |
+| List site pages | `GET /cms/v3/pages/site-pages` | Page inventory before deploy — re-list EVERY run, never trust cached IDs (pages get deleted/recreated outside the skill: IDs change, slugs vanish) | https://developers.hubspot.com/docs/api-reference/legacy/cms/pages/website-pages/get-website-pages |
 | Create site page | `POST /cms/v3/pages/site-pages` | Create page from templatePath | https://developers.hubspot.com/docs/api-reference/legacy/cms/pages/website-pages/create-website-page |
-| Update site page | `PATCH /cms/v3/pages/site-pages/{objectId}` | Sparse-update page by ID | https://developers.hubspot.com/docs/api-reference/legacy/cms/pages/website-pages/update-website-page |
+| Update site page | `PATCH /cms/v3/pages/site-pages/{objectId}` | Sparse-update page by ID; a templatePath PATCH on a live page applies immediately (page stays `PUBLISHED` — verified 2026-09-28, so no push-live needed after) | https://developers.hubspot.com/docs/api-reference/legacy/cms/pages/website-pages/update-website-page |
+| Push page live | `POST /cms/v3/pages/site-pages/{objectId}/push-live` (empty body) | 204 pushes draft→live; 404 = nothing staged (page already live, e.g. right after a templatePath PATCH) — success, not an error | — (no public reference; verified live 2026-09-27/28) |
 | List blog posts | `GET /cms/v3/blogs/posts` | Post inventory before deploy | https://developers.hubspot.com/docs/api-reference/legacy/cms/blogs/posts/get-posts |
 | Create blog post | `POST /cms/v3/blogs/posts` | Create post with content body | https://developers.hubspot.com/docs/api-reference/legacy/cms/blogs/posts/create-post |
 | List forms | `GET /marketing/v3/forms` | Form inventory for mapping | https://developers.hubspot.com/docs/api-reference/legacy/marketing/forms/get-forms |
