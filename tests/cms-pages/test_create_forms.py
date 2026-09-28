@@ -13,11 +13,14 @@ FIX = REPO_ROOT / "tests" / "cms-pages" / "fixtures"
 SCRIPT = REPO_ROOT / "marketing" / "web-development" / "man-digital-cms-pages" / "scripts" / "create-forms.sh"
 
 
-def run_forms(*args: str, env_extra: dict[str, str] | None = None) -> subprocess.CompletedProcess[str]:
+def run_forms(*args: str, env_extra: dict[str, str] | None = None,
+              env_drop: list[str] | None = None) -> subprocess.CompletedProcess[str]:
     env = dict(os.environ)
     env["CURL_BIN"] = str(FIX / "fake-curl")
     if env_extra:
         env.update(env_extra)
+    for key in env_drop or []:
+        env.pop(key, None)
     return subprocess.run(
         [str(SCRIPT), *args],
         text=True, capture_output=True, env=env, input="",
@@ -265,7 +268,17 @@ class CreateFormsTests(unittest.TestCase):
         self.assertEqual(calls.count('"groupType": "default_group"'), 2)
         self.assertIn('"displayOrder": 0', calls)
         self.assertIn('"displayOrder": 1', calls)
-        self.assertNotIn('"richText": ""', calls)
+        posts = [line.split(" ", 2)[2] for line in calls.splitlines()
+                 if line.startswith("POST ")]
+        self.assertEqual(len(posts), 1)
+        payload = json.loads(posts[0])
+        # No "richText" KEY anywhere (richTextType is legitimate and stays).
+        self.assertNotIn('"richText":', json.dumps(payload))
+        groups = payload["fieldGroups"]
+        self.assertEqual(len(groups), 2)
+        for group in groups:
+            self.assertLessEqual(len(group["fields"]), 3)
+        self.assertEqual(sum(len(g["fields"]) for g in groups), 4)
 
     def test_token_env_resolves_named_var(self) -> None:
         cfg = write_config(self.tmp, None, extra={"tokenEnv": "HS_TOKEN_MINI_TEST"})
@@ -282,9 +295,55 @@ class CreateFormsTests(unittest.TestCase):
                            "--portal", "staging", "--config", str(cfg),
                            env_extra={"HS_TOKEN_MINI_TEST": "",
                                       "FAKE_CURL_LOG": str(log)})
-        self.assertEqual(result.returncode, 1, result.stdout)
+        self.assertEqual(result.returncode, 2, result.stdout)
         self.assertIn("HS_TOKEN_MINI_TEST", result.stderr)
         self.assertIn("unset or empty", result.stderr)
+        self.assertFalse(log.exists(), "token failure must precede any network call")
+
+    def test_non_json_response_redacts_token(self) -> None:
+        log = self.tmp / "curl.log"
+        result = run_forms("--spec", str(write_spec(self.tmp, [CONTACT_FORM])),
+                           "--portal", "staging", "--config", str(self.config),
+                           "--token", "pat-test-1234",
+                           env_extra={"FAKE_CURL_LOG": str(log),
+                                      "FAKE_CURL_GET_RESP": "boom pat-test-1234"})
+        self.assertEqual(result.returncode, 1, result.stdout)
+        self.assertIn("[REDACTED]", result.stderr)
+        self.assertNotIn("pat-test-1234", result.stdout + result.stderr)
+
+    def test_missing_id_redacts_token(self) -> None:
+        result = run_forms("--spec", str(write_spec(self.tmp, [CONTACT_FORM])),
+                           "--portal", "staging", "--config", str(self.config),
+                           "--token", "pat-test-1234",
+                           env_extra={"FAKE_CURL_POST_RESP": '{"error": "pat-test-1234"}'})
+        self.assertEqual(result.returncode, 1, result.stdout)
+        self.assertIn("[REDACTED]", result.stderr)
+        self.assertNotIn("pat-test-1234", result.stdout + result.stderr)
+
+    def test_empty_token_flag_falls_through_to_env(self) -> None:
+        log = self.tmp / "curl.log"
+        result = run_forms("--spec", str(write_spec(self.tmp, [CONTACT_FORM])),
+                           "--portal", "staging", "--config", str(self.config),
+                           "--token", "",
+                           env_extra={"HS_TOKEN": "pat-test-1234",
+                                      "FAKE_CURL_LOG": str(log),
+                                      "FAKE_CURL_ECHO_AUTH": "1"})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        auths = [line for line in log.read_text(encoding="utf-8").splitlines()
+                 if line.startswith("AUTH ")]
+        self.assertTrue(auths, "expected AUTH lines in curl log")
+        for line in auths:
+            self.assertEqual(line, "AUTH pat-test-1234")
+
+    def test_empty_token_flag_with_nothing_dies_before_network(self) -> None:
+        log = self.tmp / "curl.log"
+        result = run_forms("--spec", str(write_spec(self.tmp, [CONTACT_FORM])),
+                           "--portal", "staging", "--config", str(self.config),
+                           "--token", "",
+                           env_extra={"FAKE_CURL_LOG": str(log)},
+                           env_drop=["HS_TOKEN"])
+        self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+        self.assertIn("no token supplied", result.stderr)
         self.assertFalse(log.exists(), "token failure must precede any network call")
 
 

@@ -65,7 +65,7 @@ def load_portal(path, wanted):
         with open(path, encoding="utf-8") as handle:
             portals = {p["id"]: p for p in yaml.safe_load(handle).get("portals", [])}
     except (yaml.YAMLError, AttributeError, KeyError, TypeError) as exc:
-        die(f"invalid config: {type(exc).__name__}")
+        die(f"invalid config: {type(exc).__name__}", 2)
     if wanted not in portals:
         die(f"unknown portal: {wanted} (have: {', '.join(sorted(portals))})", 2)
     return portals[wanted]
@@ -94,22 +94,26 @@ def resolve_token(opts, portal):
     tokenEnv names the env var holding THIS portal's private-app token, so each
     portal entry points at its own secret when working across portals. Fail
     closed: a configured-but-unset tokenEnv dies instead of silently falling
-    back to another portal's HS_TOKEN. Mirrors the same-named helper in
-    deploy.sh (no shared lib by repo convention — keep in sync).
+    back to another portal's HS_TOKEN. An empty/whitespace --token is treated
+    as unset (falls through) rather than sent as an empty Bearer. Mirrors the
+    same-named helper in deploy.sh (no shared lib by repo convention — keep
+    in sync).
     """
-    if opts["token_flag"]:
+    if opts["token_flag"] and opts["token"] and opts["token"].strip():
         return opts["token"]
     tenv = portal.get("tokenEnv")
     if tenv is not None:
         if not isinstance(tenv, str) or not tenv.strip():
-            die("config tokenEnv must be a non-empty string")
+            die("config tokenEnv must be a non-empty string", 2)
         val = os.environ.get(tenv.strip())
-        if val:
+        if val and val.strip():
             return val
         if not opts["dry_run"]:
-            die(f"token for portal missing: env var {tenv.strip()} (tokenEnv) is unset or empty")
-    if opts["token"]:
-        return opts["token"]
+            die(f"token for portal missing: env var {tenv.strip()} (tokenEnv) is unset or empty", 2)
+    # NOTE: read HS_TOKEN live — an empty --token flag clobbers opts["token"],
+    # so the parsed default is unreliable once the flag was given.
+    if os.environ.get("HS_TOKEN") and os.environ["HS_TOKEN"].strip():
+        return os.environ["HS_TOKEN"]
     if opts["dry_run"]:
         return "DRY-RUN-TOKEN"
     try:
@@ -372,7 +376,8 @@ def main():
             try:
                 return json.loads(proc.stdout) if proc.stdout.strip() else {}
             except ValueError:
-                die(f"{step} returned non-JSON: {proc.stdout.strip()[:200]}")
+                leaked = proc.stdout.strip().replace(token, "[REDACTED]")[:200]
+                die(f"{step} returned non-JSON: {leaked}")
 
         existing = {}  # form name -> id
         after = None
@@ -405,8 +410,8 @@ def main():
                 created = curl(["-X", "POST", FORMS], f"create form \"{full_name}\"", payload)
                 guid = created.get("id")
                 if not guid:
-                    die(f"create form \"{full_name}\" returned no id: "
-                        f"{json.dumps(created)[:200]}")
+                    leaked = json.dumps(created).replace(token, "[REDACTED]")[:200]
+                    die(f"create form \"{full_name}\" returned no id: {leaked}")
                 print(f"CREATED {module} \"{full_name}\" {guid}")
                 guids[module] = guid
                 existing[full_name] = guid

@@ -225,6 +225,18 @@ class ValidateThemeTests(unittest.TestCase):
         self.assertIn("FAIL: g4", result.stderr)
         self.assertIn("unmanifested image src /brand/none.jpg", result.stderr)
 
+    def test_lookalike_hubfs_host_earns_no_exemption(self) -> None:
+        fields = self.theme / "modules" / "header.module" / "fields.json"
+        url = "https://hubspotusercontent.attacker.invalid/hubfs/1/brand/x.jpg"
+        text = fields.read_text(encoding="utf-8").replace('"/brand/x.jpg"', f'"{url}"')
+        fields.write_text(text, encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g4", result.stderr)
+        # Skipped by normalization (dead manifest) AND rejected as unallowlisted;
+        # the dead-manifest check runs first.
+        self.assertIn("dead manifest entry (unreferenced): /brand/x.jpg", result.stderr)
+
     # S4 (gate-2): form-type field requires a native {% form %} tag.
     def _add_form_module(self, name: str, html: str) -> None:
         mod = self.theme / "modules" / f"{name}.module"

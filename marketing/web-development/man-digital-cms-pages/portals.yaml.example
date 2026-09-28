@@ -15,7 +15,7 @@ portals:
     blogId: null           # HubSpot blog id, or null to auto-provision one
     domain: null           # public domain, or null (informational only)
     forms: {}              # module-name -> HubSpot form GUID map (empty = no forms yet)
-    tokenEnv: HS_TOKEN_STAGING  # env var holding THIS portal's token (unset = use HS_TOKEN/prompt)
+    tokenEnv: HS_TOKEN_STAGING  # env var holding THIS portal's token (omit this key = shared HS_TOKEN/prompt; a NAMED-but-unset var fails the run, never falls back)
     # formsProvision: {}   # OPTIONAL (absent = manual forms, old behavior). When enabled,
                            # deploy.sh runs create-forms.sh BEFORE the theme upload (plan step 2b):
     # formsProvision:

@@ -1,24 +1,32 @@
 #!/usr/bin/env bash
 # Fake curl for cms-pages tests: no network, canned JSON per HTTP method.
-# FAKE_CURL_FAIL=1 -> exit 22 like a real auth failure.
+# FAKE_CURL_FAIL=1 -> exit 22 echoing the PRESENTED token, so redaction tests
+# prove substitution instead of passing vacuously on a fixed string.
 # FAKE_CURL_GET_RESP / FAKE_CURL_POST_RESP / FAKE_CURL_PUT_RESP override bodies.
 # FAKE_CURL_LOG=<file> appends one line per call: "<METHOD> <url> [@data-body]".
-if [ "${FAKE_CURL_FAIL:-0}" = "1" ]; then echo '{"error":"bad-token"}' >&2; exit 22; fi
+# FAKE_CURL_ECHO_AUTH=1 -> also log "AUTH <presented-token>" per call, so
+# token-routing tests can prove WHICH credential was used.
 method=GET
 url=""
 data=""
+hdr=""
 prev=""
 for a in "$@"; do
   case "$prev" in
     -X) method="$a" ;;
+    -K) hdr="$a" ;;
     -d|--data) case "$a" in @*) [ -f "${a#@}" ] && data=$(cat "${a#@}") ;; *) data="$a" ;; esac ;;
     *) case "$a" in http*|/marketing/*|/files/*|/cms/*) url="$a" ;; esac ;;
   esac
   prev="$a"
 done
+presented=""
+[ -n "$hdr" ] && [ -f "$hdr" ] && presented=$(sed -n 's/.*Bearer //;s/"//g;p' "$hdr" | head -1)
+if [ "${FAKE_CURL_FAIL:-0}" = "1" ]; then echo "request failed (presented token: $presented)" >&2; exit 22; fi
 if [ -n "${FAKE_CURL_LOG:-}" ]; then
   if [ -n "$data" ]; then printf '%s %s %s\n' "$method" "$url" "$data" >> "$FAKE_CURL_LOG";
   else printf '%s %s\n' "$method" "$url" >> "$FAKE_CURL_LOG"; fi
+  if [ "${FAKE_CURL_ECHO_AUTH:-0}" = "1" ]; then printf 'AUTH %s\n' "$presented" >> "$FAKE_CURL_LOG"; fi
 fi
 # NOTE: defaults live in variables because a JSON literal inside ${VAR:-...}
 # would terminate the expansion at its first } and leak a literal brace.

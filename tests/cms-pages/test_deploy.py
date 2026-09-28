@@ -43,12 +43,15 @@ class DeployTests(unittest.TestCase):
     def tearDown(self) -> None:
         shutil.rmtree(self.tmp, ignore_errors=True)
 
-    def run_deploy(self, *args: str, env_extra: dict | None = None) -> subprocess.CompletedProcess[str]:
+    def run_deploy(self, *args: str, env_extra: dict | None = None,
+                   env_drop: list[str] | None = None) -> subprocess.CompletedProcess[str]:
         env = dict(os.environ)
         env["HS_BIN"] = str(FIX / "fake-hs")
         env["CURL_BIN"] = str(FIX / "fake-curl")
         if env_extra:
             env.update(env_extra)
+        for key in env_drop or []:
+            env.pop(key, None)
         return subprocess.run(
             [str(SKILL_SCRIPTS / "deploy.sh"), *args],
             text=True, capture_output=True, env=env, input="",
@@ -107,7 +110,7 @@ class DeployTests(unittest.TestCase):
         bad.write_text("{{{\nnot: [valid\n", encoding="utf-8")
         result = self.run_deploy("--portal", "staging", "--zip", str(self.zip), "--config", str(bad),
                                 "--token", "pat-test-1234", "--dry-run", "--yes")
-        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertEqual(result.returncode, 2, result.stderr)
         self.assertNotIn("Traceback", result.stderr)
 
     def _zip_with_form_module(self, name: str = "contact_form") -> Path:
@@ -238,7 +241,7 @@ class DeployTests(unittest.TestCase):
         result = self.run_deploy("--portal", "staging", "--zip", str(self.zip),
                                 "--config", str(cfg),
                                 "--token", "pat-test-1234", "--dry-run", "--yes")
-        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertEqual(result.returncode, 2, result.stderr)
         self.assertIn("formsProvision must be a mapping", result.stderr)
         self.assertNotIn("Traceback", result.stderr)
 
@@ -248,7 +251,7 @@ class DeployTests(unittest.TestCase):
                                     {}, {"enabled": True,
                                          "spec": str(self.tmp / "no-such-spec.json")})),
                                 "--token", "pat-test-1234", "--dry-run", "--yes")
-        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertEqual(result.returncode, 2, result.stderr)
         self.assertIn("cannot read formsProvision.spec", result.stderr)
         self.assertNotIn("Traceback", result.stderr)
 
@@ -298,7 +301,7 @@ class DeployTests(unittest.TestCase):
                                     {}, extra={"tokenEnv": "HS_TOKEN_MINI_TEST"})),
                                 "--yes",
                                 env_extra={"HS_TOKEN_MINI_TEST": ""})
-        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertEqual(result.returncode, 2, result.stderr)
         self.assertIn("HS_TOKEN_MINI_TEST", result.stderr)
         self.assertIn("unset or empty", result.stderr)
 
@@ -310,6 +313,55 @@ class DeployTests(unittest.TestCase):
                                 env_extra={"HS_TOKEN_MINI_TEST": ""})
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("[LIVE] done", result.stdout)
+
+    def test_flag_token_reaches_provisioning_child(self) -> None:
+        # Split-brain guard: with conflicting credentials, parent AND child
+        # must both present the --token flag value, never tokenEnv's.
+        zip_path = self._zip_with_form_module()
+        spec = self._write_spec(["contact_form"])
+        log = self.tmp / "curl.log"
+        result = self.run_deploy("--portal", "staging", "--zip", str(zip_path),
+                                "--config", str(self._config_with_forms(
+                                    {}, {"enabled": True, "spec": str(spec)},
+                                    extra={"tokenEnv": "HS_TOKEN_MINI_TEST"})),
+                                "--token", "pat-right-portal", "--yes",
+                                env_extra={"HS_TOKEN_MINI_TEST": "pat-wrong-portal",
+                                           "FAKE_CURL_LOG": str(log),
+                                           "FAKE_CURL_ECHO_AUTH": "1"})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("FORM_GUID contact_form=", result.stdout)
+        calls = log.read_text(encoding="utf-8")
+        auths = [line for line in calls.splitlines() if line.startswith("AUTH ")]
+        self.assertTrue(auths, "expected AUTH lines in curl log")
+        for line in auths:
+            self.assertEqual(line, "AUTH pat-right-portal")
+        self.assertNotIn("pat-wrong-portal", calls)
+
+    def test_empty_token_flag_falls_through_to_env(self) -> None:
+        log = self.tmp / "curl.log"
+        result = self.run_deploy("--portal", "staging", "--zip", str(self.zip),
+                                "--config", str(self.config),
+                                "--token", "", "--yes",
+                                env_extra={"HS_TOKEN": "pat-test-1234",
+                                           "FAKE_CURL_LOG": str(log),
+                                           "FAKE_CURL_ECHO_AUTH": "1"})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        auths = [line for line in log.read_text(encoding="utf-8").splitlines()
+                 if line.startswith("AUTH ")]
+        self.assertTrue(auths, "expected AUTH lines in curl log")
+        for line in auths:
+            self.assertEqual(line, "AUTH pat-test-1234")
+
+    def test_empty_token_flag_with_nothing_dies_before_network(self) -> None:
+        log = self.tmp / "curl.log"
+        result = self.run_deploy("--portal", "staging", "--zip", str(self.zip),
+                                "--config", str(self.config),
+                                "--token", "", "--yes",
+                                env_extra={"FAKE_CURL_LOG": str(log)},
+                                env_drop=["HS_TOKEN"])
+        self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+        self.assertIn("no token supplied", result.stderr)
+        self.assertFalse(log.exists(), "token failure must precede any network call")
 
 
 if __name__ == "__main__":

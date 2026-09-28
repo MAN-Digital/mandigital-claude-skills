@@ -4,7 +4,7 @@
 # Env: HS_BIN (default hs), CURL_BIN (default curl), HS_TOKEN (token fallback),
 # CREATE_FORMS_BIN (default: create-forms.sh next to this script),
 # plus the per-portal var named by the entry's tokenEnv key (runbook §1)
-# Exit codes: 0 ok, 1 failed check, 2 usage/unknown portal, 3 authorization required.
+# Exit codes: 0 ok, 1 failed check, 2 usage/config, 3 authorization required.
 # Step 4 note: live `hubspot` CLI has no cms/api subcommands (CRM-only CLI,
 # per references/api-playbook.md §1), so content probes use verified REST paths
 # via curl (see CONTENT_PROBES).
@@ -63,9 +63,9 @@ def load_config(path):
             data = yaml.safe_load(handle)
         portals = {p["id"]: p for p in data.get("portals", [])}
     except (yaml.YAMLError, AttributeError, KeyError, TypeError) as exc:
-        die(f"invalid config: {type(exc).__name__}")
+        die(f"invalid config: {type(exc).__name__}", 2)
     if sum(1 for p in portals.values() if p.get("staging")) != 1:
-        die("config must flag exactly one staging portal")
+        die("config must flag exactly one staging portal", 2)
     return portals
 
 def pick_portal(portals, wanted):
@@ -91,23 +91,27 @@ def resolve_token(opts, portal):
     tokenEnv names the env var holding THIS portal's private-app token, so each
     portal entry points at its own secret when working across portals. Fail
     closed: a configured-but-unset tokenEnv dies instead of silently falling
-    back to another portal's HS_TOKEN. Dry-run never needs a token, so the
-    fail-closed check is skipped there. Mirrors the same-named helper in
-    create-forms.sh (no shared lib by repo convention — keep in sync).
+    back to another portal's HS_TOKEN. An empty/whitespace --token is treated
+    as unset (falls through) rather than sent as an empty Bearer. Dry-run
+    never needs a token, so the fail-closed check is skipped there. Mirrors
+    the same-named helper in create-forms.sh (no shared lib by repo
+    convention — keep in sync).
     """
-    if opts["token_flag"]:
+    if opts["token_flag"] and opts["token"] and opts["token"].strip():
         return opts["token"]
     tenv = portal.get("tokenEnv")
     if tenv is not None:
         if not isinstance(tenv, str) or not tenv.strip():
-            die("config tokenEnv must be a non-empty string")
+            die("config tokenEnv must be a non-empty string", 2)
         val = os.environ.get(tenv.strip())
-        if val:
+        if val and val.strip():
             return val
         if not opts["dry_run"]:
-            die(f"token for portal missing: env var {tenv.strip()} (tokenEnv) is unset or empty")
-    if opts["token"]:
-        return opts["token"]
+            die(f"token for portal missing: env var {tenv.strip()} (tokenEnv) is unset or empty", 2)
+    # NOTE: read HS_TOKEN live — an empty --token flag clobbers opts["token"],
+    # so the parsed default is unreliable once the flag was given.
+    if os.environ.get("HS_TOKEN") and os.environ["HS_TOKEN"].strip():
+        return os.environ["HS_TOKEN"]
     if opts["dry_run"]:
         return "DRY-RUN-TOKEN"
     try:
@@ -129,20 +133,20 @@ def forms_provision(portal, config_dir):
     if raw is None:
         return {}
     if not isinstance(raw, dict):
-        die("config formsProvision must be a mapping (enabled/spec/prefix)")
+        die("config formsProvision must be a mapping (enabled/spec/prefix)", 2)
     unknown = sorted(set(raw) - {"enabled", "spec", "prefix"})
     if unknown:
-        die(f"config formsProvision has unknown key(s): {', '.join(unknown)}")
+        die(f"config formsProvision has unknown key(s): {', '.join(unknown)}", 2)
     if "enabled" in raw and not isinstance(raw["enabled"], bool):
-        die("config formsProvision.enabled must be boolean")
+        die("config formsProvision.enabled must be boolean", 2)
     out = {"enabled": bool(raw.get("enabled", False)),
            "prefix": raw.get("prefix", "")}
     if "prefix" in raw and (not isinstance(raw["prefix"], str) or not raw["prefix"].strip()):
-        die("config formsProvision.prefix must be a non-empty string")
+        die("config formsProvision.prefix must be a non-empty string", 2)
     if out["enabled"]:
         spec = raw.get("spec")
         if not isinstance(spec, str) or not spec.strip():
-            die("config formsProvision.spec is required when enabled")
+            die("config formsProvision.spec is required when enabled", 2)
         out["spec"] = spec if os.path.isabs(spec) else os.path.join(config_dir, spec)
     elif "spec" in raw:
         out["spec"] = raw["spec"]
@@ -159,9 +163,9 @@ def spec_modules(spec_path):
             data = json.load(handle)
         modules = {f["module"] for f in data["forms"]}
     except (OSError, ValueError, KeyError, TypeError) as exc:
-        die(f"cannot read formsProvision.spec {spec_path}: {type(exc).__name__}")
+        die(f"cannot read formsProvision.spec {spec_path}: {type(exc).__name__}", 2)
     if not modules or not all(isinstance(m, str) for m in modules):
-        die(f"formsProvision.spec {spec_path} has no usable form modules")
+        die(f"formsProvision.spec {spec_path} has no usable form modules", 2)
     return modules
 
 def main():
@@ -293,9 +297,13 @@ def main():
                             "-F", f"folderPath={folder}", "-F", 'options={"access":"PUBLIC_INDEXABLE","overwrite":true}'],
                            f"image upload {item['dest']}")
         if provision.get("enabled"):
+            # Pass the RESOLVED token explicitly: the child re-resolves
+            # tokenEnv first, so inheriting only HS_TOKEN could provision
+            # forms in a different portal (or fail after images uploaded).
             try:
                 forms_proc = run_live(
-                    [CREATE_FORMS_BIN, "--portal", pid, "--config", opts["config"]],
+                    [CREATE_FORMS_BIN, "--portal", pid, "--config", opts["config"],
+                     "--token", token],
                     "form provisioning")
             except FileNotFoundError:
                 die(f"form provisioning failed: {CREATE_FORMS_BIN} not found "

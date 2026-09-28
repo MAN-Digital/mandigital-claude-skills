@@ -328,7 +328,26 @@ PYEOF
 out=$(python3 - "$theme_dir" "$inventory" <<'PYEOF' 2>&1
 import json, re, sys
 from pathlib import Path
+from urllib.parse import urlparse
 theme = Path(sys.argv[1])
+def hubfs_dest(url):
+    """Manifest dest for a trusted File Manager URL, else None.
+
+    S12: both the hostname AND the /hubfs/<portal>/<dest> path are validated.
+    A substring match on "hubspotusercontent" is not enough — lookalike hosts
+    (hubspotusercontent.attacker.invalid) must not earn the exemption.
+    Trusted host shape verified live 2026-09-27 (<portal>.fs1.
+    hubspotusercontent-na1.net); extend the region class on new failures.
+    """
+    try:
+        host = (urlparse(url).hostname or "").lower()
+        path = urlparse(url).path
+    except ValueError:
+        return None
+    if not re.fullmatch(r"[a-z0-9.-]+\.hubspotusercontent-[a-z]{2}[0-9]\.net", host):
+        return None
+    m = re.fullmatch(r"/hubfs/\d+/(.+)", path)
+    return ("/" + m.group(1)) if m else None
 try:
     inv = json.loads(Path(sys.argv[2]).read_text(encoding="utf-8"))
 except json.JSONDecodeError:
@@ -348,13 +367,14 @@ for fields_file in sorted((theme / "modules").glob("*.module/fields.json")):
     # unmanifested srcs + false "dead manifest entry"). Tolerate the space.
     # S12: live themes reference File Manager files by absolute hubfs URL
     # (site-relative /extek/... 404s — verified live 2026-09-27). Normalize
-    # hubfs URLs back to the manifest dest before the membership checks.
+    # trusted hubfs URLs back to the manifest dest before the membership
+    # checks; anything else absolute is governed by the external-URL check.
     for src in re.findall(r'"src"\s*:\s*"([^"]+)"', text):
         if src.startswith(("http://", "https://")):
-            m = re.search(r"/hubfs/\d+/.+?(?:[?#]|$)", src)
-            if not m:
-                continue  # non-FM absolute URL: external-URL check below governs it
-            src = "/" + m.group(0).split("/hubfs/", 1)[1].split("/", 1)[1].rstrip("?#")
+            dest = hubfs_dest(src)
+            if dest is None:
+                continue
+            src = dest
         elif not src.startswith("/"):
             continue  # relative/empty src: other checks govern
         used.add(src)
@@ -379,8 +399,8 @@ for path in sorted(theme.rglob("*")):
         # JSON \" escapes leak a trailing backslash into the raw-text match (SB-1).
         url = raw.rstrip("\\")
         # S12: hubfs URLs of manifested files are first-party, not external.
-        m = re.search(r"https://[A-Za-z0-9.\\-]*hubspotusercontent[^/]*/hubfs/\d+/.+?(?:[?#]|$)", url)
-        if m and ("/" + m.group(0).split("/hubfs/", 1)[1].split("/", 1)[1].rstrip("?#")) in manifest:
+        dest = hubfs_dest(url)
+        if dest is not None and dest in manifest:
             continue
         if url not in allowed:
             print(f"unallowlisted external URL {url} in {path.relative_to(theme)}"); sys.exit(1)

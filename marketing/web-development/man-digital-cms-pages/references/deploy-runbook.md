@@ -37,13 +37,13 @@ Token precedence per run: `--token` flag → `tokenEnv` var → `HS_TOKEN` → h
 scripts/deploy.sh --portal prod --zip dist/my-theme-20260926-abc1234.zip --config portals.yaml --token "$HS_TOKEN"
 ```
 
-Without `--portal`, deploy.sh lists entries and prompts. Without `--token`, it prompts (input hidden) and never echoes. `--dry-run` prints every action without executing. `--yes` is required for real execution; without it the script stops after the plan summary.
+Without `--portal`, deploy.sh lists entries and prompts. Without `--token` and no configured token source (`tokenEnv` var or `HS_TOKEN`), it prompts (input hidden) and never echoes; an empty `--token` is treated as unset and falls through the same chain. `--dry-run` prints every action without executing. `--yes` is required for real execution; without it the script stops after the plan summary. Exit codes: 0 ok, 1 failed check, 2 usage/config, 3 authorization required.
 
 ## 3. What deploy executes, in order
 
 1. Verify `<theme>/QA-EVIDENCE.json`: all local gates `pass`, evidence newer than every theme file.
 2. Upload images: each `assets.json` entry → File Manager destination (`folderPath` folders are auto-created by the upload call).
-2b. Provision forms — ONLY when the portal entry sets `formsProvision.enabled: true`: run `scripts/create-forms.sh --portal <id> --config portals.yaml` (spec + prefix come from the portal entry), which creates each form-spec form via `POST /marketing/v3/forms`, skipping names that already exist. The fail-closed unmapped-module check counts spec-covered modules as satisfied. Without the flag this step does not exist and step 7 stays fully manual.
+2b. Provision forms — ONLY when the portal entry sets `formsProvision.enabled: true`: run `scripts/create-forms.sh --portal <id> --config portals.yaml --token <resolved-token>` (spec + prefix come from the portal entry; deploy.sh passes its own resolved token so parent and child always use the same credential), which creates each form-spec form via `POST /marketing/v3/forms`, skipping names that already exist. The fail-closed unmapped-module check counts spec-covered modules as satisfied. Without the flag this step does not exist and step 7 stays fully manual.
 3. Upload theme: `hs cms upload <unzipped-theme> <theme> --account=<hsAccount>`.
 
 **Steps 4–7 are MANUAL in v1** (deploy.sh plans them in dry-run but does not execute them; its `[LIVE] done` message says so explicitly). Run each by hand with the private-app token (`Authorization: Bearer $HS_TOKEN`, base `https://api.hubapi.com`), using the verified paths from `references/api-playbook.md` §1:
@@ -104,7 +104,7 @@ Translate each Figma/design input row in order: single-line inputs → `text` (u
 
 ### Manual fallback (when API create fails)
 
-If `create-forms.sh` fails (auth, validation, or HubSpot-side error), the deploy stops before the theme upload — nothing half-provisions. Fall back by hand: create each form in HubSpot (Marketing → Forms) from the same spec values, copy each new form's GUID into the portal entry's `forms:` map (`<module>: "<guid>"`), then re-run deploy.sh. The fail-closed check passes on the pasted GUIDs with provisioning disabled or enabled.
+If `create-forms.sh` fails (auth, validation, or HubSpot-side error), the deploy stops before the theme upload — but forms created before the failure persist in the portal. Either re-run (creation is idempotent by name: existing forms `SKIP`, only missing ones are created) or fall back by hand: create each remaining form in HubSpot (Marketing → Forms) from the same spec values, copy each new form's GUID into the portal entry's `forms:` map (`<module>: "<guid>"`), then re-run deploy.sh. The fail-closed check passes on the pasted GUIDs with provisioning disabled or enabled; leaving provisioning enabled re-invokes the API (harmless — existing names skip).
 
 ## 4. Gate-5 staging verification
 
@@ -136,7 +136,7 @@ Read-only: fetch-probes each `assets.json` `dest` via `hs filemanager fetch <des
 
 ## Multilingual guidance
 
-Per-locale page values must be **text/textarea/richtext/choice** fields — the only `module_attribute`-overridable kinds used here. Grouped, link, and image content stays single-locale default plus an editor pass (this shapes field design: crumbs, language links, and CTAs use text hrefs rather than link/image pickers). Validated on the 2026-09-26 dry-run (see `docs/superpowers/evidence/cms-pages-full-site/2026-09-26-dryrun.md`, SB-9).
+Per-locale page values must be **text/richtext/choice** fields — the only `module_attribute`-overridable kinds used here. (`textarea` is not a valid HubSpot *module* field type — S11 rejects it, use `richtext`; the form-*spec* `textarea` in the provisioning section above is a separate namespace mapping to the Forms API `multi_line_text` and is unaffected.) Grouped, link, and image content stays single-locale default plus an editor pass (this shapes field design: crumbs, language links, and CTAs use text hrefs rather than link/image pickers). Validated on the 2026-09-26 dry-run (see `docs/superpowers/evidence/cms-pages-full-site/2026-09-26-dryrun.md`, SB-9).
 
 ## Forms per locale (limitation)
 
