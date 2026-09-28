@@ -52,8 +52,11 @@ unclear`, with the matched rule recorded for audit.
 ### What it does NOT do
 
 - **It never sends autonomously.** Nothing in the system auto-sends. The
-  pipeline stages Woodpecker **DRAFT** campaigns; a human activates them in the
-  Woodpecker UI. `copy_refresh.py` refuses any campaign whose status is not in
+  pipeline stages Woodpecker **DRAFT** campaigns; release follows the
+  campaign's configured `release_authority` (`config/autonomy-profiles.json`):
+  a human activates in the Woodpecker UI under `manual_woodpecker_ui`, while
+  under `approval_bound_autonomy` the engine executes after separate attended
+  decisions. `copy_refresh.py` refuses any campaign whose status is not in
   `allowed_statuses` (DRAFT) and never activates one.
 - **InMail objection handling is manual.** LinkUp's InMail/Sales-Nav store is
   readable, but a LinkedIn identity cannot be resolved to an enrolled contact
@@ -459,7 +462,10 @@ The script backs up `openclaw.json` first and restarts the container to apply.
 
 **The binding rule for this channel: nothing sends from it.** Everything is
 DRAFT-only staging. Approvals live in Mission Control and Woodpecker; a human
-activates the campaign in the Woodpecker UI. Autonomy tiers are declared per
+activates the campaign in the Woodpecker UI under `manual_woodpecker_ui`,
+while under `approval_bound_autonomy` release is attended engine execution —
+the campaign's `release_authority` decides and the two paths must not be
+mixed. Autonomy tiers are declared per
 stream in `stream.yaml` and promoted **only** by an explicit human decision
 after at least two weeks of calibration; when two tiers could apply, the lower
 wins.
@@ -640,7 +646,10 @@ fails the suite instead of degrading quietly to the file queue.
    that cannot import `unsubscribe_verify` is a loud problem, never a skipped
    check.
 
-8. **Human approves and activates** in Mission Control / the Woodpecker UI.
+8. **Human approves and releases** per the campaign's `release_authority`:
+   activation in Mission Control / the Woodpecker UI under
+   `manual_woodpecker_ui`, attended engine execution under
+   `approval_bound_autonomy`.
    Nothing before this point has sent anything.
 
 9. **Inbox watch.** The three watchers poll on their own crons; the webhook
@@ -1336,7 +1345,9 @@ returns 405; read campaigns by id.
 
 ### What remains manual
 
-- **Activation.** Every campaign is activated by a human in the Woodpecker UI.
+- **Activation.** Every campaign is released by a human decision: activation
+  in the Woodpecker UI under `manual_woodpecker_ui`, attended engine
+  execution under `approval_bound_autonomy`.
 - **InMail objections.** Recorded by a human running `record_objection.py` (see
   §10).
 - **Declaring a legal basis** per list/jurisdiction.
