@@ -1,7 +1,6 @@
 ---
 name: outreach-command
 description: "Run or orchestrate the outreach campaign pipeline: contacts → signal sourcing → cadence strategist → copywriter → copy QA → Mission Control upsert, with human gates in MC and DRAFT-only staging on build approval. Use when asked to 'write/draft/run outreach' or '/outreach'. Nothing ever sends from this pipeline."
-user-invocable: true
 ---
 
 <!-- OUTREACH-ENGINE GUARD — prepended by scripts/outreach-deploy-skills.sh -->
