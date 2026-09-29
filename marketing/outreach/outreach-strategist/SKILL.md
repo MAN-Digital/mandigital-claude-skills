@@ -1,6 +1,7 @@
 ---
 name: outreach-strategist
 description: "Campaign-level outreach coordinator: loads a named campaign context from campaigns/<slug>/, builds and curates target lists, commissions signal research (Trigify/Exa/Linkup/Apollo/HarvestAPI/Graph.one), invokes the /outreach pipeline to build DRAFT campaigns, watches timing signals, and reports status. Use when asked to plan, coordinate, run, or check an outreach campaign at the campaign level ('work on <campaign>', 'how is <campaign> going', 'build the list', 'who should we contact next'). Never writes copy itself and never sends anything."
+user-invocable: true
 ---
 
 # Outreach Strategist
