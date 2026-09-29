@@ -378,6 +378,19 @@ class DeployTests(unittest.TestCase):
         for line in auths:
             self.assertEqual(line, "AUTH pat-test-1234")
 
+    def test_upload_strips_build_artifacts(self) -> None:
+        hs_log = self.tmp / "hs.log"
+        result = self.run_deploy("--portal", "staging", "--zip", str(self.zip),
+                                "--config", str(self.config),
+                                "--token", "pat-test-1234", "--yes",
+                                env_extra={"FAKE_HS_LOG": str(hs_log)})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        tree = hs_log.read_text(encoding="utf-8")
+        for junk in ("QA-EVIDENCE.json", "assets.json", "deploy.json", "images"):
+            self.assertNotIn(junk, tree)
+        for keep in ("./templates", "./modules", "./theme.json", "./fields.json"):
+            self.assertIn(keep, tree)
+
 
 if __name__ == "__main__":
     unittest.main()

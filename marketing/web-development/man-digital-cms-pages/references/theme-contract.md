@@ -53,5 +53,6 @@ Every image default `src` in every module `fields.json` has exactly one entry; e
 ## 6. Asset rules
 
 - Marketer-swappable images → File Manager via manifest, referenced by absolute `dest` path.
+- Downloadable binaries (PDFs) ride the same manifest → File Manager flow (`dest` e.g. `/files/guide.pdf`); link them by absolute hubfs URL and cover every link in the live linkcheck (curl) step — gate-4 scans only `src` patterns, so PDF `href`s are verified live, not in QA.
 - `get_asset_url` images allowed only for CSS/structural decoration.
 - `.hsignore` supported for local-only files (never uploaded).

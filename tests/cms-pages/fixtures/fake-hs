@@ -22,5 +22,31 @@ if [ "${1:-}" = "filemanager" ] && [ "${2:-}" = "fetch" ]; then
   echo "fake-hs fetch OK: $*"
   exit 0
 fi
+# FAKE_HS_LOG=<file>: on `cms upload <src>`, record the uploaded tree so
+# tests can prove build artifacts were stripped from staging.
+if [ "${1:-}" = "cms" ] && [ "${2:-}" = "upload" ] && [ -n "${FAKE_HS_LOG:-}" ]; then
+  (cd "${3:-.}" && find . | sort) >> "$FAKE_HS_LOG" 2>/dev/null
+fi
+# FAKE_CMS_MISSING="<name> ...": names `cms list` omits (verify-blog tests).
+if [ "${1:-}" = "cms" ] && [ "${2:-}" = "list" ]; then
+  for f in blog_listing.html blog_post.html home.html; do
+    case " ${FAKE_CMS_MISSING:-} " in *" $f "*) continue;; esac
+    echo "$f"
+  done
+  exit 0
+fi
+# FAKE_BLOG_SETTINGS=<json>: blog-settings body for `api` (verify-blog tests).
+# FAKE_API_FAIL=1: `api` fails (token-fallback / unknown-state tests).
+if [ "${1:-}" = "api" ]; then
+  if [ "${FAKE_API_FAIL:-0}" = "1" ]; then
+    echo "fake-hs: api forbidden (missing content scope)" >&2; exit 1
+  fi
+  if [ -n "${FAKE_BLOG_SETTINGS:-}" ]; then
+    echo "$FAKE_BLOG_SETTINGS"
+  else
+    echo '{"listingPageTemplatePath":null,"postTemplatePath":null}'
+  fi
+  exit 0
+fi
 echo "fake-hs OK: $*"
 exit 0

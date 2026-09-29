@@ -407,6 +407,48 @@ for path in sorted(theme.rglob("*")):
 PYEOF
 ) || fail 4 "$out"
 
+# S13 (gate-4: links + assets): no vendor watermarks. Past agency branding
+# must never ship — it leaked once via a leftover helper (js/tj-forms.js
+# carried a "transjt" header comment, found live 2026-09-27) and once as the
+# theme folder name itself (transjt_projects/tj-extek, live 2026-09-27,
+# renamed to extek-theme 2026-09-28). Both file CONTENTS and relative PATHS
+# are scanned (names included, so any file inside a watermarked folder fails
+# even when its contents are clean; empty dirs don't ship and aren't scanned).
+# Substring hits: "transjt", "tjextek". Regex hits
+# (word-boundary): "tj" + separator (tj-foo, tj_foo, tj/foo) and standalone
+# "tj". Deliberately NOT matched: "tj" inside longer words (Norwegian
+# "nettjeneste" must keep passing) — extend the patterns if a new form appears.
+out=$(python3 - "$theme_dir" <<'PYEOF' 2>&1
+import re, sys
+from pathlib import Path
+theme = Path(sys.argv[1])
+SUBMARKS = ("transjt", "tjextek")
+PATTERNS = (re.compile(r"\btj[-_/]"), re.compile(r"\btj\b"))
+BINARIES = (".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg", ".ico")
+def check(text, rel):
+    lowered = text.lower()
+    for mark in SUBMARKS:
+        if mark in lowered:
+            print(f"banned vendor string {mark!r} in {rel}"); sys.exit(1)
+    for pat in PATTERNS:
+        found = pat.search(lowered)
+        if found:
+            print(f"banned vendor string {found.group(0)!r} in {rel}"); sys.exit(1)
+for path in sorted(theme.rglob("*")):
+    if not path.is_file():
+        continue
+    rel = path.relative_to(theme)
+    check(str(rel), rel)  # paths first: watermarked folder/file names fail
+    if path.suffix in BINARIES:
+        continue
+    try:
+        text = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        continue
+    check(text, rel)
+PYEOF
+) || fail 4 "$out"
+
 # S6 (gate-4: links + assets): no [...] placeholder text in fields.json
 # DEFAULT string values (they render to visitors). Parsed-JSON walk, not raw
 # text: structural brackets (arrays) never match — only string VALUES held in

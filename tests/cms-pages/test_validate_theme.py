@@ -237,6 +237,98 @@ class ValidateThemeTests(unittest.TestCase):
         # the dead-manifest check runs first.
         self.assertIn("dead manifest entry (unreferenced): /brand/x.jpg", result.stderr)
 
+    # S13: vendor watermarks fail the gate.
+    def test_transjt_watermark_fails_gate4(self) -> None:
+        header = self.theme / "modules" / "header.module" / "module.html"
+        header.write_text(header.read_text(encoding="utf-8") + "<!-- TransJT -->\n",
+                          encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g4", result.stderr)
+        self.assertIn("banned vendor string 'transjt' in", result.stderr)
+
+    def test_tj_prefix_watermark_fails_gate4(self) -> None:
+        header = self.theme / "modules" / "header.module" / "module.html"
+        header.write_text(header.read_text(encoding="utf-8") + "<!-- tj-forms helper -->\n",
+                          encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g4", result.stderr)
+        self.assertIn("banned vendor string 'tj-' in", result.stderr)
+
+    def test_tjextek_watermark_fails_gate4(self) -> None:
+        header = self.theme / "modules" / "header.module" / "module.html"
+        header.write_text(header.read_text(encoding="utf-8") + "<!-- tjextek theme -->\n",
+                          encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g4", result.stderr)
+        self.assertIn("banned vendor string 'tjextek' in", result.stderr)
+
+    def test_standalone_tj_watermark_fails_gate4(self) -> None:
+        header = self.theme / "modules" / "header.module" / "module.html"
+        header.write_text(header.read_text(encoding="utf-8") + "<!-- built by TJ -->\n",
+                          encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g4", result.stderr)
+        self.assertIn("banned vendor string 'tj' in", result.stderr)
+
+    def test_watermarked_filename_fails_gate4(self) -> None:
+        # S13 scans relative PATHS too: a watermarked file name fails even
+        # when its contents are clean (pins the tj-extek folder rename).
+        helper = self.theme / "js" / "tj-forms.js"
+        helper.write_text("// clean helper\n", encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g4", result.stderr)
+        self.assertIn("banned vendor string 'tj-' in", result.stderr)
+        self.assertIn("tj-forms.js", result.stderr)
+
+    def test_watermarked_directory_fails_gate4(self) -> None:
+        subdir = self.theme / "js" / "tj-lib"
+        subdir.mkdir(parents=True)
+        (subdir / "clean.js").write_text("// clean helper\n", encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("FAIL: g4", result.stderr)
+        self.assertIn("banned vendor string 'tj-' in", result.stderr)
+        self.assertIn("tj-lib", result.stderr)
+
+    def test_tj_underscore_variant_fails_gate4(self) -> None:
+        header = self.theme / "modules" / "header.module" / "module.html"
+        header.write_text(header.read_text(encoding="utf-8") + "<!-- tj_forms helper -->\n",
+                          encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("banned vendor string 'tj_' in", result.stderr)
+
+    def test_tj_slash_path_variant_fails_gate4(self) -> None:
+        subdir = self.theme / "tj"
+        subdir.mkdir()
+        (subdir / "x.js").write_text("// clean helper\n", encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("banned vendor string 'tj/' in", result.stderr)
+
+    def test_watermarked_binary_filename_fails_gate4(self) -> None:
+        # Binary CONTENTS are skipped, but the path scan still catches a
+        # watermarked file name.
+        (self.theme / "images" / "tj-logo.png").write_bytes(b"\x89PNG\r\n\x1a\n")
+        result = run_validator(self.theme, self.inventory)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("banned vendor string 'tj-' in", result.stderr)
+        self.assertIn("tj-logo.png", result.stderr)
+
+    def test_nettjeneste_passes_gate4(self) -> None:
+        # Deliberate carve-out: "tj" inside longer words (Norwegian
+        # "nettjeneste") must NOT trip the standalone-tj pattern.
+        header = self.theme / "modules" / "header.module" / "module.html"
+        header.write_text(header.read_text(encoding="utf-8") + "<!-- Våre nettjenester er trygge -->\n",
+                          encoding="utf-8")
+        result = run_validator(self.theme, self.inventory)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
     def test_lookalike_hubfs_url_outside_fields_rejected(self) -> None:
         # Pins the exemption call site directly: manifest stays satisfied via
         # the normal src, so only the external-URL check can reject this.
