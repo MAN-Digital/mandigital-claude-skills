@@ -42,3 +42,7 @@ Converts a React (Vite + Tailwind + shadcn) repo or a Figma handoff into a valid
 - Small edits ("small edit …") stay lightweight: touched files only, no forced rebuild.
 
 Prerequisites beyond Setup above: `hs` CLI v8+, `gh` CLI, Python 3 with PyYAML (`pip3 install --user pyyaml`), `zip`, `unzip`, `curl`. Gate 3 (`hs cms lint`) needs hs auth (PAK) + network + an hs account with source-code-read or content-editor-access — local validation is NOT fully offline. Set `HS_ACCOUNT=<hsAccount>` (staging, never prod for routine runs) to select the lint account.
+
+## Portal configuration maintenance
+
+Ask to add or update an entry in `portals.yaml`, or say “use portal `<id>`” to select an existing entry for the task. The skill follows the Portal-config flow and [maintenance checklist](references/portal-config-maintenance.md), preserves unrelated settings, and validates edits locally. Config changes do not deploy anything. The existing gitignored config remains shared by both skill symlinks.
