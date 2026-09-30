@@ -71,6 +71,11 @@ UI editing. Prepare the payload while the user supplies a suitable credential.
 - Scope CSS to actual module wrapper IDs/classes observed in rendered output or
   module source. Check text against its background, including rich-text children;
   mobile metrics need readable labels, sensible wrapping, and no horizontal overflow.
+- Keep whitespace between a CSS opening brace and an ID selector, especially inside
+  media queries: write `@media (...) { #module ... }`, never a brace immediately
+  followed by `#`. HubL interprets that adjacent pair as a comment opener and can
+  swallow the remaining head markup. Verify rendered style/script boundaries, not
+  just successful API readback.
 - Match visible FAQs with FAQPage answers. Inspect the theme's existing JSON-LD:
   link to existing Article/WebPage/Organization IDs instead of duplicating them.
   Include accurate VideoObject metadata and OG image. Do not promise rich results.
