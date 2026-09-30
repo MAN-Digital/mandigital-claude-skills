@@ -35,7 +35,8 @@ All paths verified against the method+path on the linked doc page.
 | List site pages | `GET /cms/v3/pages/site-pages` | Page inventory before deploy — re-list EVERY run, never trust cached IDs (pages get deleted/recreated outside the skill: IDs change, slugs vanish) | https://developers.hubspot.com/docs/api-reference/legacy/cms/pages/website-pages/get-website-pages |
 | Create site page | `POST /cms/v3/pages/site-pages` | Create page from templatePath | https://developers.hubspot.com/docs/api-reference/legacy/cms/pages/website-pages/create-website-page |
 | Update site page | `PATCH /cms/v3/pages/site-pages/{objectId}` | Sparse-update page by ID; a templatePath PATCH on a live page applies immediately (page stays `PUBLISHED` — verified 2026-09-28, so no push-live needed after) | https://developers.hubspot.com/docs/api-reference/legacy/cms/pages/website-pages/update-website-page |
-| Push page live | `POST /cms/v3/pages/site-pages/{objectId}/push-live` (empty body) | 204 pushes draft→live; requires explicit publication authorization; treat any non-2xx response as unconfirmed and verify state, never assume 404 means success | — (no public reference; verified live 2026-09-27/28) |
+| Apply draft to live version | `POST /cms/v3/pages/site-pages/{objectId}/draft/push-live` (empty body) | Applies draft fields to the live version. For a never-published page this can leave state DRAFT; first publication also requires scheduling. Verify public HTTP/content, not just 204. | https://developers.hubspot.com/docs/api-reference/legacy/cms/pages/website-pages/drafts/publish-website-page-draft |
+| Publish a new site page | `POST /cms/v3/pages/site-pages/schedule` with `id` and ISO `publishDate` | Requires a strictly future timestamp; for publish-now requests use a short future offset, then verify actual public availability. Explicit publication authorization required. | https://developers.hubspot.com/docs/api-reference/legacy/cms/pages/website-pages/schedule-website-page |
 | List blog posts | `GET /cms/v3/blogs/posts` | Post inventory before deploy | https://developers.hubspot.com/docs/api-reference/legacy/cms/blogs/posts/get-posts |
 | Create blog post | `POST /cms/v3/blogs/posts` | Create post with content body | https://developers.hubspot.com/docs/api-reference/legacy/cms/blogs/posts/create-post |
 | List forms | `GET /marketing/v3/forms` | Form inventory for mapping | https://developers.hubspot.com/docs/api-reference/legacy/marketing/forms/get-forms |
@@ -107,3 +108,5 @@ scope; do not keep retrying 403s or silently switch to browser edits.
 
 Draft endpoints were read successfully in portal 1969772 on 2026-09-30;
 private-app write verification remains a per-session prerequisite.
+
+Publication verification (2026-09-30): the route without `/draft` returned 404. A successful `/draft/push-live` on an unpublished page applied its content but left it in DRAFT. The schedule endpoint rejected a current/past timestamp and accepted a strictly future timestamp. Never treat 404 or a scheduled state alone as proof that the public page is live.
