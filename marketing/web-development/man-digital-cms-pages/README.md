@@ -33,6 +33,57 @@ scripts/validate-source.sh
 
 Prerequisites: Git, Python 3, and ripgrep. HubSpot CLI access is needed only for an
 explicitly authorized upload; local validation does not contact HubSpot.
+## Safe API credentials
+
+For draft page edits, use a HubSpot private-app token with the `content` scope.
+The CLI personal access key can read pages without being able to write them.
+Theme file uploads continue to use the existing CLI account workflow.
+
+1. In the intended HubSpot portal, open **Development → Legacy apps**. Select an
+   existing private app or create one, for example `MAN Digital CMS Draft Editor`.
+2. Add the **`content`** scope. This scope also permits publication; our draft
+   workflow uses only draft endpoints. Add `files` separately only if uploads are
+   required. Existing video/image URLs need no upload permission.
+3. Open **Auth → Show token → Copy**. See the
+   [official private-app instructions](https://developers.hubspot.com/docs/apps/legacy-apps/private-apps/overview).
+4. Run this command in an interactive terminal on the computer where Codex runs:
+
+   ```bash
+   python3 "$HOME/.local/share/mandigital-claude-skills/marketing/web-development/man-digital-cms-pages/scripts/cms-token.py" setup --portal-id 1969772
+   ```
+
+   For another checkout, run `python3 scripts/cms-token.py setup --portal-id <portalId>`
+   from this skill directory. Use the ID of the selected portal, never a CLI default.
+5. Paste the token **at the hidden prompt** and press Enter. Do not paste it into
+   chat, a command argument, a README, `portals.yaml`, or a GitHub secret field for
+   this local workflow. The command verifies the HubSpot portal and `content`
+   scope before saving; it does not edit any page.
+
+Credentials are stored at `~/.config/man-digital/hubspot/<portalId>.json`, outside
+this repository. The directory uses mode `700`; the file uses mode `600`. This is
+an owner-readable local file, not an encrypted vault. Tokens are never printed,
+and hidden input keeps them out of shell history and process arguments. The helper
+refuses an unverified token, a different portal, and insufficient scopes.
+
+For this production portal, the file is
+`~/.config/man-digital/hubspot/1969772.json`. Add only its path to the selected local
+`portals.yaml` entry as `tokenFile`; never add the file contents. This optional
+field is used by the page-content API workflow, not by existing deploy/form scripts.
+
+To verify access later without displaying the token:
+
+```bash
+python3 "$HOME/.local/share/mandigital-claude-skills/marketing/web-development/man-digital-cms-pages/scripts/cms-token.py" check --portal-id 1969772
+```
+
+To replace a rotated token, rerun `setup`; the existing file is replaced only after
+verification succeeds. To revoke access, revoke/rotate the token in HubSpot;
+deleting the local file alone does not revoke it. On another computer, run setup
+there rather than syncing this credential through Git.
+
+See [the page-content API workflow](references/page-content-api.md) for draft
+snapshots, writes, readback, and visual verification.
+
 ## Full-site generation
 
 Converts a React (Vite + Tailwind + shadcn) repo or a Figma handoff into a validated HubSpot theme ZIP: global header/footer, blog listing + post, DnD templates, `deploy.json` page manifest, `assets.json` image manifest.

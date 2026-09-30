@@ -51,6 +51,7 @@ Three skill packages we don't own but depend on. Each has a README inside `devel
    - Producing or repurposing a video? → [`marketing/content-creation/video-production/`](./marketing/content-creation/video-production/)
    - Designing a website page in Figma? → [`marketing/web-development/man-digital-figma-website-design/`](./marketing/web-development/man-digital-figma-website-design/)
    - Maintaining the HubSpot website? → [`marketing/web-development/man-digital-cms-pages/`](./marketing/web-development/man-digital-cms-pages/)
+     - [Set up private CMS API credentials](./marketing/web-development/man-digital-cms-pages/README.md#safe-api-credentials): hidden terminal input, portal verification, and local storage outside Git.
    - Auditing PSI, Web Vitals, SEO, or AEO? → [`marketing/web-development/auditing-web-vitals/`](./marketing/web-development/auditing-web-vitals/)
    - Setting up a development workflow? → [`development/`](./development/)
 

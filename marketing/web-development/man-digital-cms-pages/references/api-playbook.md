@@ -35,7 +35,7 @@ All paths verified against the method+path on the linked doc page.
 | List site pages | `GET /cms/v3/pages/site-pages` | Page inventory before deploy — re-list EVERY run, never trust cached IDs (pages get deleted/recreated outside the skill: IDs change, slugs vanish) | https://developers.hubspot.com/docs/api-reference/legacy/cms/pages/website-pages/get-website-pages |
 | Create site page | `POST /cms/v3/pages/site-pages` | Create page from templatePath | https://developers.hubspot.com/docs/api-reference/legacy/cms/pages/website-pages/create-website-page |
 | Update site page | `PATCH /cms/v3/pages/site-pages/{objectId}` | Sparse-update page by ID; a templatePath PATCH on a live page applies immediately (page stays `PUBLISHED` — verified 2026-09-28, so no push-live needed after) | https://developers.hubspot.com/docs/api-reference/legacy/cms/pages/website-pages/update-website-page |
-| Push page live | `POST /cms/v3/pages/site-pages/{objectId}/push-live` (empty body) | 204 pushes draft→live; 404 = nothing staged (page already live, e.g. right after a templatePath PATCH) — success, not an error | — (no public reference; verified live 2026-09-27/28) |
+| Push page live | `POST /cms/v3/pages/site-pages/{objectId}/push-live` (empty body) | 204 pushes draft→live; requires explicit publication authorization; treat any non-2xx response as unconfirmed and verify state, never assume 404 means success | — (no public reference; verified live 2026-09-27/28) |
 | List blog posts | `GET /cms/v3/blogs/posts` | Post inventory before deploy | https://developers.hubspot.com/docs/api-reference/legacy/cms/blogs/posts/get-posts |
 | Create blog post | `POST /cms/v3/blogs/posts` | Create post with content body | https://developers.hubspot.com/docs/api-reference/legacy/cms/blogs/posts/create-post |
 | List forms | `GET /marketing/v3/forms` | Form inventory for mapping | https://developers.hubspot.com/docs/api-reference/legacy/marketing/forms/get-forms |
@@ -90,3 +90,20 @@ off when absent), max 3 waits, then stop with evidence.
 Re-check each §2 doc URL when a deploy fails with 401/403/404-on-valid-path.
 Re-run the §1 --help capture on any `hs`/`hubspot` minor upgrade; re-check
 §2 URLs on 429-behavior change. Update this file and commit.
+
+## 5. Draft page editing
+
+Use [page-content-api.md](page-content-api.md) for page edits and local credential
+setup. Existing deploy/form scripts retain their environment-token behavior.
+The page-content workflow supports the selected config entry's `tokenFile`, created
+by `scripts/cms-token.py setup --portal-id <portalId>`. A PAK with page-read scopes
+is insufficient for page writes. Preflight the private app's portal and `content`
+scope; do not keep retrying 403s or silently switch to browser edits.
+
+- Read draft: `GET /cms/v3/pages/site-pages/{objectId}/draft`.
+- Update draft: `PATCH /cms/v3/pages/site-pages/{objectId}/draft`.
+- Clone: `POST /cms/v3/pages/site-pages/clone` with `id` and `cloneName`.
+- Ordinary page PATCH can update live content immediately. Never use it for a draft request.
+
+Draft endpoints were read successfully in portal 1969772 on 2026-09-30;
+private-app write verification remains a per-session prerequisite.
