@@ -9,3 +9,5 @@ Skills for designing, implementing, validating, and improving the MAN Digital we
 | [`auditing-web-vitals/`](./auditing-web-vitals/) | Measure and improve PSI, Lighthouse, Core Web Vitals, SEO, accessibility, and AEO |
 
 Install the individual skill folder so its existing skill name remains unchanged.
+
+CMS page drafts use the [API workflow and private terminal credential setup](man-digital-cms-pages/README.md#safe-api-credentials); module/theme deployment keeps its separate validation and CLI workflow.

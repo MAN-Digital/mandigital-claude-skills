@@ -18,6 +18,7 @@ Validate a proposed candidate in memory before replacing the original. Use a saf
 - Every `staging` is a boolean and exactly one entry is true. Never quietly choose a staging portal when creating the first config.
 - `blogId` is null or a positive numeric ID; `domain` is null or a nonempty string; `forms` is a mapping of module names to nonempty form GUID strings. Local shape validation does not establish that IDs exist in HubSpot.
 - If present, `tokenEnv` is a valid shell environment variable name matching `[A-Za-z_][A-Za-z0-9_]*`. An unset variable is a deployment prerequisite to report, not a reason to reset config or substitute another portal's credential.
+- If present, `tokenFile` is a nonempty absolute or home-relative path outside the repository, holding credentials for the same portal. It is an alternative explicitly selected credential source for page-content API work only; existing deploy/form scripts do not read it. Store only the path in YAML.
 - If present, `formsProvision` is a mapping with only `enabled`, `spec`, and `prefix`. `enabled` is boolean; when true, `spec` must be a nonempty string resolving to an existing form-spec file (relative paths resolve against the config directory). A supplied `prefix` must be a nonempty string. Preserve existing provisioning settings unless requested otherwise.
 - Preserve unrecognized existing fields rather than dropping them. Compare the candidate against the original to ensure only requested changes and necessary staging-switch changes occurred.
 
